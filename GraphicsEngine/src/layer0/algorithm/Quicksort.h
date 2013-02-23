@@ -1,0 +1,81 @@
+/*
+ * Quicksort.h
+ *
+ *  Created on: 04.05.2011
+ *      Author: Norbert Nopper
+ */
+#ifndef QUICKSORT_H_
+#define QUICKSORT_H_
+
+#include "../../UsedLibs.h"
+
+template<class SORT>
+class Quicksort
+{
+
+private:
+
+	void quicksort(boost::int32_t left, boost::int32_t right, std::vector<SORT>& allElements) const
+	{
+		if (left < right)
+		{
+			boost::int32_t divider = divide(left, right, allElements);
+			quicksort(left, divider - 1, allElements);
+			quicksort(divider + 1, right, allElements);
+		}
+	}
+
+	boost::int32_t divide(boost::int32_t left, boost::int32_t right, std::vector<SORT>& allElements) const
+	{
+		boost::int32_t leftWalker = left;
+
+		boost::int32_t rightWalker = right - 1;
+
+		SORT pivot = allElements[right];
+
+		do
+		{
+			while (*allElements[leftWalker] <= *pivot && leftWalker < right)
+			{
+				leftWalker++;
+			}
+
+			while (*allElements[rightWalker] >= *pivot && rightWalker > left)
+			{
+				rightWalker--;
+			}
+
+			if (leftWalker < rightWalker)
+			{
+				SORT temp = allElements[leftWalker];
+				allElements[leftWalker] = allElements[rightWalker];
+				allElements[rightWalker] = temp;
+			}
+
+		} while (leftWalker < rightWalker);
+
+		SORT temp = allElements[leftWalker];
+		allElements[leftWalker] = allElements[right];
+		allElements[right] = temp;
+
+		return leftWalker;
+	}
+
+public:
+
+	Quicksort()
+	{
+	}
+
+	~Quicksort()
+	{
+	}
+
+	void sort(std::vector<SORT>& allElements) const
+	{
+		quicksort(0, allElements.size() - 1, allElements);
+	}
+
+};
+
+#endif /* QUICKSORT_H_ */

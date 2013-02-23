@@ -1,0 +1,244 @@
+/*
+ * SurfaceMaterial.cpp
+ *
+ *  Created on: 29.05.2011
+ *      Author: Norbert Nopper
+ */
+
+#include "SurfaceMaterial.h"
+
+using namespace std;
+
+SurfaceMaterial::SurfaceMaterial(const string& name) :
+	name(name), emissive(), emissiveTexture(), ambient(), ambientTexture(), diffuse(), diffuseTexture(), specular(), specularTexture(), shininess(0.0f), reflection(), reflectionTexture(), refraction(), refractionTexture(), refractiveIndex(0.0f), normalMapTexture()
+{
+}
+
+SurfaceMaterial::~SurfaceMaterial()
+{
+}
+
+const string& SurfaceMaterial::getName() const
+{
+	return name;
+}
+
+const Color& SurfaceMaterial::getAmbient() const
+{
+	return ambient;
+}
+
+GLuint SurfaceMaterial::getAmbientTextureName() const
+{
+	if (ambientTexture.get())
+	{
+		return ambientTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+const Color& SurfaceMaterial::getDiffuse() const
+{
+	return diffuse;
+}
+
+GLuint SurfaceMaterial::getDiffuseTextureName() const
+{
+	if (diffuseTexture.get())
+	{
+		return diffuseTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+const Color& SurfaceMaterial::getEmissive() const
+{
+	return emissive;
+}
+
+GLuint SurfaceMaterial::getEmissiveTextureName() const
+{
+	if (emissiveTexture.get())
+	{
+		return emissiveTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+const Color& SurfaceMaterial::getSpecular() const
+{
+	return specular;
+}
+
+GLuint SurfaceMaterial::getSpecularTextureName() const
+{
+	if (specularTexture.get())
+	{
+		return specularTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+const Color& SurfaceMaterial::getReflection() const
+{
+	return reflection;
+}
+
+GLuint SurfaceMaterial::getReflectionTextureName() const
+{
+	if (reflectionTexture.get())
+	{
+		return reflectionTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+const Color& SurfaceMaterial::getRefraction() const
+{
+	return refraction;
+}
+
+GLuint SurfaceMaterial::getRefractionTextureName() const
+{
+	if (refractionTexture.get())
+	{
+		return refractionTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+float SurfaceMaterial::getShininess() const
+{
+	return shininess;
+}
+
+float SurfaceMaterial::getRefractiveIndex() const
+{
+	return refractiveIndex;
+}
+
+GLuint SurfaceMaterial::getNormalMapTextureName() const
+{
+	if (normalMapTexture.get())
+	{
+		return normalMapTexture->getTextureName();
+	}
+
+	return 0;
+}
+
+void SurfaceMaterial::setAmbient(const Color& ambient)
+{
+	this->ambient = ambient;
+}
+
+void SurfaceMaterial::setAmbientTexture(const Texture2DSP& ambientTexture)
+{
+	this->ambientTexture = ambientTexture;
+}
+
+void SurfaceMaterial::setDiffuse(const Color& diffuse)
+{
+	this->diffuse = diffuse;
+}
+
+void SurfaceMaterial::setDiffuseTexture(const Texture2DSP& diffuseTexture)
+{
+	this->diffuseTexture = diffuseTexture;
+}
+
+void SurfaceMaterial::setEmissive(const Color& emissive)
+{
+	this->emissive = emissive;
+}
+
+void SurfaceMaterial::setEmissiveTexture(const Texture2DSP& emissiveTexture)
+{
+	this->emissiveTexture = emissiveTexture;
+}
+
+void SurfaceMaterial::setSpecular(const Color& specular)
+{
+	this->specular = specular;
+}
+
+void SurfaceMaterial::setSpecularTexture(const Texture2DSP& specularTexture)
+{
+	this->specularTexture = specularTexture;
+}
+
+void SurfaceMaterial::setReflection(const Color& reflection)
+{
+	this->reflection = reflection;
+}
+
+void SurfaceMaterial::setReflectionTexture(const Texture2DSP& reflectionTexture)
+{
+	this->reflectionTexture = reflectionTexture;
+}
+
+void SurfaceMaterial::setRefraction(const Color& refraction)
+{
+	this->refraction = refraction;
+}
+
+void SurfaceMaterial::setRefractionTexture(const Texture2DSP& refractionTexture)
+{
+	this->refractionTexture = refractionTexture;
+}
+
+void SurfaceMaterial::setShininess(float shininess)
+{
+	this->shininess = shininess;
+}
+
+void SurfaceMaterial::setRefractiveIndex(float refractiveIndex)
+{
+	this->refractiveIndex = refractiveIndex;
+}
+
+void SurfaceMaterial::setNormalMapTexture(const Texture2DSP& normalMapTexture)
+{
+	this->normalMapTexture = normalMapTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getAmbientTexture() const
+{
+	return ambientTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getDiffuseTexture() const
+{
+	return diffuseTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getEmissiveTexture() const
+{
+	return emissiveTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getNormalMapTexture() const
+{
+	return normalMapTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getReflectionTexture() const
+{
+	return reflectionTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getRefractionTexture() const
+{
+	return refractionTexture;
+}
+
+const Texture2DSP& SurfaceMaterial::getSpecularTexture() const
+{
+	return specularTexture;
+}

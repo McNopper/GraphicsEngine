@@ -1,0 +1,95 @@
+/*
+ * Octant.h
+ *
+ *  Created on: 22.04.2011
+ *      Author: Norbert Nopper
+ */
+
+#ifndef OCTANT_H_
+#define OCTANT_H_
+
+#include "../../UsedLibs.h"
+
+#include "../../layer0/math/Point4.h"
+#include "../../layer0/algorithm/Quicksort.h"
+#include "../../layer1/camera/Camera.h"
+#include "../../layer1/collision/AxisAlignedBoundingBox.h"
+#include "../../layer1/collision/BoundingSphere.h"
+#include "OctreeEntity.h"
+
+class Octree;
+
+class Octant : public AxisAlignedBoundingBox
+{
+
+	friend class Octree;
+
+private:
+
+	Octree* octree;
+
+	Octant* parent;
+
+	boost::uint32_t level;
+	boost::uint32_t maxLevels;
+
+	std::vector<Octant*> allChilds;
+	std::vector<Octant*> allChildsPlusMe;
+
+	std::vector<OctreeEntity*> allOctreeEntities;
+
+	BoundingSphere boundingSphere;
+
+	Quicksort<Octant*> quicksortOctant;
+	Quicksort<OctreeEntity*> quicksortOctreeEntity;
+
+	float distanceToCamera;
+
+	bool debug;
+
+private:
+
+	Octant(Octree* octree);
+	virtual ~Octant();
+
+	void init(Octant* parent, boost::uint32_t level, boost::uint32_t numberLevels, const Point4& center, float halfWidth, float halfHeight, float halfDepth);
+
+	void createChilds();
+
+	bool releaseChilds();
+
+	bool updateEntity(OctreeEntity* octreeEntity);
+
+	void removeEntity(OctreeEntity* octreeEntity);
+
+	void removeAllEntities();
+
+	void setParent(Octant* octant);
+
+	Octant* getParent() const;
+
+	Octree* getOctree() const;
+
+	void sort();
+
+	void update() const;
+
+	void render() const;
+
+	void updateEntities() const;
+
+	void renderEntities(bool ascending) const;
+
+	void updateDistanceToCamera();
+
+public:
+
+    bool operator <=(const Octant& other) const;
+
+	bool operator >=(const Octant& other) const;
+
+	void setDebug(bool debug);
+
+};
+
+#endif /* OCTANT_H_ */
