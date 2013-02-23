@@ -411,6 +411,7 @@
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
+								<outputType id="cdt.managedbuild.tool.macosx.cpp.linker.output.546998163" outputPrefix="../../GE_Binaries/" superClass="cdt.managedbuild.tool.macosx.cpp.linker.output"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.macosx.base.151631130" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.base">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1278579805" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
