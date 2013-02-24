@@ -6,7 +6,8 @@ How to build the engine / examples:
 1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux or the Windows SDK for Windows.
 2. Extract this ZIP file and set the workspace-cpp folder as your Eclipse workspace.
 3. Import each folder as a separate, existing project.
-4. Set the build configuration in Eclipse to your operating system.
+4. Set the build configurations in Eclipse to your operating system.
+5. Build GLUS.
 6. Build the Graphics Engine.
 7. Build any of the examples.
 8. Please read the README.txt in the GE_Binaries folder. 
@@ -53,10 +54,10 @@ Features:
 - Post processing with MSAA, gamma correction, tone mapping (HDR), blur and bloom
 - Render filter, that only transparent, opaque or all nodes should be rendered
 
-Changes:
+24.02.2012 Norbert Nopper (norbert@nopper.tv)
+
+Changelog:
 
 - Added MSAA textures, render buffers and frame buffers
 - Added MSAA post processor 
 - Bug fixes and improvements
-
-16.02.2012 Norbert Nopper (norbert@nopper.tv)
