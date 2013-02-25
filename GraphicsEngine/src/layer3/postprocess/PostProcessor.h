@@ -57,6 +57,9 @@ protected:
 	bool useGamma;
 	float gamma;
 
+	std::string screenTexture;
+	std::string bloomTexture;
+
 	PostProcessor(GLenum target);
 
 	virtual void setUniforms() const = 0;

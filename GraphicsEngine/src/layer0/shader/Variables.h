@@ -61,8 +61,12 @@
 
 #define u_numberSamples "u_numberSamples"
 
+#define u_useMS "u_useMS"
+
 #define u_screenTexture "u_screenTexture"
+#define u_screenTextureMS "u_screenTextureMS"
 #define u_bloomTexture "u_bloomTexture"
+#define u_bloomTextureMS "u_bloomTextureMS"
 #define u_blurTexture "u_blurTexture"
 
 #define u_useBlur "u_useBlur"

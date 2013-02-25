@@ -91,12 +91,12 @@ void PostProcessor::render() const
 		// Only the bright texture is needed
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(target, frameBuffer->getColor1Texture()->getTextureName());
-		glUniform1i(program->getUniformLocation(u_screenTexture), 0);
+		glUniform1i(program->getUniformLocation(screenTexture), 0);
 
 		// Not used. Just take the color texture as a dummy value
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(target, frameBuffer->getColor0Texture()->getTextureName());
-		glUniform1i(program->getUniformLocation(u_bloomTexture), 1);
+		glUniform1i(program->getUniformLocation(bloomTexture), 1);
 
 		// Blur using the bloom texture
 		glActiveTexture(GL_TEXTURE2);
@@ -154,12 +154,12 @@ void PostProcessor::render() const
 	// Color
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(target, frameBuffer->getColor0Texture()->getTextureName());
-	glUniform1i(program->getUniformLocation(u_screenTexture), 0);
+	glUniform1i(program->getUniformLocation(screenTexture), 0);
 
 	// Bloom
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(target, bloomFrameBuffer->getColor0Texture()->getTextureName());
-	glUniform1i(program->getUniformLocation(u_bloomTexture), 1);
+	glUniform1i(program->getUniformLocation(bloomTexture), 1);
 
 	// Blur
 	glActiveTexture(GL_TEXTURE2);

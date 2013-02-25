@@ -48,16 +48,6 @@ ProgramSP ProgramFactory::createPostProcess2DProgram() const
 	return program;
 }
 
-ProgramSP ProgramFactory::createPostProcess2DMultisampleProgram() const
-{
-	ProgramSP program;
-
-	program
-		= ProgramManager::getInstance()->getProgramBy("../GraphicsEngine/shader/PostProcessMultisample.vert.glsl", "../GraphicsEngine/shader/PostProcessMultisample.frag.glsl");
-
-	return program;
-}
-
 ProgramSP ProgramFactory::createLineGeometryProgram() const
 {
 	ProgramSP program;

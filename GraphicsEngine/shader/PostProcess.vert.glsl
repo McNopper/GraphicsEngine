@@ -1,11 +1,14 @@
 #version 420 core
 
 uniform sampler2D u_screenTexture;
+uniform sampler2DMS u_screenTextureMS;
 uniform sampler1D u_blurTexture;
 
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform mat4 u_modelMatrix;
+
+uniform int u_useMS;
 
 in vec4 a_vertex;
 in vec2 a_texCoord;
@@ -18,9 +21,19 @@ flat out float v_texWidthBlurStep;
 
 void main(void)
 {
+	ivec2 texSize;
+	
 	v_texCoord = a_texCoord;
 	
-	ivec2 texSize = textureSize(u_screenTexture, 0); 
+	if (u_useMS > 0)
+	{
+		texSize = textureSize(u_screenTextureMS);
+	} 
+	else
+	{
+		texSize = textureSize(u_screenTexture, 0);
+	}
+	 
 	v_texCoordStep = vec2(1.0 / float(texSize.s + 1), 1.0 / float(texSize.t + 1));
 	
 	int texWidth = textureSize(u_blurTexture, 0);

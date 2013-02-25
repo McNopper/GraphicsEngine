@@ -10,6 +10,7 @@
 #include "../../layer0/shader/ProgramFactory.h"
 #include "../../layer0/shader/Variables.h"
 #include "../../layer0/texture/Texture1DManager.h"
+#include "../../layer0/texture/Texture2DManager.h"
 #include "../../layer0/texture/Texture2DMultisample.h"
 #include "../../layer0/texture/Texture2DMultisampleManager.h"
 #include "../../layer2/framebuffer/FrameBuffer2DMultisample.h"
@@ -27,6 +28,8 @@ PostProcessor2DMultisample::PostProcessor2DMultisample(int32_t samples, GLenum i
 	char buffer[256];
 	sprintf(buffer, "%p", this);
 	string uniqueID(buffer);
+
+	dummy = Texture2DManager::getInstance()->createTexture("PostProcessorMultisampleDummy", GL_RGB, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 
 	// Main textures
 
@@ -80,9 +83,14 @@ PostProcessor2DMultisample::PostProcessor2DMultisample(int32_t samples, GLenum i
 
 	//
 
+	screenTexture = u_screenTextureMS;
+	bloomTexture = u_bloomTextureMS;
+
+	//
+
 	ProgramFactory programFactory;
 
-	program = programFactory.createPostProcess2DMultisampleProgram();
+	program = programFactory.createPostProcess2DProgram();
 
 	GLUSshape rectangularPlane;
 	glusCreateRectangularPlanef(&rectangularPlane, 0.5f, 0.5f);
@@ -113,4 +121,14 @@ PostProcessor2DMultisample::~PostProcessor2DMultisample()
 void PostProcessor2DMultisample::setUniforms() const
 {
 	glUniform1i(program->getUniformLocation(u_numberSamples), samples);
+	glUniform1i(program->getUniformLocation(u_useMS), 1);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, dummy->getTextureName());
+	glUniform1i(program->getUniformLocation(u_screenTexture), 3);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, dummy->getTextureName());
+	glUniform1i(program->getUniformLocation(u_bloomTexture), 4);
+
+	glActiveTexture(GL_TEXTURE0);
 }

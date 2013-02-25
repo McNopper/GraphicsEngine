@@ -1,8 +1,14 @@
 #version 420 core
 
+uniform int u_numberSamples;
+
 uniform sampler2D u_screenTexture;
+uniform sampler2DMS u_screenTextureMS;
 uniform sampler2D u_bloomTexture;
+uniform sampler2DMS u_bloomTextureMS;
 uniform sampler1D u_blurTexture;
+
+uniform int u_useMS;
 
 uniform int u_useBlur;
 uniform int u_blurHorizontal;
@@ -25,6 +31,22 @@ flat in float v_texWidthBlurStep;
 
 layout(location = 0, index = 0) out vec4 fragColor;
 
+vec4 textureMultisample(sampler2DMS sampler, vec2 pos)
+{
+	vec4 color = vec4(0.0);
+	
+	ivec2 ipos = ivec2(pos);
+
+	for (int i = 0; i < u_numberSamples; i++)
+	{
+		color += texelFetch(sampler, ipos, i);
+	}
+	
+	color /= float(u_numberSamples);
+	
+	return color;
+}
+
 vec4 blur()
 {
 	vec4 blurred = vec4(0.0);
@@ -33,6 +55,17 @@ vec4 blur()
 	int tpixel = 0;
 	
 	float convolution;
+
+	vec2 texCoord;	
+	vec2 texCoordStep;
+	
+	if (u_useMS > 0)
+	{
+		vec2 textureDimension = textureSize(u_screenTextureMS);
+	
+		texCoord = floor(textureDimension * v_texCoord);	
+		texCoordStep = floor(textureDimension * v_texCoordStep);
+	}
 	
 	if (u_blurHorizontal != 0)
 	{
@@ -58,7 +91,14 @@ vec4 blur()
 				convolution *= texture(u_blurTexture, v_texWidthBlurStep*float(t+tpixel+1)).r;
 			}
 
-			blurred += texture(u_screenTexture, vec2(v_texCoord.s + v_texCoordStep.s*float(s), v_texCoord.t + v_texCoordStep.t*float(t))) * convolution;
+			if (u_useMS > 0)
+			{
+				blurred += textureMultisample(u_screenTextureMS, vec2(texCoord.s + texCoordStep.s*float(s), texCoord.t + texCoordStep.t*float(t))) * convolution;
+			}
+			else
+			{
+				blurred += texture(u_screenTexture, vec2(v_texCoord.s + v_texCoordStep.s*float(s), v_texCoord.t + v_texCoordStep.t*float(t))) * convolution;
+			}
 		}
 	}
 
@@ -75,12 +115,30 @@ void main(void)
 	}
 	else
 	{
-		color = texture(u_screenTexture, v_texCoord);
+		if (u_useMS > 0)
+		{
+			vec2 texCoord = floor(textureSize(u_screenTextureMS) * v_texCoord);
+
+			color = textureMultisample(u_screenTextureMS, texCoord);
+		}
+		else
+		{
+			color = texture(u_screenTexture, v_texCoord);
+		}
 	}
 
 	if (u_useBloom != 0)
 	{
-		color += texture(u_bloomTexture, v_texCoord) * u_bloomLevel;
+		if (u_useMS > 0)
+		{
+			vec2 texCoord = floor(textureSize(u_bloomTextureMS) * v_texCoord);
+	
+			color += textureMultisample(u_bloomTextureMS, texCoord) * u_bloomLevel;
+		}
+		else
+		{
+			color += texture(u_bloomTexture, v_texCoord) * u_bloomLevel;
+		}
 	}		
 	
 	if (u_useExposure != 0)

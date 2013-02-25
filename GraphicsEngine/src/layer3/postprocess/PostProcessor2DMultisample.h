@@ -10,6 +10,8 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/texture/Texture2D.h"
+
 #include "PostProcessor.h"
 
 class PostProcessor2DMultisample : public PostProcessor
@@ -19,6 +21,8 @@ private:
 	boost::int32_t samples;
 	GLenum internalFormat;
 	bool fixedsamplelocations;
+
+	Texture2DSP dummy;
 
 protected:
 

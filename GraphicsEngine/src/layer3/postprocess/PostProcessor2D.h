@@ -10,6 +10,8 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/texture/Texture2DMultisample.h"
+
 #include "PostProcessor.h"
 
 class PostProcessor2D : public PostProcessor
@@ -20,6 +22,8 @@ private:
 	GLenum internalFormat;
 	GLenum format;
 	GLenum type;
+
+	Texture2DMultisampleSP dummy;
 
 protected:
 

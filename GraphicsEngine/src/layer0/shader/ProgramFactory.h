@@ -22,8 +22,6 @@ public:
 
 	ProgramSP createPostProcess2DProgram() const;
 
-	ProgramSP createPostProcess2DMultisampleProgram() const;
-
 	ProgramSP createLineGeometryProgram() const;
 
 	ProgramSP createLineGeometryLinesProgram() const;

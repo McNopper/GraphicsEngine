@@ -8,9 +8,11 @@
 #include "../../layer0/algorithm/GaussFilter.h"
 #include "../../layer0/renderbuffer/RenderBufferManager.h"
 #include "../../layer0/shader/ProgramFactory.h"
+#include "../../layer0/shader/Variables.h"
 #include "../../layer0/texture/Texture1DManager.h"
 #include "../../layer0/texture/Texture2D.h"
 #include "../../layer0/texture/Texture2DManager.h"
+#include "../../layer0/texture/Texture2DMultisampleManager.h"
 #include "../../layer2/framebuffer/FrameBuffer2D.h"
 #include "../../layer2/framebuffer/FrameBuffer2DManager.h"
 
@@ -27,6 +29,8 @@ PostProcessor2D::PostProcessor2D(GLenum internalFormat, GLenum format, GLenum ty
 	char buffer[256];
 	sprintf(buffer, "%p", this);
 	string uniqueID(buffer);
+
+	dummy = Texture2DMultisampleManager::getInstance()->createTexture("PostProcessorDummy", 0, internalFormat, 1, 1, false);
 
 	// Main textures
 
@@ -80,6 +84,11 @@ PostProcessor2D::PostProcessor2D(GLenum internalFormat, GLenum format, GLenum ty
 
 	//
 
+	screenTexture = u_screenTexture;
+	bloomTexture = u_bloomTexture;
+
+	//
+
 	ProgramFactory programFactory;
 
 	program = programFactory.createPostProcess2DProgram();
@@ -112,5 +121,15 @@ PostProcessor2D::~PostProcessor2D()
 
 void PostProcessor2D::setUniforms() const
 {
-	// Not needed
+	glUniform1i(program->getUniformLocation(u_numberSamples), 0);
+	glUniform1i(program->getUniformLocation(u_useMS), 0);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, dummy->getTextureName());
+	glUniform1i(program->getUniformLocation(u_screenTextureMS), 3);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, dummy->getTextureName());
+	glUniform1i(program->getUniformLocation(u_bloomTextureMS), 4);
+
+	glActiveTexture(GL_TEXTURE0);
 }
