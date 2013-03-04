@@ -54,10 +54,24 @@ Features:
 - Post processing with MSAA, gamma correction, tone mapping (HDR), blur and bloom
 - Render filter, that only transparent, opaque or all nodes should be rendered
 
-24.02.2012 Norbert Nopper (norbert@nopper.tv)
+Build configuration naming:
+
+[CPU]_[GPU]_[OS]_[OpenGL]_[Compiler]_[Configuration]
+
+CPU:						ARMv6, x64, x86
+GPU (Optional):				VC4
+OS: 						Darwin, Linux, Windows
+OpenGL (Optional):			GLES2, GLES3
+Compiler:					GCC, MinGW, MSVC
+Configuration:				Debug, Release
+
+e.g. x86__Windows__MSVC_Debug
+
+04.03.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Changed build configuration naming
 - Added MSAA textures, render buffers and frame buffers
 - Added MSAA post processor 
 - Bug fixes and improvements
