@@ -41,6 +41,8 @@ void PerspectiveCamera::perspective(float fovy, const Viewport& viewport, float 
 
 	projectionMatrix.setM(result);
 
+	biasedProjectionMatrix = biasMatrix * projectionMatrix;
+
 	updateViewFrustum();
 }
 

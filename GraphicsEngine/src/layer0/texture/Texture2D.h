@@ -8,6 +8,7 @@
 #ifndef TEXTURE2D_H_
 #define TEXTURE2D_H_
 
+#include "PixelData.h"
 #include "TextureStandard.h"
 
 class Texture2D : public TextureStandard
@@ -15,7 +16,7 @@ class Texture2D : public TextureStandard
 
 private:
 
-	boost::uint8_t* pixels;
+	PixelData pixelData;
 
 public:
 

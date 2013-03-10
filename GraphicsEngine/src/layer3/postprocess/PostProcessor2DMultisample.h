@@ -29,7 +29,7 @@ protected:
 	virtual void setUniforms() const;
 
 public:
-	PostProcessor2DMultisample(boost::int32_t samples, GLenum internalFormat, bool fixedsamplelocations, boost::int32_t blurPixel = 2, float blurSigma = 0.5f, boost::int32_t bloomPixel = 16, float bloomSigma = 5.0f);
+	PostProcessor2DMultisample(boost::int32_t samples, GLenum internalFormat, bool fixedsamplelocations, boost::int32_t blurPixel = 2, float blurSigma = 0.5f, boost::int32_t bloomPixel = 16, float bloomSigma = 5.0f, boost::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
 	virtual ~PostProcessor2DMultisample();
 };
 

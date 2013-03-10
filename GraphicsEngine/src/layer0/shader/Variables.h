@@ -65,9 +65,16 @@
 
 #define u_screenTexture "u_screenTexture"
 #define u_screenTextureMS "u_screenTextureMS"
+#define u_depthTexture "u_depthTexture"
+#define u_depthTextureMS "u_depthTextureMS"
 #define u_bloomTexture "u_bloomTexture"
 #define u_bloomTextureMS "u_bloomTextureMS"
 #define u_blurTexture "u_blurTexture"
+
+#define u_useDoF "u_useDoF"
+#define u_aperture "u_aperture"
+#define u_focal "u_focal"
+#define u_focusedObject "u_focusedObject"
 
 #define u_useBlur "u_useBlur"
 #define u_blurHorizontal "u_blurHorizontal"

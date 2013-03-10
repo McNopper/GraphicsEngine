@@ -27,6 +27,9 @@ public:
 	const static Color YELLOW;
 	const static Color MAGENTA;
 	const static Color CYAN;
+	const static Color BRIGHT_GREY;
+	const static Color GREY;
+	const static Color DARK_GREY;
 
 	Color();
 	Color(float r, float g, float b);

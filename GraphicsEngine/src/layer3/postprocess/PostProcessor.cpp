@@ -5,7 +5,9 @@
  *      Author: nopper
  */
 
+#include "../../layer0/algorithm/GaussFilter.h"
 #include "../../layer0/shader/Variables.h"
+#include "../../layer0/texture/Texture1DArrayManager.h"
 #include "../../layer1/camera/Camera.h"
 #include "../../layer1/camera/CameraManager.h"
 #include "../../layer1/camera/ViewportManager.h"
@@ -16,9 +18,40 @@ using namespace std;
 
 using namespace boost;
 
-PostProcessor::PostProcessor(GLenum target) :
-		target(target), frameBuffer(), tempBloomFrameBuffer(), bloomFrameBuffer(), blurTexture1D(), bloomTexture1D(), program(), vboVertices(0), vboTexCoords(0), vboIndices(0), numberIndices(0), useBlur(false), useBloom(false), bloomLevel(1.0f), useExposure(false), exposure(1.0f), useGamma(false), gamma(2.2f)
+
+PostProcessor::PostProcessor(GLenum target, int32_t blurPixel, float blurSigma, int32_t bloomPixel, float bloomSigma, int32_t maxRadiusCoC, float cocSigma, float aperture, float focal, float focusedObject) :
+		target(target), outputFramebuffer(0), frameBuffer(), tempFrameBuffer(), depthOfFieldFrameBuffer(), bloomFrameBuffer(), blurTexture1DArray(), bloomTexture1DArray(), program(), vboVertices(0), vboTexCoords(0), vboIndices(0), numberIndices(0), useDoF(false), aperture(aperture), focal(focal), focusedObject(focusedObject), useBlur(false), useBloom(false), bloomLevel(1.0f), useExposure(false), exposure(1.0f), useGamma(false), gamma(2.2f)
 {
+	char buffer[256];
+	sprintf(buffer, "%p", this);
+	string uniqueID(buffer);
+
+	// Blur textures for bloom, blur and depth of field pass
+
+	GaussFilter gaussFilterBlur(blurPixel, blurSigma);
+	PixelDataSP pixelDataBlur = PixelDataSP(new PixelData(gaussFilterBlur.getValuesSize(), 1, GL_RED, GL_FLOAT, static_cast<const uint8_t*>(gaussFilterBlur.getVoidValues()), gaussFilterBlur.getValuesSize() * 4));
+
+	blurTexture1DArray = Texture1DArrayManager::getInstance()->createTexture("PostProcessorBlur" + uniqueID, GL_R16F, gaussFilterBlur.getValuesSize(), GL_RED, GL_FLOAT, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	blurTexture1DArray->addPixelData(pixelDataBlur);
+	blurTexture1DArray->init();
+
+	GaussFilter gaussFilterBloom(bloomPixel, bloomSigma);
+	PixelDataSP pixelDataBloom = PixelDataSP(new PixelData(gaussFilterBloom.getValuesSize(), 1, GL_RED, GL_FLOAT, static_cast<const uint8_t*>(gaussFilterBloom.getVoidValues()), gaussFilterBloom.getValuesSize() * 4));
+
+	bloomTexture1DArray = Texture1DArrayManager::getInstance()->createTexture("PostProcessorBloom" + uniqueID, GL_R16F, gaussFilterBloom.getValuesSize(), GL_RED, GL_FLOAT, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	bloomTexture1DArray->addPixelData(pixelDataBloom);
+	bloomTexture1DArray->init();
+
+	GaussFilter gaussFilterCoC(maxRadiusCoC, cocSigma);
+	depthOfFieldTexture1DArray = Texture1DArrayManager::getInstance()->createTexture("PostProcessorDepthOfField" + uniqueID, GL_R16F, gaussFilterCoC.getValuesSize(), GL_RED, GL_FLOAT, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	for (int32_t i = maxRadiusCoC; i > 0; i--)
+	{
+		GaussFilter gaussFilterCoC(i, cocSigma);
+		PixelDataSP pixelDataCoC = PixelDataSP(new PixelData(gaussFilterCoC.getValuesSize(), 1, GL_RED, GL_FLOAT, static_cast<const uint8_t*>(gaussFilterCoC.getVoidValues()), gaussFilterCoC.getValuesSize() * 4));
+
+		depthOfFieldTexture1DArray->addPixelData(pixelDataCoC);
+	}
+	depthOfFieldTexture1DArray->init();
 }
 
 PostProcessor::~PostProcessor()
@@ -38,6 +71,11 @@ bool PostProcessor::use(bool enabled) const
 	if (frameBuffer.get())
 	{
 		frameBuffer->use(enabled);
+
+		if (!enabled)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, outputFramebuffer);
+		}
 
 		return true;
 	}
@@ -62,7 +100,7 @@ GLuint PostProcessor::getVboVertices() const
 
 void PostProcessor::render() const
 {
-	if (!frameBuffer.get() || !tempBloomFrameBuffer.get() || !bloomFrameBuffer.get() || !blurTexture1D.get() || !bloomTexture1D.get() )
+	if (!frameBuffer.get() || !tempFrameBuffer.get() || !bloomFrameBuffer.get() || !depthOfFieldFrameBuffer.get() || !blurTexture1DArray.get() || !bloomTexture1DArray.get() || !depthOfFieldTexture1DArray.get() )
 	{
 		return;
 	}
@@ -83,6 +121,29 @@ void PostProcessor::render() const
 	glUniformMatrix4fv(program->getUniformLocation(u_viewMatrix), 1, GL_FALSE, currentCamera->getViewMatrix().getM());
 	glUniformMatrix4fv(program->getUniformLocation(u_modelMatrix), 1, GL_FALSE, modelMatrix.getM());
 
+	//
+
+	const CameraSP& defaultCamera = CameraManager::getInstance()->getDefaultPerspectiveCamera();
+
+	Point4 focalPoint = defaultCamera->getEye() + (defaultCamera->getDirection() * focal);
+	Point4 focusedObjectPoint = defaultCamera->getEye() + (defaultCamera->getDirection() * focusedObject);
+
+	Point4 biasedFocalPoint = defaultCamera->getBiasedProjectionMatrix() * defaultCamera->getViewMatrix() * focalPoint;
+	Point4 biasedFocusedObjectPoint = defaultCamera->getBiasedProjectionMatrix() * defaultCamera->getViewMatrix() * focusedObjectPoint;
+
+	glUniform1f(program->getUniformLocation(u_aperture), aperture);
+	glUniform1f(program->getUniformLocation(u_focal), glusClampf(biasedFocalPoint.getZ(), 0.0f, 1.0f));
+	glUniform1f(program->getUniformLocation(u_focusedObject), glusClampf(biasedFocusedObjectPoint.getZ(), 0.0f, 1.0f));
+
+	//
+
+	// Depth texture
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(target, frameBuffer->getDepthTexture()->getTextureName());
+	glUniform1i(program->getUniformLocation(depthTexture), 3);
+
+	glActiveTexture(GL_TEXTURE0);
+
 	// Create bloom textures
 	if (useBloom)
 	{
@@ -100,10 +161,12 @@ void PostProcessor::render() const
 
 		// Blur using the bloom texture
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_1D, bloomTexture1D->getTextureName());
+		glBindTexture(GL_TEXTURE_1D_ARRAY, bloomTexture1DArray->getTextureName());
 		glUniform1i(program->getUniformLocation(u_blurTexture), 2);
 
 		glActiveTexture(GL_TEXTURE0);
+
+		glUniform1i(program->getUniformLocation(u_useDoF), false);
 
 		glUniform1i(program->getUniformLocation(u_useBlur), true);
 
@@ -122,18 +185,19 @@ void PostProcessor::render() const
 
 		glUniform1i(program->getUniformLocation(u_blurHorizontal), 1);
 		glUniform1i(program->getUniformLocation(u_blurVertical), 0);
-		tempBloomFrameBuffer->use(true);
+		tempFrameBuffer->use(true);
 
 		glDrawElements(GL_TRIANGLES, numberIndices, GL_UNSIGNED_INT, 0);
 
-		tempBloomFrameBuffer->use(false);
+		tempFrameBuffer->use(false);
 
 		// ... and final pass
 
-		glBindTexture(target, tempBloomFrameBuffer->getColor0Texture()->getTextureName());
+		glBindTexture(target, tempFrameBuffer->getColor0Texture()->getTextureName());
 
 		glUniform1i(program->getUniformLocation(u_blurHorizontal), 0);
 		glUniform1i(program->getUniformLocation(u_blurVertical), 1);
+
 		bloomFrameBuffer->use(true);
 
 		glDrawElements(GL_TRIANGLES, numberIndices, GL_UNSIGNED_INT, 0);
@@ -147,32 +211,161 @@ void PostProcessor::render() const
 		glBindTexture(target, 0);
 	}
 
+	FrameBufferSP usedFrameBuffer = frameBuffer;
+
+	// Bloom the framebuffer
+	if (useBloom)
+	{
+		use(false);
+
+		// Original frame buffer
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(target, frameBuffer->getColor0Texture()->getTextureName());
+		glUniform1i(program->getUniformLocation(screenTexture), 0);
+
+		// Bloom
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(target, bloomFrameBuffer->getColor0Texture()->getTextureName());
+		glUniform1i(program->getUniformLocation(bloomTexture), 1);
+
+		// Dummy
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_1D_ARRAY, bloomTexture1DArray->getTextureName());
+		glUniform1i(program->getUniformLocation(u_blurTexture), 2);
+
+		glActiveTexture(GL_TEXTURE0);
+
+		glUniform1i(program->getUniformLocation(u_useDoF), false);
+
+		glUniform1i(program->getUniformLocation(u_useBlur), false);
+
+		glUniform1i(program->getUniformLocation(u_useBloom), true);
+		glUniform1f(program->getUniformLocation(u_bloomLevel), bloomLevel);
+
+		glUniform1i(program->getUniformLocation(u_useExposure), false);
+		glUniform1f(program->getUniformLocation(u_exposure), exposure);
+
+		glUniform1i(program->getUniformLocation(u_useGamma), false);
+		glUniform1f(program->getUniformLocation(u_gamma), gamma);
+
+		glUniform1i(program->getUniformLocation(u_blurHorizontal), 0);
+		glUniform1i(program->getUniformLocation(u_blurVertical), 0);
+
+		postProcessorVAO->bind();
+
+		// One pass
+
+		tempFrameBuffer->use(true);
+
+		glDrawElements(GL_TRIANGLES, numberIndices, GL_UNSIGNED_INT, 0);
+
+		tempFrameBuffer->use(false);
+
+		//
+
+		postProcessorVAO->unbind();
+
+		glBindTexture(target, 0);
+
+		usedFrameBuffer = tempFrameBuffer;
+	}
+
+	// Depth of field
+	if (useDoF)
+	{
+		use(false);
+
+		// Only the color texture is needed
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(target, usedFrameBuffer->getColor0Texture()->getTextureName());
+		glUniform1i(program->getUniformLocation(screenTexture), 0);
+
+		// Not used. Just take the color texture as a dummy value
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(target, frameBuffer->getColor0Texture()->getTextureName());
+		glUniform1i(program->getUniformLocation(bloomTexture), 1);
+
+		// Blur using the DOF texture
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_1D_ARRAY, depthOfFieldTexture1DArray->getTextureName());
+		glUniform1i(program->getUniformLocation(u_blurTexture), 2);
+
+		glActiveTexture(GL_TEXTURE0);
+
+		glUniform1i(program->getUniformLocation(u_useDoF), true);
+
+		glUniform1i(program->getUniformLocation(u_useBlur), false);
+
+		glUniform1i(program->getUniformLocation(u_useBloom), false);
+		glUniform1f(program->getUniformLocation(u_bloomLevel), bloomLevel);
+
+		glUniform1i(program->getUniformLocation(u_useExposure), false);
+		glUniform1f(program->getUniformLocation(u_exposure), exposure);
+
+		glUniform1i(program->getUniformLocation(u_useGamma), false);
+		glUniform1f(program->getUniformLocation(u_gamma), gamma);
+
+		postProcessorVAO->bind();
+
+		// First pass ...
+
+		glUniform1i(program->getUniformLocation(u_blurHorizontal), 1);
+		glUniform1i(program->getUniformLocation(u_blurVertical), 0);
+		tempFrameBuffer->use(true);
+
+		glDrawElements(GL_TRIANGLES, numberIndices, GL_UNSIGNED_INT, 0);
+
+		tempFrameBuffer->use(false);
+
+		// ... and final pass
+
+		glBindTexture(target, tempFrameBuffer->getColor0Texture()->getTextureName());
+
+		glUniform1i(program->getUniformLocation(u_blurHorizontal), 0);
+		glUniform1i(program->getUniformLocation(u_blurVertical), 1);
+		depthOfFieldFrameBuffer->use(true);
+
+		glDrawElements(GL_TRIANGLES, numberIndices, GL_UNSIGNED_INT, 0);
+
+		depthOfFieldFrameBuffer->use(false);
+
+		//
+
+		postProcessorVAO->unbind();
+
+		glBindTexture(target, 0);
+
+		usedFrameBuffer = depthOfFieldFrameBuffer;
+	}
+
 	//
 
 	use(false);
 
 	// Color
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(target, frameBuffer->getColor0Texture()->getTextureName());
+	glBindTexture(target, usedFrameBuffer->getColor0Texture()->getTextureName());
 	glUniform1i(program->getUniformLocation(screenTexture), 0);
 
-	// Bloom
+	// Not used.
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(target, bloomFrameBuffer->getColor0Texture()->getTextureName());
 	glUniform1i(program->getUniformLocation(bloomTexture), 1);
 
 	// Blur
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_1D, blurTexture1D->getTextureName());
+	glBindTexture(GL_TEXTURE_1D_ARRAY, blurTexture1DArray->getTextureName());
 	glUniform1i(program->getUniformLocation(u_blurTexture), 2);
 
 	glActiveTexture(GL_TEXTURE0);
+
+	glUniform1i(program->getUniformLocation(u_useDoF), false);
 
 	glUniform1i(program->getUniformLocation(u_useBlur), useBlur);
 	glUniform1i(program->getUniformLocation(u_blurHorizontal), 1);
 	glUniform1i(program->getUniformLocation(u_blurVertical), 1);
 
-	glUniform1i(program->getUniformLocation(u_useBloom), useBloom);
+	glUniform1i(program->getUniformLocation(u_useBloom), false);
 	glUniform1f(program->getUniformLocation(u_bloomLevel), bloomLevel);
 
 	glUniform1i(program->getUniformLocation(u_useExposure), useExposure);
@@ -193,6 +386,66 @@ void PostProcessor::render() const
 	glDepthMask(GL_TRUE);
 
 	glBindTexture(target, 0);
+}
+
+GLuint PostProcessor::getOutputFBO() const
+{
+	return outputFramebuffer;
+}
+
+void PostProcessor::setOutputFBO(GLuint outputFramebuffer)
+{
+	this->outputFramebuffer = outputFramebuffer;
+}
+
+GLuint PostProcessor::getFBO() const
+{
+	if (frameBuffer.get())
+	{
+		return frameBuffer->getFBO();
+	}
+
+	return 0;
+}
+
+bool PostProcessor::isUseDoF() const
+{
+	return useDoF;
+}
+
+void PostProcessor::setUseDoF(bool useDoF)
+{
+	this->useDoF = useDoF;
+}
+
+float PostProcessor::getAperture() const
+{
+	return aperture;
+}
+
+void PostProcessor::setAperture(float aperture)
+{
+	this->aperture = aperture;
+}
+
+float PostProcessor::getFocal() const
+{
+	return focal;
+}
+
+void PostProcessor::setFocal(float focal)
+{
+	this->focal = focal;
+}
+
+float PostProcessor::getFocusedObject() const
+{
+	return focusedObject;
+}
+
+void PostProcessor::setFocusedObject(float focusedObject)
+{
+	this->focusedObject = focusedObject;
 }
 
 bool PostProcessor::isUseBlur() const

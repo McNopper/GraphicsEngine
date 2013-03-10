@@ -33,6 +33,8 @@ protected:
 	float zNear;
 	float zFar;
 	Matrix4x4 projectionMatrix;
+	Matrix4x4 biasedProjectionMatrix;
+	Matrix4x4 biasMatrix;
 
 	ViewFrustum viewFrustum;
 
@@ -56,9 +58,13 @@ public:
 
 	const Point4& getEye() const;
 
+	const Vector3& getDirection() const;
+
 	const Matrix4x4& getViewMatrix() const;
 
 	const Matrix4x4& getProjectionMatrix() const;
+
+	const Matrix4x4& getBiasedProjectionMatrix() const;
 
 	/**
 	 * View Frustum is in world space.

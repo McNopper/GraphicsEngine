@@ -11,7 +11,7 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/shader/Program.h"
-#include "../../layer0/texture/Texture1D.h"
+#include "../../layer0/texture/Texture1DArray.h"
 #include "../../layer2/framebuffer/FrameBuffer.h"
 
 #include "PostProcessorVAO.h"
@@ -25,13 +25,20 @@ protected:
 
 	//
 
-	FrameBufferSP frameBuffer;
+	GLuint  outputFramebuffer;
 
-	FrameBufferSP tempBloomFrameBuffer;
+	//
+
+	FrameBufferSP frameBuffer;
+	FrameBufferSP tempFrameBuffer;
+
+	FrameBufferSP depthOfFieldFrameBuffer;
+
 	FrameBufferSP bloomFrameBuffer;
 
-	Texture1DSP blurTexture1D;
-	Texture1DSP bloomTexture1D;
+	Texture1DArraySP blurTexture1DArray;
+	Texture1DArraySP bloomTexture1DArray;
+	Texture1DArraySP depthOfFieldTexture1DArray;
 
 	ProgramSP program;
 
@@ -46,6 +53,11 @@ protected:
 
 	//
 
+	bool useDoF;
+	float aperture;
+	float focal;
+	float focusedObject;
+
 	bool useBlur;
 
 	bool useBloom;
@@ -58,9 +70,10 @@ protected:
 	float gamma;
 
 	std::string screenTexture;
+	std::string depthTexture;
 	std::string bloomTexture;
 
-	PostProcessor(GLenum target);
+	PostProcessor(GLenum target, boost::int32_t blurPixel = 2, float blurSigma = 0.5f, boost::int32_t bloomPixel = 16, float bloomSigma = 5.0f, boost::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
 
 	virtual void setUniforms() const = 0;
 
@@ -75,6 +88,20 @@ public:
 	GLuint getVboTexCoords() const;
 	GLuint getVboVertices() const;
 
+	GLuint getOutputFBO() const;
+	void setOutputFBO(GLuint outputFramebuffer);
+
+	GLuint getFBO() const;
+
+	bool isUseDoF() const;
+	void setUseDoF(bool useDoF);
+	float getAperture() const;
+	void setAperture(float aperture);
+	float getFocal() const;
+	void setFocal(float focal);
+	float getFocusedObject() const;
+	void setFocusedObject(float focusedObject);
+	
 	bool isUseBlur() const;
 	void setUseBlur(bool useBlur);
 

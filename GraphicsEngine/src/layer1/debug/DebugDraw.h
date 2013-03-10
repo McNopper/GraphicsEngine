@@ -10,6 +10,7 @@
 
 #include "../../layer0/color/Color.h"
 #include "../../layer0/math/AxisAlignedBox.h"
+#include "../../layer0/math/Plane.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Sphere.h"
 
@@ -30,6 +31,8 @@ public:
 	void draw(const Sphere& Sphere, const Color& color, bool mesh = false) const;
 
 	void draw(const AxisAlignedBox& axisAlignedBox, const Color& color) const;
+
+	void draw(const Plane& plane, const Point4& origin, const Color& color) const;
 
 };
 

@@ -45,6 +45,8 @@ public:
 	void setY(float y);
 	float getZ() const;
 	void setZ(float z);
+	float getW() const;
+	void setW(float w);
 
 	const float* getP() const;
 

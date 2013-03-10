@@ -35,7 +35,7 @@ Point4::Point4(const float other[4])
 	p[0] = other[0];
 	p[1] = other[1];
 	p[2] = other[2];
-	p[3] = 1.0f;
+	p[3] = other[3];
 }
 
 Point4::Point4(const Point4 & other)
@@ -43,7 +43,7 @@ Point4::Point4(const Point4 & other)
 	p[0] = other.p[0];
 	p[1] = other.p[1];
 	p[2] = other.p[2];
-	p[3] = 1.0f;
+	p[3] = other.p[3];
 }
 
 Point4::~Point4()
@@ -119,6 +119,16 @@ float Point4::getZ() const
 void Point4::setZ(float z)
 {
 	p[2] = z;
+}
+
+float Point4::getW() const
+{
+	return p[3];
+}
+
+void Point4::setW(float w)
+{
+	p[3] = w;
 }
 
 const float* Point4::getP() const

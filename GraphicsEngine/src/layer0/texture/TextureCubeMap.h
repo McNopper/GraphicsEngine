@@ -8,6 +8,7 @@
 #ifndef TEXTURECUBEMAP_H_
 #define TEXTURECUBEMAP_H_
 
+#include "PixelData.h"
 #include "TextureStandard.h"
 
 class TextureCubeMap : public TextureStandard
@@ -15,12 +16,12 @@ class TextureCubeMap : public TextureStandard
 
 private:
 
-	boost::uint8_t* pixelsPosX;
-	boost::uint8_t* pixelsNegX;
-	boost::uint8_t* pixelsPosY;
-	boost::uint8_t* pixelsNegY;
-	boost::uint8_t* pixelsPosZ;
-	boost::uint8_t* pixelsNegZ;
+	PixelData pixelDataPosX;
+	PixelData pixelDataNegX;
+	PixelData pixelDataPosY;
+	PixelData pixelDataNegY;
+	PixelData pixelDataPosZ;
+	PixelData pixelDataNegZ;
 
 public:
 

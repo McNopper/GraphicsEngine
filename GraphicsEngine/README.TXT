@@ -47,8 +47,9 @@ Features:
 - Perspective and orthographic cameras
 - Overlay text output
 - Debug: Frames per second
-- Debug: Rendering of lines, cubes and spheres
+- Debug: Rendering of lines, planes, cubes and spheres
 - Debug: Rendering of bounding sphere and octree nodes 
+- Debug: Ground plane
 - Multithreaded update loop
 - Sky sphere and dome
 - Post processing with MSAA, gamma correction, tone mapping (HDR), blur and bloom
@@ -67,10 +68,12 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-04.03.2013 Norbert Nopper (norbert@nopper.tv)
+08.03.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Addded ground plane debug output
+- Added plane debug output
 - Changed build configuration naming
 - Added MSAA textures, render buffers and frame buffers
 - Added MSAA post processor 

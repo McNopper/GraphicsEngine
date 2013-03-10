@@ -119,3 +119,24 @@ void DebugDraw::draw(const AxisAlignedBox& axisAlignedBox, const Color& color) c
 
 	// Left and Right not needed
 }
+
+void DebugDraw::draw(const Plane& plane, const Point4& origin, const Color& color) const
+{
+	Matrix4x4 modelMatrix;
+
+	if (!LineGeometryManager::getInstance()->getLineGeometry("GridPlane").get())
+	{
+		return;
+	}
+
+	float x = -plane.getPlane()[0] * plane.getPlane()[3] + origin.getX();
+	float y = -plane.getPlane()[1] * plane.getPlane()[3] + origin.getY();
+	float z = -plane.getPlane()[2] * plane.getPlane()[3] + origin.getZ();
+
+	modelMatrix.identity();
+	modelMatrix.translate(x, y, z);
+	modelMatrix.rotateRzRyRx(0.0f, plane.getPlane()[0] * 90.0f, plane.getPlane()[1] * -90.0f);
+
+	LineGeometryManager::getInstance()->getLineGeometry("GridPlane")->draw(modelMatrix, color);
+}
+

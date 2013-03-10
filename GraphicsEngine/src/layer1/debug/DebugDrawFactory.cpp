@@ -22,9 +22,17 @@ DebugDrawFactory::~DebugDrawFactory()
 
 void DebugDrawFactory::createDefaultDebugGeometry() const
 {
+	LineGeometrySP lineGeometry;
+
+	GLUSline gridPlane;
+	glusCreateRectangularGridf(&gridPlane, 50.0f, 50.0f, 50, 50);
+	lineGeometry = LineGeometrySP(new LineGeometry(gridPlane));
+	glusDestroyLinef(&gridPlane);
+	LineGeometryManager::getInstance()->setLineGeometry("GridPlane", lineGeometry);
+
 	GLUSshape sphere;
 	glusCreateSpheref(&sphere, 1.0f, 32);
-	LineGeometrySP lineGeometry = LineGeometrySP(new LineGeometry(sphere));
+	lineGeometry = LineGeometrySP(new LineGeometry(sphere));
 	glusDestroyShapef(&sphere);
 	LineGeometryManager::getInstance()->setLineGeometry("Sphere", lineGeometry);
 
@@ -44,7 +52,7 @@ void DebugDrawFactory::createDefaultDebugGeometry() const
 	GLUSfloat origin0[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 	GLUSfloat origin1[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 	glusCreateLinef(&singleLine, origin0, origin1);
-	LineGeometrySP singleLineGeometry = LineGeometrySP(new LineGeometry(singleLine));
+	lineGeometry = LineGeometrySP(new LineGeometry(singleLine));
 	glusDestroyLinef(&singleLine);
-	LineGeometryManager::getInstance()->setLineGeometry("SingleLine", singleLineGeometry);
+	LineGeometryManager::getInstance()->setLineGeometry("SingleLine", lineGeometry);
 }

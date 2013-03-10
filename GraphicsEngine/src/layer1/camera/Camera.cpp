@@ -10,16 +10,23 @@
 #include "Camera.h"
 
 Camera::Camera() :
-	eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(), viewport(), zNear(0.1f), zFar(1000.0f), viewFrustum()
+	eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum()
 {
+	// Needed to range values between 0 and 1
+	biasMatrix.identity();
+	biasMatrix.translate(0.5f, 0.5f, 0.5f);
+	biasMatrix.scale(0.5f, 0.5f, 0.5f);
+
 	lookAt(eye, center, up);
 }
 
 Camera::Camera(const Camera& other) :
-	eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum)
+	eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
+	biasedProjectionMatrix = other.projectionMatrix;
+	biasMatrix = other.biasMatrix;
 }
 
 Camera::~Camera()
@@ -94,6 +101,11 @@ const Point4& Camera::getEye() const
 	return eye;
 }
 
+const Vector3& Camera::getDirection() const
+{
+	return direction;
+}
+
 const Matrix4x4& Camera::getViewMatrix() const
 {
 	return viewMatrix;
@@ -102,6 +114,11 @@ const Matrix4x4& Camera::getViewMatrix() const
 const Matrix4x4& Camera::getProjectionMatrix() const
 {
 	return projectionMatrix;
+}
+
+const Matrix4x4& Camera::getBiasedProjectionMatrix() const
+{
+	return biasedProjectionMatrix;
 }
 
 const ViewFrustum& Camera::getViewFrustum() const

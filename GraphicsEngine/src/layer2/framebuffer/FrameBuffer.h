@@ -50,6 +50,8 @@ public:
 
 	void use(bool enable);
 
+	GLuint getFBO() const;
+
 	boost::int32_t getWidth() const;
 	void setWidth(boost::int32_t width);
 	boost::int32_t getHeight() const;

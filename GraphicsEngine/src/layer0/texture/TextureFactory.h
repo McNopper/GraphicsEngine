@@ -11,6 +11,7 @@
 #include "../../UsedLibs.h"
 
 #include "Texture1D.h"
+#include "Texture1DArray.h"
 #include "Texture2D.h"
 #include "Texture2DMultisample.h"
 #include "TextureCubeMap.h"
@@ -40,6 +41,12 @@ public:
 	Texture1DSP createTexture1D(boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels = nullptr, boost::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE) const;
 
 	Texture1DSP createTexture1D(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels = nullptr, boost::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE) const;
+
+	//
+
+	Texture1DArraySP createTexture1DArray(boost::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE) const;
+
+	Texture1DArraySP createTexture1DArray(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE) const;
 
 	//
 

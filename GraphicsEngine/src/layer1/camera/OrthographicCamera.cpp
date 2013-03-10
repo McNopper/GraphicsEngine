@@ -43,5 +43,7 @@ void OrthographicCamera::orthographic(const Viewport& viewport, float nearVal, f
 
 	projectionMatrix.setM(result);
 
+	biasedProjectionMatrix = biasMatrix * projectionMatrix;
+
 	updateViewFrustum();
 }

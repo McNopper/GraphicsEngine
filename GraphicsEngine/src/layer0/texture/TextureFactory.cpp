@@ -203,6 +203,16 @@ Texture1DSP TextureFactory::createTexture1D(GLint internalFormat, int32_t width,
 	return Texture1DSP(new Texture1D(internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT));
 }
 
+Texture1DArraySP TextureFactory::createTexture1DArray(int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) const
+{
+	return Texture1DArraySP(new Texture1DArray(gatherInternalFormat(format, type), width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT));
+}
+
+Texture1DArraySP TextureFactory::createTexture1DArray(GLint internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) const
+{
+	return Texture1DArraySP(new Texture1DArray(internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT));
+}
+
 Texture2DSP TextureFactory::createTexture2D(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) const
 {
 	Texture2DSP texture2D;

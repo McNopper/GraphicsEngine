@@ -2,7 +2,7 @@
 
 uniform sampler2D u_screenTexture;
 uniform sampler2DMS u_screenTextureMS;
-uniform sampler1D u_blurTexture;
+uniform sampler1DArray u_blurTexture;
 
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
@@ -18,6 +18,8 @@ flat out vec2 v_texCoordStep;
 
 flat out int v_texWidthBlur;
 flat out float v_texWidthBlurStep;
+
+out float v_cocRadiusReduction;
 
 void main(void)
 {
@@ -36,7 +38,7 @@ void main(void)
 	 
 	v_texCoordStep = vec2(1.0 / float(texSize.s + 1), 1.0 / float(texSize.t + 1));
 	
-	int texWidth = textureSize(u_blurTexture, 0);
+	int texWidth = textureSize(u_blurTexture, 0).s;
 	v_texWidthBlur = texWidth;
 	v_texWidthBlurStep = 1.0 / float(texWidth + 1);
 

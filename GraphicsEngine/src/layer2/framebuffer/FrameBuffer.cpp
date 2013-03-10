@@ -126,6 +126,11 @@ void FrameBuffer::use(bool enable)
 	}
 }
 
+GLuint FrameBuffer::getFBO() const
+{
+	return fbo;
+}
+
 int32_t FrameBuffer::getDrawBuffersCount() const
 {
 	int32_t count = 0;

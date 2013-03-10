@@ -10,22 +10,8 @@
 using namespace boost;
 
 Texture1D::Texture1D(GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) :
-	TextureStandard(GL_TEXTURE_1D, internalFormat, width, 1, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT)
+	TextureStandard(GL_TEXTURE_1D, internalFormat, width, 1, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT), pixelData(width, 1, format, type, pixels, sizeOfData)
 {
-	if (pixels && sizeOfData > 0)
-	{
-		this->pixels = new uint8_t[sizeOfData];
-
-		if (this->pixels)
-		{
-			memcpy(this->pixels, pixels, sizeOfData);
-		}
-	}
-	else
-	{
-		this->pixels = nullptr;
-	}
-
 	init();
 }
 
@@ -56,7 +42,7 @@ bool Texture1D::init()
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glTexImage1D(target, 0, internalFormat, width, 0, format, type, pixels);
+	glTexImage1D(target, 0, internalFormat, width, 0, format, type, pixelData.getPixels());
 
 	if (mipMap)
 	{
@@ -73,10 +59,5 @@ bool Texture1D::init()
 
 void Texture1D::freePixels()
 {
-	if (pixels)
-	{
-		delete[] pixels;
-
-		pixels = nullptr;
-	}
+	pixelData.freePixels();
 }
