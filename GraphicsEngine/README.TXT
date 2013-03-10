@@ -52,7 +52,7 @@ Features:
 - Debug: Ground plane
 - Multithreaded update loop
 - Sky sphere and dome
-- Post processing with MSAA, gamma correction, tone mapping (HDR), blur and bloom
+- Post processing with MSAA, gamma correction, tone mapping (HDR), blur, bloom and depth of field
 - Render filter, that only transparent, opaque or all nodes should be rendered
 
 Build configuration naming:
@@ -68,11 +68,12 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-08.03.2013 Norbert Nopper (norbert@nopper.tv)
+10.03.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
-- Addded ground plane debug output
+- Added depth of field
+- Added ground plane debug output
 - Added plane debug output
 - Changed build configuration naming
 - Added MSAA textures, render buffers and frame buffers
