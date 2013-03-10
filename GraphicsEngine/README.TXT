@@ -52,7 +52,7 @@ Features:
 - Debug: Ground plane
 - Multithreaded update loop
 - Sky sphere and dome
-- Post processing with MSAA, gamma correction, tone mapping (HDR), blur, bloom and depth of field
+- Post processing with MSAA, gamma correction, tone mapping (HDR), blur, bloom and depth of field (DOF)
 - Render filter, that only transparent, opaque or all nodes should be rendered
 
 Build configuration naming:
