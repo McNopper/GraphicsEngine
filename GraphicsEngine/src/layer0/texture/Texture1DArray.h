@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Texture1DArray(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT);
+	Texture1DArray(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture1DArray();
 
 	virtual bool init();

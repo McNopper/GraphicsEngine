@@ -143,9 +143,11 @@ public:
 
 	bool isTransparent() const;
 	void setTransparent(bool transparent);
+	void setTransparentRecursive(bool transparent);
 
 	bool isVisible() const;
 	void setVisible(bool visible);
+	void setVisibleRecursive(bool transparent);
 };
 
 typedef boost::shared_ptr<Node> NodeSP;

@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Texture1D(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT);
+	Texture1D(GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture1D();
 
 	virtual bool init();

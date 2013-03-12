@@ -12,7 +12,7 @@
 
 using namespace std;
 
-ModelEntityManager* ModelEntityManager::instance;
+ModelEntityManager* ModelEntityManager::instance = nullptr;
 
 ModelEntityManager::ModelEntityManager() :
 	allEntities(), allUpdatableEntities(), octree()
@@ -234,5 +234,22 @@ void ModelEntityManager::setBrightColorEffect(bool writeBrightColor, float brigh
 		(*walker)->setBrightColorLimit(brightColorLimit);
 		walker++;
 	}
+}
+
+ModelEntitySP ModelEntityManager::findEntity(const string& name) const
+{
+	auto walker = allEntities.begin();
+
+	while (walker != allEntities.end())
+	{
+		if ((*walker)->getName().compare(name) == 0)
+		{
+			return *walker;
+		}
+
+		walker++;
+	}
+
+	return ModelEntitySP();
 }
 

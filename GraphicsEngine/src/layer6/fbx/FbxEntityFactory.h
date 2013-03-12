@@ -40,6 +40,8 @@ private:
 	bool currentEntityAnimated;
 	bool currentEntitySkinned;
 
+	bool anisotropic;
+
 	bool doReset;
 
 	float minX, maxX, minY, maxY, minZ, maxZ;
@@ -54,7 +56,7 @@ private:
 
 	void processSurfaceMaterial(boost::int32_t materialIndex, FbxSurfaceMaterial* surfaceMaterial);
 
-	FbxDouble3 processMaterialProperty(const FbxSurfaceMaterial* Material, const char* propertyName, const char* factorPropertyName, Texture2DSP& texture) const;
+	FbxDouble3 processMaterialProperty(const FbxSurfaceMaterial* Material, const char* propertyName, const char* factorPropertyName, const FbxDouble3& defaultColor, Texture2DSP& texture) const;
 
 	void traverseNode(FbxNode* node, const NodeSP& parentNode);
 
@@ -77,7 +79,7 @@ public:
 	FbxEntityFactory();
 	virtual ~FbxEntityFactory();
 
-	ModelEntitySP loadFbxFile(const std::string& filename, float scale, const SurfaceMaterialSP& overwriteSurfaceMaterial = SurfaceMaterialSP());
+	ModelEntitySP loadFbxFile(const std::string& name, const std::string& filename, float scale, bool globalAnisotropic = false, const SurfaceMaterialSP& overwriteSurfaceMaterial = SurfaceMaterialSP());
 
 };
 

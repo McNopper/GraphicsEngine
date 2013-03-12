@@ -31,6 +31,8 @@ public:
 
 	Matrix3x3 copy() const;
 
+	Matrix3x3& operator*=(const Matrix3x3& other);
+
 	Matrix3x3 operator*(const Matrix3x3& other) const;
 
 	Matrix4x4 createMatrix4x4() const;

@@ -10,7 +10,7 @@
 using namespace std;
 
 SurfaceMaterial::SurfaceMaterial(const string& name) :
-	name(name), emissive(), emissiveTexture(), ambient(), ambientTexture(), diffuse(), diffuseTexture(), specular(), specularTexture(), shininess(0.0f), reflection(), reflectionTexture(), refraction(), refractionTexture(), refractiveIndex(0.0f), normalMapTexture()
+	name(name), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), normalMapTexture()
 {
 }
 

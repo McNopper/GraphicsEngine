@@ -12,6 +12,7 @@
 
 #include "../../layer0/math/Matrix4x4.h"
 #include "../../layer0/math/Matrix3x3.h"
+#include "../../layer1/material/SurfaceMaterial.h"
 #include "../../layer1/collision/BoundingSphere.h"
 #include "../../layer3/node/Node.h"
 
@@ -29,6 +30,9 @@ private:
 
 	std::map<boost::int32_t, NodeSP> allNodesByIndex;
 	std::map<std::string, NodeSP> allNodesByName;
+	std::map<std::string, SurfaceMaterialSP> allSurfaceMaterialsByName;
+
+	void updateSurfaceMaterialsRecursive(const NodeSP& node);
 
 public:
 
@@ -44,6 +48,12 @@ public:
 	bool isAnimated() const;
 
 	bool isSkinned() const;
+
+	SurfaceMaterialSP findSurfaceMaterial(const std::string& name) const;
+
+	boost::int32_t getSurfaceMaterialCount() const;
+
+	SurfaceMaterialSP getSurfaceMaterialAt(boost::int32_t index) const;
 
 };
 

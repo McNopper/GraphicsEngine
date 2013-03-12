@@ -121,3 +121,12 @@ const Matrix3x3& Quaternion::getRotationMatrix3x3() const
 
 	return rotationMatrix3x3;
 }
+
+Quaternion Quaternion::slerp(const Quaternion& other, float t) const
+{
+	Quaternion result;
+
+	glusQuaternionSlerpf(result.q, q, other.q, t);
+
+	return result;
+}

@@ -2,29 +2,15 @@
 
 using namespace std;
 
-static User userInput;
-
 static bool writeBrightColor = true;
 static float brightColorLimit = 1.0f;
 
 GLUSboolean initGame(GLUSvoid)
 {
-	//glusLogSetLevel(GLUS_LOG_DEBUG);
-
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-	WorkerManager::getInstance()->addWorker();
-
-	FontFactory fontFactory;
-	fontFactory.createDefaultFont();
-
-	DebugDrawFactory debugDrawFactory;
-	debugDrawFactory.createDefaultDebugGeometry();
+	if (!initEngine(GLUS_LOG_INFO, 7))
+	{
+		return GLUS_FALSE;
+	}
 
 	OctreeFactory octreeFactory;
 	OctreeSP octree = octreeFactory.createOctree(6, 1024, Point4(), 256.0f, 256.0f, 256.0f);
@@ -81,7 +67,7 @@ GLUSboolean initGame(GLUSvoid)
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Reflective", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, 0.0f);
 
 	filename = "teapot.fbx";
-	entity = entityFactory.loadFbxFile(filename, 1.0f, surfaceMaterial);
+	entity = entityFactory.loadFbxFile("Teapot", filename, 1.0f, false, surfaceMaterial);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
@@ -98,7 +84,7 @@ GLUSboolean initGame(GLUSvoid)
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Yellow", Color::BLACK, Color(0.2f, 0.2f, 0.0f), Color(0.8f, 0.8f, 0.0f), Color(0.9f, 0.9f, 9.0f), 20.0f);
 	position = Point4(-10.0f, 0.0f, -15.0f);
 
-	entity = primitiveEntityFactory.createSpherePrimitiveEntity(5.0f, 5.0f, 5.0f, surfaceMaterial);
+	entity = primitiveEntityFactory.createSpherePrimitiveEntity("YellowSphere", 5.0f, 5.0f, 5.0f, surfaceMaterial);
 	entity->setPosition(position);
 
 	ModelEntityManager::getInstance()->updateEntity(entity);
@@ -107,13 +93,9 @@ GLUSboolean initGame(GLUSvoid)
 
 	ModelEntityManager::getInstance()->setBrightColorEffect(writeBrightColor, brightColorLimit);
 
-	// Camera
-
-	userInput.setUserCamera(CameraManager::getInstance()->getDefaultPerspectiveCamera());
-
 	// Lights
 
-	Color ambient(0.1f, 0.1f, 0.1f, 1.0f);
+	Color ambient(0.25f, 0.25f, 0.25f, 1.0f);
 	Color specular(0.5f, 0.5f, 0.5f, 1.0f);
 
 	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(1.0f, 1.0f, 1.0f), ambient, Color::WHITE, specular));
@@ -138,22 +120,17 @@ GLUSboolean initGame(GLUSvoid)
 
 GLUSvoid reshapeGame(GLUSint width, GLUSint height)
 {
-	ViewportSP defaultViewport = ViewportManager::getInstance()->getDefaultViewport();
-	defaultViewport->setViewport(0, 0, width, height);
-	defaultViewport->use();
-
-	CameraManager::getInstance()->updateWindowViewport(*defaultViewport);
-
-	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
-
-	FrameBuffer2DManager::getInstance()->updateWidthHeight(width, height);
+	reshapeEngine(width, height);
 }
 
 GLUSboolean updateGame(GLUSfloat deltaTime)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if (!updateEngine(deltaTime))
+	{
+		return GLUS_FALSE;
+	}
 
-	userInput.update(deltaTime);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
 
@@ -195,46 +172,25 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 GLUSvoid terminateGame(GLUSvoid)
 {
-	userInput.setUserCamera(CameraSP());
-
-	SkyManager::terminate();
-	EntityCommandManager::terminate();
-	WorkerManager::terminate();
-	LineGeometryManager::terminate();
-	FontManager::terminate();
-	PostProcessor2DManager::terminate();
-	FrameBuffer2DManager::terminate();
-	RenderBufferManager::terminate();
-	Texture2DManager::terminate();
-	TextureCubeMapManager::terminate();
-	ModelEntityManager::terminate();
-	ModelManager::terminate();
-	ViewportManager::terminate();
-	LightManager::terminate();
-	CameraManager::terminate();
-	ProgramManager::terminate();
+	terminateEngine();
 }
 
 GLUSvoid mouseButtonGame(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos)
 {
 	glusLogPrint(GLUS_LOG_DEBUG, "mouseButton %d %d %d %d", pressed, button, xPos, yPos);
-	userInput.mouseButton(pressed, button, xPos, yPos);
+	mouseButtonEngine(pressed, button, xPos, yPos);
 }
 
 GLUSvoid mouseWheelGame(GLUSint buttons, GLUSint ticks, GLUSint xPos, GLUSint yPos)
 {
-	static GLUSint lastTicks = 0;
-
 	glusLogPrint(GLUS_LOG_DEBUG, "mouseWheel %d %d %d %d", buttons, ticks, xPos, yPos);
-	userInput.mouseWheel(buttons, ticks-lastTicks, xPos, yPos);
-
-	lastTicks = ticks;
+	mouseWheelEngine(buttons, ticks, xPos, yPos);
 }
 
 GLUSvoid mouseMoveGame(GLUSint buttons, GLUSint xPos, GLUSint yPos)
 {
 	glusLogPrint(GLUS_LOG_DEBUG, "mouseMove %d %d %d", buttons, xPos, yPos);
-	userInput.mouseMove(buttons, xPos, yPos);
+	mouseMoveEngine(buttons, xPos, yPos);
 }
 
 GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
@@ -313,7 +269,7 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 		}
 	}
 
-	userInput.key(pressed, key);
+	keyEngine(pressed, key);
 }
 
 int main(int argc, char* argv[])

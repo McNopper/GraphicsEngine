@@ -52,6 +52,20 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 	return surfaceMaterial;
 }
 
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess) const
+{
+	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
+
+	surfaceMaterial->setEmissive(emissive);
+	surfaceMaterial->setAmbient(ambient);
+	surfaceMaterial->setDiffuse(diffuse);
+	surfaceMaterial->setDiffuseTexture(diffuseTexture);
+	surfaceMaterial->setSpecular(specular);
+	surfaceMaterial->setShininess(shininess);
+
+	return surfaceMaterial;
+}
+
 SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const
 {
 	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
@@ -74,6 +88,23 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 
 	surfaceMaterial->setEmissive(emissive);
 	surfaceMaterial->setAmbient(ambient);
+	surfaceMaterial->setDiffuseTexture(diffuseTexture);
+	surfaceMaterial->setSpecular(specular);
+	surfaceMaterial->setShininess(shininess);
+	surfaceMaterial->setReflection(reflection);
+	surfaceMaterial->setRefraction(refraction);
+	surfaceMaterial->setRefractiveIndex(refractiveIndex);
+
+	return surfaceMaterial;
+}
+
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const
+{
+	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
+
+	surfaceMaterial->setEmissive(emissive);
+	surfaceMaterial->setAmbient(ambient);
+	surfaceMaterial->setDiffuse(diffuse);
 	surfaceMaterial->setDiffuseTexture(diffuseTexture);
 	surfaceMaterial->setSpecular(specular);
 	surfaceMaterial->setShininess(shininess);

@@ -23,29 +23,29 @@ public:
 	PrimitiveEntityFactory();
 	virtual ~PrimitiveEntityFactory();
 
-	ModelEntitySP createCubePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createCubePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createCubePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createCubePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
-	ModelEntitySP createSpherePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createSpherePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createSpherePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createSpherePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
-	ModelEntitySP createDomePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createDomePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createDomePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createDomePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
-	ModelEntitySP createTorusPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createTorusPrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createTorusPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createTorusPrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
-	ModelEntitySP createConePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createConePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createConePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createConePrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
-	ModelEntitySP createCylinderPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
+	ModelEntitySP createCylinderPrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const;
 
-	ModelEntitySP createCylinderPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
+	ModelEntitySP createCylinderPrimitiveEntity(const std::string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const std::vector<AnimationStackSP>& allAnimStacks) const;
 
 };
 

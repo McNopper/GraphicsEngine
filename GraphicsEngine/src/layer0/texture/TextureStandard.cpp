@@ -9,10 +9,13 @@
 
 using namespace boost;
 
-TextureStandard::TextureStandard(GLenum target, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) :
+TextureStandard::TextureStandard(GLenum target, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
 		Texture(target, internalFormat, width, height),
-		format(format), type(type), sizeOfData(sizeOfData), mipMap(mipMap), minFilter(minFilter), magFilter(magFilter), wrapS(wrapS), wrapT(wrapT)
+		format(format), type(type), sizeOfData(sizeOfData), mipMap(mipMap), minFilter(minFilter), magFilter(magFilter), wrapS(wrapS), wrapT(wrapT), anisotropic(1.0)
 {
+	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic");
+
+	setAnisotropic(anisotropic);
 }
 
 TextureStandard::~TextureStandard()
@@ -106,5 +109,46 @@ void TextureStandard::setWrapT(GLint wrapT)
 		glBindTexture(target, textureName);
 
 		glTexParameteri(target, GL_TEXTURE_WRAP_T, wrapT);
+	}
+}
+
+float TextureStandard::getAnisotropic() const
+{
+	return anisotropic;
+}
+
+void TextureStandard::setAnisotropic(float level)
+{
+	if (hasAnisotropic)
+	{
+		float max = 1.0f;
+
+		if (level < 1.0f)
+		{
+			level = 1.0;
+		}
+
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+
+		if (level > max)
+		{
+			level = max;
+		}
+
+		glBindTexture(target, textureName);
+
+		glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
+	}
+}
+
+void TextureStandard::setMaxAnisotropic()
+{
+	if (hasAnisotropic)
+	{
+		float max = 1.0f;
+
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+
+		setAnisotropic(max);
 	}
 }

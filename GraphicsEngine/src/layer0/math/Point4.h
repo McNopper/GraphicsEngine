@@ -46,7 +46,6 @@ public:
 	float getZ() const;
 	void setZ(float z);
 	float getW() const;
-	void setW(float w);
 
 	const float* getP() const;
 
@@ -57,6 +56,8 @@ public:
 	float distance(const Plane& plane) const;
 
 	float distance(const Sphere& sphere) const;
+
+	Point4 lerp(const Point4& other, float t) const;
 
 };
 

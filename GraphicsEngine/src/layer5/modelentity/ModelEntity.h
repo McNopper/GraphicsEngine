@@ -12,6 +12,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer1/collision/BoundingSphere.h"
@@ -20,7 +21,7 @@
 #include "../../layer3/octree/OctreeEntity.h"
 #include "../../layer4/model/Model.h"
 
-class ModelEntity : public OctreeEntity, public NodeOwner
+class ModelEntity : public OctreeEntity, public NodeOwner, public Geometry
 {
 
 protected:
@@ -31,9 +32,7 @@ protected:
 	float translateX;
 	float translateY;
 	float translateZ;
-	float angleX;
-	float angleY;
-	float angleZ;
+	Quaternion rotation;
 	float scaleX;
 	float scaleY;
 	float scaleZ;
@@ -70,6 +69,8 @@ private:
 	boost::int32_t animLayerIndex;
 	InstanceNodeSP rootInstanceNode;
 
+	std::string name;
+
 protected:
 
 	void updateMetrics();
@@ -84,7 +85,7 @@ public:
 
     virtual boost::int32_t getNumberJoints() const;
 
-	ModelEntity(const ModelSP& model, float scaleX, float scaleY, float scaleZ);
+	ModelEntity(const std::string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ);
 	virtual ~ModelEntity();
 
     virtual void updateBoundingSphereCenter(bool force = false);
@@ -99,10 +100,12 @@ public:
     void setPosition(const Point4& position);
 
     void setRotation(float angleX, float angleY, float angleZ);
+    void setRotation(const Quaternion& rotation);
 
     void setScale(float scaleX, float scaleY, float scaleZ);
 
     void setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ);
+    void setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ);
 
     bool isUpdateable() const;
     void setUpdateable(bool updateable);
@@ -131,9 +134,11 @@ public:
     void setBrightColorLimit(float brightColorLimit);
     void setRefractiveIndex(float refractiveIndex);
 
+    const boost::shared_ptr<InstanceNode>& getRootInstanceNode() const;
+
     boost::shared_ptr<InstanceNode> findInstanceNodeRecursive(const std::string& name) const;
 
-    boost::shared_ptr<ModelEntity> getNewInstance() const;
+    boost::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
 
 	bool isDebug() const;
 
@@ -142,6 +147,16 @@ public:
 	bool isDebugAsMesh() const;
 
 	void setDebugAsMesh(bool debugAsMesh);
+
+	const std::string& getName() const;
+
+	//
+
+	virtual void updateLocation(const Point4& location);
+
+	virtual void updateOrientation(const Quaternion& orientation);
+
+	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
 
 };
 

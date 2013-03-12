@@ -43,12 +43,14 @@ public:
 	bool isVisibleActive() const;
 
 	void setVisible(bool visible, bool visibleActive);
+	void setVisibleRecursive(bool visible, bool visibleActive);
 
 	bool isTransparent() const;
 
 	bool isTransparentActive() const;
 
 	void setTransparent(bool transparent, bool transparentActive);
+	void setTransparentRecursive(bool transparent, bool transparentActive);
 
 };
 

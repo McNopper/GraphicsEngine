@@ -55,7 +55,7 @@ void Texture2DManager::addTexture(const string& key, const Texture2DSP& texture)
 	allTextures[key] = texture;
 }
 
-Texture2DSP Texture2DManager::createTexture(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
+Texture2DSP Texture2DManager::createTexture(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
 	auto walker = allTextures.find(filename);
 
@@ -63,7 +63,7 @@ Texture2DSP Texture2DManager::createTexture(const string& filename, bool mipMap,
 
 	if (walker == allTextures.end())
 	{
-		allTextures[filename] = textureFactory.createTexture2D(filename, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[filename] = textureFactory.createTexture2D(filename, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[filename];
 	}
@@ -71,7 +71,7 @@ Texture2DSP Texture2DManager::createTexture(const string& filename, bool mipMap,
 	return allTextures[filename];
 }
 
-Texture2DSP Texture2DManager::createTexture(const string& key, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
+Texture2DSP Texture2DManager::createTexture(const string& key, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
 	auto walker = allTextures.find(key);
 
@@ -79,7 +79,7 @@ Texture2DSP Texture2DManager::createTexture(const string& key, int32_t width, in
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture2D(width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture2D(width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}
@@ -87,7 +87,7 @@ Texture2DSP Texture2DManager::createTexture(const string& key, int32_t width, in
 	return allTextures[key];
 }
 
-Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
+Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
 	auto walker = allTextures.find(key);
 
@@ -95,7 +95,7 @@ Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFor
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture2D(internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture2D(internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}

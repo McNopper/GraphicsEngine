@@ -63,14 +63,11 @@ layout(location = 1, index = 0) out vec4 brightColor;
 
 void main(void)
 {
-	vec4 diffuseColor;
-	if (u_hasDiffuseTexture == 0)
+	vec4 diffuseTexture = vec4(1.0, 1.0, 1.0, 1.0);
+
+	if (u_hasDiffuseTexture != 0)
 	{
-		diffuseColor = u_material.diffuseColor;
-	}
-	else
-	{
- 		diffuseColor = texture2D(u_material.diffuseTexture, v_texCoord);
+ 		diffuseTexture = texture2D(u_material.diffuseTexture, v_texCoord);
  	}
 
 	vec3 normal;
@@ -136,7 +133,7 @@ void main(void)
 		specularIntensity = pow(eDotR, u_material.shininess);
 	}
 	
-	vec4 color = u_material.emissiveColor + attenuation*u_light.ambientColor*u_material.ambientColor + attenuation*u_light.diffuseColor*diffuseColor * diffuseIntensity + attenuation*u_light.specularColor*u_material.specularColor * specularIntensity;
+	vec4 color = u_material.emissiveColor*diffuseTexture + attenuation*u_light.ambientColor*u_material.ambientColor*diffuseTexture + attenuation*u_light.diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + attenuation*u_light.specularColor*u_material.specularColor * specularIntensity;
 	
 	if (u_hasCubeMapTexture > 0 && (dot(vec3(1.0), u_material.reflectionColor.rgb) > 0.0 || dot(vec3(1.0), u_material.refractionColor.rgb) > 0.0))
 	{

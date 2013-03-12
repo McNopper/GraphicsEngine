@@ -9,8 +9,8 @@
 
 using namespace boost;
 
-Texture2D::Texture2D(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) :
-	TextureStandard(GL_TEXTURE_2D, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT), pixelData(width, width, format, type, pixels, sizeOfData)
+Texture2D::Texture2D(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
+	TextureStandard(GL_TEXTURE_2D, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic), pixelData(width, width, format, type, pixels, sizeOfData)
 {
 	init();
 }

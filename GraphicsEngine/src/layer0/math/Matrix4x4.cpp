@@ -40,6 +40,13 @@ Matrix4x4 Matrix4x4::copy(bool rotationOnly) const
 	return result;
 }
 
+Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& other)
+{
+	glusMatrix4x4Multiplyf(m, m, other.m);
+
+	return *this;
+}
+
 Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) const
 {
 	Matrix4x4 result;

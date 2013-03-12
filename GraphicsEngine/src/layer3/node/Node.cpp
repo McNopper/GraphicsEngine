@@ -824,12 +824,11 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasDiffuseTexture), 0);
 
-				glUniform4fv(currentProgram->getUniformLocation(u_diffuseColor), 1, currentDiffuse);
-
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, 0);
 				glUniform1i(currentProgram->getUniformLocation(u_diffuseTexture), 0);
 			}
+			glUniform4fv(currentProgram->getUniformLocation(u_diffuseColor), 1, currentDiffuse);
 
 			glUniform4fv(currentProgram->getUniformLocation(u_specularColor), 1, currentSpecular);
 			glUniform1f(currentProgram->getUniformLocation(u_shininess), currentShininess);
@@ -1002,6 +1001,20 @@ void Node::setTransparent(bool transparent)
 	this->transparent = transparent;
 }
 
+void Node::setTransparentRecursive(bool transparent)
+{
+	this->transparent = transparent;
+
+	auto walker = allChilds.begin();
+
+	while (walker != allChilds.end())
+	{
+		(*walker)->setTransparentRecursive(transparent);
+
+		walker++;
+	}
+}
+
 bool Node::isVisible() const
 {
 	return visible;
@@ -1010,4 +1023,18 @@ bool Node::isVisible() const
 void Node::setVisible(bool visible)
 {
 	this->visible = visible;
+}
+
+void Node::setVisibleRecursive(bool visible)
+{
+	this->visible = visible;
+
+	auto walker = allChilds.begin();
+
+	while (walker != allChilds.end())
+	{
+		(*walker)->setVisibleRecursive(transparent);
+
+		walker++;
+	}
 }

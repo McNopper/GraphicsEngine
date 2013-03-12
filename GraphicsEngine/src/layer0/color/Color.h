@@ -20,16 +20,34 @@ private:
 public:
 
 	const static Color WHITE;
+	const static Color WHITE_TRANSPARENT;
 	const static Color BLACK;
+	const static Color BLACK_TRANSPARENT;
 	const static Color RED;
+	const static Color RED_TRANSPARENT;
 	const static Color GREEN;
+	const static Color GREEN_TRANSPARENT;
 	const static Color BLUE;
+	const static Color BLUE_TRANSPARENT;
 	const static Color YELLOW;
+	const static Color YELLOW_TRANSPARENT;
 	const static Color MAGENTA;
+	const static Color MAGENTA_TRANSPARENT;
 	const static Color CYAN;
+	const static Color CYAN_TRANSPARENT;
 	const static Color BRIGHT_GREY;
+	const static Color BRIGHT_GREY_TRANSPARENT;
 	const static Color GREY;
+	const static Color GREY_TRANSPARENT;
 	const static Color DARK_GREY;
+	const static Color DARK_GREY_TRANSPARENT;
+
+	const static Color DEFAULT_EMISSIVE;
+	const static Color DEFAULT_AMBIENT;
+	const static Color DEFAULT_DIFFUSE;
+	const static Color DEFAULT_SPECULAR;
+	const static Color DEFAULT_REFLECTION;
+	const static Color DEFAULT_REFRACTION;
 
 	Color();
 	Color(float r, float g, float b);

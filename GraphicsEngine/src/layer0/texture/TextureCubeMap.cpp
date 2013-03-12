@@ -11,8 +11,8 @@ using namespace boost;
 
 TextureCubeMap::TextureCubeMap(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type,
 		const uint8_t* pixelsPosX, const uint8_t* pixelsNegX, const uint8_t* pixelsPosY, const uint8_t* pixelsNegY, const uint8_t* pixelsPosZ, const uint8_t* pixelsNegZ,
-		uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT) :
-		TextureStandard(GL_TEXTURE_CUBE_MAP, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT),
+		uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
+		TextureStandard(GL_TEXTURE_CUBE_MAP, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic),
 		pixelDataPosX(width, width, format, type, pixelsPosX, sizeOfData),
 		pixelDataNegX(width, width, format, type, pixelsNegX, sizeOfData),
 		pixelDataPosY(width, width, format, type, pixelsPosY, sizeOfData),

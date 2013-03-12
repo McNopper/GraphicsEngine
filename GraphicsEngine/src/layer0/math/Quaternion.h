@@ -46,6 +46,8 @@ public:
 
 	const Matrix3x3& getRotationMatrix3x3() const;
 
+	Quaternion slerp(const Quaternion& other, float t) const;
+
 };
 
 #endif /* QUATERNION_H_ */

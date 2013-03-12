@@ -10,16 +10,34 @@
 using namespace boost;
 
 const Color Color::WHITE = Color(1.0f, 1.0f, 1.0f, 1.0f);
+const Color Color::WHITE_TRANSPARENT = Color(1.0f, 1.0f, 1.0f, 0.0f);
 const Color Color::BLACK = Color(0.0f, 0.0f, 0.0f, 1.0f);
+const Color Color::BLACK_TRANSPARENT = Color(0.0f, 0.0f, 0.0f, 0.0f);
 const Color Color::RED = Color(1.0f, 0.0f, 0.0f, 1.0f);
+const Color Color::RED_TRANSPARENT = Color(1.0f, 0.0f, 0.0f, 0.0f);
 const Color Color::GREEN = Color(0.0f, 1.0f, 0.0f, 1.0f);
+const Color Color::GREEN_TRANSPARENT = Color(0.0f, 1.0f, 0.0f, 0.0f);
 const Color Color::BLUE = Color(0.0f, 0.0f, 1.0f, 1.0f);
+const Color Color::BLUE_TRANSPARENT = Color(0.0f, 0.0f, 1.0f, 0.0f);
 const Color Color::YELLOW = Color(1.0f, 1.0f, 0.0f, 1.0f);
+const Color Color::YELLOW_TRANSPARENT = Color(1.0f, 1.0f, 0.0f, 0.0f);
 const Color Color::MAGENTA = Color(1.0f, 0.0f, 1.0f, 1.0f);
+const Color Color::MAGENTA_TRANSPARENT = Color(1.0f, 0.0f, 1.0f, 0.0f);
 const Color Color::CYAN = Color(0.0f, 1.0f, 1.0f, 1.0f);
+const Color Color::CYAN_TRANSPARENT = Color(0.0f, 1.0f, 1.0f, 0.0f);
 const Color Color::BRIGHT_GREY = Color(0.75f, 0.75f, 0.75f, 1.0f);
+const Color Color::BRIGHT_GREY_TRANSPARENT = Color(0.75f, 0.75f, 0.75f, 0.0f);
 const Color Color::GREY = Color(0.5f, 0.5f, 0.5f, 1.0f);
+const Color Color::GREY_TRANSPARENT = Color(0.5f, 0.5f, 0.5f, 0.0f);
 const Color Color::DARK_GREY = Color(0.25f, 0.25f, 0.25f, 1.0f);
+const Color Color::DARK_GREY_TRANSPARENT = Color(0.25f, 0.25f, 0.25f, 0.0f);
+
+const Color Color::DEFAULT_EMISSIVE = Color(0.0f, 0.0f, 0.0f, 1.0f);
+const Color Color::DEFAULT_AMBIENT = Color(0.2f, 0.2f, 0.2f, 1.0f);
+const Color Color::DEFAULT_DIFFUSE = Color(0.8f, 0.8f, 0.8f, 1.0f);
+const Color Color::DEFAULT_SPECULAR = Color(0.0f, 0.0f, 0.0f, 1.0f);
+const Color Color::DEFAULT_REFLECTION = Color(0.0f, 0.0f, 0.0f, 1.0f);
+const Color Color::DEFAULT_REFRACTION = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
 Color::Color()
 {

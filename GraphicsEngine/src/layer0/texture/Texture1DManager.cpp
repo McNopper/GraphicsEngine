@@ -55,7 +55,7 @@ void Texture1DManager::addTexture(const string& key, const Texture1DSP& texture)
 	allTextures[key] = texture;
 }
 
-Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
+Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
 	auto walker = allTextures.find(key);
 
@@ -63,7 +63,7 @@ Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GL
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1D(width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture1D(width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}
@@ -71,7 +71,7 @@ Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GL
 	return allTextures[key];
 }
 
-Texture1DSP Texture1DManager::createTexture(const string& key, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
+Texture1DSP Texture1DManager::createTexture(const string& key, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
 	auto walker = allTextures.find(key);
 
@@ -79,7 +79,7 @@ Texture1DSP Texture1DManager::createTexture(const string& key, GLint internalFor
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1D(internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture1D(internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}

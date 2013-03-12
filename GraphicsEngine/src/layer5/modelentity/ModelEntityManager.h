@@ -55,6 +55,8 @@ public:
 
 	void setBrightColorEffect(bool writeBrightColor, float brightColorLimit) const;
 
+	ModelEntitySP findEntity(const std::string& name) const;
+
 };
 
 #endif /* MODELENTITYMANAGER_H_ */

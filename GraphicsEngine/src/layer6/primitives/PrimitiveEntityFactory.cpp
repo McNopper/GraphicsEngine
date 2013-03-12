@@ -23,7 +23,7 @@ PrimitiveEntityFactory::~PrimitiveEntityFactory()
 {
 }
 
-ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -37,10 +37,10 @@ ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, halfExtend, halfExtend));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cube", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -54,10 +54,10 @@ ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, halfExtend, halfExtend));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cube", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -73,10 +73,10 @@ ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(float scaleX, 
 
 	boundingSphere.setRadius(radius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Sphere", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -92,10 +92,10 @@ ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(float scaleX, 
 
 	boundingSphere.setRadius(radius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Sphere", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -111,10 +111,10 @@ ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(radius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Dome", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -130,10 +130,10 @@ ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(radius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Dome", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -150,10 +150,10 @@ ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(float scaleX, f
 
 	boundingSphere.setRadius(outerRadius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Torus", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -170,10 +170,10 @@ ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(float scaleX, f
 
 	boundingSphere.setRadius(outerRadius);
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Torus", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -190,10 +190,10 @@ ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cone", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -210,10 +210,10 @@ ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(float scaleX, fl
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cone", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
+ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	ModelFactory modelFactory;
 
@@ -229,10 +229,10 @@ ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(float scaleX
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cylinder", boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
 
-ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
+ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(const string& name, float scaleX, float scaleY, float scaleZ, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
 	ModelFactory modelFactory;
 
@@ -248,5 +248,5 @@ ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(float scaleX
 
 	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
 
-	return ModelEntitySP(new ModelEntity(modelFactory.createModel("Cylinder", boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }

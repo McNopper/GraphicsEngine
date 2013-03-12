@@ -19,6 +19,8 @@
 #include "layer0/shader/Program.h"
 #include "layer0/shader/ProgramManager.h"
 #include "layer0/statistic/FrameCounter.h"
+#include "layer0/texture/Texture1DManager.h"
+#include "layer0/texture/Texture1DArrayManager.h"
 #include "layer0/texture/Texture2DManager.h"
 #include "layer0/texture/Texture2DMultisampleManager.h"
 #include "layer0/texture/TextureCubeMapManager.h"
@@ -27,6 +29,7 @@
 #include "layer1/debug/DebugDraw.h"
 #include "layer1/debug/DebugDrawFactory.h"
 #include "layer1/debug/LineGeometryManager.h"
+#include "layer1/event/EventManager.h"
 #include "layer1/interpolation/ConstantInterpolator.h"
 #include "layer1/interpolation/CubicInterpolator.h"
 #include "layer1/interpolation/LinearInterpolator.h"
@@ -53,6 +56,8 @@
 #include "layer2/framebuffer/FrameBuffer2DMultisample.h"
 #include "layer2/framebuffer/FrameBuffer2DMultisampleManager.h"
 #include "layer2/input/User.h"
+#include "layer2/path/Path.h"
+#include "layer2/path/LinePath.h"
 #include "layer2/shader/ProgramManagerProxy.h"
 #include "layer3/debug/FpsPrinter.h"
 #include "layer3/octree/OctreeFactory.h"
@@ -63,7 +68,23 @@
 #include "layer4/model/ModelManager.h"
 #include "layer5/modelentity/ModelEntityManager.h"
 #include "layer6/fbx/FbxEntityFactory.h"
+#include "layer6/path/PathEntityManager.h"
 #include "layer6/primitives/PrimitiveEntityFactory.h"
 
+GLUSvoid mouseButtonEngine(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos);
+
+GLUSvoid mouseWheelEngine(GLUSint buttons, GLUSint ticks, GLUSint xPos, GLUSint yPos);
+
+GLUSvoid mouseMoveEngine(GLUSint buttons, GLUSint xPos, GLUSint yPos);
+
+GLUSvoid keyEngine(GLUSboolean pressed, GLUSint key);
+
+GLUSboolean initEngine(GLUSuint logLevel = GLUS_LOG_INFO, int32_t numberWorker = 8);
+
+GLUSvoid reshapeEngine(GLUSint width, GLUSint height);
+
+GLUSboolean updateEngine(GLUSfloat deltaTime);
+
+GLUSvoid terminateEngine(GLUSvoid);
 
 #endif /* GRAPHICSENGINE_H_ */

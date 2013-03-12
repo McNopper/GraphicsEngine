@@ -27,10 +27,13 @@ protected:
 	GLint wrapS;
 	GLint wrapT;
 
+	float anisotropic;
+	bool hasAnisotropic;
+
 	virtual void changingSize();
 
 public:
-	TextureStandard(GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT);
+	TextureStandard(GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~TextureStandard();
 
 	virtual void freePixels() = 0;
@@ -49,6 +52,10 @@ public:
 
 	GLint getWrapT() const;
 	void setWrapT(GLint wrapT);
+
+	float getAnisotropic() const;
+	void setAnisotropic(float level);
+	void setMaxAnisotropic();
 
 };
 

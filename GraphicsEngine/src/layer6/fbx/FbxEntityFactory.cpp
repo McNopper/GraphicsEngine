@@ -24,7 +24,7 @@ using namespace boost;
 const char* FbxEntityFactory::CHANNELS[] = {"X", "Y", "Z"};
 
 FbxEntityFactory::FbxEntityFactory() :
-	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
+	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
 {
 	// Create the FBX SDK manager
 	manager = FbxManager::Create();
@@ -46,7 +46,7 @@ FbxEntityFactory::~FbxEntityFactory()
 	manager->Destroy();
 }
 
-ModelEntitySP FbxEntityFactory::loadFbxFile(const string& filename, float scale, const SurfaceMaterialSP& overwriteSurfaceMaterial)
+ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& filename, float scale, bool globalAnisotropic, const SurfaceMaterialSP& overwriteSurfaceMaterial)
 {
 	glusLogPrint(GLUS_LOG_INFO, "Loading FBX %s", filename.c_str());
 
@@ -57,7 +57,7 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& filename, float scale,
 	{
 		model = ModelManager::getInstance()->getModelByKey(filename);
 
-		return ModelEntitySP(new ModelEntity(model, scale, scale, scale));
+		return ModelEntitySP(new ModelEntity(name, model, scale, scale, scale));
 	}
 
 	// Create an importer.
@@ -80,6 +80,7 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& filename, float scale,
 	importer->Import(scene);
 
 	currentSurfaceMaterial = overwriteSurfaceMaterial;
+	anisotropic = globalAnisotropic;
 	currentNumberAnimationStacks = importer->GetAnimStackCount();
 	currentSurfaceMaterials.clear();
 	nodeTreeFactory.reset();
@@ -119,7 +120,7 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& filename, float scale,
 
 	glusLogPrint(GLUS_LOG_INFO, "Entity created: %s", filename.c_str());
 
-	return ModelEntitySP(new ModelEntity(model, scale, scale, scale));
+	return ModelEntitySP(new ModelEntity(name, model, scale, scale, scale));
 }
 
 bool FbxEntityFactory::traverseScene(FbxScene* scene)
@@ -204,6 +205,10 @@ void FbxEntityFactory::processTexture(FbxTexture* texture)
 		{
 			glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
 		}
+		else
+		{
+			texture2D->setAnisotropic(anisotropic);
+		}
 	}
 	else
 	{
@@ -217,27 +222,33 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	Texture2DSP texture2D;
 
 	SurfaceMaterialSP currentSurfaceMaterial(new SurfaceMaterial(surfaceMaterial->GetName()));
+	SurfaceMaterial defaultMaterial("default");
+	FbxDouble3 defaultEmissive(defaultMaterial.getEmissive().getR(), defaultMaterial.getEmissive().getG(), defaultMaterial.getEmissive().getB());
+	FbxDouble3 defaultAmbient(defaultMaterial.getAmbient().getR(), defaultMaterial.getAmbient().getG(), defaultMaterial.getAmbient().getB());
+	FbxDouble3 defaultDiffuse(defaultMaterial.getAmbient().getR(), defaultMaterial.getAmbient().getG(), defaultMaterial.getAmbient().getB());
+	FbxDouble3 defaultSpecular(defaultMaterial.getSpecular().getR(), defaultMaterial.getSpecular().getG(), defaultMaterial.getSpecular().getB());
+	FbxDouble3 defaultReflection(defaultMaterial.getReflection().getR(), defaultMaterial.getReflection().getG(), defaultMaterial.getReflection().getB());
 
 	texture2D.reset();
-	const FbxDouble3 emissive = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, texture2D);
+	const FbxDouble3 emissive = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, defaultEmissive, texture2D);
 	color.setRGBA(static_cast<GLfloat> (emissive[0]), static_cast<GLfloat> (emissive[1]), static_cast<GLfloat> (emissive[2]), 1.0f);
 	currentSurfaceMaterial->setEmissive(color);
 	currentSurfaceMaterial->setEmissiveTexture(texture2D);
 
 	texture2D.reset();
-	const FbxDouble3 ambient = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, texture2D);
+	const FbxDouble3 ambient = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, defaultAmbient, texture2D);
 	color.setRGBA(static_cast<GLfloat> (ambient[0]), static_cast<GLfloat> (ambient[1]), static_cast<GLfloat> (ambient[2]), 1.0f);
 	currentSurfaceMaterial->setAmbient(color);
 	currentSurfaceMaterial->setAmbientTexture(texture2D);
 
 	texture2D.reset();
-	const FbxDouble3 diffuse = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, texture2D);
+	const FbxDouble3 diffuse = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, defaultDiffuse, texture2D);
 	color.setRGBA(static_cast<GLfloat> (diffuse[0]), static_cast<GLfloat> (diffuse[1]), static_cast<GLfloat> (diffuse[2]), 1.0f);
 	currentSurfaceMaterial->setDiffuse(color);
 	currentSurfaceMaterial->setDiffuseTexture(texture2D);
 
 	texture2D.reset();
-	const FbxDouble3 specular = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, texture2D);
+	const FbxDouble3 specular = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, defaultSpecular, texture2D);
 	color.setRGBA(static_cast<GLfloat> (specular[0]), static_cast<GLfloat> (specular[1]), static_cast<GLfloat> (specular[2]), 1.0f);
 	currentSurfaceMaterial->setSpecular(color);
 	currentSurfaceMaterial->setSpecularTexture(texture2D);
@@ -251,14 +262,14 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	}
 
 	texture2D.reset();
-	const FbxDouble3 reflection = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sReflection, FbxSurfaceMaterial::sReflectionFactor, texture2D);
+	const FbxDouble3 reflection = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sReflection, FbxSurfaceMaterial::sReflectionFactor, defaultReflection, texture2D);
 	color.setRGBA(static_cast<GLfloat> (reflection[0]), static_cast<GLfloat> (reflection[1]), static_cast<GLfloat> (reflection[2]), 1.0f);
 	currentSurfaceMaterial->setReflection(color);
 	currentSurfaceMaterial->setReflectionTexture(texture2D);
 
-	// Not supported by FBX
+	// Not supported by FBX, so set default values
 	currentSurfaceMaterial->setRefractiveIndex(0.0f);
-	currentSurfaceMaterial->setRefraction(Color::BLACK);
+	currentSurfaceMaterial->setRefraction(defaultMaterial.getRefraction());
 	currentSurfaceMaterial->setRefractionTexture(Texture2DSP());
 
 	FbxProperty normalMapProperty = surfaceMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
@@ -272,6 +283,15 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 			{
 				texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName());
 
+				if (texture2D.get() == nullptr)
+				{
+					glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
+				}
+				else
+				{
+					texture2D->setAnisotropic(anisotropic);
+				}
+
 				currentSurfaceMaterial->setNormalMapTexture(texture2D);
 			}
 		}
@@ -282,20 +302,24 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	glusLogPrint(GLUS_LOG_INFO, "Created material: %s", surfaceMaterial->GetName());
 }
 
-FbxDouble3 FbxEntityFactory::processMaterialProperty(const FbxSurfaceMaterial * surfaceMaterial, const char * propertyName, const char * factorPropertyName, Texture2DSP& texture2D) const
+FbxDouble3 FbxEntityFactory::processMaterialProperty(const FbxSurfaceMaterial * surfaceMaterial, const char * propertyName, const char * factorPropertyName, const FbxDouble3& defaultColor, Texture2DSP& texture2D) const
 {
-	FbxDouble3 result(0, 0, 0);
+	FbxDouble3 result(defaultColor[0], defaultColor[1], defaultColor[2]);
 	const FbxProperty property = surfaceMaterial->FindProperty(propertyName);
 	const FbxProperty factorProperty = surfaceMaterial->FindProperty(factorPropertyName);
-	if (property.IsValid() && factorProperty.IsValid())
+	if (property.IsValid())
 	{
 		result = property.Get<FbxDouble3>();
-		double factor = factorProperty.Get<double>();
-		if (factor != 1)
+
+		if (factorProperty.IsValid())
 		{
-			result[0] *= factor;
-			result[1] *= factor;
-			result[2] *= factor;
+			double factor = factorProperty.Get<double>();
+			if (factor != 1)
+			{
+				result[0] *= factor;
+				result[1] *= factor;
+				result[2] *= factor;
+			}
 		}
 	}
 
@@ -308,6 +332,15 @@ FbxDouble3 FbxEntityFactory::processMaterialProperty(const FbxSurfaceMaterial * 
 			if (fileTexture)
 			{
 				texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName());
+
+				if (texture2D.get() == nullptr)
+				{
+					glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
+				}
+				else
+				{
+					texture2D->setAnisotropic(anisotropic);
+				}
 			}
 		}
 	}

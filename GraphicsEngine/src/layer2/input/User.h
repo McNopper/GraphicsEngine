@@ -49,6 +49,8 @@ private:
 
 public:
 
+	static User defaultUser;
+
 	User();
 	virtual ~User();
 

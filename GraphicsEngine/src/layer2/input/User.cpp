@@ -11,6 +11,8 @@
 
 using namespace boost;
 
+User User::defaultUser = User();
+
 User::User() :
 	zoomingFactor(1.0f), panningFactor(0.1f), rotationFactor(0.1f), moveFactor(10.0f), lastX(0), lastY(0), rotation(), position(), direction(0.0f, 0.0f, -1.0f), up(), left(-1.0f, 0.0f, 0.0f), wPressed(false), aPressed(false), sPressed(false), dPressed(false), dirtyFlag(false), userCamera()
 {

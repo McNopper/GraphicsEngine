@@ -40,6 +40,13 @@ Matrix3x3 Matrix3x3::copy() const
 	return result;
 }
 
+Matrix3x3& Matrix3x3::operator*=(const Matrix3x3& other)
+{
+	glusMatrix3x3Multiplyf(m, m, other.m);
+
+	return *this;
+}
+
 Matrix3x3 Matrix3x3::operator*(const Matrix3x3& other) const
 {
 	Matrix3x3 result;

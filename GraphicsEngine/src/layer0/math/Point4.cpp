@@ -36,6 +36,14 @@ Point4::Point4(const float other[4])
 	p[1] = other[1];
 	p[2] = other[2];
 	p[3] = other[3];
+
+	if (p[3] != 0.0f && p[3] != 1.0f)
+	{
+		for (int32_t i = 0; i < 4; i++)
+		{
+			p[i] /= other[3];
+		}
+	}
 }
 
 Point4::Point4(const Point4 & other)
@@ -44,6 +52,14 @@ Point4::Point4(const Point4 & other)
 	p[1] = other.p[1];
 	p[2] = other.p[2];
 	p[3] = other.p[3];
+
+	if (p[3] != 0.0f && p[3] != 1.0f)
+	{
+		for (int32_t i = 0; i < 4; i++)
+		{
+			p[i] /= other.p[3];
+		}
+	}
 }
 
 Point4::~Point4()
@@ -126,11 +142,6 @@ float Point4::getW() const
 	return p[3];
 }
 
-void Point4::setW(float w)
-{
-	p[3] = w;
-}
-
 const float* Point4::getP() const
 {
 	return p;
@@ -156,4 +167,16 @@ float Point4::distance(const Plane& plane) const
 float Point4::distance(const Sphere& sphere) const
 {
 	return sphere.distance(*this);
+}
+
+Point4 Point4::lerp(const Point4& other, float t) const
+{
+	Point4 result;
+
+	for (int32_t i = 0; i < 3; i++)
+	{
+		result.p[i] = glusMixf(p[i], other.p[i], t);
+	}
+
+	return result;
 }

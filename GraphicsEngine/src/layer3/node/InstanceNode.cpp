@@ -82,6 +82,21 @@ void InstanceNode::setVisible(bool visible, bool visibleActive)
 		this->visibleActive = visibleActive;
 }
 
+void InstanceNode::setVisibleRecursive(bool visible, bool visibleActive)
+{
+		this->visible = visible;
+		this->visibleActive = visibleActive;
+
+		auto walkerNode = allChilds.begin();
+
+		while (walkerNode != allChilds.end())
+		{
+			(*walkerNode)->setVisibleRecursive(visible, visibleActive);
+
+			walkerNode++;
+		}
+}
+
 bool InstanceNode::isTransparent() const
 {
 	return transparent;
@@ -97,3 +112,19 @@ void InstanceNode::setTransparent(bool transparent, bool transparentActive)
 	this->transparent = transparent;
 	this->transparentActive = transparentActive;
 }
+
+void InstanceNode::setTransparentRecursive(bool transparent, bool transparentActive)
+{
+	this->transparent = transparent;
+	this->transparentActive = transparentActive;
+
+	auto walkerNode = allChilds.begin();
+
+	while (walkerNode != allChilds.end())
+	{
+		(*walkerNode)->setTransparentRecursive(visible, visibleActive);
+
+		walkerNode++;
+	}
+}
+

@@ -35,8 +35,8 @@ int32_t ModelEntity::getNumberJoints() const
 	return model->getNumberJoints();
 }
 
-ModelEntity::ModelEntity(const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	OctreeEntity(), NodeOwner(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), angleX(0.0f), angleY(0.0f), angleZ(0.0f), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode()
+ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
+	OctreeEntity(), NodeOwner(), Geometry(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -65,7 +65,7 @@ void ModelEntity::updateMetrics()
 {
 	modelMatrix.identity();
 	modelMatrix.translate(translateX, translateY, translateZ);
-	modelMatrix.rotateRzRyRx(angleZ, angleY, angleX);
+	modelMatrix *= rotation.getRotationMatrix4x4();
 	modelMatrix.scale(scaleX, scaleY, scaleZ);
 
 	if (updateNormalModelMatrix)
@@ -107,9 +107,19 @@ void ModelEntity::setPosition(const Point4& position)
 
 void ModelEntity::setRotation(float angleX, float angleY, float angleZ)
 {
-	this->angleX = angleX;
-	this->angleY = angleY;
-	this->angleZ = angleZ;
+	Quaternion rotation;
+	rotation.rotateRzRyRxf(angleZ, angleY, angleX);
+
+	this->rotation = rotation;
+
+	this->updateNormalModelMatrix = true;
+
+	updateMetrics();
+}
+
+void ModelEntity::setRotation(const Quaternion& rotation)
+{
+	this->rotation = rotation;
 
 	this->updateNormalModelMatrix = true;
 
@@ -131,15 +141,37 @@ void ModelEntity::setScale(float scaleX, float scaleY, float scaleZ)
 
 void ModelEntity::setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ)
 {
+	Quaternion rotation;
+	rotation.rotateRzRyRxf(angleZ, angleY, angleX);
+
 	this->translateX = position.getX();
 	this->translateY = position.getY();
 	this->translateZ = position.getZ();
 
 	this->position = position;
 
-	this->angleX = angleX;
-	this->angleY = angleY;
-	this->angleZ = angleZ;
+	this->rotation = rotation;
+
+	this->scaleX = scaleX;
+	this->scaleY = scaleY;
+	this->scaleZ = scaleZ;
+
+	this->updateNormalModelMatrix = true;
+
+	updateMetrics();
+
+	updateBoundingSphereCenter(true);
+}
+
+void ModelEntity::setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ)
+{
+	this->translateX = position.getX();
+	this->translateY = position.getY();
+	this->translateZ = position.getZ();
+
+	this->position = position;
+
+	this->rotation = rotation;
 
 	this->scaleX = scaleX;
 	this->scaleY = scaleY;
@@ -302,14 +334,19 @@ const ModelSP& ModelEntity::getModel() const
 	return model;
 }
 
+const InstanceNodeSP& ModelEntity::getRootInstanceNode() const
+{
+	return rootInstanceNode;
+}
+
 InstanceNodeSP ModelEntity::findInstanceNodeRecursive(const string& name) const
 {
 	return rootInstanceNode->findChildRecursive(name);
 }
 
-ModelEntitySP ModelEntity::getNewInstance() const
+ModelEntitySP ModelEntity::getNewInstance(const string& name) const
 {
-	return ModelEntitySP(new ModelEntity(model, scaleX, scaleY, scaleZ));
+	return ModelEntitySP(new ModelEntity(name, model, scaleX, scaleY, scaleZ));
 }
 
 bool ModelEntity::isDebug() const
@@ -330,4 +367,43 @@ bool ModelEntity::isDebugAsMesh() const
 void ModelEntity::setDebugAsMesh(bool debugAsMesh)
 {
 	this->debugAsMesh = debugAsMesh;
+}
+
+const string& ModelEntity::getName() const
+{
+	return name;
+}
+
+void ModelEntity::updateLocation(const Point4& location)
+{
+	this->translateX = location.getX();
+	this->translateY = location.getY();
+	this->translateZ = location.getZ();
+
+	updateMetrics();
+
+	updateBoundingSphereCenter(true);
+}
+
+void ModelEntity::updateOrientation(const Quaternion& orientation)
+{
+	this->rotation = orientation;
+
+	this->updateNormalModelMatrix = true;
+
+	updateMetrics();
+}
+
+void ModelEntity::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
+{
+	this->translateX = location.getX();
+	this->translateY = location.getY();
+	this->translateZ = location.getZ();
+	this->rotation = orientation;
+
+	this->updateNormalModelMatrix = true;
+
+	updateMetrics();
+
+	updateBoundingSphereCenter(true);
 }

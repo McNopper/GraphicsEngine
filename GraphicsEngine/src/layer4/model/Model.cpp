@@ -12,14 +12,16 @@ using namespace std;
 using namespace boost;
 
 Model::Model(const BoundingSphere& boundingSphere, const NodeSP& node, int32_t numberJoints, bool animationData, bool skinned) :
-	boundingSphere(boundingSphere), rootNode(node), numberJoints(numberJoints), animated(animationData), skinned(skinned), allNodesByIndex(), allNodesByName()
+	boundingSphere(boundingSphere), rootNode(node), numberJoints(numberJoints), animated(animationData), skinned(skinned), allNodesByIndex(), allNodesByName(), allSurfaceMaterialsByName()
 {
+	updateSurfaceMaterialsRecursive(rootNode);
 }
 
 Model::~Model()
 {
 	allNodesByIndex.clear();
 	allNodesByName.clear();
+	allSurfaceMaterialsByName.clear();
 
 	rootNode.reset();
 }
@@ -47,4 +49,68 @@ bool Model::isAnimated() const
 bool Model::isSkinned() const
 {
 	return skinned;
+}
+
+void Model::updateSurfaceMaterialsRecursive(const NodeSP& node)
+{
+	if (node.get())
+	{
+		if (node->getMesh().get())
+		{
+			const MeshSP& mesh = node->getMesh();
+
+			for (uint32_t i = 0; i < mesh->getSurfaceMaterialsCount(); i++)
+			{
+				const SurfaceMaterialSP& surfaceMaterial =mesh->getSurfaceMaterialAt(i);
+
+				auto result = allSurfaceMaterialsByName.find(surfaceMaterial->getName());
+
+				if (result == allSurfaceMaterialsByName.end())
+				{
+					allSurfaceMaterialsByName[surfaceMaterial->getName()] = surfaceMaterial;
+				}
+			}
+		}
+
+		for (uint32_t i = 0; i < node->getChildCount(); i++)
+		{
+			updateSurfaceMaterialsRecursive(node->getChild(i));
+		}
+	}
+}
+
+SurfaceMaterialSP Model::findSurfaceMaterial(const string& name) const
+{
+	auto result = allSurfaceMaterialsByName.find(name);
+
+	if (result != allSurfaceMaterialsByName.end())
+	{
+		return result->second;
+	}
+
+	return SurfaceMaterialSP();
+}
+
+int32_t Model::getSurfaceMaterialCount() const
+{
+	return static_cast<int32_t>(allSurfaceMaterialsByName.size());
+}
+
+SurfaceMaterialSP Model::getSurfaceMaterialAt(int32_t index) const
+{
+	if (index >= 0 && index < getSurfaceMaterialCount())
+	{
+		auto walker = allSurfaceMaterialsByName.begin();
+
+		while (index > 0)
+		{
+			walker++;
+
+			index--;
+		}
+
+		return walker->second;
+	}
+
+	return SurfaceMaterialSP();
 }

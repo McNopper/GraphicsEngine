@@ -33,6 +33,8 @@ public:
 
 	Matrix4x4 copy(bool rotationOnly = false) const;
 
+	Matrix4x4& operator*=(const Matrix4x4& other);
+
 	Matrix4x4 operator*(const Matrix4x4& other) const;
 
 	Matrix3x3 extractMatrix3x3() const;
