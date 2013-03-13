@@ -97,7 +97,10 @@ bool PathEntityManager::updateEntity(Geometry* geometry, float deltaTime)
 
 	path->updatePath(deltaTime, *geometry);
 
-	geometry->updateLocationOrientation(path->getLocation(), path->getOrientation());
+	if (!path->isPaused())
+	{
+		geometry->updateLocationOrientation(path->getLocation(), path->getOrientation());
+	}
 
 	return true;
 }

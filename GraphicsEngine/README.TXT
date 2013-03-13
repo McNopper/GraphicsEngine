@@ -54,6 +54,7 @@ Features:
 - Sky sphere and dome
 - Post processing with MSAA, gamma correction, tone mapping (HDR), blur, bloom and depth of field (DOF)
 - Render filter, that only transparent, opaque or all nodes should be rendered
+- Animated paths (line, circle) for lights, cameras and entities
 
 Build configuration naming:
 
@@ -68,10 +69,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-10.03.2013 Norbert Nopper (norbert@nopper.tv)
+13.03.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Added path
 - Added depth of field
 - Added ground plane debug output
 - Added plane debug output

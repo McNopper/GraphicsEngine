@@ -53,6 +53,9 @@ private:
 	std::map<float, float> allShininessValues[1];
 	std::map<float, const Interpolator*> allShininessInterpolators[1];
 
+	std::map<float, float> allTransparencyValues[1];
+	std::map<float, const Interpolator*> allTransparencyInterpolators[1];
+
 	float getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time) const;
 
 public:
@@ -70,6 +73,7 @@ public:
 	void addReflectionColorValue(enum eCHANNELS_RGBA channel, float time, float value, const Interpolator& interpolator);
 	void addRefractionColorValue(enum eCHANNELS_RGBA channel, float time, float value, const Interpolator& interpolator);
 	void addShininessValue(enum eCHANNELS_SCALAR channel, float time, float value, const Interpolator& interpolator);
+	void addTransparencyValue(enum eCHANNELS_SCALAR channel, float time, float value, const Interpolator& interpolator);
 
 	bool hasTranslationValue(enum eCHANNELS_XYZ channel) const;
 	bool hasRotationValue(enum eCHANNELS_XYZ channel) const;
@@ -81,6 +85,7 @@ public:
 	bool hasReflectionColorValue(enum eCHANNELS_RGBA channel) const;
 	bool hasRefractionColorValue(enum eCHANNELS_RGBA channel) const;
 	bool hasShininessValue(enum eCHANNELS_SCALAR channel) const;
+	bool hasTransparencyValue(enum eCHANNELS_SCALAR channel) const;
 
 	float getTranslationValue(enum eCHANNELS_XYZ channel, float time) const;
 	float getRotationValue(enum eCHANNELS_XYZ channel, float time) const;
@@ -92,6 +97,7 @@ public:
 	float getReflectionColorValue(enum eCHANNELS_RGBA channel, float time) const;
 	float getRefractionColorValue(enum eCHANNELS_RGBA channel, float time) const;
 	float getShininessValue(enum eCHANNELS_SCALAR channel, float time) const;
+	float getTransparencyValue(enum eCHANNELS_SCALAR channel, float time) const;
 
 };
 

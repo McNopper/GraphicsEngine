@@ -62,10 +62,24 @@ void Camera::setRotation(float angleZ, float angleY, float angleX)
 	lookAt(eye, center, up);
 }
 
-void Camera::setRotation(Quaternion& rotation)
+void Camera::setRotation(const Quaternion& rotation)
 {
 	Vector3 direction(0.0f, 0.0f, -1.0f);
 	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
+	this->up = rotation.getRotationMatrix4x4() * up;
+
+	lookAt(eye, center, up);
+}
+
+void Camera::setPositionRotation(const Point4& position, const Quaternion& rotation)
+{
+	Vector3 direction(0.0f, 0.0f, -1.0f);
+	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	this->eye = position;
+	this->center = position + direction;
 
 	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
 	this->up = rotation.getRotationMatrix4x4() * up;
@@ -138,4 +152,19 @@ void Camera::setCameraProperties(const ProgramSP& program) const
 	glUniformMatrix4fv(program->getUniformLocation(u_viewMatrix), 1, GL_FALSE, viewMatrix.getM());
 
 	glUniform4fv(program->getUniformLocation(u_eyePosition), 1, eye.getP());
+}
+
+void Camera::updateLocation(const Point4& location)
+{
+	setPosition(location);
+}
+
+void Camera::updateOrientation(const Quaternion& orientation)
+{
+	setRotation(orientation);
+}
+
+void Camera::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
+{
+	setPositionRotation(location, orientation);
 }

@@ -267,10 +267,14 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	currentSurfaceMaterial->setReflection(color);
 	currentSurfaceMaterial->setReflectionTexture(texture2D);
 
-	// Not supported by FBX, so set default values
-	currentSurfaceMaterial->setRefractiveIndex(0.0f);
-	currentSurfaceMaterial->setRefraction(defaultMaterial.getRefraction());
-	currentSurfaceMaterial->setRefractionTexture(Texture2DSP());
+	// Refraction not supported by FBX, so set keep values
+
+	// Only use the transparency factor.
+	FbxProperty transparencyFactorProperty = surfaceMaterial->FindProperty(FbxSurfaceMaterial::sTransparencyFactor);
+	if (transparencyFactorProperty.IsValid())
+	{
+		currentSurfaceMaterial->setTransparency(transparencyFactorProperty.Get<double>());
+	}
 
 	FbxProperty normalMapProperty = surfaceMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
 	if (normalMapProperty.IsValid())

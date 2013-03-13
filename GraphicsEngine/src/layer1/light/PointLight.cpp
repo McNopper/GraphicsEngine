@@ -71,3 +71,18 @@ void PointLight::setLightProperties(const ProgramSP& program) const
 	glUniform1f(program->getUniformLocation(u_lightLinearAttenuation), linearAttenuation);
 	glUniform1f(program->getUniformLocation(u_lightQuadraticAttenuation), quadraticAttenuation);
 }
+
+void PointLight::updateLocation(const Point4& location)
+{
+	position = location;
+}
+
+void PointLight::updateOrientation(const Quaternion& orientation)
+{
+	// Do nothing
+}
+
+void PointLight::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
+{
+	position = location;
+}

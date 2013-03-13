@@ -10,7 +10,7 @@
 using namespace std;
 
 SurfaceMaterial::SurfaceMaterial(const string& name) :
-	name(name), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), normalMapTexture()
+	name(name), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(0.0f), normalMapTexture()
 {
 }
 
@@ -123,6 +123,11 @@ float SurfaceMaterial::getRefractiveIndex() const
 	return refractiveIndex;
 }
 
+float SurfaceMaterial::getTransparency() const
+{
+	return transparency;
+}
+
 GLuint SurfaceMaterial::getNormalMapTextureName() const
 {
 	if (normalMapTexture.get())
@@ -201,6 +206,11 @@ void SurfaceMaterial::setShininess(float shininess)
 void SurfaceMaterial::setRefractiveIndex(float refractiveIndex)
 {
 	this->refractiveIndex = refractiveIndex;
+}
+
+void SurfaceMaterial::setTransparency(float transparency)
+{
+	this->transparency = transparency;
 }
 
 void SurfaceMaterial::setNormalMapTexture(const Texture2DSP& normalMapTexture)

@@ -64,7 +64,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Teapot
 
-	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Reflective", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, 0.0f);
+	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Reflective", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, 0.0f, 0.0f);
 
 	filename = "teapot.fbx";
 	entity = entityFactory.loadFbxFile("Teapot", filename, 1.0f, false, surfaceMaterial);

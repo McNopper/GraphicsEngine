@@ -223,14 +223,6 @@ void ModelEntity::updateBoundingSphereCenter(bool force)
 
 	if (model->isAnimated())
 	{
-		time += ModelEntity::currentDeltaTime;
-
-		float stopTime = model->getRootNode()->getStopTime(getAnimStackIndex(), getAnimLayerIndex());
-		if (time > stopTime)
-		{
-			time -= stopTime;
-		}
-
 		doUpdateBoundingSphereCenter = true;
 	}
 
@@ -260,6 +252,14 @@ void ModelEntity::update()
 {
 	if (model->isAnimated())
 	{
+		time += ModelEntity::currentDeltaTime;
+
+		float stopTime = model->getRootNode()->getStopTime(getAnimStackIndex(), getAnimLayerIndex());
+		if (time > stopTime)
+		{
+			time -= stopTime;
+		}
+
 		// Calculate skinning and pass later to shader
 		if (model->isSkinned() && getAnimStackIndex() >= 0 && getAnimLayerIndex() >= 0)
 		{

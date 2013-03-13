@@ -66,7 +66,7 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 	return surfaceMaterial;
 }
 
-SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const
 {
 	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
 
@@ -78,11 +78,12 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 	surfaceMaterial->setReflection(reflection);
 	surfaceMaterial->setRefraction(refraction);
 	surfaceMaterial->setRefractiveIndex(refractiveIndex);
+	surfaceMaterial->setTransparency(transparency);
 
 	return surfaceMaterial;
 }
 
-SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const
 {
 	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
 
@@ -94,11 +95,12 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 	surfaceMaterial->setReflection(reflection);
 	surfaceMaterial->setRefraction(refraction);
 	surfaceMaterial->setRefractiveIndex(refractiveIndex);
+	surfaceMaterial->setTransparency(transparency);
 
 	return surfaceMaterial;
 }
 
-SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const
 {
 	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
 
@@ -111,6 +113,7 @@ SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& na
 	surfaceMaterial->setReflection(reflection);
 	surfaceMaterial->setRefraction(refraction);
 	surfaceMaterial->setRefractiveIndex(refractiveIndex);
+	surfaceMaterial->setTransparency(transparency);
 
 	return surfaceMaterial;
 }

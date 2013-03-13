@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Quaternion.h"
 #include "../../layer0/math/Vector3.h"
@@ -48,7 +49,8 @@ public:
 
     void setPosition(const Point4& position);
     void setRotation(float angleZ, float angleY, float angleX);
-    void setRotation(Quaternion& rotation);
+    void setRotation(const Quaternion& rotation);
+    void setPositionRotation(const Point4& position, const Quaternion& rotation);
 
 	void lookAt(const Point4& eye, const Point4& center, const Vector3& up);
 
@@ -74,6 +76,14 @@ public:
 	float distanceToCamera(const BoundingSphere& boundingSphere) const;
 
 	void setCameraProperties(const ProgramSP& program) const;
+
+	//
+
+	virtual void updateLocation(const Point4& location);
+
+	virtual void updateOrientation(const Quaternion& orientation);
+
+	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
 
 };
 

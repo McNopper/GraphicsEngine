@@ -65,3 +65,20 @@ void SpotLight::setLightProperties(const ProgramSP& program) const
 	glUniform1f(program->getUniformLocation(u_lightSpotExponent), spotExponent);
 }
 
+void SpotLight::updateLocation(const Point4& location)
+{
+	position = location;
+}
+
+void SpotLight::updateOrientation(const Quaternion& orientation)
+{
+	spotDirection = orientation * Vector3(0.0f, 0.0f, -1.0f);
+}
+
+void SpotLight::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
+{
+	position = location;
+
+	spotDirection = orientation * Vector3(0.0f, 0.0f, -1.0f);
+}
+

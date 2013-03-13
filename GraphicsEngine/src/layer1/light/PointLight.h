@@ -8,11 +8,12 @@
 #ifndef POINTLIGHT_H_
 #define POINTLIGHT_H_
 
+#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 
 #include "Light.h"
 
-class PointLight: public Light
+class PointLight: public Light, public Geometry
 {
 
 protected:
@@ -39,6 +40,14 @@ public:
 	void setQuadraticAttenuation(float quadraticAttenuation);
 
 	virtual void setLightProperties(const ProgramSP& program) const;
+
+	//
+
+	virtual void updateLocation(const Point4& location);
+
+	virtual void updateOrientation(const Quaternion& orientation);
+
+	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
 
 };
 

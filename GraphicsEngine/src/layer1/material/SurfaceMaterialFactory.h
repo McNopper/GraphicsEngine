@@ -28,11 +28,11 @@ public:
 
 	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess) const;
 
-	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const;
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const;
 
-	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const;
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const;
 
-	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex) const;
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const;
 
 };
 

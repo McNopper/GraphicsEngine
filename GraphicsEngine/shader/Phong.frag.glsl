@@ -31,6 +31,8 @@ struct MaterialProperties
 	
 	vec4 reflectionColor;
 	vec4 refractionColor;
+	
+	float transparency;
 };
 
 uniform	LightProperties u_light;
@@ -157,7 +159,7 @@ void main(void)
 		}
 	}
 
-	fragColor = color;
+	fragColor = vec4(color.rgb, color.a * (1.0 - u_material.transparency));
 	
 	if (u_writeBrightColor > 0)
 	{

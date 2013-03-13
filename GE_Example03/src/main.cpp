@@ -75,7 +75,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Monkey
 
-	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Diamond", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::WHITE, RI_DIAMOND);
+	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Diamond", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::WHITE, RI_DIAMOND, 0.0f);
 
 	filename = "monkey.fbx";
 	entity = entityFactory.loadFbxFile("Monkey", filename, 1.0f, false, surfaceMaterial);

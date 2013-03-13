@@ -15,6 +15,10 @@
 class Path
 {
 
+protected:
+
+	Quaternion baseRotation;
+
 private:
 
 	bool paused;
@@ -38,14 +42,14 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, Geometry& geometry) = 0;
+	virtual bool update(float deltaTime, Geometry& geometry, bool updateOrientation = true) = 0;
 
 	void setLocation(const Point4& location);
 	void setOrientation(const Quaternion& orientation);
 
 public:
 
-	Path();
+	Path(const Quaternion& baseRotation);
 	virtual ~Path();
 
 	void startPath();

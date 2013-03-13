@@ -7,8 +7,8 @@
 
 #include "Path.h"
 
-Path::Path() :
-		paused(true), looping(false), ended(false), elapsedTime(0.0f), speed(1.0f), location(), orientation()
+Path::Path(const Quaternion& baseRotation) :
+	baseRotation(baseRotation), paused(true), looping(false), ended(false), elapsedTime(0.0f), speed(1.0f), location(), orientation()
 {
 }
 

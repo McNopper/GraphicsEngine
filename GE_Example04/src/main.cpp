@@ -39,10 +39,15 @@ GLUSboolean initGame(GLUSvoid)
 
 	SkyManager::getInstance()->setActiveSky("SwedishRoyalCastle");
 
+	//
+	//
+	//
+
 	// Textured, transparent cube with rotation animation
 
 	Texture2DSP cubeTexture = Texture2DManager::getInstance()->createTexture("Glass.bmp");
-	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Glass", Color(1.0f, 1.0f, 1.0f, 0.5f), Color::BLACK_TRANSPARENT, Color::BLACK_TRANSPARENT, cubeTexture, Color::BLACK_TRANSPARENT, 0.0f);
+	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Glass", Color::WHITE, Color::BLACK_TRANSPARENT, Color::BLACK_TRANSPARENT, cubeTexture, Color::BLACK_TRANSPARENT, 0.0f);
+	surfaceMaterial->setTransparency(0.5f);
 	position = Point4(0.0f, 1.0f, -10.0f);
 
 	animationLayer = AnimationLayerSP(new AnimationLayer());
@@ -61,11 +66,45 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Path animation
 
-	PathSP path = PathSP(new LinePath(entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -10.0f)));
+	PathSP path = PathSP(new OrientedLinePath(Quaternion(), entity->getPosition(), entity->getPosition() + Vector3(5.0f, 5.0f, -5.0f)));
 	PathEntityManager::getInstance()->addEntity(entity.get(), path);
 	path->setSpeed(4.0f);
 	path->setLooping(true);
 	path->startPath();
+
+	//
+	//
+	//
+
+	// Astro Boy
+
+	filename = "astroBoy_walk.fbx";
+	entity = entityFactory.loadFbxFile("AstroBoy", filename, 0.2f);
+	if (!entity.get())
+	{
+		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
+
+		return GLUS_FALSE;
+	}
+	position = Point4(0.0f, 0.0f, -20.0f);
+	entity->setPosition(position);
+	entity->setAnimation(0, 0);
+
+	ModelEntityManager::getInstance()->updateEntity(entity);
+
+	// Path animation
+
+	Quaternion baseRotation(90.0f, Vector3(0.0f, 1.0f, 0.0f));
+
+	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -5.0f), false));
+	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	path->setSpeed(2.5f);
+	path->setLooping(true);
+	path->startPath();
+
+	//
+	//
+	//
 
 	// Lights
 
@@ -111,14 +150,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// Path animation
 
-	// Get the glass cube ...
-	ModelEntitySP entity = ModelEntityManager::getInstance()->findEntity("GlassCube");
-	// ... update the path ...
-	PathEntityManager::getInstance()->updateEntity(entity.get(), deltaTime);
-	// ... and pass the values to the manager.
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	// Update the paths
+	PathEntityManager::getInstance()->updateEntities(deltaTime);
 
-	//
+	// Update everything
 
 	ModelEntityManager::getInstance()->updateMetrics();
 	ModelEntityManager::getInstance()->sort();

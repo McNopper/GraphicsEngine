@@ -7,8 +7,8 @@
 
 #include "LinePath.h"
 
-LinePath::LinePath(const Point4& startLocation, const Point4& endLocation) :
-		Path(), startLocation(startLocation), endLocation(endLocation), direction(), goToEnd(true)
+LinePath::LinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation) :
+		Path(baseRotation), startLocation(startLocation), endLocation(endLocation), direction(), goToEnd(true)
 {
 }
 
@@ -25,7 +25,7 @@ void LinePath::start()
 	goToEnd = true;
 }
 
-bool LinePath::update(float deltaTime, Geometry& geometry)
+bool LinePath::update(float deltaTime, Geometry& geometry, bool updateOrientation)
 {
 	bool result = false;
 
@@ -89,6 +89,11 @@ bool LinePath::update(float deltaTime, Geometry& geometry)
 	}
 
 	setLocation(currentLocation);
+
+	if (updateOrientation)
+	{
+		setOrientation(baseRotation);
+	}
 
 	return result;
 }

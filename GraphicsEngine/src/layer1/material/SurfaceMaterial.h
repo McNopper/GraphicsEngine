@@ -42,6 +42,9 @@ private:
 
 	float refractiveIndex;
 
+	float transparency;
+	Texture2DSP transparencyTexture;
+
 	Texture2DSP normalMapTexture;
 
 public:
@@ -67,6 +70,8 @@ public:
 	const Texture2DSP& getSpecularTexture() const;
     GLuint getSpecularTextureName() const;
 
+    float getShininess() const;
+
     const Color& getReflection() const;
 	const Texture2DSP& getReflectionTexture() const;
     GLuint getReflectionTextureName() const;
@@ -75,9 +80,9 @@ public:
 	const Texture2DSP& getRefractionTexture() const;
     GLuint getRefractionTextureName() const;
 
-    float getShininess() const;
-
     float getRefractiveIndex() const;
+
+    float getTransparency() const;
 
 	const Texture2DSP& getNormalMapTexture() const;
     GLuint getNormalMapTextureName() const;
@@ -94,15 +99,17 @@ public:
     void setSpecular(const Color& specular);
     void setSpecularTexture(const Texture2DSP& specularTexture);
 
+    void setShininess(float shininess);
+
     void setReflection(const Color& reflection);
     void setReflectionTexture(const Texture2DSP& reflectionTexture);
 
     void setRefraction(const Color& refraction);
     void setRefractionTexture(const Texture2DSP& refractionTexture);
 
-    void setShininess(float shininess);
-
     void setRefractiveIndex(float refractiveIndex);
+
+    void setTransparency(float transparency);
 
     void setNormalMapTexture(const Texture2DSP& normalMapTexture);
 

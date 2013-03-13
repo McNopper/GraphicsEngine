@@ -118,6 +118,12 @@ void AnimationLayer::addShininessValue(enum eCHANNELS_SCALAR channel, float time
 	allShininessInterpolators[channel][time] = &interpolator;
 }
 
+void AnimationLayer::addTransparencyValue(enum eCHANNELS_SCALAR channel, float time, float value, const Interpolator& interpolator)
+{
+	allTransparencyValues[channel][time] = value;
+	allTransparencyInterpolators[channel][time] = &interpolator;
+}
+
 float AnimationLayer::getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time) const
 {
 	if (currentTableInterpolators.size() == 0)
@@ -185,6 +191,11 @@ bool AnimationLayer::hasRefractionColorValue(enum eCHANNELS_RGBA channel) const
 bool AnimationLayer::hasShininessValue(enum eCHANNELS_SCALAR channel) const
 {
 	return allShininessValues[channel].size() > 0;
+}
+
+bool AnimationLayer::hasTransparencyValue(enum eCHANNELS_SCALAR channel) const
+{
+	return allTransparencyValues[channel].size() > 0;
 }
 
 float AnimationLayer::getTranslationValue(enum eCHANNELS_XYZ channel, float time) const
@@ -263,6 +274,14 @@ float AnimationLayer::getShininessValue(enum eCHANNELS_SCALAR channel, float tim
 {
 	const std::map<float, float>& currentTableValues = allShininessValues[channel];
 	const std::map<float, const Interpolator*>& currentTableInterpolators = allShininessInterpolators[channel];
+
+	return getInterpolatedValue(currentTableValues, currentTableInterpolators, time);
+}
+
+float AnimationLayer::getTransparencyValue(enum eCHANNELS_SCALAR channel, float time) const
+{
+	const std::map<float, float>& currentTableValues = allTransparencyValues[channel];
+	const std::map<float, const Interpolator*>& currentTableInterpolators = allTransparencyInterpolators[channel];
 
 	return getInterpolatedValue(currentTableValues, currentTableInterpolators, time);
 }

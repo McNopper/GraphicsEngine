@@ -15,7 +15,7 @@
 class LinePath : public Path
 {
 
-private:
+protected:
 
 	Point4 startLocation;
 
@@ -32,11 +32,11 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, Geometry& geometry);
+	virtual bool update(float deltaTime, Geometry& geometry, bool updateOrientation = true);
 
 public:
 
-	LinePath(const Point4& startLocation, const Point4& endLocation);
+	LinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation);
 	virtual ~LinePath();
 
 };

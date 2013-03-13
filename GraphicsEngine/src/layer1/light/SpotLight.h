@@ -35,6 +35,12 @@ public:
 
 	virtual void setLightProperties(const ProgramSP& program) const;
 
+	virtual void updateLocation(const Point4& location);
+
+	virtual void updateOrientation(const Quaternion& orientation);
+
+	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
+
 };
 
 #endif /* SPOTLIGHT_H_ */

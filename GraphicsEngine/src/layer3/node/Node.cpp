@@ -745,6 +745,7 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			float currentReflection[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 			float currentRefraction[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 			float currentShininess = 0.0f;
+			float currentTransparency = 0.0f;
 
 			for (int32_t i = 0; i < 4; i++)
 			{
@@ -756,6 +757,7 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				currentRefraction[i] = currentSurfaceMaterial->getRefraction().getRGBA()[i];
 			}
 			currentShininess = currentSurfaceMaterial->getShininess();
+			currentTransparency = currentSurfaceMaterial->getTransparency();
 
 			if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
 			{
@@ -793,6 +795,10 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				if (animLayer->hasShininessValue(AnimationLayer::S))
 				{
 					currentShininess = animLayer->getShininessValue(AnimationLayer::S, time);
+				}
+				if (animLayer->hasTransparencyValue(AnimationLayer::S))
+				{
+					currentTransparency = animLayer->getTransparencyValue(AnimationLayer::S, time);
 				}
 			}
 
@@ -833,6 +839,8 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			glUniform4fv(currentProgram->getUniformLocation(u_specularColor), 1, currentSpecular);
 			glUniform1f(currentProgram->getUniformLocation(u_shininess), currentShininess);
 
+			glUniform1f(currentProgram->getUniformLocation(u_transparency), currentTransparency);
+
 			if (currentSurfaceMaterial->getNormalMapTextureName() != 0)
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasNormalMapTexture), 1);
@@ -852,8 +860,8 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				glActiveTexture(GL_TEXTURE0);
 			}
 
-			glUniform4fv(currentProgram->getUniformLocation(u_reflection), 1, currentReflection);
-			glUniform4fv(currentProgram->getUniformLocation(u_refraction), 1, currentRefraction);
+			glUniform4fv(currentProgram->getUniformLocation(u_reflectionColor), 1, currentReflection);
+			glUniform4fv(currentProgram->getUniformLocation(u_refractionColor), 1, currentRefraction);
 
 			float environmentRefractiveIndex = nodeOwner.getRefractiveIndex();
 			float materialRefractiveIndex = currentSurfaceMaterial->getRefractiveIndex();
