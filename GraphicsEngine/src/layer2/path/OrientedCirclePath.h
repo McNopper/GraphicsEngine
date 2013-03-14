@@ -25,7 +25,7 @@ protected:
 public:
 
 	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise);
-
+	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis);
 	virtual ~OrientedCirclePath();
 
 };

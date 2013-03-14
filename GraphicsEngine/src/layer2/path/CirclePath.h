@@ -47,6 +47,7 @@ protected:
 public:
 
 	CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise);
+	CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis);
 	virtual ~CirclePath();
 
 };
