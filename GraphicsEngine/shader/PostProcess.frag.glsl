@@ -157,7 +157,7 @@ void main(void)
 		}
 		else
 		{
-			unfocusedObject = texture(u_depthTexture, v_texCoord).z;
+			unfocusedObject = texture(u_depthTexture, v_texCoord).x;
 		}
 		
 		if (unfocusedObject > 0.0)
