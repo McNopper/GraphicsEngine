@@ -36,6 +36,7 @@ Features:
 - Octree or list rendering
 - Frustum culling
 - Sorting of entities (for alpha blending etc.)
+- Excluding of entities by a list
 - Mouse/Key input and movement
 - Phong with diffuse, normal map and environment texture (reflection and refraction)
 - Alpha blending
@@ -69,10 +70,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-13.03.2013 Norbert Nopper (norbert@nopper.tv)
+04.04.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Added entity exclude list
 - Added path
 - Added depth of field
 - Added ground plane debug output

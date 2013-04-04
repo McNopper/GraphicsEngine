@@ -45,6 +45,7 @@
 #include "layer2/animation/AnimationStack.h"
 #include "layer2/debug/GroundPlane.h"
 #include "layer2/entity/EntityCommandManager.h"
+#include "layer2/entity/EntityList.h"
 #include "layer2/environment/SkyDome.h"
 #include "layer2/environment/SkyManager.h"
 #include "layer2/environment/SkySphere.h"

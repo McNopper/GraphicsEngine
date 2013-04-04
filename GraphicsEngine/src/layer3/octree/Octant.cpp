@@ -85,7 +85,7 @@ void Octant::sort()
 	}
 	quicksortOctant.sort(allChildsPlusMe);
 
-	vector<OctreeEntity*>::iterator walker = allOctreeEntities.begin();
+	auto walker = allOctreeEntities.begin();
 	while (walker != allOctreeEntities.end())
 	{
 		(*walker)->updateDistanceToCamera();
@@ -170,7 +170,7 @@ void Octant::updateEntities() const
 	auto walkerEntities = allOctreeEntities.begin();
 	while (walkerEntities != allOctreeEntities.end())
 	{
-		if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()))
+		if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
 		{
 			if (WorkerManager::getInstance()->getNumberWorkers() == 0)
 			{
@@ -178,7 +178,7 @@ void Octant::updateEntities() const
 			}
 			else
 			{
-				EntityCommandManager::getInstance()->publishUpdateCommand(*walkerEntities);
+				EntityCommandManager::getInstance()->publishUpdateCommand((*walkerEntities).get());
 			}
 		}
 
@@ -193,7 +193,7 @@ void Octant::renderEntities(bool ascending) const
 		auto walkerEntities = allOctreeEntities.begin();
 		while (walkerEntities != allOctreeEntities.end())
 		{
-			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()))
+			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
 			{
 				(*walkerEntities)->render();
 			}
@@ -206,7 +206,7 @@ void Octant::renderEntities(bool ascending) const
 		auto walkerEntities = allOctreeEntities.rbegin();
 		while (walkerEntities != allOctreeEntities.rend())
 		{
-			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()))
+			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
 			{
 				(*walkerEntities)->render();
 			}
@@ -289,7 +289,7 @@ bool Octant::releaseChilds()
 	return true;
 }
 
-bool Octant::updateEntity(OctreeEntity* octreeEntity)
+bool Octant::updateEntity(const OctreeEntitySP& octreeEntity)
 {
 	BOOST_ASSERT(octreeEntity != 0);
 
@@ -340,7 +340,7 @@ bool Octant::updateEntity(OctreeEntity* octreeEntity)
 	return true;
 }
 
-void Octant::removeEntity(OctreeEntity* octreeEntity)
+void Octant::removeEntity(const OctreeEntitySP& octreeEntity)
 {
 	BOOST_ASSERT(octreeEntity != 0);
 

@@ -15,11 +15,14 @@ enum RenderFilter {RENDER_TRANSPARENT, RENDER_OPAQUE, RENDER_ALL};
 
 class Entity {
 
+	friend void boost::checked_delete<Entity>(Entity* x);
+
 protected:
 
 	static CameraSP currentCamera;
 	static bool ascendingSortOrder;
 	static enum RenderFilter renderFilter;
+	static bool modelTransformOnly;
 
 	float distanceToCamera;
 
@@ -31,11 +34,12 @@ protected:
 
 public:
 
-    static void setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder = false, enum RenderFilter renderFilter = RENDER_ALL);
+    static void setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder = false, enum RenderFilter renderFilter = RENDER_ALL, bool modelTransformOnly = false);
 
     static const CameraSP& getCurrentCamera();
     static bool isAscendingSortOrder();
     static enum RenderFilter getRenderFilter();
+    static bool getModelTransformOnly();
 
 	virtual const BoundingSphere& getBoundingSphere() const = 0;
 
@@ -46,5 +50,7 @@ public:
 	virtual void render() const = 0;
 
 };
+
+typedef boost::shared_ptr<Entity> EntitySP;
 
 #endif /* ENTITY_H_ */

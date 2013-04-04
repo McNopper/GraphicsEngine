@@ -36,12 +36,12 @@ private:
 	std::vector<Octant*> allChilds;
 	std::vector<Octant*> allChildsPlusMe;
 
-	std::vector<OctreeEntity*> allOctreeEntities;
+	std::vector<OctreeEntitySP> allOctreeEntities;
 
 	BoundingSphere boundingSphere;
 
 	Quicksort<Octant*> quicksortOctant;
-	Quicksort<OctreeEntity*> quicksortOctreeEntity;
+	Quicksort<OctreeEntitySP> quicksortOctreeEntity;
 
 	float distanceToCamera;
 
@@ -58,9 +58,9 @@ private:
 
 	bool releaseChilds();
 
-	bool updateEntity(OctreeEntity* octreeEntity);
+	bool updateEntity(const OctreeEntitySP& octreeEntity);
 
-	void removeEntity(OctreeEntity* octreeEntity);
+	void removeEntity(const OctreeEntitySP& octreeEntity);
 
 	void removeAllEntities();
 

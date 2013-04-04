@@ -9,7 +9,8 @@
 
 using namespace boost;
 
-Octree::Octree(uint32_t maxLevels, uint32_t maxElements, const Point4& center, float halfWidth, float halfHeight, float halfDepth)
+Octree::Octree(uint32_t maxLevels, uint32_t maxElements, const Point4& center, float halfWidth, float halfHeight, float halfDepth):
+	entityExcludeList()
 {
 	BOOST_ASSERT(maxElements > 0);
 
@@ -70,7 +71,7 @@ void Octree::recycleOctant(Octant* octant)
 	}
 }
 
-bool Octree::updateEntity(OctreeEntity* octreeEntity) const
+bool Octree::updateEntity(const OctreeEntitySP& octreeEntity) const
 {
 	bool result = root->updateEntity(octreeEntity);
 
@@ -84,7 +85,7 @@ bool Octree::updateEntity(OctreeEntity* octreeEntity) const
 	return result;
 }
 
-void Octree::removeEntity(OctreeEntity* octreeEntity) const
+void Octree::removeEntity(const OctreeEntitySP& octreeEntity) const
 {
 	root->removeEntity(octreeEntity);
 }
@@ -112,4 +113,19 @@ void Octree::render() const
 void Octree::setDebug(bool debug)
 {
 	root->setDebug(debug);
+}
+
+void Octree::setEntityExcludeList(const EntityListSP& entityExcludeList)
+{
+	this->entityExcludeList = entityExcludeList;
+}
+
+bool Octree::isEntityExcluded(const OctreeEntitySP& octreeEntity) const
+{
+	if (entityExcludeList.get() == nullptr)
+	{
+		return false;
+	}
+
+	return entityExcludeList->containsEntity(octreeEntity);
 }

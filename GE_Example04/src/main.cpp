@@ -4,6 +4,8 @@ using namespace std;
 
 static GroundPlane groundPlane;
 
+static EntityListSP entityExcludeList;
+
 GLUSboolean initGame(GLUSvoid)
 {
 	if (!initEngine(GLUS_LOG_INFO, 7))
@@ -91,6 +93,13 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setAnimation(0, 0);
 
 	ModelEntityManager::getInstance()->updateEntity(entity);
+
+	// Entity exclude list
+
+	entityExcludeList = EntityListSP(new EntityList());
+	entityExcludeList->addEntity(entity);
+
+	//ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
 
 	// Path animation
 
@@ -187,6 +196,11 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 GLUSvoid terminateGame(GLUSvoid)
 {
+	if (entityExcludeList.get())
+	{
+		entityExcludeList->clear();
+	}
+
 	terminateEngine();
 }
 

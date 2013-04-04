@@ -17,6 +17,7 @@ class OctreeEntity : public Entity
 
 	friend class Octree;
 	friend class Octant;
+	friend void boost::checked_delete<OctreeEntity>(OctreeEntity* x);
 
 private:
 
@@ -45,5 +46,7 @@ public:
 	bool insideVisitingOctant() const;
 
 };
+
+typedef boost::shared_ptr<OctreeEntity> OctreeEntitySP;
 
 #endif /* OCTREEENTITY_H_ */

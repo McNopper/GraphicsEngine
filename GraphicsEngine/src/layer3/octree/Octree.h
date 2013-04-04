@@ -10,6 +10,8 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer2/entity/EntityList.h"
+
 #include "Octant.h"
 #include "OctreeEntity.h"
 
@@ -26,6 +28,8 @@ private:
 
 	Octant* root;
 
+	EntityListSP entityExcludeList;
+
 	Octree(boost::uint32_t maxLevels, boost::uint32_t maxElements, const Point4& center, float halfWidth, float halfHeight, float halfDepth);
 
 	virtual ~Octree();
@@ -36,9 +40,9 @@ private:
 
 public:
 
-	bool updateEntity(OctreeEntity* octreeEntity) const;
+	bool updateEntity(const OctreeEntitySP& octreeEntity) const;
 
-	void removeEntity(OctreeEntity* octreeEntity) const;
+	void removeEntity(const OctreeEntitySP& octreeEntity) const;
 
 	void removeAllEntities() const;
 
@@ -49,6 +53,10 @@ public:
 	void render() const;
 
 	void setDebug(bool debug);
+
+	void setEntityExcludeList(const EntityListSP& entityExcludeList);
+
+	bool isEntityExcluded(const OctreeEntitySP& octreeEntity) const;
 
 };
 

@@ -17,6 +17,8 @@ uniform int u_hasSkinning;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
 
+uniform	int u_modelTransformOnly;
+
 in vec4 a_vertex;
 in vec3 a_normal;
 in vec3 a_bitangent;
@@ -116,5 +118,12 @@ void main(void)
 		v_texCoord = a_texCoord;
 	}
 
-	gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
+	if (u_modelTransformOnly)
+	{
+		gl_Position = v_vertex;
+	}
+	else
+	{
+		gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
+	}
 }

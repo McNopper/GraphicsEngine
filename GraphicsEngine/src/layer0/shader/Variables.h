@@ -45,6 +45,8 @@
 #define u_hasNormalMapTexture "u_hasNormalMapTexture"
 #define u_hasCubeMapTexture "u_hasCubeMapTexture"
 
+#define u_modelTransformOnly "u_modelTransformOnly"
+
 #define u_writeBrightColor "u_writeBrightColor"
 #define u_brightColorLimit "u_brightColorLimit"
 

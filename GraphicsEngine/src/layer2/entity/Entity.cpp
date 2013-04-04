@@ -10,6 +10,7 @@
 CameraSP Entity::currentCamera;
 bool Entity::ascendingSortOrder = false;
 enum RenderFilter Entity::renderFilter = RENDER_ALL;
+bool Entity::modelTransformOnly = false;
 
 Entity::Entity() :
 		distanceToCamera(0.0f)
@@ -20,11 +21,12 @@ Entity::~Entity()
 {
 }
 
-void Entity::setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder, enum RenderFilter renderFilter)
+void Entity::setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder, enum RenderFilter renderFilter, bool modelTransformOnly)
 {
 	Entity::currentCamera = currentCamera;
 	Entity::ascendingSortOrder = ascendingSortOrder;
 	Entity::renderFilter = renderFilter;
+	Entity::modelTransformOnly = modelTransformOnly;
 }
 
 const CameraSP& Entity::getCurrentCamera()
@@ -40,6 +42,11 @@ bool Entity::isAscendingSortOrder()
 enum RenderFilter Entity::getRenderFilter()
 {
 	return Entity::renderFilter;
+}
+
+bool Entity::getModelTransformOnly()
+{
+	return Entity::modelTransformOnly;
 }
 
 float Entity::getDistanceToCamera() const

@@ -15,12 +15,17 @@ using namespace std;
 ModelEntityManager* ModelEntityManager::instance = nullptr;
 
 ModelEntityManager::ModelEntityManager() :
-	allEntities(), allUpdatableEntities(), octree()
+	allEntities(), allUpdatableEntities(), octree(), quicksort(), entityExcludeList()
 {
 }
 
 ModelEntityManager::~ModelEntityManager()
 {
+	if (entityExcludeList.get())
+	{
+		entityExcludeList->clear();
+	}
+
 	vector<ModelEntitySP>::iterator walker = allEntities.begin();
 
 	while (walker != allEntities.end())
@@ -59,11 +64,12 @@ void ModelEntityManager::setOctree(const OctreeSP& octree)
 
 	this->octree = octree;
 	this->octree->removeAllEntities();
+	this->octree->setEntityExcludeList(entityExcludeList);
 
 	vector<ModelEntitySP>::iterator walker = allEntities.begin();
 	while (walker != allEntities.end())
 	{
-		octree->updateEntity(walker->get());
+		octree->updateEntity(*walker);
 		walker++;
 	}
 }
@@ -93,7 +99,7 @@ void ModelEntityManager::updateMetrics() const
 		{
 			if (!(*walker)->insideVisitingOctant())
 			{
-				octree->updateEntity((*walker).get());
+				octree->updateEntity(*walker);
 			}
 
 			walker++;
@@ -125,7 +131,7 @@ void ModelEntityManager::update() const
 
 		while (walker != allUpdatableEntities.end())
 		{
-			if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()))
+			if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !octree->isEntityExcluded(*walker))
 			{
 				if (WorkerManager::getInstance()->getNumberWorkers() == 0)
 				{
@@ -160,7 +166,7 @@ void ModelEntityManager::render() const
 			auto walker = allEntities.begin();
 			while (walker != allEntities.end())
 			{
-				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()))
+				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}
@@ -173,7 +179,7 @@ void ModelEntityManager::render() const
 			auto walker = allEntities.rbegin();
 			while (walker != allEntities.rend())
 			{
-				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()))
+				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}
@@ -192,7 +198,7 @@ void ModelEntityManager::updateEntity(const ModelEntitySP& entity)
 		allEntities.push_back(entity);
 		if (octree.get())
 		{
-			octree->updateEntity(entity.get());
+			octree->updateEntity(entity);
 		}
 	}
 	walker = find(allUpdatableEntities.begin(), allUpdatableEntities.end(), entity);
@@ -214,7 +220,7 @@ void ModelEntityManager::removeEntity(const ModelEntitySP& entity)
 	{
 		if (octree.get())
 		{
-			octree->removeEntity(entity.get());
+			octree->removeEntity(entity);
 		}
 		allEntities.erase(walker);
 	}
@@ -251,5 +257,25 @@ ModelEntitySP ModelEntityManager::findEntity(const string& name) const
 	}
 
 	return ModelEntitySP();
+}
+
+void ModelEntityManager::setEntityExcludeList(const EntityListSP& entityExcludeList)
+{
+	this->entityExcludeList = entityExcludeList;
+
+	if (octree)
+	{
+		octree->setEntityExcludeList(entityExcludeList);
+	}
+}
+
+bool ModelEntityManager::isEntityExcluded(const ModelEntitySP& modelEntity) const
+{
+	if (!entityExcludeList.get())
+	{
+		return false;
+	}
+
+	return entityExcludeList->containsEntity(modelEntity);
 }
 

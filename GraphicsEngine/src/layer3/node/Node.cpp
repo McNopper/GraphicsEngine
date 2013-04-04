@@ -808,6 +808,9 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 			currentProgram->use();
 
+			// In some cases, the vertex shader should only use the model matrix
+			glUniform1i(currentProgram->getUniformLocation(u_modelTransformOnly), Entity::getModelTransformOnly());
+
 			glUniformMatrix4fv(currentProgram->getUniformLocation(u_modelMatrix), 1, GL_FALSE, matrix.getM());
 
 			// We have the inverse and transpose by setting the matrix

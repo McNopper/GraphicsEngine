@@ -11,6 +11,7 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/algorithm/Quicksort.h"
+#include "../../layer2/entity/EntityList.h"
 #include "../../layer3/octree/Octree.h"
 #include "ModelEntity.h"
 
@@ -27,6 +28,8 @@ private:
 	OctreeSP octree;
 
 	Quicksort<ModelEntitySP> quicksort;
+
+	EntityListSP entityExcludeList;
 
 private:
 
@@ -56,6 +59,10 @@ public:
 	void setBrightColorEffect(bool writeBrightColor, float brightColorLimit) const;
 
 	ModelEntitySP findEntity(const std::string& name) const;
+
+	void setEntityExcludeList(const EntityListSP& entityExcludeList);
+
+	bool isEntityExcluded(const ModelEntitySP& modelEntity) const;
 
 };
 
