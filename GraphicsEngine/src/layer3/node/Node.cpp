@@ -897,6 +897,9 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				glActiveTexture(GL_TEXTURE0);
 			}
 
+			// TODO Enable, if available
+			glUniform1i(currentProgram->getUniformLocation(u_hasCubeMapOverlayTexture), 0);
+
 			// Skinning
 			if (mesh->hasSkinning())
 			{

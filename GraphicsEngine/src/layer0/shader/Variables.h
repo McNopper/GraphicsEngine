@@ -44,6 +44,7 @@
 #define u_hasDiffuseTexture "u_hasDiffuseTexture"
 #define u_hasNormalMapTexture "u_hasNormalMapTexture"
 #define u_hasCubeMapTexture "u_hasCubeMapTexture"
+#define u_hasCubeMapOverlayTexture "u_hasCubeMapOverlayTexture"
 
 #define u_modelTransformOnly "u_modelTransformOnly"
 
@@ -94,6 +95,7 @@
 #define u_lineGeometryOffset1 "u_lineGeometryOffset1"
 
 #define u_cubemap "u_cubemap"
+#define u_cubemapOverlay "u_cubemapOverlay"
 
 #define u_eta "u_eta"
 #define u_reflectanceNormalIncidence "u_reflectanceNormalIncidence"

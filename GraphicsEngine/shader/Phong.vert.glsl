@@ -118,7 +118,7 @@ void main(void)
 		v_texCoord = a_texCoord;
 	}
 
-	if (u_modelTransformOnly)
+	if (u_modelTransformOnly != 0)
 	{
 		gl_Position = v_vertex;
 	}

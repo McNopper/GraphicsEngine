@@ -46,6 +46,7 @@ uniform	int u_lightType;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
 uniform	int u_hasCubeMapTexture;
+uniform	int u_hasCubeMapOverlayTexture;
 
 uniform	int u_writeBrightColor;
 uniform	float u_brightColorLimit;
@@ -53,6 +54,7 @@ uniform	float u_brightColorLimit;
 uniform vec4 u_eyePosition;
 
 uniform samplerCube u_cubemap;
+uniform samplerCube u_cubemapOverlay;
 
 in vec4 v_vertex;
 in vec3 v_normal;
@@ -137,17 +139,31 @@ void main(void)
 	
 	vec4 color = u_material.emissiveColor*diffuseTexture + attenuation*u_light.ambientColor*u_material.ambientColor*diffuseTexture + attenuation*u_light.diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + attenuation*u_light.specularColor*u_material.specularColor * specularIntensity;
 	
-	if (u_hasCubeMapTexture > 0 && (dot(vec3(1.0), u_material.reflectionColor.rgb) > 0.0 || dot(vec3(1.0), u_material.refractionColor.rgb) > 0.0))
+	if (u_hasCubeMapTexture != 0 && (dot(vec3(1.0), u_material.reflectionColor.rgb) > 0.0 || dot(vec3(1.0), u_material.refractionColor.rgb) > 0.0))
 	{
 		vec3 reflection = normalize(reflect(-eyeDirection, normal));
 	
 		vec4 reflectionColor = texture(u_cubemap, reflection);
+		
+		if (u_hasCubeMapOverlayTexture != 0)
+		{
+			vec4 tempColor = texture(u_cubemapOverlay, reflection);
+			
+			reflectionColor = vec4(reflectionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
+		}
 
 		if (u_eta > 0.0)
 		{
 			vec3 refraction = normalize(refract(-eyeDirection, normal, u_eta));
 			
 			vec4 refractionColor = texture(u_cubemap, refraction);
+
+			if (u_hasCubeMapOverlayTexture != 0)
+			{
+				vec4 tempColor = texture(u_cubemapOverlay, refraction);
+			
+				refractionColor = vec4(refractionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
+			}
 			
 			float fresnel = u_reflectanceNormalIncidence + (1.0 - u_reflectanceNormalIncidence) * pow((1.0 - dot(eyeDirection, normal)), 5.0);
 			
@@ -161,7 +177,7 @@ void main(void)
 
 	fragColor = vec4(color.rgb, color.a * (1.0 - u_material.transparency));
 	
-	if (u_writeBrightColor > 0)
+	if (u_writeBrightColor != 0)
 	{
 		vec3 tempBrightColor = max(color.rgb - vec3(u_brightColorLimit), vec3(0.0));
 		
