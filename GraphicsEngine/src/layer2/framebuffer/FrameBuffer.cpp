@@ -9,8 +9,7 @@
 
 using namespace boost;
 
-FrameBuffer::FrameBuffer(int32_t width, int32_t height) :
-	fbo(0), width(width), height(height), drawBufferMode(GL_FRONT), readBufferMode(GL_FRONT),
+FrameBuffer::FrameBuffer(int32_t width, int32_t height) : FrameBufferBase(width, height),
 	color0Texture(), color0RenderBuffer(), color1Texture(), color1RenderBuffer(), depthTexture(), depthRenderBuffer(), depthStencilTexture(), depthStencilRenderBuffer()
 {
 	init();
@@ -18,7 +17,6 @@ FrameBuffer::FrameBuffer(int32_t width, int32_t height) :
 
 FrameBuffer::~FrameBuffer()
 {
-	destroy();
 }
 
 bool FrameBuffer::init()
@@ -98,18 +96,6 @@ bool FrameBuffer::init()
 	return isValid();
 }
 
-void FrameBuffer::destroy()
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    if (fbo)
-	{
-    	glDeleteFramebuffers(1, &fbo);
-
-	    fbo = 0;
-	}
-}
-
 void FrameBuffer::use(bool enable)
 {
 	static const GLenum attachments[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
@@ -124,11 +110,6 @@ void FrameBuffer::use(bool enable)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDrawBuffers(1, attachments);
 	}
-}
-
-GLuint FrameBuffer::getFBO() const
-{
-	return fbo;
 }
 
 int32_t FrameBuffer::getDrawBuffersCount() const
@@ -185,90 +166,6 @@ const RenderBufferSP& FrameBuffer::getDepthRenderBuffer() const
 const RenderBufferSP& FrameBuffer::getDepthStencilRenderBuffer() const
 {
 	return depthStencilRenderBuffer;
-}
-
-boost::int32_t FrameBuffer::getWidth() const
-{
-	return width;
-}
-
-void FrameBuffer::setWidth(int32_t width)
-{
-	if (this->width != width)
-	{
-		this->width = width;
-		destroy();
-
-		init();
-	}
-}
-
-boost::int32_t FrameBuffer::getHeight() const
-{
-	return height;
-}
-
-void FrameBuffer::setHeight(int32_t height)
-{
-	if (this->height != height)
-	{
-		this->height = height;
-		destroy();
-
-		init();
-	}
-}
-
-void FrameBuffer::setWidthHeight(int32_t width, int32_t height)
-{
-	if (this->width != width || this->height != height)
-	{
-		this->width = width;
-		this->height = height;
-		destroy();
-
-		init();
-	}
-}
-
-GLenum FrameBuffer::getDrawBufferMode() const
-{
-	return drawBufferMode;
-}
-
-void FrameBuffer::setDrawBufferMode(GLenum drawBufferMode)
-{
-	this->drawBufferMode = drawBufferMode;
-
-	init();
-}
-
-GLenum FrameBuffer::getReadBufferMode() const
-{
-	return readBufferMode;
-}
-
-void FrameBuffer::setReadBufferMode(GLenum readBufferMode)
-{
-	this->readBufferMode = readBufferMode;
-
-	init();
-}
-
-bool FrameBuffer::isValid() const
-{
-	if (!fbo)
-	{
-		return false;
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-	bool valid = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    return valid;
 }
 
 void FrameBuffer::setColorAttachment0(const TextureSP& texture)

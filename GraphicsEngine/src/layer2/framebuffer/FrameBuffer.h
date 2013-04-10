@@ -11,20 +11,12 @@
 #include "../../layer0/texture/Texture.h"
 #include "../../layer0/renderbuffer/RenderBuffer.h"
 
-#include "../../UsedLibs.h"
+#include "FrameBufferBase.h"
 
-class FrameBuffer
+class FrameBuffer : public FrameBufferBase
 {
 
 private:
-
-	GLuint fbo;
-
-	boost::int32_t width;
-	boost::int32_t height;
-
-	GLenum drawBufferMode;
-	GLenum readBufferMode;
 
 	TextureSP color0Texture;
 	RenderBufferSP color0RenderBuffer;
@@ -45,26 +37,9 @@ public:
 	FrameBuffer(boost::int32_t width, boost::int32_t height);
 	virtual ~FrameBuffer();
 
-	bool init();
-	void destroy();
+	virtual bool init();
 
-	void use(bool enable);
-
-	GLuint getFBO() const;
-
-	boost::int32_t getWidth() const;
-	void setWidth(boost::int32_t width);
-	boost::int32_t getHeight() const;
-	void setHeight(boost::int32_t height);
-
-	void setWidthHeight(boost::int32_t width, boost::int32_t height);
-
-	GLenum getDrawBufferMode() const;
-	void setDrawBufferMode(GLenum drawBufferMode);
-	GLenum getReadBufferMode() const;
-	void setReadBufferMode(GLenum readBufferMode);
-
-	bool isValid() const;
+	virtual void use(bool enable);
 
 	virtual void setColorAttachment0(const TextureSP& texture);
 	virtual void setColorAttachment0(const RenderBufferSP& renderBuffer);
