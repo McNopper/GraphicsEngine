@@ -97,31 +97,24 @@ void Octant::sort()
 
 void Octant::update() const
 {
-	if (!OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible(boundingSphere))
+	auto walker = allChildsPlusMe.begin();
+	while (walker != allChildsPlusMe.end())
 	{
-		return;
-	}
-	else
-	{
-		auto walker = allChildsPlusMe.begin();
-		while (walker != allChildsPlusMe.end())
+		if (*walker == this)
 		{
-			if (*walker == this)
-			{
-				updateEntities();
-			}
-			else
-			{
-				(*walker)->update();
-			}
-			walker++;
+			updateEntities();
 		}
+		else
+		{
+			(*walker)->update();
+		}
+		walker++;
 	}
 }
 
-void Octant::render() const
+void Octant::render(bool force) const
 {
-	if (!OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible(boundingSphere))
+	if (!force && !OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible(boundingSphere))
 	{
 		return;
 	}
@@ -133,7 +126,7 @@ void Octant::render() const
 		{
 			if (*walker == this)
 			{
-				renderEntities(true);
+				renderEntities(true, force);
 			}
 			else
 			{
@@ -149,7 +142,7 @@ void Octant::render() const
 		{
 			if (*walker == this)
 			{
-				renderEntities(false);
+				renderEntities(false, force);
 			}
 			else
 			{
@@ -170,30 +163,27 @@ void Octant::updateEntities() const
 	auto walkerEntities = allOctreeEntities.begin();
 	while (walkerEntities != allOctreeEntities.end())
 	{
-		if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
+		if (WorkerManager::getInstance()->getNumberWorkers() == 0)
 		{
-			if (WorkerManager::getInstance()->getNumberWorkers() == 0)
-			{
-				(*walkerEntities)->update();
-			}
-			else
-			{
-				EntityCommandManager::getInstance()->publishUpdateCommand((*walkerEntities).get());
-			}
+			(*walkerEntities)->update();
+		}
+		else
+		{
+			EntityCommandManager::getInstance()->publishUpdateCommand((*walkerEntities).get());
 		}
 
 		walkerEntities++;
 	}
 }
 
-void Octant::renderEntities(bool ascending) const
+void Octant::renderEntities(bool ascending, bool force) const
 {
 	if (ascending)
 	{
 		auto walkerEntities = allOctreeEntities.begin();
 		while (walkerEntities != allOctreeEntities.end())
 		{
-			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
+			if ((force || OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere())) && !octree->isEntityExcluded(*walkerEntities))
 			{
 				(*walkerEntities)->render();
 			}
@@ -206,7 +196,7 @@ void Octant::renderEntities(bool ascending) const
 		auto walkerEntities = allOctreeEntities.rbegin();
 		while (walkerEntities != allOctreeEntities.rend())
 		{
-			if (OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere()) && !octree->isEntityExcluded(*walkerEntities))
+			if ((force || OctreeEntity::getCurrentCamera()->getViewFrustum().isVisible((*walkerEntities)->getBoundingSphere())) && !octree->isEntityExcluded(*walkerEntities))
 			{
 				(*walkerEntities)->render();
 			}

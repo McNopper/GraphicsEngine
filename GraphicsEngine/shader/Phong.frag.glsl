@@ -33,6 +33,8 @@ struct MaterialProperties
 	vec4 refractionColor;
 	
 	float transparency;
+	
+	samplerCube dynamicCubeMapTexture;
 };
 
 uniform	LightProperties u_light;
@@ -46,7 +48,7 @@ uniform	int u_lightType;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
 uniform	int u_hasCubeMapTexture;
-uniform	int u_hasCubeMapOverlayTexture;
+uniform	int u_hasDynamicCubeMapTexture;
 
 uniform	int u_writeBrightColor;
 uniform	float u_brightColorLimit;
@@ -54,7 +56,6 @@ uniform	float u_brightColorLimit;
 uniform vec4 u_eyePosition;
 
 uniform samplerCube u_cubemap;
-uniform samplerCube u_cubemapOverlay;
 
 in vec4 v_vertex;
 in vec3 v_normal;
@@ -145,9 +146,9 @@ void main(void)
 	
 		vec4 reflectionColor = texture(u_cubemap, reflection);
 		
-		if (u_hasCubeMapOverlayTexture != 0)
+		if (u_hasDynamicCubeMapTexture != 0)
 		{
-			vec4 tempColor = texture(u_cubemapOverlay, reflection);
+			vec4 tempColor = texture(u_material.dynamicCubeMapTexture, reflection);
 			
 			reflectionColor = vec4(reflectionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
 		}
@@ -158,9 +159,9 @@ void main(void)
 			
 			vec4 refractionColor = texture(u_cubemap, refraction);
 
-			if (u_hasCubeMapOverlayTexture != 0)
+			if (u_hasDynamicCubeMapTexture != 0)
 			{
-				vec4 tempColor = texture(u_cubemapOverlay, refraction);
+				vec4 tempColor = texture(u_material.dynamicCubeMapTexture, refraction);
 			
 				refractionColor = vec4(refractionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
 			}

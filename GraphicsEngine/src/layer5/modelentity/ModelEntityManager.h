@@ -50,7 +50,10 @@ public:
 
 	void update() const;
 
-	void render() const;
+	/**
+	 * @param force True, if render everything. Exclude list is still excluding.
+	 */
+	void render(bool force = false) const;
 
 	void updateEntity(const ModelEntitySP& entity);
 

@@ -11,6 +11,7 @@ CameraSP Entity::currentCamera;
 bool Entity::ascendingSortOrder = false;
 enum RenderFilter Entity::renderFilter = RENDER_ALL;
 bool Entity::modelTransformOnly = false;
+bool Entity::dynamicCubeMaps = false;
 
 Entity::Entity() :
 		distanceToCamera(0.0f)
@@ -21,12 +22,13 @@ Entity::~Entity()
 {
 }
 
-void Entity::setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder, enum RenderFilter renderFilter, bool modelTransformOnly)
+void Entity::setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder, enum RenderFilter renderFilter, bool modelTransformOnly, bool dynamicCubeMaps)
 {
 	Entity::currentCamera = currentCamera;
 	Entity::ascendingSortOrder = ascendingSortOrder;
 	Entity::renderFilter = renderFilter;
 	Entity::modelTransformOnly = modelTransformOnly;
+	Entity::dynamicCubeMaps = dynamicCubeMaps;
 }
 
 const CameraSP& Entity::getCurrentCamera()
@@ -47,6 +49,11 @@ enum RenderFilter Entity::getRenderFilter()
 bool Entity::getModelTransformOnly()
 {
 	return Entity::modelTransformOnly;
+}
+
+bool Entity::getDynamicCubeMaps()
+{
+	return dynamicCubeMaps;
 }
 
 float Entity::getDistanceToCamera() const

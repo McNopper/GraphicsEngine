@@ -131,16 +131,13 @@ void ModelEntityManager::update() const
 
 		while (walker != allUpdatableEntities.end())
 		{
-			if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !octree->isEntityExcluded(*walker))
+			if (WorkerManager::getInstance()->getNumberWorkers() == 0)
 			{
-				if (WorkerManager::getInstance()->getNumberWorkers() == 0)
-				{
-					(*walker)->update();
-				}
-				else
-				{
-					EntityCommandManager::getInstance()->publishUpdateCommand(walker->get());
-				}
+				(*walker)->update();
+			}
+			else
+			{
+				EntityCommandManager::getInstance()->publishUpdateCommand(walker->get());
 			}
 
 			walker++;
@@ -153,11 +150,11 @@ void ModelEntityManager::update() const
 	}
 }
 
-void ModelEntityManager::render() const
+void ModelEntityManager::render(bool force) const
 {
 	if (octree.get())
 	{
-		octree->render();
+		octree->render(force);
 	}
 	else
 	{
@@ -166,7 +163,7 @@ void ModelEntityManager::render() const
 			auto walker = allEntities.begin();
 			while (walker != allEntities.end())
 			{
-				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !isEntityExcluded(*walker))
+				if ((force || ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}
@@ -179,7 +176,7 @@ void ModelEntityManager::render() const
 			auto walker = allEntities.rbegin();
 			while (walker != allEntities.rend())
 			{
-				if (ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere()) && !isEntityExcluded(*walker))
+				if ((force || ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}

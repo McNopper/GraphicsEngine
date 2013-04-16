@@ -74,11 +74,11 @@ private:
 
 	void update() const;
 
-	void render() const;
+	void render(bool force = false) const;
 
 	void updateEntities() const;
 
-	void renderEntities(bool ascending) const;
+	void renderEntities(bool ascending, bool force = false) const;
 
 	void updateDistanceToCamera();
 

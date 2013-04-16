@@ -50,7 +50,7 @@ public:
 
 	void update() const;
 
-	void render() const;
+	void render(bool force = false) const;
 
 	void setDebug(bool debug);
 

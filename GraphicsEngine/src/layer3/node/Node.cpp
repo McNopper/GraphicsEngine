@@ -897,12 +897,23 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				glActiveTexture(GL_TEXTURE0);
 			}
 
-			// TODO Enable, if available
-			glUniform1i(currentProgram->getUniformLocation(u_hasCubeMapOverlayTexture), 0);
-			glActiveTexture(GL_TEXTURE3);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-		    glUniform1i(currentProgram->getUniformLocation(u_cubemapOverlay), 3);
-			glActiveTexture(GL_TEXTURE0);
+			// Only allow dynamic cube map, if also a sky cube map is available
+			if (Entity::getDynamicCubeMaps() && currentSurfaceMaterial->getDynamicCubeMapTextureName() != 0 && SkyManager::getInstance()->hasActiveSky())
+			{
+				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 1);
+				glActiveTexture(GL_TEXTURE3);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, currentSurfaceMaterial->getDynamicCubeMapTextureName());
+			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 3);
+				glActiveTexture(GL_TEXTURE0);
+			}
+			else
+			{
+				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 0);
+				glActiveTexture(GL_TEXTURE3);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 3);
+				glActiveTexture(GL_TEXTURE0);
+			}
 
 			// Skinning
 			if (mesh->hasSkinning())

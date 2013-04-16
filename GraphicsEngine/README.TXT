@@ -25,7 +25,7 @@ Libraries/SDKs used:
 - Boost 1.51.0 http://www.boost.org/ http://www.boostpro.com/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.9.0 http://glew.sourceforge.net/
-- GLFW 2.7.7 http://www.glfw.org/
+- GLFW 2.7.8 http://www.glfw.org/
 
 Please note: On Ubuntu 12.04, just use the libraries provided with the OS, even if they are older versions.
 
@@ -70,10 +70,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-04.04.2013 Norbert Nopper (norbert@nopper.tv)
+11.04.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Added latest GLFW (2.7.8)
 - Added entity exclude list
 - Added path
 - Added depth of field

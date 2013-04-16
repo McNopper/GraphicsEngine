@@ -12,6 +12,7 @@
 
 #include "../../layer0/color/Color.h"
 #include "../../layer0/texture/Texture2D.h"
+#include "../../layer0/texture/TextureCubeMap.h"
 
 class SurfaceMaterial
 {
@@ -46,6 +47,8 @@ private:
 	Texture2DSP transparencyTexture;
 
 	Texture2DSP normalMapTexture;
+
+	TextureCubeMapSP dynamicCubeMapTexture;
 
 public:
 
@@ -87,6 +90,9 @@ public:
 	const Texture2DSP& getNormalMapTexture() const;
     GLuint getNormalMapTextureName() const;
 
+	const TextureCubeMapSP& getDynamicCubeMapTexture() const;
+    GLuint getDynamicCubeMapTextureName() const;
+
     void setAmbient(const Color& ambient);
     void setAmbientTexture(const Texture2DSP& ambientTexture);
 
@@ -112,6 +118,8 @@ public:
     void setTransparency(float transparency);
 
     void setNormalMapTexture(const Texture2DSP& normalMapTexture);
+
+    void setDynamicCubeMapTexture(const TextureCubeMapSP& dynamicCubeMapTexture);
 
 };
 

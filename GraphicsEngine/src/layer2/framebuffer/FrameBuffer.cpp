@@ -220,7 +220,6 @@ void FrameBuffer::setDepthAttachment(const RenderBufferSP& renderBuffer)
 	init();
 }
 
-
 void FrameBuffer::setDepthStencilAttachment(const TextureSP& texture)
 {
 	depthTexture.reset();

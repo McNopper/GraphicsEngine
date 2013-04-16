@@ -12,6 +12,7 @@
 
 #include "../../layer0/color/Color.h"
 #include "../../layer0/texture/Texture2D.h"
+#include "../../layer0/texture/TextureCubeMap.h"
 
 #include "SurfaceMaterial.h"
 
@@ -33,6 +34,10 @@ public:
 	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const;
 
 	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency) const;
+
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency, const TextureCubeMapSP& dynamicCubeMapTexture) const;
+
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Texture2DSP& diffuseTexture, const Color& specular, float shininess, const Color& reflection, const Color& refraction, float refractiveIndex, float transparency, const TextureCubeMapSP& dynamicCubeMapTexture) const;
 
 };
 

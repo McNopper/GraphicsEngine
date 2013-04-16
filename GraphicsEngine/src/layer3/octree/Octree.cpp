@@ -105,9 +105,9 @@ void Octree::update() const
 	root->update();
 }
 
-void Octree::render() const
+void Octree::render(bool force) const
 {
-	root->render();
+	root->render(force);
 }
 
 void Octree::setDebug(bool debug)
