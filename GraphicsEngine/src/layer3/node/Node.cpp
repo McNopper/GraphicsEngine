@@ -929,6 +929,12 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			else
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasSkinning), 0);
+
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), nodeOwner.getNumberJoints(), GL_FALSE, Matrix4x4().getM());
+				glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, Matrix3x3().getM());
+
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), nodeOwner.getNumberJoints(), GL_FALSE, Matrix4x4().getM());
+				glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, Matrix3x3().getM());
 			}
 
 			// Write bright color
@@ -963,7 +969,11 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			{
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+				glActiveTexture(GL_TEXTURE3);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
+
 			glActiveTexture(GL_TEXTURE0);
 
 			currentVAO->unbind();
