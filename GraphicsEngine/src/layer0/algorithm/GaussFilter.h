@@ -23,7 +23,10 @@ private:
 
 public:
 	GaussFilter(boost::int32_t pixel, float sigma);
+	GaussFilter(const GaussFilter& other);
 	virtual ~GaussFilter();
+
+	GaussFilter& operator =(const GaussFilter& other);
 
 	boost::int32_t getPixel() const;
 

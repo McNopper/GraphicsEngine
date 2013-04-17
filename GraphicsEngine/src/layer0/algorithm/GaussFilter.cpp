@@ -46,6 +46,19 @@ GaussFilter::GaussFilter(int32_t pixel, float sigma) :
 	}
 }
 
+GaussFilter::GaussFilter(const GaussFilter& other) :
+	pixel(other.getPixel()), sigma(other.getSigma()), values(nullptr)
+{
+	values = new float[other.getValuesSize()];
+
+	if (!values)
+	{
+		return;
+	}
+
+	memcpy(values, other.getValues(), other.getValuesSize() * sizeof(float));
+}
+
 GaussFilter::~GaussFilter()
 {
 	if (values)
@@ -54,6 +67,33 @@ GaussFilter::~GaussFilter()
 
 		values = nullptr;
 	}
+}
+
+GaussFilter& GaussFilter::operator =(const GaussFilter& other)
+{
+	if (this != &other)
+	{
+		pixel = other.getPixel();
+		sigma = other.getSigma();
+
+		if (values)
+		{
+			delete[] values;
+
+			values = nullptr;
+		}
+
+		values = new float[other.getValuesSize()];
+
+		if (!values)
+		{
+			return *this;
+		}
+
+		memcpy(values, other.getValues(), other.getValuesSize() * sizeof(float));
+	}
+
+	return *this;
 }
 
 int32_t GaussFilter::getPixel() const
