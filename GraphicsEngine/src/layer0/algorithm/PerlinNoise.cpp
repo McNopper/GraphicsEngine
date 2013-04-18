@@ -14,9 +14,58 @@ PerlinNoise::PerlinNoise(int32_t seed, float frequencyStart, float frequencyFact
 {
 }
 
+PerlinNoise::PerlinNoise(const PerlinNoise& other) :
+		data(nullptr), dataSize(0), seed(other.seed), frequencyStart(other.frequencyStart), frequencyFactor(other.frequencyFactor), amplitudeStart(other.amplitudeStart), amplitudeFactor(other.amplitudeFactor), octaves(other.octaves), minValue(other.minValue), maxValue(other.maxValue)
+{
+	data = new float[other.dataSize];
+
+	if (!data)
+	{
+		return;
+	}
+
+	memcpy(data, other.data, other.dataSize * sizeof(float));
+
+	dataSize = other.dataSize;
+}
+
 PerlinNoise::~PerlinNoise()
 {
 	freeData();
+}
+
+PerlinNoise& PerlinNoise::operator =(const PerlinNoise& other)
+{
+	if (this != &other)
+	{
+		freeData();
+
+		seed = other.seed;
+
+		frequencyStart = other.frequencyStart;
+		frequencyFactor = other.frequencyFactor;
+
+		amplitudeStart = other.amplitudeStart;
+		amplitudeFactor = other.amplitudeFactor;
+
+		octaves = other.octaves;
+
+		minValue = other.minValue;
+		maxValue = other.maxValue;
+
+		data = new float[other.dataSize];
+
+		if (!data)
+		{
+			return *this;
+		}
+
+		memcpy(data, other.data, other.dataSize * sizeof(float));
+
+		dataSize = other.dataSize;
+	}
+
+	return *this;
 }
 
 void PerlinNoise::freeData()

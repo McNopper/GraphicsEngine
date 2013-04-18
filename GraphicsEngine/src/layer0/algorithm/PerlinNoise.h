@@ -37,7 +37,10 @@ class PerlinNoise
 	public:
 
 		PerlinNoise(boost::int32_t seed, float frequencyStart, float frequencyFactor, float amplitudeStart, float amplitudeFactor, boost::int32_t octaves);
+		PerlinNoise(const PerlinNoise& other);
 		virtual ~PerlinNoise();
+
+		PerlinNoise& operator = (const PerlinNoise& other);
 
 		void freeData();
 
