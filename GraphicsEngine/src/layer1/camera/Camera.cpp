@@ -10,18 +10,16 @@
 #include "Camera.h"
 
 Camera::Camera() :
-	eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum()
+	dirty(true), eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum()
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
 	biasMatrix.translate(0.5f, 0.5f, 0.5f);
 	biasMatrix.scale(0.5f, 0.5f, 0.5f);
-
-	lookAt(eye, center, up);
 }
 
 Camera::Camera(const Camera& other) :
-	eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum)
+	dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
@@ -35,9 +33,7 @@ Camera::~Camera()
 
 void Camera::updateViewFrustum()
 {
-	Matrix4x4 transposedViewProjectionMatrix = projectionMatrix * viewMatrix;
-	transposedViewProjectionMatrix.transpose();
-	viewFrustum.transformToWorldSpace(transposedViewProjectionMatrix);
+	viewFrustum.transformToWorldSpace(*this);
 }
 
 void Camera::setPosition(const Point4& position)
@@ -45,7 +41,7 @@ void Camera::setPosition(const Point4& position)
 	this->eye = position;
 	this->center = position + direction;
 
-	lookAt(eye, center, up);
+	lookAt(this->eye, this->center, this->up);
 }
 
 void Camera::setRotation(float angleZ, float angleY, float angleX)
@@ -59,7 +55,7 @@ void Camera::setRotation(float angleZ, float angleY, float angleX)
 	this->center = this->eye + rotationMatrix * direction;
 	this->up = rotationMatrix * up;
 
-	lookAt(eye, center, up);
+	lookAt(this->eye, this->center, this->up);
 }
 
 void Camera::setRotation(const Quaternion& rotation)
@@ -70,7 +66,7 @@ void Camera::setRotation(const Quaternion& rotation)
 	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
 	this->up = rotation.getRotationMatrix4x4() * up;
 
-	lookAt(eye, center, up);
+	lookAt(this->eye, this->center, this->up);
 }
 
 void Camera::setPositionRotation(const Point4& position, const Quaternion& rotation)
@@ -84,7 +80,7 @@ void Camera::setPositionRotation(const Point4& position, const Quaternion& rotat
 	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
 	this->up = rotation.getRotationMatrix4x4() * up;
 
-	lookAt(eye, center, up);
+	lookAt(this->eye, this->center, this->up);
 }
 
 void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
@@ -101,11 +97,18 @@ void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
 	viewMatrix.setM(result);
 
 	updateViewFrustum();
+
+	dirty = false;
 }
 
-void Camera::updateViewport( const Viewport& viewport)
+void Camera::updateViewport(const Viewport& viewport)
 {
 	this->viewport = viewport;
+
+	if (dirty)
+	{
+		lookAt(this->eye, this->center, this->up);
+	}
 
 	updateProjectionMatrix();
 }
@@ -118,6 +121,21 @@ const Point4& Camera::getEye() const
 const Vector3& Camera::getDirection() const
 {
 	return direction;
+}
+
+const Vector3& Camera::getUp() const
+{
+	return up;
+}
+
+float Camera::getNearZ() const
+{
+	return zNear;
+}
+
+float Camera::getFarZ() const
+{
+	return zFar;
 }
 
 const Matrix4x4& Camera::getViewMatrix() const

@@ -101,7 +101,7 @@ void Mesh::updateVAO()
 {
 	ProgramFactory programFactory;
 
-	ProgramSP defaultShaderprogram;
+	ProgramSP shaderprogram;
 
 	for (uint32_t materialIndex = 0; materialIndex < surfaceMaterials.size(); materialIndex++)
 	{
@@ -109,9 +109,14 @@ void Mesh::updateVAO()
 
 		SubMeshSP currentSubMesh = getSubMeshAt(materialIndex);
 
-		defaultShaderprogram = programFactory.createPhongProgram();
+		shaderprogram = programFactory.createPhongProgram();
 
-		SubMeshVAOSP vao = SubMeshVAOSP(new SubMeshVAO(defaultShaderprogram, *this));
+		SubMeshVAOSP vao = SubMeshVAOSP(new SubMeshVAO(shaderprogram, *this));
+		currentSubMesh->addVAO(vao);
+
+		shaderprogram = programFactory.createPhongRenderToCubeMapProgram();
+
+		vao = SubMeshVAOSP(new SubMeshVAO(shaderprogram, *this));
 		currentSubMesh->addVAO(vao);
 	}
 }

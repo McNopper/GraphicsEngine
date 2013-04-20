@@ -18,6 +18,8 @@ public:
 
 	ProgramSP createPhongProgram() const;
 
+	ProgramSP createPhongRenderToCubeMapProgram() const;
+
 	ProgramSP createFontProgram() const;
 
 	ProgramSP createPostProcess2DProgram() const;

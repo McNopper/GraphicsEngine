@@ -11,12 +11,10 @@
 
 OrthographicCamera::OrthographicCamera() : Camera()
 {
-	updateProjectionMatrix();
 }
 
 OrthographicCamera::OrthographicCamera(const OrthographicCamera& other) : Camera(other)
 {
-	updateProjectionMatrix();
 }
 
 OrthographicCamera::~OrthographicCamera()
@@ -26,6 +24,26 @@ OrthographicCamera::~OrthographicCamera()
 void OrthographicCamera::updateProjectionMatrix()
 {
 	orthographic(viewport, zNear, zFar);
+}
+
+float OrthographicCamera::getNearWidth() const
+{
+	return viewport.getWidth();
+}
+
+float OrthographicCamera::getNearHeight() const
+{
+	return viewport.getHeight();
+}
+
+float OrthographicCamera::getFarWidth() const
+{
+	return viewport.getWidth();
+}
+
+float OrthographicCamera::getFarHeight() const
+{
+	return viewport.getHeight();
 }
 
 void OrthographicCamera::orthographic(const Viewport& viewport, float nearVal, float farVal)

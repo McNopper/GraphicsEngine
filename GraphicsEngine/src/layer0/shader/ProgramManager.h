@@ -23,6 +23,7 @@ private:
 public:
 
 	static const std::string DEFAULT_PROGRAM_TYPE;
+	static const std::string RENDER_TO_CUBEMAP_PROGRAM_TYPE;
 
 private:
 
@@ -39,13 +40,13 @@ public:
 
 	void removeProgram(const ProgramSP& program);
 
-	ProgramSP getProgramBy(const std::string& computeFilename) const;
+	ProgramSP getComputeProgramBy(const std::string& computeFilename, const std::string& type = DEFAULT_PROGRAM_TYPE) const;
 
-	ProgramSP getProgramBy(const std::string& vertexFilename, const std::string& fragmentFilename) const;
+	ProgramSP getVertexFragmentProgramBy(const std::string& vertexFilename, const std::string& fragmentFilename, const std::string& type = DEFAULT_PROGRAM_TYPE) const;
 
-	ProgramSP getProgramBy(const std::string& vertexFilename, const std::string& geometryFilename, const std::string& fragmentFilename) const;
+	ProgramSP getVertexGeometryFragmentProgramBy(const std::string& vertexFilename, const std::string& geometryFilename, const std::string& fragmentFilename, const std::string& type = DEFAULT_PROGRAM_TYPE) const;
 
-	ProgramSP getProgramBy(const std::string& vertexFilename, const std::string& controlFilename, const std::string& evaluationFilename, const std::string& geometryFilename, const std::string& fragmentFilename) const;
+	ProgramSP getVertexControlEvaluateGeometryFragmentProgramBy(const std::string& vertexFilename, const std::string& controlFilename, const std::string& evaluationFilename, const std::string& geometryFilename, const std::string& fragmentFilename, const std::string& type = DEFAULT_PROGRAM_TYPE) const;
 
 	const std::multimap<std::string, ProgramSP>& getAllPrograms() const;
 

@@ -22,7 +22,6 @@ protected:
 	static CameraSP currentCamera;
 	static bool ascendingSortOrder;
 	static enum RenderFilter renderFilter;
-	static bool modelTransformOnly;
 	static bool dynamicCubeMaps;
 
 	float distanceToCamera;
@@ -35,12 +34,11 @@ protected:
 
 public:
 
-    static void setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder = false, enum RenderFilter renderFilter = RENDER_ALL, bool modelTransformOnly = false, bool dynamicCubeMaps = false);
+    static void setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder = false, enum RenderFilter renderFilter = RENDER_ALL, bool dynamicCubeMaps = false);
 
     static const CameraSP& getCurrentCamera();
     static bool isAscendingSortOrder();
     static enum RenderFilter getRenderFilter();
-    static bool getModelTransformOnly();
     static bool getDynamicCubeMaps();
 
 	virtual const BoundingSphere& getBoundingSphere() const = 0;

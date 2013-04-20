@@ -19,7 +19,17 @@ public:
 
 	virtual void updateProjectionMatrix();
 
+	virtual float getNearWidth() const;
+
+	virtual float getNearHeight() const;
+
+	virtual float getFarWidth() const;
+
+	virtual float getFarHeight() const;
+
 	void orthographic(const Viewport& viewport, float nearVal, float farVal);
 };
+
+typedef boost::shared_ptr<OrthographicCamera> OrthographicCameraSP;
 
 #endif /* ORTHOGRAPHICCAMERA_H_ */

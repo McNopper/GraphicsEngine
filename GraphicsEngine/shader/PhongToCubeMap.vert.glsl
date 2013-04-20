@@ -3,8 +3,6 @@
 #define MAX_SKIN_INDICES 8
 #define MAX_MATRICES 64
 
-uniform mat4 u_projectionMatrix;
-uniform mat4 u_viewMatrix;
 uniform mat4 u_modelMatrix;
 uniform mat3 u_normalModelMatrix;
 
@@ -16,6 +14,8 @@ uniform mat3 u_jointNormalMatrix[MAX_MATRICES];
 uniform int u_hasSkinning;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
+
+uniform	int u_modelTransformOnly;
 
 in vec4 a_vertex;
 in vec3 a_normal;
@@ -29,11 +29,11 @@ in vec4 a_boneWeight_0;
 in vec4 a_boneWeight_1;
 in float a_boneCounter;
 
-out vec4 v_vertex;
-out vec3 v_normal;
-out vec3 v_bitangent;
-out vec3 v_tangent;
-out vec2 v_texCoord;
+out vec4 v_g_vertex;
+out vec3 v_g_normal;
+out vec3 v_g_bitangent;
+out vec3 v_g_tangent;
+out vec2 v_g_texCoord;
 
 void main(void)
 {
@@ -101,20 +101,20 @@ void main(void)
 		}
 	}
 
-	v_vertex = u_modelMatrix * vertex;
+	v_g_vertex = u_modelMatrix * vertex;
 
-	v_normal = u_normalModelMatrix * normal;
+	v_g_normal = u_normalModelMatrix * normal;
 	
 	if (u_hasNormalMapTexture != 0)
 	{
-		v_bitangent = u_normalModelMatrix * bitangent;
-		v_tangent = u_normalModelMatrix * tangent;
+		v_g_bitangent = u_normalModelMatrix * bitangent;
+		v_g_tangent = u_normalModelMatrix * tangent;
 	}
 	
 	if (u_hasDiffuseTexture != 0 || u_hasNormalMapTexture != 0)
 	{
-		v_texCoord = a_texCoord;
+		v_g_texCoord = a_texCoord;
 	}
 
-	gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
+	gl_Position = v_g_vertex;
 }

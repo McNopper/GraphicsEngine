@@ -9,6 +9,7 @@
 #include "../../layer0/shader/Program.h"
 #include "../../layer0/shader/VAO.h"
 #include "../../layer0/shader/Variables.h"
+#include "../../layer1/material/RefractiveIndices.h"
 #include "../../layer1/material/SurfaceMaterial.h"
 #include "../../layer2/animation/AnimationLayer.h"
 #include "../../layer2/animation/AnimationStack.h"
@@ -808,9 +809,6 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 			currentProgram->use();
 
-			// In some cases, the vertex shader should only use the model matrix
-			glUniform1i(currentProgram->getUniformLocation(u_modelTransformOnly), Entity::getModelTransformOnly());
-
 			glUniformMatrix4fv(currentProgram->getUniformLocation(u_modelMatrix), 1, GL_FALSE, matrix.getM());
 
 			// We have the inverse and transpose by setting the matrix
@@ -867,14 +865,23 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			glUniform4fv(currentProgram->getUniformLocation(u_refractionColor), 1, currentRefraction);
 
 			float environmentRefractiveIndex = nodeOwner.getRefractiveIndex();
-			float materialRefractiveIndex = currentSurfaceMaterial->getRefractiveIndex();
 
-			float eta = environmentRefractiveIndex / materialRefractiveIndex;
+			if (environmentRefractiveIndex != RI_NOTHING)
+			{
+				float materialRefractiveIndex = currentSurfaceMaterial->getRefractiveIndex();
 
-			float reflectanceNormalIncidence = ((environmentRefractiveIndex - materialRefractiveIndex) * (environmentRefractiveIndex - materialRefractiveIndex)) / ((environmentRefractiveIndex + materialRefractiveIndex) * (environmentRefractiveIndex + materialRefractiveIndex));
+				float eta = environmentRefractiveIndex / materialRefractiveIndex;
 
-			glUniform1f(currentProgram->getUniformLocation(u_eta), eta);
-			glUniform1f(currentProgram->getUniformLocation(u_reflectanceNormalIncidence), reflectanceNormalIncidence);
+				float reflectanceNormalIncidence = ((environmentRefractiveIndex - materialRefractiveIndex) * (environmentRefractiveIndex - materialRefractiveIndex)) / ((environmentRefractiveIndex + materialRefractiveIndex) * (environmentRefractiveIndex + materialRefractiveIndex));
+
+				glUniform1f(currentProgram->getUniformLocation(u_eta), eta);
+				glUniform1f(currentProgram->getUniformLocation(u_reflectanceNormalIncidence), reflectanceNormalIncidence);
+			}
+			else
+			{
+				glUniform1f(currentProgram->getUniformLocation(u_eta), 0.0f);
+				glUniform1f(currentProgram->getUniformLocation(u_reflectanceNormalIncidence), 0.0f);
+			}
 
 			if (SkyManager::getInstance()->hasActiveSky())
 			{

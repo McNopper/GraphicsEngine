@@ -10,6 +10,8 @@
 #ifndef REFRACTIVEINDICES_H_
 #define REFRACTIVEINDICES_H_
 
+#define RI_NOTHING					0.0f
+
 #define RI_VACUUM					1.0f
 #define RI_AIR						1.000293f
 

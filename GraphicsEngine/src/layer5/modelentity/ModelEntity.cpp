@@ -18,9 +18,9 @@ using namespace boost;
 float ModelEntity::currentDeltaTime;
 string ModelEntity::currentProgramType;
 
-void ModelEntity::setCurrentValues(const string& currentProgramType, const CameraSP& currentCamera, float currentDeltaTime, bool ascendingSortOrder, enum RenderFilter renderFilter)
+void ModelEntity::setCurrentValues(const string& currentProgramType, const CameraSP& currentCamera, float currentDeltaTime, bool ascendingSortOrder, enum RenderFilter renderFilter, bool dynamicCubeMaps)
 {
-	OctreeEntity::setCurrentValues(currentCamera, ascendingSortOrder, renderFilter);
+	OctreeEntity::setCurrentValues(currentCamera, ascendingSortOrder, renderFilter, dynamicCubeMaps);
 	ModelEntity::currentProgramType = currentProgramType;
 	ModelEntity::currentDeltaTime = currentDeltaTime;
 }

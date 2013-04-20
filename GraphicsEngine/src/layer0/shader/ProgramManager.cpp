@@ -14,6 +14,7 @@ using namespace std;
 ProgramManager* ProgramManager::instance;
 
 const string ProgramManager::DEFAULT_PROGRAM_TYPE = "default";
+const string ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE = "renderToCubeMap";
 
 ProgramManager::ProgramManager() :
 	allPrograms()
@@ -72,7 +73,7 @@ void ProgramManager::removeProgram(const ProgramSP& program)
 	}
 }
 
-ProgramSP ProgramManager::getProgramBy(const string& computeFilename) const
+ProgramSP ProgramManager::getComputeProgramBy(const string& computeFilename, const string& type) const
 {
 	multimap<string, ProgramSP>::const_iterator walker = allPrograms.begin();
 
@@ -90,14 +91,14 @@ ProgramSP ProgramManager::getProgramBy(const string& computeFilename) const
 	}
 
 	currentProgram
-			= ProgramSP(new Program(ProgramManager::DEFAULT_PROGRAM_TYPE, computeFilename));
+			= ProgramSP(new Program(type, computeFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
 	return currentProgram;
 }
 
-ProgramSP ProgramManager::getProgramBy(const string& vertexFilename, const string& fragmentFilename) const
+ProgramSP ProgramManager::getVertexFragmentProgramBy(const string& vertexFilename, const string& fragmentFilename, const string& type) const
 {
 	multimap<string, ProgramSP>::const_iterator walker = allPrograms.begin();
 
@@ -115,14 +116,14 @@ ProgramSP ProgramManager::getProgramBy(const string& vertexFilename, const strin
 	}
 
 	currentProgram
-			= ProgramSP(new Program(ProgramManager::DEFAULT_PROGRAM_TYPE, vertexFilename, fragmentFilename));
+			= ProgramSP(new Program(type, vertexFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
 	return currentProgram;
 }
 
-ProgramSP ProgramManager::getProgramBy(const string& vertexFilename, const string& geometryFilename, const string& fragmentFilename) const
+ProgramSP ProgramManager::getVertexGeometryFragmentProgramBy(const string& vertexFilename, const string& geometryFilename, const string& fragmentFilename, const string& type) const
 {
 	multimap<string, ProgramSP>::const_iterator walker = allPrograms.begin();
 
@@ -140,14 +141,14 @@ ProgramSP ProgramManager::getProgramBy(const string& vertexFilename, const strin
 	}
 
 	currentProgram
-			= ProgramSP(new Program(ProgramManager::DEFAULT_PROGRAM_TYPE, vertexFilename, fragmentFilename));
+			= ProgramSP(new Program(type, vertexFilename, geometryFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
 	return currentProgram;
 }
 
-ProgramSP ProgramManager::getProgramBy(const std::string& vertexFilename, const std::string& controlFilename, const std::string& evaluationFilename, const std::string& geometryFilename, const std::string& fragmentFilename) const
+ProgramSP ProgramManager::getVertexControlEvaluateGeometryFragmentProgramBy(const std::string& vertexFilename, const std::string& controlFilename, const std::string& evaluationFilename, const std::string& geometryFilename, const std::string& fragmentFilename, const string& type) const
 {
 	multimap<string, ProgramSP>::const_iterator walker = allPrograms.begin();
 
@@ -165,7 +166,7 @@ ProgramSP ProgramManager::getProgramBy(const std::string& vertexFilename, const 
 	}
 
 	currentProgram
-			= ProgramSP(new Program(ProgramManager::DEFAULT_PROGRAM_TYPE, vertexFilename, fragmentFilename));
+			= ProgramSP(new Program(type, vertexFilename, controlFilename, evaluationFilename, geometryFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 

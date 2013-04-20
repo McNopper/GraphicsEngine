@@ -94,13 +94,6 @@ GLUSboolean initGame(GLUSvoid)
 
 	ModelEntityManager::getInstance()->updateEntity(entity);
 
-	// Entity exclude list
-
-	entityExcludeList = EntityListSP(new EntityList());
-	entityExcludeList->addEntity(entity);
-
-	//ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
-
 	// Path animation
 
 	Quaternion baseRotation(90.0f, Vector3(0.0f, 1.0f, 0.0f));
@@ -110,6 +103,32 @@ GLUSboolean initGame(GLUSvoid)
 	path->setSpeed(2.5f);
 	path->setLooping(true);
 	path->startPath();
+
+	//
+	//
+	//
+
+	// Full reflecting sphere
+
+	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("FullReflection", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, RI_VACUUM, 0.0f);
+	position = Point4(-5.0f, 1.0f, -15.0f);
+
+	entity = primitiveEntityFactory.createSpherePrimitiveEntity("FullReflectionSphere", 2.0f, 2.0f, 2.0f, surfaceMaterial);
+	entity->setPosition(position);
+	entity->setRefractiveIndex(RI_NOTHING);
+
+	ModelEntityManager::getInstance()->updateEntity(entity);
+
+	//
+	//
+	//
+
+	// Entity exclude list
+
+	entityExcludeList = EntityListSP(new EntityList());
+	entityExcludeList->addEntity(entity);
+
+	//ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
 
 	//
 	//

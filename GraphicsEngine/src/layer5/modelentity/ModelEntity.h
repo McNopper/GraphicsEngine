@@ -79,7 +79,7 @@ protected:
 
 public:
 
-    static void setCurrentValues(const std::string& currentProgramType, const CameraSP& currentCamera, float currentDeltaTime, bool ascendingSortOrder = true, enum RenderFilter renderFilter = RENDER_ALL);
+    static void setCurrentValues(const std::string& currentProgramType, const CameraSP& currentCamera, float currentDeltaTime, bool ascendingSortOrder = true, enum RenderFilter renderFilter = RENDER_ALL, bool dynamicCubeMaps = false);
 
     virtual const std::string& getCurrentProgramType() const;
 

@@ -47,8 +47,6 @@
 #define u_hasCubeMapTexture "u_hasCubeMapTexture"
 #define u_hasDynamicCubeMapTexture "u_hasDynamicCubeMapTexture"
 
-#define u_modelTransformOnly "u_modelTransformOnly"
-
 #define u_writeBrightColor "u_writeBrightColor"
 #define u_brightColorLimit "u_brightColorLimit"
 

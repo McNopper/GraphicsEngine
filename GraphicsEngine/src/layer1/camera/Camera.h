@@ -22,6 +22,10 @@
 class Camera
 {
 
+private:
+
+	bool dirty;
+
 protected:
 
 	Point4 eye;
@@ -61,6 +65,20 @@ public:
 	const Point4& getEye() const;
 
 	const Vector3& getDirection() const;
+
+	const Vector3& getUp() const;
+
+	float getNearZ() const;
+
+	float getFarZ() const;
+
+	virtual float getNearWidth() const = 0;
+
+	virtual float getNearHeight() const = 0;
+
+	virtual float getFarWidth() const = 0;
+
+	virtual float getFarHeight() const = 0;
 
 	const Matrix4x4& getViewMatrix() const;
 
