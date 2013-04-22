@@ -17,10 +17,20 @@
 class DynamicEnvironmentManager : public Manager<EntitySP, FrameBufferCubeMapSP>
 {
 
+private:
+
+	static DynamicEnvironmentManager* instance;
+
 protected:
 
 	DynamicEnvironmentManager();
 	virtual ~DynamicEnvironmentManager();
+
+public:
+
+	static DynamicEnvironmentManager* getInstance();
+
+	static void terminate();
 
 	FrameBufferCubeMapSP createCubeMap(const EntitySP& entity, boost::int32_t length);
 

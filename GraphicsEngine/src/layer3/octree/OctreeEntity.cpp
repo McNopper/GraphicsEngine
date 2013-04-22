@@ -43,15 +43,6 @@ void OctreeEntity::setVisitingOctant(Octant *visitingOctant)
 	this->visitingOctant = visitingOctant;
 }
 
-bool OctreeEntity::operator <=(const OctreeEntity& other) const
-{
-	return distanceToCamera <= other.distanceToCamera;
-}
-bool OctreeEntity::operator >=(const OctreeEntity& other) const
-{
-	return distanceToCamera >= other.distanceToCamera;
-}
-
 bool OctreeEntity::insideVisitingOctant() const
 {
 	if (!visitingOctant)

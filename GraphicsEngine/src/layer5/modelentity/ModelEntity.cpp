@@ -36,7 +36,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	OctreeEntity(), NodeOwner(), Geometry(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name)
+	OctreeEntity(), NodeOwner(), Geometry(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name), jointIndex(-1)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -47,6 +47,8 @@ ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX,
 
 	if (model->isAnimated() && model->isSkinned())
 	{
+		jointIndex = model->getRootNode()->getSkinningRootIndex();
+
 		model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices);
 		model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), 0.0f, getAnimStackIndex(), getAnimLayerIndex());
 	}
@@ -231,7 +233,7 @@ void ModelEntity::updateBoundingSphereCenter(bool force)
 		Matrix4x4 skinningMatrix;
 		if (model->isSkinned())
 		{
-			model->getRootNode()->updateSkinningMatrix(skinningMatrix, Matrix4x4(), time, getAnimStackIndex(), getAnimLayerIndex());
+			skinningMatrix = jointMatrices[jointIndex] * bindMatrices[jointIndex];
 		}
 
 		Matrix4x4 renderingMatrix;

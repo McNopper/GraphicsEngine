@@ -16,9 +16,9 @@ class Manager
 
 protected:
 
-	static Manager<KEY, ELEMENT>* instance;
-
 	std::map<KEY, ELEMENT> allElements;
+
+public:
 
 	Manager() :
 			allElements()
@@ -29,28 +29,6 @@ protected:
 	virtual ~Manager()
 	{
 		allElements.clear();
-	}
-
-public:
-
-	static Manager<KEY, ELEMENT>* getInstance()
-	{
-		if (!instance)
-		{
-			instance = new Manager<KEY, ELEMENT>();
-		}
-
-		return instance;
-	}
-
-	static void terminate()
-	{
-		if (instance)
-		{
-			delete instance;
-
-			instance = nullptr;
-		}
 	}
 
 	void addElement(KEY key, ELEMENT element)
@@ -93,8 +71,5 @@ public:
 	}
 
 };
-
-template<class KEY, class ELEMENT>
-Manager<KEY, ELEMENT>* Manager<KEY, ELEMENT>::instance = nullptr;
 
 #endif /* MANAGER_H_ */

@@ -71,6 +71,8 @@ private:
 
 	std::string name;
 
+	boost::int32_t jointIndex;
+
 protected:
 
 	void updateMetrics();

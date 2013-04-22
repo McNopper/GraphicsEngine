@@ -21,6 +21,15 @@ Entity::~Entity()
 {
 }
 
+bool Entity::operator <=(const Entity& other) const
+{
+	return distanceToCamera <= other.distanceToCamera;
+}
+bool Entity::operator >=(const Entity& other) const
+{
+	return distanceToCamera >= other.distanceToCamera;
+}
+
 void Entity::setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder, enum RenderFilter renderFilter, bool dynamicCubeMaps)
 {
 	Entity::currentCamera = currentCamera;

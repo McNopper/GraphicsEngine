@@ -136,9 +136,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
 
-	ModelEntityManager::getInstance()->updateMetrics();
-	ModelEntityManager::getInstance()->sort();
 	ModelEntityManager::getInstance()->update();
+	ModelEntityManager::getInstance()->sort();
 
 	PostProcessor2DSP postProcessor = PostProcessor2DManager::getInstance()->getPostProcessor("PostProcessor");
 	postProcessor->use(true);

@@ -15,6 +15,8 @@ using namespace boost;
 
 using namespace std;
 
+DynamicEnvironmentManager* DynamicEnvironmentManager::instance = nullptr;
+
 DynamicEnvironmentManager::DynamicEnvironmentManager() :
 		Manager<EntitySP, FrameBufferCubeMapSP>()
 {
@@ -22,6 +24,25 @@ DynamicEnvironmentManager::DynamicEnvironmentManager() :
 
 DynamicEnvironmentManager::~DynamicEnvironmentManager()
 {
+}
+
+DynamicEnvironmentManager* DynamicEnvironmentManager::getInstance()
+{
+	if (!instance)
+	{
+		instance = new DynamicEnvironmentManager();
+	}
+
+	return instance;
+}
+
+void DynamicEnvironmentManager::terminate()
+{
+	if (instance)
+	{
+		delete instance;
+		instance = 0;
+	}
 }
 
 FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& entity, int32_t length)

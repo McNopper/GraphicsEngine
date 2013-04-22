@@ -44,11 +44,9 @@ public:
 
 	void setOctree(const OctreeSP& octree);
 
-	void updateMetrics() const;
+	void update() const;
 
 	void sort();
-
-	void update() const;
 
 	/**
 	 * @param force True, if render everything. Exclude list is still excluding.

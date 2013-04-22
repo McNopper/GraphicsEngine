@@ -169,6 +169,11 @@ GLUSboolean initGame(GLUSvoid)
 	ModelEntityManager::getInstance()->updateEntity(entity);
 
 	//
+
+	FrameBufferCubeMapSP framebufferCubeMap = DynamicEnvironmentManager::getInstance()->createCubeMap(entity, 1024);
+	surfaceMaterial->setDynamicCubeMapTexture(framebufferCubeMap->getCubeMapTexture());
+
+	//
 	//
 	//
 
@@ -232,9 +237,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// Update everything
 
-	ModelEntityManager::getInstance()->updateMetrics();
-	ModelEntityManager::getInstance()->sort();
 	ModelEntityManager::getInstance()->update();
+	ModelEntityManager::getInstance()->sort();
 
 	// Sky
 

@@ -368,87 +368,16 @@ bool Node::isAnimated() const
 	return allAnimStacks.size() != 0;
 }
 
-bool Node::updateSkinningMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
+int32_t Node::getSkinningRootIndex() const
 {
 	if (mesh)
 	{
-		return false;
+		return -1;
 	}
-
-	float currentTranslate[3] = {0.0f, 0.0f, 0.0f};
-	float currentRotate[3] = {0.0f, 0.0f, 0.0f};
-	float currentScale[3] = {1.0f, 1.0f, 1.0f};
-
-	for (int32_t i = 0; i < 3; i++)
-	{
-		currentTranslate[i] = translate[i];
-		currentRotate[i] = rotate[i];
-		currentScale[i] = scale[i];
-	}
-
-	if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
-	{
-		// Animate values depending on time
-		const AnimationLayerSP& animLayer = allAnimStacks[animStackIndex]->getAnimationLayer(animLayerIndex);
-
-		for (enum AnimationLayer::eCHANNELS_XYZ i = AnimationLayer::X; i <= AnimationLayer::Z; i = static_cast<enum AnimationLayer::eCHANNELS_XYZ>(i + 1))
-		{
-			if (animLayer->hasTranslationValue(i))
-			{
-				currentTranslate[i] = animLayer->getTranslationValue(i, time);
-			}
-			if (animLayer->hasRotationValue(i))
-			{
-				currentRotate[i] = animLayer->getRotationValue(i, time);
-			}
-			if (animLayer->hasScalingValue(i))
-			{
-				currentScale[i] = animLayer->getScalingValue(i, time);
-			}
-		}
-	}
-
-	Matrix4x4 bindMatrix;
 
 	if (joint && usedJoint)
 	{
-		Matrix4x4 transformFinalMatrix = transformMatrix * geometricTransformMatrix;
-		Matrix4x4 transformLinkInverseMatrix = transformLinkMatrix;
-		transformLinkInverseMatrix.inverseRigidBody();
-
-		bindMatrix = transformLinkInverseMatrix * transformFinalMatrix;
-	}
-
-	Matrix4x4 localMatrix;
-
-	if (usedJoint)
-	{
-		localMatrix.translate(getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 0), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 1), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 2));
-		localMatrix.multiply(rotateOffsetMatrix);
-		localMatrix.multiply(rotatePivotMatrix);
-		localMatrix.multiply(preRotateMatrix);
-		localMatrix.rotateRzRyRx(getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 2), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 1), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 0));
-		localMatrix.multiply(postRotateMatrix);
-		localMatrix.multiply(inverseRotatePivotMatrix);
-		localMatrix.multiply(scaleOffsetMatrix);
-		localMatrix.multiply(scalePivotMatrix);
-		localMatrix.scale(getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 0), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 1), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 2));
-		localMatrix.multiply(inverseScalePivotMatrix);
-	}
-	else
-	{
-		localMatrix.translate(currentTranslate[0], currentTranslate[1], currentTranslate[2]);
-		localMatrix.rotateRzRyRx(currentRotate[2], currentRotate[1], currentRotate[0]);
-		localMatrix.scale(currentScale[0], currentScale[1], currentScale[2]);
-	}
-
-	Matrix4x4 newParentMatrix = parentMatrix * localMatrix;
-
-	if (joint && usedJoint)
-	{
-		matrix = newParentMatrix * geometricTransformMatrix * bindMatrix;
-
-		return true;
+		return index;
 	}
 
 	//
@@ -456,28 +385,28 @@ bool Node::updateSkinningMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix
 	vector<NodeSP>::const_iterator walker = allChilds.begin();
 
 	int32_t i = 0;
-	bool result = false;
+	int32_t result = -1;
 	while (walker != allChilds.end())
 	{
-		result = (*walker)->updateSkinningMatrix(matrix, newParentMatrix, time, animStackIndex, animLayerIndex);
+		result = (*walker)->getSkinningRootIndex();
 
-		if (result)
+		if (result != -1)
 		{
-			return true;
+			return result;
 		}
 
 		walker++;
 		i++;
 	}
 
-	return false;
+	return -1;
 }
 
-void Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
+bool Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
 {
 	if (joint)
 	{
-		return;
+		return false;
 	}
 
 	float currentTranslate[3] = {0.0f, 0.0f, 0.0f};
@@ -533,7 +462,7 @@ void Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 	{
 		matrix = newParentMatrix * geometricTransformMatrix;
 
-		return;
+		return true;
 	}
 
 	//
@@ -541,13 +470,21 @@ void Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 	vector<NodeSP>::const_iterator walker = allChilds.begin();
 
 	int32_t i = 0;
+	bool result = false;
 	while (walker != allChilds.end())
 	{
-		(*walker)->updateRenderingMatrix(matrix, newParentMatrix, time, animStackIndex, animLayerIndex);
+		result = (*walker)->updateRenderingMatrix(matrix, newParentMatrix, time, animStackIndex, animLayerIndex);
+
+		if (result)
+		{
+			return true;
+		}
 
 		walker++;
 		i++;
 	}
+
+	return false;
 }
 
 void Node::updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const

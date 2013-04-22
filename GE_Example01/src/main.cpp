@@ -206,9 +206,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
 
 	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
-	ModelEntityManager::getInstance()->updateMetrics();
-	ModelEntityManager::getInstance()->sort();
 	ModelEntityManager::getInstance()->update();
+	ModelEntityManager::getInstance()->sort();
 	ModelEntityManager::getInstance()->render();
 
 	FpsPrinter::printer.print(deltaTime);

@@ -123,9 +123,9 @@ public:
 
 	bool isAnimated() const;
 
-	bool updateSkinningMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	boost::int32_t getSkinningRootIndex() const;
 
-	void updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	bool updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
 	void updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const;
 

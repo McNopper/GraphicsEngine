@@ -34,6 +34,9 @@ protected:
 
 public:
 
+    bool operator <=(const Entity& other) const;
+	bool operator >=(const Entity& other) const;
+
     static void setCurrentValues(const CameraSP& currentCamera, bool ascendingSortOrder = false, enum RenderFilter renderFilter = RENDER_ALL, bool dynamicCubeMaps = false);
 
     static const CameraSP& getCurrentCamera();

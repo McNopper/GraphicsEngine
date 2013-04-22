@@ -52,13 +52,13 @@ bool FrameBufferCubeMap::init()
 		{
 			depthCubeMapTexture->setWidthHeight(width, height);
 
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTextureName(), 0);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubeMapTexture->getTextureName(), 0);
 		}
 		else if (depthStencilCubeMapTexture.get())
 		{
 			depthStencilCubeMapTexture->setWidthHeight(width, height);
 
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthStencilTexture->getTextureName(), 0);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthStencilCubeMapTexture->getTextureName(), 0);
 		}
 	}
 	else if (cubeMapTexture.get() && (depthTexture.get() || depthRenderBuffer.get() || depthStencilTexture.get() || depthStencilRenderBuffer.get()))

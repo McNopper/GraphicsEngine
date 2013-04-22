@@ -74,51 +74,6 @@ void ModelEntityManager::setOctree(const OctreeSP& octree)
 	}
 }
 
-void ModelEntityManager::updateMetrics() const
-{
-	auto walker = allUpdatableEntities.begin();
-	while (walker != allUpdatableEntities.end())
-	{
-		(*walker)->updateBoundingSphereCenter();
-
-		walker++;
-	}
-
-	walker = allEntities.begin();
-	while (walker != allEntities.end())
-	{
-		(*walker)->updateDistanceToCamera();
-
-		walker++;
-	}
-
-	if (octree.get())
-	{
-		walker = allUpdatableEntities.begin();
-		while (walker != allUpdatableEntities.end())
-		{
-			if (!(*walker)->insideVisitingOctant())
-			{
-				octree->updateEntity(*walker);
-			}
-
-			walker++;
-		}
-	}
-}
-
-void ModelEntityManager::sort()
-{
-	if (octree.get())
-	{
-		octree->sort();
-	}
-	else
-	{
-		quicksort.sort(allEntities);
-	}
-}
-
 void ModelEntityManager::update() const
 {
 	if (octree.get())
@@ -147,6 +102,48 @@ void ModelEntityManager::update() const
 	if (WorkerManager::getInstance()->getNumberWorkers() > 0)
 	{
 		EntityCommandManager::getInstance()->waitUpdateAllFinished();
+	}
+
+	auto walker = allUpdatableEntities.begin();
+	while (walker != allUpdatableEntities.end())
+	{
+		(*walker)->updateBoundingSphereCenter();
+
+		walker++;
+	}
+
+	if (octree.get())
+	{
+		walker = allUpdatableEntities.begin();
+		while (walker != allUpdatableEntities.end())
+		{
+			if (!(*walker)->insideVisitingOctant())
+			{
+				octree->updateEntity(*walker);
+			}
+
+			walker++;
+		}
+	}
+}
+
+void ModelEntityManager::sort()
+{
+	auto walker = allEntities.begin();
+	while (walker != allEntities.end())
+	{
+		(*walker)->updateDistanceToCamera();
+
+		walker++;
+	}
+
+	if (octree.get())
+	{
+		octree->sort();
+	}
+	else
+	{
+		quicksort.sort(allEntities);
 	}
 }
 

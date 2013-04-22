@@ -40,9 +40,6 @@ protected:
 
 public:
 
-    bool operator <=(const OctreeEntity& other) const;
-	bool operator >=(const OctreeEntity& other) const;
-
 	bool insideVisitingOctant() const;
 
 };
