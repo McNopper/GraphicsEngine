@@ -21,17 +21,22 @@ out vec2 v_texCoord;
 
 void main(void)
 {
-	for(int i = 0; i < gl_in.length(); ++i)
-	{
-		v_vertex = v_g_vertex[i];
-		v_normal = v_g_normal[i];
-		v_bitangent = v_g_bitangent[i];
-		v_tangent = v_g_tangent[i];
-		v_texCoord = v_g_texCoord[i];
+    for (int layer = 0; layer < 6; layer++)
+    {
+        gl_Layer = layer;
 
-		gl_Position = u_projectionMatrix * u_viewMatrix * gl_in[i].gl_Position;
-		EmitVertex();
-	}
+		for(int i = 0; i < gl_in.length(); ++i)
+		{
+			v_vertex = v_g_vertex[i];
+			v_normal = v_g_normal[i];
+			v_bitangent = v_g_bitangent[i];
+			v_tangent = v_g_tangent[i];
+			v_texCoord = v_g_texCoord[i];
 	
-	EndPrimitive();
+			gl_Position = u_projectionMatrix * u_viewMatrix * gl_in[i].gl_Position;
+			EmitVertex();
+		}
+		
+		EndPrimitive();
+    }
 }

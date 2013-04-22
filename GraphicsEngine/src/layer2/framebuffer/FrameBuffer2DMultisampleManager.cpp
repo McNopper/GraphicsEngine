@@ -51,7 +51,7 @@ void FrameBuffer2DMultisampleManager::terminate()
 
 bool FrameBuffer2DMultisampleManager::containsFrameBuffer(const string& key) const
 {
-	return allFrameBuffers.at(key);
+	return allFrameBuffers.find(key) != allFrameBuffers.end();
 }
 
 const FrameBuffer2DMultisampleSP& FrameBuffer2DMultisampleManager::getFrameBuffer(const string& key) const

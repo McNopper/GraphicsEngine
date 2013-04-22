@@ -51,7 +51,7 @@ void FrameBuffer2DManager::terminate()
 
 bool FrameBuffer2DManager::containsFrameBuffer(const string& key) const
 {
-	return allFrameBuffers.at(key);
+	return allFrameBuffers.find(key) != allFrameBuffers.end();
 }
 
 const FrameBuffer2DSP& FrameBuffer2DManager::getFrameBuffer(const string& key) const

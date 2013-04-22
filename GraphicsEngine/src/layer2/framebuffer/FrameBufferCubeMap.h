@@ -65,4 +65,6 @@ public:
 
 };
 
+typedef boost::shared_ptr<FrameBufferCubeMap> FrameBufferCubeMapSP;
+
 #endif /* FRAMEBUFFERCUBEMAP_H_ */

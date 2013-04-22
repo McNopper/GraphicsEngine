@@ -93,6 +93,7 @@ GLUSvoid terminateEngine(GLUSvoid)
 
 	ModelManager::terminate();
 
+	DynamicEnvironmentManager::terminate();
 	PostProcessor2DManager::terminate();
 	PostProcessor2DMultisampleManager::terminate();
 
@@ -100,6 +101,7 @@ GLUSvoid terminateEngine(GLUSvoid)
 	FontManager::terminate();
 	FrameBuffer2DManager::terminate();
 	FrameBuffer2DMultisampleManager::terminate();
+	FrameBufferCubeMapManager::terminate();
 	EntityCommandManager::terminate();
 
 	CameraManager::terminate();
