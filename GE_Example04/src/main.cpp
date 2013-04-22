@@ -108,10 +108,59 @@ GLUSboolean initGame(GLUSvoid)
 	//
 	//
 
+	filename = "seymourplane_triangulate.fbx";
+	entity = entityFactory.loadFbxFile("Plane0", filename, 0.1f);
+	if (!entity.get())
+	{
+		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
+
+		return GLUS_FALSE;
+	}
+	position = Point4(-5.0f, 4.0f, -12.0f);
+	entity->setPosition(position);
+	entity->setAnimation(0, 0);
+
+	ModelEntityManager::getInstance()->updateEntity(entity);
+
+	//
+
+	baseRotation = Quaternion(-90.0f, Vector3(1.0f, 1.0f, 0.0f));
+
+	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -3.0f), true, Vector3(1.0f, 1.0f, 0.0f)));
+	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	path->setSpeed(5.0f);
+	path->setLooping(true);
+	path->startPath();
+
+	//
+	//
+	//
+
+	entity = entity->getNewInstance("Plane1");
+	position = Point4(-5.0f, 4.0f, -11.0f);
+	entity->setPosition(position);
+	entity->setAnimation(0, 0);
+
+	ModelEntityManager::getInstance()->updateEntity(entity);
+
+	//
+
+	baseRotation = Quaternion(90.0f, Vector3(-1.0f, 1.0f, 0.0f));
+
+	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -4.0f), false, Vector3(-1.0f, 1.0f, 0.0f)));
+	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	path->setSpeed(3.0f);
+	path->setLooping(true);
+	path->startPath();
+
+	//
+	//
+	//
+
 	// Full reflecting sphere
 
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("FullReflection", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, RI_VACUUM, 0.0f);
-	position = Point4(-5.0f, 1.0f, -15.0f);
+	position = Point4(-5.0f, 4.0f, -15.0f);
 
 	entity = primitiveEntityFactory.createSpherePrimitiveEntity("FullReflectionSphere", 2.0f, 2.0f, 2.0f, surfaceMaterial);
 	entity->setPosition(position);
