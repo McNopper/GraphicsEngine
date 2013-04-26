@@ -19,15 +19,13 @@ class PerlinNoise3D : public PerlinNoise
 		boost::int32_t height;
 		boost::int32_t depth;
 
-		float getNoiseValue(boost::int32_t x, boost::int32_t y, boost::int32_t z) const;
+		boost::uint32_t* data3D;
 
-		float getSmoothNoiseValue(boost::int32_t x, boost::int32_t y, boost::int32_t z) const;
-
-		float getPerlinNoiseValue(float x, float y, float z) const;
+		float getNoiseValue(boost::int32_t x, boost::int32_t y, boost::int32_t z, boost::int32_t amplitude) const;
 
 	public:
 
-		PerlinNoise3D(boost::int32_t width, boost::int32_t height, boost::int32_t depth, boost::int32_t seed, float frequencyStart, float frequencyFactor, float amplitudeStart, float amplitudeFactor, boost::int32_t octaves);
+		PerlinNoise3D(boost::int32_t width, boost::int32_t height, boost::int32_t depth, boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
 		virtual ~PerlinNoise3D();
 
 		boost::int32_t getWidth() const;

@@ -9,13 +9,13 @@
 
 using namespace boost;
 
-PerlinNoise::PerlinNoise(int32_t seed, float frequencyStart, float frequencyFactor, float amplitudeStart, float amplitudeFactor, int32_t octaves) :
-		data(nullptr), dataSize(0), seed(seed), frequencyStart(frequencyStart), frequencyFactor(frequencyFactor), amplitudeStart(amplitudeStart), amplitudeFactor(amplitudeFactor), octaves(octaves), minValue(0.0f), maxValue(0.0f)
+PerlinNoise::PerlinNoise(int32_t seed, float frequency, float amplitude, float persistence, int32_t octaves) :
+		data(nullptr), dataSize(0), seed(seed), frequency(frequency), amplitude(amplitude), persistence(persistence), octaves(octaves)
 {
 }
 
 PerlinNoise::PerlinNoise(const PerlinNoise& other) :
-		data(nullptr), dataSize(0), seed(other.seed), frequencyStart(other.frequencyStart), frequencyFactor(other.frequencyFactor), amplitudeStart(other.amplitudeStart), amplitudeFactor(other.amplitudeFactor), octaves(other.octaves), minValue(other.minValue), maxValue(other.maxValue)
+		data(nullptr), dataSize(0), seed(other.seed), frequency(other.frequency), amplitude(other.amplitude), persistence(other.persistence), octaves(other.octaves)
 {
 	data = new float[other.dataSize];
 
@@ -42,16 +42,13 @@ PerlinNoise& PerlinNoise::operator =(const PerlinNoise& other)
 
 		seed = other.seed;
 
-		frequencyStart = other.frequencyStart;
-		frequencyFactor = other.frequencyFactor;
+		frequency = other.frequency;
 
-		amplitudeStart = other.amplitudeStart;
-		amplitudeFactor = other.amplitudeFactor;
+		amplitude = other.amplitude;
+
+		persistence = other.persistence;
 
 		octaves = other.octaves;
-
-		minValue = other.minValue;
-		maxValue = other.maxValue;
 
 		data = new float[other.dataSize];
 
@@ -80,12 +77,6 @@ void PerlinNoise::freeData()
 	}
 }
 
-float PerlinNoise::getRandomValue(int32_t n) const
-{
-	n = (n << 13) ^ n;
-	return (1.0f - (float)((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f);
-}
-
 float PerlinNoise::getInterpolatedValue(float value0, float value1, float t) const
 {
 	float ft;
@@ -103,14 +94,4 @@ const float* PerlinNoise::getData() const
 boost::int32_t PerlinNoise::getDataSize() const
 {
 	return dataSize;
-}
-
-float PerlinNoise::getMinValue() const
-{
-	return minValue;
-}
-
-float PerlinNoise::getMaxValue() const
-{
-	return maxValue;
 }

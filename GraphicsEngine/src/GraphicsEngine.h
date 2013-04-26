@@ -10,6 +10,9 @@
 
 #include "UsedLibs.h"
 
+#include "layer0/algorithm/PerlinNoise1D.h"
+#include "layer0/algorithm/PerlinNoise2D.h"
+#include "layer0/algorithm/PerlinNoise3D.h"
 #include "layer0/math/Point4.h"
 #include "layer0/math/Vector3.h"
 #include "layer0/renderbuffer/RenderBuffer.h"

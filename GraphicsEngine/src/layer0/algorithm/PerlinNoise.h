@@ -19,24 +19,19 @@ class PerlinNoise
 
 		boost::int32_t seed;
 
-		float frequencyStart;
-		float frequencyFactor;
+		float frequency;
 
-		float amplitudeStart;
-		float amplitudeFactor;
+		float amplitude;
+
+		float persistence;
 
 		boost::int32_t octaves;
-
-		float minValue;
-		float maxValue;
-
-		float getRandomValue(boost::int32_t n) const;
 
 		float getInterpolatedValue(float value0, float value1, float t) const;
 
 	public:
 
-		PerlinNoise(boost::int32_t seed, float frequencyStart, float frequencyFactor, float amplitudeStart, float amplitudeFactor, boost::int32_t octaves);
+		PerlinNoise(boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
 		PerlinNoise(const PerlinNoise& other);
 		virtual ~PerlinNoise();
 
@@ -47,10 +42,6 @@ class PerlinNoise
 		const float* getData() const;
 
 		boost::int32_t getDataSize() const;
-
-		float getMinValue() const;
-
-		float getMaxValue() const;
 
 };
 

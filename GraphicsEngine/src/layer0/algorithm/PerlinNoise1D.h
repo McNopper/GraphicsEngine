@@ -17,15 +17,13 @@ class PerlinNoise1D : public PerlinNoise
 
 		boost::int32_t width;
 
-		float getNoiseValue(boost::int32_t x) const;
+		boost::uint32_t* data1D;
 
-		float getSmoothNoiseValue(boost::int32_t x) const;
-
-		float getPerlinNoiseValue(float x) const;
+		float getNoiseValue(boost::int32_t x, boost::int32_t amplitude) const;
 
 	public:
 
-		PerlinNoise1D(boost::int32_t width, boost::int32_t seed, float frequencyStart, float frequencyFactor, float amplitudeStart, float amplitudeFactor, boost::int32_t octaves);
+		PerlinNoise1D(boost::int32_t width, boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
 		virtual ~PerlinNoise1D();
 
 		boost::int32_t getWidth() const;
