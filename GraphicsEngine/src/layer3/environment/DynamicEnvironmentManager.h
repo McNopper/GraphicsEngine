@@ -11,10 +11,13 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/algorithm/Manager.h"
+#include "../../layer1/camera/PerspectiveCamera.h"
 #include "../../layer2/entity/Entity.h"
 #include "../../layer2/framebuffer/FrameBufferCubeMap.h"
 
-class DynamicEnvironmentManager : public Manager<EntitySP, FrameBufferCubeMapSP>
+#include "DynamicEnvironment.h"
+
+class DynamicEnvironmentManager : public Manager<EntitySP, DynamicEnvironmentSP>
 {
 
 private:

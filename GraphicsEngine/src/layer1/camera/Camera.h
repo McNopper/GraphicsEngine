@@ -72,6 +72,8 @@ public:
 
 	float getFarZ() const;
 
+	const Viewport& getViewport() const;
+
 	virtual float getNearWidth() const = 0;
 
 	virtual float getNearHeight() const = 0;

@@ -16,6 +16,7 @@
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer1/collision/BoundingSphere.h"
+#include "../../layer3/environment/DynamicEnvironment.h"
 #include "../../layer3/node/InstanceNode.h"
 #include "../../layer3/node/NodeOwner.h"
 #include "../../layer3/octree/OctreeEntity.h"
@@ -151,6 +152,8 @@ public:
 	void setDebugAsMesh(bool debugAsMesh);
 
 	const std::string& getName() const;
+
+
 
 	//
 

@@ -31,11 +31,16 @@ public:
 	Point4(const Point4& other);
 	~Point4();
 
+	bool operator ==(const Point4& other) const;
+	bool operator !=(const Point4& other) const;
+
 	Point4 operator +(const Vector3& vector) const;
 	Point4 operator -(const Vector3& vector) const;
 
 	Point4& operator +=(const Vector3& vector);
 	Point4& operator -=(const Vector3& vector);
+
+	Point4& operator =(const Point4& other);
 
 	Vector3 operator -(const Point4& other) const;
 

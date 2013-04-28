@@ -138,6 +138,11 @@ float Camera::getFarZ() const
 	return zFar;
 }
 
+const Viewport& Camera::getViewport() const
+{
+	return viewport;
+}
+
 const Matrix4x4& Camera::getViewMatrix() const
 {
 	return viewMatrix;
@@ -160,7 +165,7 @@ const ViewFrustum& Camera::getViewFrustum() const
 
 float Camera::distanceToCamera(const BoundingSphere& boundingSphere) const
 {
-	return (boundingSphere.getCenter() - eye).dot(direction);
+	return (boundingSphere.getCenter() - eye).length();
 }
 
 void Camera::setCameraProperties(const ProgramSP& program) const

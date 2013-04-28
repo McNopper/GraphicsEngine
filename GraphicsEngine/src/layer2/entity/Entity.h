@@ -24,6 +24,9 @@ protected:
 	static enum RenderFilter renderFilter;
 	static bool dynamicCubeMaps;
 
+	static Matrix4x4 viewMatrix[6];
+	static Matrix4x4 projectionMatrix;
+
 	float distanceToCamera;
 
 	Entity();
@@ -43,6 +46,12 @@ public:
     static bool isAscendingSortOrder();
     static enum RenderFilter getRenderFilter();
     static bool getDynamicCubeMaps();
+
+    static void setCubeMapViewMatrix(boost::int32_t face, const Matrix4x4& matrix);
+    static void setCubeMapProjectionMatrix(const Matrix4x4& matrix);
+
+    static const Matrix4x4* getCubeMapViewMatrices();
+    static const Matrix4x4& getCubeMapProjectionMatrix();
 
 	virtual const BoundingSphere& getBoundingSphere() const = 0;
 

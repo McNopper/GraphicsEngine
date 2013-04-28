@@ -80,7 +80,7 @@ const CameraSP& CameraManager::getCamera(const string& key) const
 
 void CameraManager::setCamera(const string& key, const CameraSP& camera, bool windowCamera)
 {
-	BOOST_ASSERT(DEFAULT_PERSPECTIVE_CAMERA_KEY.compare(key) == 0);
+	BOOST_ASSERT(DEFAULT_PERSPECTIVE_CAMERA_KEY.compare(key) != 0);
 
 	allCameras[key] = camera;
 

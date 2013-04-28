@@ -75,6 +75,15 @@ Vector3 Vector3::operator *(float scalar) const
 	return result;
 }
 
+Vector3& Vector3::operator =(const Vector3& vector)
+{
+	v[0] = vector.v[0];
+	v[1] = vector.v[1];
+	v[2] = vector.v[2];
+
+	return *this;
+}
+
 Vector3& Vector3::operator +=(const Vector3& vector)
 {
 	glusVector3AddVector3f(v, v, vector.v);

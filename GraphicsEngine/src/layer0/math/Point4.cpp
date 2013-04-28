@@ -66,6 +66,24 @@ Point4::~Point4()
 {
 }
 
+bool Point4::operator ==(const Point4& other) const
+{
+	for (int32_t i = 0; i < 4; i++)
+	{
+		if (p[i] != other.p[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Point4::operator !=(const Point4& other) const
+{
+	return !(*this == other);
+}
+
 Point4 Point4::operator +(const Vector3& vector) const
 {
 	Point4 result;
@@ -94,6 +112,16 @@ Point4& Point4::operator +=(const Vector3& vector)
 Point4& Point4::operator -=(const Vector3& vector)
 {
 	glusPoint4SubtractVector3f(p, p, vector.v);
+
+	return *this;
+}
+
+Point4& Point4::operator =(const Point4& other)
+{
+	p[0] = other.p[0];
+	p[1] = other.p[1];
+	p[2] = other.p[2];
+	p[3] = other.p[3];
 
 	return *this;
 }

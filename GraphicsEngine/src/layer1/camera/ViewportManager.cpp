@@ -66,7 +66,7 @@ const ViewportSP& ViewportManager::getViewport(const string& key) const
 
 void ViewportManager::setViewport(const string& key, const ViewportSP& viewport)
 {
-	BOOST_ASSERT(DEFAULT_VIEWPORT_KEY.compare(key) == 0);
+	BOOST_ASSERT(DEFAULT_VIEWPORT_KEY.compare(key) != 0);
 
 	allViewports[key] = viewport;
 }

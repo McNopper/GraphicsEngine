@@ -28,6 +28,8 @@
 #include "layer0/texture/Texture2DMultisampleManager.h"
 #include "layer0/texture/TextureCubeMapManager.h"
 #include "layer1/camera/CameraManager.h"
+#include "layer1/camera/OrthographicCamera.h"
+#include "layer1/camera/PerspectiveCamera.h"
 #include "layer1/camera/ViewportManager.h"
 #include "layer1/debug/DebugDraw.h"
 #include "layer1/debug/DebugDrawFactory.h"

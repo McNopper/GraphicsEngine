@@ -180,9 +180,8 @@ GLUSboolean initGame(GLUSvoid)
 	// Entity exclude list
 
 	entityExcludeList = EntityListSP(new EntityList());
-	entityExcludeList->addEntity(entity);
 
-	//ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
+	ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
 
 	//
 	//
@@ -206,7 +205,6 @@ GLUSboolean initGame(GLUSvoid)
 
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glClearColor(0.9f, 0.9f, 0.9f, 0.0f);
 	glClearDepth(1.0f);
 
 	return GLUS_TRUE;
@@ -224,11 +222,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 		return GLUS_FALSE;
 	}
 
+	glClearColor(0.9f, 0.9f, 0.9f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
-
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
 
 	// Path animation
 
@@ -238,6 +233,71 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	// Update everything
 
 	ModelEntityManager::getInstance()->update();
+
+	//
+	// Render the dynamic cube maps
+	//
+
+	auto allElements = DynamicEnvironmentManager::getInstance()->getAllElements();
+
+	auto walker = allElements.begin();
+
+	while (walker != allElements.end())
+	{
+		auto currentEntity = walker->first;
+		entityExcludeList->addEntity(currentEntity);
+
+		auto currentDynamicEnvironment = walker->second;
+
+		currentDynamicEnvironment->use(currentEntity->getBoundingSphere().getCenter());
+
+		const Viewport& dynamicEnvironmentViewport = currentDynamicEnvironment->getCamera(0)->getViewport();
+		dynamicEnvironmentViewport.use();
+
+		ProgramManagerProxy::setCameraByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0));
+
+		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false);
+
+		ModelEntityManager::getInstance()->sort();
+
+		//
+
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//
+
+		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false, RENDER_OPAQUE);
+		ModelEntityManager::getInstance()->render(true);
+
+		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, true, RENDER_TRANSPARENT);
+		glFrontFace(GL_CW);
+		ModelEntityManager::getInstance()->render(true);
+		glFrontFace(GL_CCW);
+		ModelEntityManager::getInstance()->render(true);
+
+		//
+
+		entityExcludeList->clear();
+
+		currentDynamicEnvironment->unuse();
+
+		walker++;
+	}
+
+	//
+	// Render the normal scene
+	//
+
+	ViewportSP defaultViewport = ViewportManager::getInstance()->getDefaultViewport();
+	defaultViewport->use();
+
+	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
+
+	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
+
+	//
+
 	ModelEntityManager::getInstance()->sort();
 
 	// Sky
@@ -250,10 +310,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// All the primitves
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false, RENDER_OPAQUE);
+	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false, RENDER_OPAQUE, true);
 	ModelEntityManager::getInstance()->render();
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, true, RENDER_TRANSPARENT);
+	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, true, RENDER_TRANSPARENT, true);
 	glFrontFace(GL_CW);
 	ModelEntityManager::getInstance()->render();
 	glFrontFace(GL_CCW);

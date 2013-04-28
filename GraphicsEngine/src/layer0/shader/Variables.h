@@ -14,6 +14,9 @@
 #define u_normalModelViewMatrix "u_normalModelViewMatrix"
 #define u_normalModelMatrix "u_normalModelMatrix"
 
+#define u_cubeMapProjectionMatrix "u_cubeMapProjectionMatrix"
+#define u_cubeMapViewMatrix "u_cubeMapViewMatrix"
+
 #define u_eyePosition "u_eyePosition"
 
 #define u_lightType "u_lightType"

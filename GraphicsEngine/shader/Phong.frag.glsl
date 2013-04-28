@@ -1,5 +1,7 @@
 #version 420 core
 
+#define ALPHA_FACTOR 2.0
+
 struct LightProperties
 {
 	vec4 ambientColor;
@@ -148,9 +150,14 @@ void main(void)
 		
 		if (u_hasDynamicCubeMapTexture != 0)
 		{
-			vec4 tempColor = texture(u_material.dynamicCubeMapTexture, reflection);
-			
-			reflectionColor = vec4(reflectionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
+			vec4 temp = texture(u_material.dynamicCubeMapTexture, reflection);
+		
+			if (temp.a > 0.0)
+			{
+				float alpha = clamp(temp.a * ALPHA_FACTOR, 0.0, 1.0);
+					
+				reflectionColor = vec4(reflectionColor.rgb * (1.0 - alpha) + temp.rgb * alpha, 1.0);
+			}  
 		}
 
 		if (u_eta > 0.0)
@@ -161,9 +168,14 @@ void main(void)
 
 			if (u_hasDynamicCubeMapTexture != 0)
 			{
-				vec4 tempColor = texture(u_material.dynamicCubeMapTexture, refraction);
+				vec4 temp = texture(u_material.dynamicCubeMapTexture, refraction);
 			
-				refractionColor = vec4(refractionColor.rgb * (1.0 - tempColor.a) + tempColor.rgb * tempColor.a, 1.0);
+				if (temp.a > 0.0)
+				{		
+					float alpha = clamp(temp.a * ALPHA_FACTOR, 0.0, 1.0);
+
+					refractionColor = vec4(refractionColor.rgb * (1.0 - alpha) + temp.rgb * alpha, 1.0);
+				}  
 			}
 			
 			float fresnel = u_reflectanceNormalIncidence + (1.0 - u_reflectanceNormalIncidence) * pow((1.0 - dot(eyeDirection, normal)), 5.0);
@@ -176,7 +188,7 @@ void main(void)
 		}
 	}
 
-	fragColor = vec4(color.rgb, color.a * (1.0 - u_material.transparency));
+	fragColor = vec4(color.rgb, color.a * u_material.transparency);
 	
 	if (u_writeBrightColor != 0)
 	{

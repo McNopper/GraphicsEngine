@@ -859,6 +859,12 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				glActiveTexture(GL_TEXTURE0);
 			}
 
+			if (!Entity::getDynamicCubeMaps())
+			{
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_cubeMapViewMatrix), 6, GL_FALSE, Entity::getCubeMapViewMatrices()[0].getM());
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_cubeMapProjectionMatrix), 1, GL_FALSE, Entity::getCubeMapProjectionMatrix().getM());
+			}
+
 			// Skinning
 			if (mesh->hasSkinning())
 			{
@@ -913,7 +919,10 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			{
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+			}
 
+			if (currentSurfaceMaterial->getDynamicCubeMapTexture() != 0)
+			{
 				glActiveTexture(GL_TEXTURE3);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}

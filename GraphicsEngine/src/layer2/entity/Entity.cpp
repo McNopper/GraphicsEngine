@@ -12,6 +12,9 @@ bool Entity::ascendingSortOrder = false;
 enum RenderFilter Entity::renderFilter = RENDER_ALL;
 bool Entity::dynamicCubeMaps = false;
 
+Matrix4x4 Entity::viewMatrix[6];
+Matrix4x4 Entity::projectionMatrix;
+
 Entity::Entity() :
 		distanceToCamera(0.0f)
 {
@@ -66,6 +69,26 @@ float Entity::getDistanceToCamera() const
 void Entity::setDistanceToCamera(float distanceToCamera)
 {
 	this->distanceToCamera = distanceToCamera;
+}
+
+void Entity::setCubeMapViewMatrix(int32_t face, const Matrix4x4& matrix)
+{
+	viewMatrix[face] = matrix;
+}
+
+void Entity::setCubeMapProjectionMatrix(const Matrix4x4& matrix)
+{
+	projectionMatrix = matrix;
+}
+
+const Matrix4x4* Entity::getCubeMapViewMatrices()
+{
+	return viewMatrix;
+}
+
+const Matrix4x4& Entity::getCubeMapProjectionMatrix()
+{
+	return projectionMatrix;
 }
 
 

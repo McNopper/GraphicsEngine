@@ -130,7 +130,7 @@ void Octant::render(bool force) const
 			}
 			else
 			{
-				(*walker)->render();
+				(*walker)->render(force);
 			}
 			walker++;
 		}
@@ -146,7 +146,7 @@ void Octant::render(bool force) const
 			}
 			else
 			{
-				(*walker)->render();
+				(*walker)->render(force);
 			}
 			walker++;
 		}

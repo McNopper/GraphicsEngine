@@ -18,7 +18,7 @@ using namespace std;
 DynamicEnvironmentManager* DynamicEnvironmentManager::instance = nullptr;
 
 DynamicEnvironmentManager::DynamicEnvironmentManager() :
-		Manager<EntitySP, FrameBufferCubeMapSP>()
+		Manager<EntitySP, DynamicEnvironmentSP>()
 {
 }
 
@@ -47,18 +47,18 @@ void DynamicEnvironmentManager::terminate()
 
 FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& entity, int32_t length)
 {
-	FrameBufferCubeMapSP result = findElement(entity);
+	DynamicEnvironmentSP dynamicEnvironment = findElement(entity);
 
-	if (result.get())
+	if (dynamicEnvironment.get())
 	{
-		return result;
+		return dynamicEnvironment->getFrameBufferCubeMap();
 	}
 
 	char buffer[256];
 	sprintf(buffer, "%p", entity.get());
 	string uniqueID(buffer);
 
-	result = FrameBufferCubeMapManager::getInstance()->createFrameBuffer("DynamicEnvironment" + uniqueID, length, length);
+	FrameBufferCubeMapSP result = FrameBufferCubeMapManager::getInstance()->createFrameBuffer("DynamicEnvironment" + uniqueID, length, length);
 
 	TextureFactory textureFactory;
 
@@ -67,6 +67,10 @@ FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& en
 
 	TextureCubeMapSP depth = textureFactory.createTextureCubeMap(length, length, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
 	result->setDepthAttachment(depth);
+
+	dynamicEnvironment = DynamicEnvironmentSP(new DynamicEnvironment(entity->getBoundingSphere().getCenter(), result));
+
+	addElement(entity, dynamicEnvironment);
 
 	return result;
 }
