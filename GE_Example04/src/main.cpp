@@ -108,6 +108,8 @@ GLUSboolean initGame(GLUSvoid)
 	//
 	//
 
+	// Air plane
+
 	filename = "seymourplane_triangulate.fbx";
 	entity = entityFactory.loadFbxFile("Plane0", filename, 0.1f);
 	if (!entity.get())
@@ -157,7 +159,7 @@ GLUSboolean initGame(GLUSvoid)
 	//
 	//
 
-	// Full reflecting sphere
+	// Full reflecting sphere with dynamic environment
 
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("FullReflection", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, RI_VACUUM, 0.0f);
 	position = Point4(-5.0f, 4.0f, -15.0f);
@@ -222,12 +224,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 		return GLUS_FALSE;
 	}
 
-	glClearColor(0.9f, 0.9f, 0.9f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	// Path animation
-
 	// Update the paths
+
 	PathEntityManager::getInstance()->updateEntities(deltaTime);
 
 	// Update everything
@@ -248,7 +246,6 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 		entityExcludeList->addEntity(currentEntity);
 
 		auto currentDynamicEnvironment = walker->second;
-
 		currentDynamicEnvironment->use(currentEntity->getBoundingSphere().getCenter());
 
 		const Viewport& dynamicEnvironmentViewport = currentDynamicEnvironment->getCamera(0)->getViewport();
@@ -296,9 +293,12 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
 
+	ModelEntityManager::getInstance()->sort();
+
 	//
 
-	ModelEntityManager::getInstance()->sort();
+	glClearColor(0.9f, 0.9f, 0.9f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Sky
 

@@ -38,7 +38,7 @@ Features:
 - Sorting of entities (for alpha blending etc.)
 - Excluding of entities by a list
 - Mouse/Key input and movement
-- Phong with diffuse, normal map and environment texture (reflection and refraction)
+- Phong with diffuse, normal map and environment (static/dynamic) texture (reflection and refraction)
 - Alpha blending
 - Animation (Transform and Color)
 - Skinning
@@ -70,10 +70,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-11.04.2013 Norbert Nopper (norbert@nopper.tv)
+29.04.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Added dynamic environment mapping
 - Added latest GLFW (2.7.8)
 - Added entity exclude list
 - Added path
