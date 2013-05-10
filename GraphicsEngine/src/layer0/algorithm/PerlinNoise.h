@@ -14,7 +14,7 @@ class PerlinNoise
 {
 	protected:
 
-		float* data;
+		boost::uint8_t* data;
 		boost::int32_t dataSize;
 
 		boost::int32_t seed;
@@ -27,8 +27,6 @@ class PerlinNoise
 
 		boost::int32_t octaves;
 
-		float getInterpolatedValue(float value0, float value1, float t) const;
-
 	public:
 
 		PerlinNoise(boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
@@ -39,7 +37,7 @@ class PerlinNoise
 
 		void freeData();
 
-		const float* getData() const;
+		const boost::uint8_t* getData() const;
 
 		boost::int32_t getDataSize() const;
 

@@ -17,14 +17,14 @@ PerlinNoise::PerlinNoise(int32_t seed, float frequency, float amplitude, float p
 PerlinNoise::PerlinNoise(const PerlinNoise& other) :
 		data(nullptr), dataSize(0), seed(other.seed), frequency(other.frequency), amplitude(other.amplitude), persistence(other.persistence), octaves(other.octaves)
 {
-	data = new float[other.dataSize];
+	data = new uint8_t[other.dataSize];
 
 	if (!data)
 	{
 		return;
 	}
 
-	memcpy(data, other.data, other.dataSize * sizeof(float));
+	memcpy(data, other.data, other.dataSize * sizeof(uint8_t));
 
 	dataSize = other.dataSize;
 }
@@ -50,14 +50,14 @@ PerlinNoise& PerlinNoise::operator =(const PerlinNoise& other)
 
 		octaves = other.octaves;
 
-		data = new float[other.dataSize];
+		data = new uint8_t[other.dataSize];
 
 		if (!data)
 		{
 			return *this;
 		}
 
-		memcpy(data, other.data, other.dataSize * sizeof(float));
+		memcpy(data, other.data, other.dataSize * sizeof(uint8_t));
 
 		dataSize = other.dataSize;
 	}
@@ -77,16 +77,7 @@ void PerlinNoise::freeData()
 	}
 }
 
-float PerlinNoise::getInterpolatedValue(float value0, float value1, float t) const
-{
-	float ft;
-
-	ft = (1.0f - cosf(t * GLUS_PI)) / 2.0f;
-
-	return value0 * (1.0f - ft) + value1 * ft;
-}
-
-const float* PerlinNoise::getData() const
+const uint8_t* PerlinNoise::getData() const
 {
 	return data;
 }
