@@ -14,7 +14,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	OctreeFactory octreeFactory;
 	OctreeSP octree = octreeFactory.createOctree(6, 1024, Point4(), 256.0f, 256.0f, 256.0f);
-	ModelEntityManager::getInstance()->setOctree(octree);
+	GeneralEntityManager::getInstance()->setOctree(octree);
 	//octree->setDebug(true);
 
 	PrimitiveEntityFactory primitiveEntityFactory;
@@ -77,7 +77,7 @@ GLUSboolean initGame(GLUSvoid)
 	position = Point4(0.0f, -2.0f, -15.0f);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Yellow sphere
 
@@ -87,11 +87,11 @@ GLUSboolean initGame(GLUSvoid)
 	entity = primitiveEntityFactory.createSpherePrimitiveEntity("YellowSphere", 5.0f, 5.0f, 5.0f, surfaceMaterial);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
-	ModelEntityManager::getInstance()->setBrightColorEffect(writeBrightColor, brightColorLimit);
+	GeneralEntityManager::getInstance()->setBrightColorEffect(writeBrightColor, brightColorLimit);
 
 	// Lights
 
@@ -134,10 +134,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
 
-	ModelEntityManager::getInstance()->update();
-	ModelEntityManager::getInstance()->sort();
+	GeneralEntityManager::getInstance()->update();
+	GeneralEntityManager::getInstance()->sort();
 
 	PostProcessor2DSP postProcessor = PostProcessor2DManager::getInstance()->getPostProcessor("PostProcessor");
 	postProcessor->use(true);
@@ -145,7 +145,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	SkyManager::getInstance()->getActiveSky()->render(CameraManager::getInstance()->getDefaultPerspectiveCamera()->getEye());
-	ModelEntityManager::getInstance()->render();
+	GeneralEntityManager::getInstance()->render();
 
 	postProcessor->render();
 

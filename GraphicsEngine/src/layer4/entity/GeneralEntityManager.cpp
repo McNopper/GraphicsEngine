@@ -1,5 +1,5 @@
 /*
- * ModelEntityManager.cpp
+ * GeneralEntityManager.cpp
  *
  *  Created on: 30.04.2011
  *      Author: Norbert Nopper
@@ -8,25 +8,25 @@
 #include "../../layer1/worker/WorkerManager.h"
 #include "../../layer2/entity/EntityCommandManager.h"
 
-#include "ModelEntityManager.h"
+#include "GeneralEntityManager.h"
 
 using namespace std;
 
-ModelEntityManager* ModelEntityManager::instance = nullptr;
+GeneralEntityManager* GeneralEntityManager::instance = nullptr;
 
-ModelEntityManager::ModelEntityManager() :
+GeneralEntityManager::GeneralEntityManager() :
 	allEntities(), allUpdatableEntities(), octree(), quicksort(), entityExcludeList()
 {
 }
 
-ModelEntityManager::~ModelEntityManager()
+GeneralEntityManager::~GeneralEntityManager()
 {
 	if (entityExcludeList.get())
 	{
 		entityExcludeList->clear();
 	}
 
-	vector<ModelEntitySP>::iterator walker = allEntities.begin();
+	vector<GeneralEntitySP>::iterator walker = allEntities.begin();
 
 	while (walker != allEntities.end())
 	{
@@ -36,17 +36,17 @@ ModelEntityManager::~ModelEntityManager()
 	}
 }
 
-ModelEntityManager* ModelEntityManager::getInstance()
+GeneralEntityManager* GeneralEntityManager::getInstance()
 {
 	if (!instance)
 	{
-		instance = new ModelEntityManager();
+		instance = new GeneralEntityManager();
 	}
 
 	return instance;
 }
 
-void ModelEntityManager::terminate()
+void GeneralEntityManager::terminate()
 {
 	if (instance)
 	{
@@ -55,7 +55,7 @@ void ModelEntityManager::terminate()
 	}
 }
 
-void ModelEntityManager::setOctree(const OctreeSP& octree)
+void GeneralEntityManager::setOctree(const OctreeSP& octree)
 {
 	if (this->octree.get())
 	{
@@ -66,7 +66,7 @@ void ModelEntityManager::setOctree(const OctreeSP& octree)
 	this->octree->removeAllEntities();
 	this->octree->setEntityExcludeList(entityExcludeList);
 
-	vector<ModelEntitySP>::iterator walker = allEntities.begin();
+	vector<GeneralEntitySP>::iterator walker = allEntities.begin();
 	while (walker != allEntities.end())
 	{
 		octree->updateEntity(*walker);
@@ -74,7 +74,7 @@ void ModelEntityManager::setOctree(const OctreeSP& octree)
 	}
 }
 
-void ModelEntityManager::update() const
+void GeneralEntityManager::update() const
 {
 	if (octree.get())
 	{
@@ -127,27 +127,27 @@ void ModelEntityManager::update() const
 	}
 }
 
-void ModelEntityManager::sort()
+void GeneralEntityManager::sort()
 {
-	auto walker = allEntities.begin();
-	while (walker != allEntities.end())
-	{
-		(*walker)->updateDistanceToCamera();
-
-		walker++;
-	}
-
 	if (octree.get())
 	{
 		octree->sort();
 	}
 	else
 	{
+		auto walker = allEntities.begin();
+		while (walker != allEntities.end())
+		{
+			(*walker)->updateDistanceToCamera();
+
+			walker++;
+		}
+
 		quicksort.sort(allEntities);
 	}
 }
 
-void ModelEntityManager::render(bool force) const
+void GeneralEntityManager::render(bool force) const
 {
 	if (octree.get())
 	{
@@ -155,12 +155,12 @@ void ModelEntityManager::render(bool force) const
 	}
 	else
 	{
-		if (ModelEntity::isAscendingSortOrder())
+		if (GeneralEntity::isAscendingSortOrder())
 		{
 			auto walker = allEntities.begin();
 			while (walker != allEntities.end())
 			{
-				if ((force || ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
+				if ((force || GeneralEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}
@@ -173,7 +173,7 @@ void ModelEntityManager::render(bool force) const
 			auto walker = allEntities.rbegin();
 			while (walker != allEntities.rend())
 			{
-				if ((force || ModelEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
+				if ((force || GeneralEntity::getCurrentCamera()->getViewFrustum().isVisible((*walker)->getBoundingSphere())) && !isEntityExcluded(*walker))
 				{
 					(*walker)->render();
 				}
@@ -184,9 +184,9 @@ void ModelEntityManager::render(bool force) const
 	}
 }
 
-void ModelEntityManager::updateEntity(const ModelEntitySP& entity)
+void GeneralEntityManager::updateEntity(const GeneralEntitySP& entity)
 {
-	vector<ModelEntitySP>::iterator walker = find(allEntities.begin(), allEntities.end(), entity);
+	vector<GeneralEntitySP>::iterator walker = find(allEntities.begin(), allEntities.end(), entity);
 	if (walker == allEntities.end())
 	{
 		allEntities.push_back(entity);
@@ -207,9 +207,9 @@ void ModelEntityManager::updateEntity(const ModelEntitySP& entity)
 	}
 }
 
-void ModelEntityManager::removeEntity(const ModelEntitySP& entity)
+void GeneralEntityManager::removeEntity(const GeneralEntitySP& entity)
 {
-	vector<ModelEntitySP>::iterator walker = find(allEntities.begin(), allEntities.end(), entity);
+	vector<GeneralEntitySP>::iterator walker = find(allEntities.begin(), allEntities.end(), entity);
 	if (walker != allEntities.end())
 	{
 		if (octree.get())
@@ -225,7 +225,7 @@ void ModelEntityManager::removeEntity(const ModelEntitySP& entity)
 	}
 }
 
-void ModelEntityManager::setBrightColorEffect(bool writeBrightColor, float brightColorLimit) const
+void GeneralEntityManager::setBrightColorEffect(bool writeBrightColor, float brightColorLimit) const
 {
 	auto walker = allEntities.begin();
 	while (walker != allEntities.end())
@@ -236,7 +236,7 @@ void ModelEntityManager::setBrightColorEffect(bool writeBrightColor, float brigh
 	}
 }
 
-ModelEntitySP ModelEntityManager::findEntity(const string& name) const
+GeneralEntitySP GeneralEntityManager::findEntity(const string& name) const
 {
 	auto walker = allEntities.begin();
 
@@ -250,10 +250,10 @@ ModelEntitySP ModelEntityManager::findEntity(const string& name) const
 		walker++;
 	}
 
-	return ModelEntitySP();
+	return GeneralEntitySP();
 }
 
-void ModelEntityManager::setEntityExcludeList(const EntityListSP& entityExcludeList)
+void GeneralEntityManager::setEntityExcludeList(const EntityListSP& entityExcludeList)
 {
 	this->entityExcludeList = entityExcludeList;
 
@@ -263,13 +263,13 @@ void ModelEntityManager::setEntityExcludeList(const EntityListSP& entityExcludeL
 	}
 }
 
-bool ModelEntityManager::isEntityExcluded(const ModelEntitySP& modelEntity) const
+bool GeneralEntityManager::isEntityExcluded(const GeneralEntitySP& generalEntity) const
 {
 	if (!entityExcludeList.get())
 	{
 		return false;
 	}
 
-	return entityExcludeList->containsEntity(modelEntity);
+	return entityExcludeList->containsEntity(generalEntity);
 }
 

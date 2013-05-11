@@ -81,6 +81,12 @@ void Octant::sort()
 	{
 		(*walkerChildsPlusMe)->updateDistanceToCamera();
 
+		// Sort children, if available
+		if (*walkerChildsPlusMe != this)
+		{
+			(*walkerChildsPlusMe)->sort();
+		}
+
 		walkerChildsPlusMe++;
 	}
 	quicksortOctant.sort(allChildsPlusMe);

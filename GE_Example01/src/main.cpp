@@ -11,7 +11,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	OctreeFactory octreeFactory;
 	OctreeSP octree = octreeFactory.createOctree(6, 1024, Point4(), 256.0f, 256.0f, 256.0f);
-	ModelEntityManager::getInstance()->setOctree(octree);
+	GeneralEntityManager::getInstance()->setOctree(octree);
 	//octree->setDebug(true);
 
 	PrimitiveEntityFactory primitiveEntityFactory;
@@ -39,7 +39,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Green torus
 
@@ -49,7 +49,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity = primitiveEntityFactory.createTorusPrimitiveEntity("GreenTorus", 1.0f, 1.0f, 1.0f, surfaceMaterial);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Blue cube
 
@@ -59,7 +59,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity = primitiveEntityFactory.createCubePrimitiveEntity("BlueCube", 1.0f, 1.0f, 1.0f, surfaceMaterial);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Yellow cone
 
@@ -69,7 +69,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity = primitiveEntityFactory.createConePrimitiveEntity("YellowCone", 1.0f, 1.0f, 1.0f, surfaceMaterial);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Cyan cylinder
 
@@ -79,7 +79,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity = primitiveEntityFactory.createCylinderPrimitiveEntity("CyanCylinder", 1.0f, 1.0f, 1.0f, surfaceMaterial);
 	entity->setPosition(position);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Black sphere with emissive color animation
 
@@ -97,7 +97,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Textured cube with rotation animation
 
@@ -118,7 +118,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	//entity->setDebug(true);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Humanoids
 
@@ -137,7 +137,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	//entity->setDebug(true);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
@@ -149,7 +149,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	//entity->setDebug(true);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
@@ -162,7 +162,7 @@ GLUSboolean initGame(GLUSvoid)
 	//entity->setDebug(true);
 	//entity->setDebugAsMesh(true);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Lights
 
@@ -205,10 +205,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
-	ModelEntityManager::getInstance()->update();
-	ModelEntityManager::getInstance()->sort();
-	ModelEntityManager::getInstance()->render();
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
+	GeneralEntityManager::getInstance()->update();
+	GeneralEntityManager::getInstance()->sort();
+	GeneralEntityManager::getInstance()->render();
 
 	FpsPrinter::printer.print(deltaTime);
 

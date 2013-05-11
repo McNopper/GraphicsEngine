@@ -89,7 +89,7 @@ GLUSvoid terminateEngine(GLUSvoid)
 
 	PathEntityManager::terminate();
 
-	ModelEntityManager::terminate();
+	GeneralEntityManager::terminate();
 
 	ModelManager::terminate();
 

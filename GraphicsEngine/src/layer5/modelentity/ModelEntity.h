@@ -12,23 +12,17 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer1/collision/BoundingSphere.h"
 #include "../../layer3/environment/DynamicEnvironment.h"
 #include "../../layer3/node/InstanceNode.h"
 #include "../../layer3/node/NodeOwner.h"
-#include "../../layer3/octree/OctreeEntity.h"
+#include "../../layer4/entity/GeneralEntity.h"
 #include "../../layer4/model/Model.h"
 
-class ModelEntity : public OctreeEntity, public NodeOwner, public Geometry
+class ModelEntity : public GeneralEntity, public NodeOwner
 {
-
-protected:
-
-	static float currentDeltaTime;
-	static std::string currentProgramType;
 
 	float translateX;
 	float translateY;
@@ -82,8 +76,6 @@ protected:
 
 public:
 
-    static void setCurrentValues(const std::string& currentProgramType, const CameraSP& currentCamera, float currentDeltaTime, bool ascendingSortOrder = true, enum RenderFilter renderFilter = RENDER_ALL, bool dynamicCubeMaps = false);
-
     virtual const std::string& getCurrentProgramType() const;
 
     virtual boost::int32_t getNumberJoints() const;
@@ -110,8 +102,8 @@ public:
     void setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ);
     void setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ);
 
-    bool isUpdateable() const;
-    void setUpdateable(bool updateable);
+    virtual bool isUpdateable() const;
+    virtual void setUpdateable(bool updateable);
 
 	void setAnimation(boost::int32_t animStackIndex, boost::int32_t animLayerIndex);
 
@@ -133,9 +125,9 @@ public:
     virtual float getBrightColorLimit() const;
     virtual float getRefractiveIndex() const;
 
-    void setWriteBrightColor(bool writeBrightColor);
-    void setBrightColorLimit(float brightColorLimit);
-    void setRefractiveIndex(float refractiveIndex);
+    virtual void setWriteBrightColor(bool writeBrightColor);
+    virtual void setBrightColorLimit(float brightColorLimit);
+    virtual void setRefractiveIndex(float refractiveIndex);
 
     const boost::shared_ptr<InstanceNode>& getRootInstanceNode() const;
 
@@ -151,7 +143,7 @@ public:
 
 	void setDebugAsMesh(bool debugAsMesh);
 
-	const std::string& getName() const;
+	virtual const std::string& getName() const;
 
 
 

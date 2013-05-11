@@ -15,7 +15,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	OctreeFactory octreeFactory;
 	OctreeSP octree = octreeFactory.createOctree(6, 1024, Point4(), 256.0f, 256.0f, 256.0f);
-	ModelEntityManager::getInstance()->setOctree(octree);
+	GeneralEntityManager::getInstance()->setOctree(octree);
 	//octree->setDebug(true);
 
 	PrimitiveEntityFactory primitiveEntityFactory;
@@ -64,7 +64,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setAnimation(0, 0);
 	entity->getModel()->getRootNode()->setTransparentRecursive(true);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Path animation
 
@@ -92,7 +92,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	// Path animation
 
@@ -122,7 +122,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
@@ -143,7 +143,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
@@ -168,7 +168,7 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setPosition(position);
 	entity->setRefractiveIndex(RI_NOTHING);
 
-	ModelEntityManager::getInstance()->updateEntity(entity);
+	GeneralEntityManager::getInstance()->updateEntity(entity);
 
 	//
 
@@ -183,7 +183,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	entityExcludeList = EntityListSP(new EntityList());
 
-	ModelEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
+	GeneralEntityManager::getInstance()->setEntityExcludeList(entityExcludeList);
 
 	//
 	//
@@ -230,7 +230,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// Update everything
 
-	ModelEntityManager::getInstance()->update();
+	GeneralEntityManager::getInstance()->update();
 
 	//
 	// Render the dynamic cube maps
@@ -253,9 +253,9 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 		ProgramManagerProxy::setCameraByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0));
 
-		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false);
+		GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false);
 
-		ModelEntityManager::getInstance()->sort();
+		GeneralEntityManager::getInstance()->sort();
 
 		//
 
@@ -264,14 +264,14 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 		//
 
-		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false, RENDER_OPAQUE);
-		ModelEntityManager::getInstance()->render(true);
+		GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, false, RENDER_OPAQUE);
+		GeneralEntityManager::getInstance()->render(true);
 
-		ModelEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, true, RENDER_TRANSPARENT);
+		GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, currentDynamicEnvironment->getCamera(0), deltaTime, true, RENDER_TRANSPARENT);
 		glFrontFace(GL_CW);
-		ModelEntityManager::getInstance()->render(true);
+		GeneralEntityManager::getInstance()->render(true);
 		glFrontFace(GL_CCW);
-		ModelEntityManager::getInstance()->render(true);
+		GeneralEntityManager::getInstance()->render(true);
 
 		//
 
@@ -291,9 +291,9 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
 
-	ModelEntityManager::getInstance()->sort();
+	GeneralEntityManager::getInstance()->sort();
 
 	//
 
@@ -310,14 +310,14 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// All the primitves
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false, RENDER_OPAQUE, true);
-	ModelEntityManager::getInstance()->render();
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false, RENDER_OPAQUE, true);
+	GeneralEntityManager::getInstance()->render();
 
-	ModelEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, true, RENDER_TRANSPARENT, true);
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, true, RENDER_TRANSPARENT, true);
 	glFrontFace(GL_CW);
-	ModelEntityManager::getInstance()->render();
+	GeneralEntityManager::getInstance()->render();
 	glFrontFace(GL_CCW);
-	ModelEntityManager::getInstance()->render();
+	GeneralEntityManager::getInstance()->render();
 
 	// FPS
 
