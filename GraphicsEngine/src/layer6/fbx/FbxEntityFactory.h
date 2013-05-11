@@ -35,6 +35,7 @@ private:
 	NodeTreeFactory nodeTreeFactory;
 
 	std::map<boost::int32_t, SurfaceMaterialSP> currentSurfaceMaterials;
+	std::vector<SurfaceMaterialSP> allSurfaceMaterials;
 	boost::int32_t currentNumberJoints;
 	boost::int32_t currentNumberAnimationStacks;
 	bool currentEntityAnimated;

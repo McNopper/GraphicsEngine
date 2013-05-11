@@ -26,7 +26,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	NodeOwner(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name), jointIndex(-1)
+	NodeOwner(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name), jointIndex(-1)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -318,7 +318,14 @@ void ModelEntity::setRefractiveIndex(float refractiveIndex)
 
 void ModelEntity::setBoundingSphereCenter(const Point4& center)
 {
-	boundingSphere.setCenter(center);
+	if (usePositionAsBoundingSphereCenter)
+	{
+		boundingSphere.setCenter(position);
+	}
+	else
+	{
+		boundingSphere.setCenter(center);
+	}
 }
 
 const ModelSP& ModelEntity::getModel() const
@@ -396,6 +403,18 @@ void ModelEntity::updateLocationOrientation(const Point4& location, const Quater
 	this->updateNormalModelMatrix = true;
 
 	updateMetrics();
+
+	updateBoundingSphereCenter(true);
+}
+
+bool ModelEntity::isUsePositionAsBoundingSphereCenter() const
+{
+	return usePositionAsBoundingSphereCenter;
+}
+
+void ModelEntity::setUsePositionAsBoundingSphereCenter(bool usePositionAsBoundingSphereCenter)
+{
+	this->usePositionAsBoundingSphereCenter = usePositionAsBoundingSphereCenter;
 
 	updateBoundingSphereCenter(true);
 }

@@ -24,7 +24,7 @@ using namespace boost;
 const char* FbxEntityFactory::CHANNELS[] = {"X", "Y", "Z"};
 
 FbxEntityFactory::FbxEntityFactory() :
-	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
+	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), allSurfaceMaterials(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
 {
 	// Create the FBX SDK manager
 	manager = FbxManager::Create();
@@ -40,6 +40,7 @@ FbxEntityFactory::FbxEntityFactory() :
 FbxEntityFactory::~FbxEntityFactory()
 {
 	currentSurfaceMaterials.clear();
+	allSurfaceMaterials.clear();
 
 	delete geometryConverter;
 	ioSettings->Destroy();
@@ -83,6 +84,7 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 	anisotropic = globalAnisotropic;
 	currentNumberAnimationStacks = importer->GetAnimStackCount();
 	currentSurfaceMaterials.clear();
+	allSurfaceMaterials.clear();
 	nodeTreeFactory.reset();
 	currentNumberJoints = 0;
 	currentEntityAnimated = false;
@@ -134,6 +136,11 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 		processTexture(scene->GetTexture(i));
 	}
 
+	if (currentSurfaceMaterial.get())
+	{
+		allSurfaceMaterials.push_back(currentSurfaceMaterial);
+	}
+
 	for (int32_t i = 0; i < scene->GetMaterialCount(); i++)
 	{
 		if (!currentSurfaceMaterial.get())
@@ -160,7 +167,7 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 
 			if (currentNumberJoints >= MAX_MATRICES)
 			{
-				glusLogPrint(GLUS_LOG_ERROR, "To many joints: %d", currentNumberJoints);
+				glusLogPrint(GLUS_LOG_ERROR, "Too many joints: %d", currentNumberJoints);
 
 				nodeTreeFactory.reset();
 				currentNumberJoints = 0;
@@ -175,6 +182,15 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 					walker++;
 				}
 				currentSurfaceMaterials.clear();
+
+				auto walkerAll = allSurfaceMaterials.begin();
+				while (walkerAll != allSurfaceMaterials.end())
+				{
+					walkerAll->reset();
+
+					walkerAll++;
+				}
+				allSurfaceMaterials.clear();
 
 				traverseDeleteUserPointer(node);
 
@@ -218,10 +234,31 @@ void FbxEntityFactory::processTexture(FbxTexture* texture)
 
 void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceMaterial* surfaceMaterial)
 {
+	string materialName(surfaceMaterial->GetName());
+
+	//
+
+	auto walker = allSurfaceMaterials.begin();
+	while (walker != allSurfaceMaterials.end())
+	{
+		if ((*walker)->getName().compare(materialName) == 0)
+		{
+			currentSurfaceMaterials[materialIndex] = (*walker);
+
+			glusLogPrint(GLUS_LOG_INFO, "Reused material: %s", surfaceMaterial->GetName());
+
+			return;
+		}
+
+		walker++;
+	}
+
+	//
+
 	Color color;
 	Texture2DSP texture2D;
 
-	SurfaceMaterialSP currentSurfaceMaterial(new SurfaceMaterial(surfaceMaterial->GetName()));
+	SurfaceMaterialSP currentSurfaceMaterial(new SurfaceMaterial(materialName));
 	SurfaceMaterial defaultMaterial("default");
 	FbxDouble3 defaultEmissive(defaultMaterial.getEmissive().getR(), defaultMaterial.getEmissive().getG(), defaultMaterial.getEmissive().getB());
 	FbxDouble3 defaultAmbient(defaultMaterial.getAmbient().getR(), defaultMaterial.getAmbient().getG(), defaultMaterial.getAmbient().getB());
@@ -302,6 +339,7 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	}
 
 	currentSurfaceMaterials[materialIndex] = currentSurfaceMaterial;
+	allSurfaceMaterials.push_back(currentSurfaceMaterial);
 
 	glusLogPrint(GLUS_LOG_INFO, "Created material: %s", surfaceMaterial->GetName());
 }

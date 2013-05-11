@@ -370,11 +370,6 @@ bool Node::isAnimated() const
 
 int32_t Node::getSkinningRootIndex() const
 {
-	if (mesh)
-	{
-		return -1;
-	}
-
 	if (joint && usedJoint)
 	{
 		return index;
@@ -774,6 +769,22 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			}
 			glUniform4fv(currentProgram->getUniformLocation(u_diffuseColor), 1, currentDiffuse);
 
+			if (currentSurfaceMaterial->getSpecularTextureName() != 0)
+			{
+				glUniform1i(currentProgram->getUniformLocation(u_hasSpecularTexture), 1);
+
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, currentSurfaceMaterial->getSpecularTextureName());
+				glUniform1i(currentProgram->getUniformLocation(u_specularTexture), 1);
+			}
+			else
+			{
+				glUniform1i(currentProgram->getUniformLocation(u_hasSpecularTexture), 0);
+
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glUniform1i(currentProgram->getUniformLocation(u_specularTexture), 0);
+			}
 			glUniform4fv(currentProgram->getUniformLocation(u_specularColor), 1, currentSpecular);
 			glUniform1f(currentProgram->getUniformLocation(u_shininess), currentShininess);
 
@@ -783,18 +794,18 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasNormalMapTexture), 1);
 
-				glActiveTexture(GL_TEXTURE1);
+				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, currentSurfaceMaterial->getNormalMapTextureName());
-				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 1);
+				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 2);
 				glActiveTexture(GL_TEXTURE0);
 			}
 			else
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasNormalMapTexture), 0);
 
-				glActiveTexture(GL_TEXTURE1);
+				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 1);
+				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 2);
 				glActiveTexture(GL_TEXTURE0);
 			}
 
@@ -826,18 +837,18 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 				SkySP activeSky = SkyManager::getInstance()->getActiveSky();
 
-				glActiveTexture(GL_TEXTURE2);
+				glActiveTexture(GL_TEXTURE3);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, activeSky->getSkyTextureName());
-			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 2);
+			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 3);
 				glActiveTexture(GL_TEXTURE0);
 			}
 			else
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasCubeMapTexture), 0);
 
-				glActiveTexture(GL_TEXTURE2);
+				glActiveTexture(GL_TEXTURE3);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 2);
+			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 3);
 				glActiveTexture(GL_TEXTURE0);
 			}
 
@@ -845,17 +856,17 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 			if (Entity::getDynamicCubeMaps() && currentSurfaceMaterial->getDynamicCubeMapTextureName() != 0 && SkyManager::getInstance()->hasActiveSky())
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 1);
-				glActiveTexture(GL_TEXTURE3);
+				glActiveTexture(GL_TEXTURE4);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, currentSurfaceMaterial->getDynamicCubeMapTextureName());
-			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 3);
+			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 4);
 				glActiveTexture(GL_TEXTURE0);
 			}
 			else
 			{
 				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 0);
-				glActiveTexture(GL_TEXTURE3);
+				glActiveTexture(GL_TEXTURE4);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 3);
+			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 4);
 				glActiveTexture(GL_TEXTURE0);
 			}
 
@@ -906,24 +917,31 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 			if (currentSurfaceMaterial->getDiffuseTextureName() != 0)
 			{
+				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 
-			if (currentSurfaceMaterial->getNormalMapTextureName() != 0)
+			if (currentSurfaceMaterial->getSpecularTextureName() != 0)
 			{
 				glActiveTexture(GL_TEXTURE1);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 
-			if (SkyManager::getInstance()->hasActiveSky())
+			if (currentSurfaceMaterial->getNormalMapTextureName() != 0)
 			{
 				glActiveTexture(GL_TEXTURE2);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+
+			if (SkyManager::getInstance()->hasActiveSky())
+			{
+				glActiveTexture(GL_TEXTURE3);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
 
 			if (currentSurfaceMaterial->getDynamicCubeMapTexture() != 0)
 			{
-				glActiveTexture(GL_TEXTURE3);
+				glActiveTexture(GL_TEXTURE4);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			}
 

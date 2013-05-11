@@ -37,6 +37,7 @@
 #define u_diffuseColor "u_material.diffuseColor"
 #define u_diffuseTexture "u_material.diffuseTexture"
 #define u_specularColor "u_material.specularColor"
+#define u_specularTexture "u_material.specularTexture"
 #define u_shininess "u_material.shininess"
 #define u_normalMapTexture "u_material.normalMapTexture"
 #define u_reflectionColor "u_material.reflectionColor"
@@ -46,6 +47,7 @@
 
 #define u_hasSkinning "u_hasSkinning"
 #define u_hasDiffuseTexture "u_hasDiffuseTexture"
+#define u_hasSpecularTexture "u_hasSpecularTexture"
 #define u_hasNormalMapTexture "u_hasNormalMapTexture"
 #define u_hasCubeMapTexture "u_hasCubeMapTexture"
 #define u_hasDynamicCubeMapTexture "u_hasDynamicCubeMapTexture"

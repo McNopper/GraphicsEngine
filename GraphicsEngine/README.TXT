@@ -38,7 +38,7 @@ Features:
 - Sorting of entities (for alpha blending etc.)
 - Excluding of entities by a list
 - Mouse/Key input and movement
-- Phong with diffuse, normal map and environment (static/dynamic) texture (reflection and refraction)
+- Phong with diffuse, specular, normal map and environment (static/dynamic) texture (reflection and refraction)
 - Alpha blending
 - Animation (Transform and Color)
 - Skinning

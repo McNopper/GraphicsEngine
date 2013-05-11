@@ -27,6 +27,7 @@ struct MaterialProperties
 	vec4 diffuseColor;
 	sampler2D diffuseTexture; 
 	vec4 specularColor;
+	sampler2D specularTexture; 
 	float shininess;
 	
 	sampler2D normalMapTexture;
@@ -48,6 +49,7 @@ uniform	float u_reflectanceNormalIncidence;
 
 uniform	int u_lightType;
 uniform	int u_hasDiffuseTexture;
+uniform	int u_hasSpecularTexture;
 uniform	int u_hasNormalMapTexture;
 uniform	int u_hasCubeMapTexture;
 uniform	int u_hasDynamicCubeMapTexture;
@@ -75,6 +77,13 @@ void main(void)
 	if (u_hasDiffuseTexture != 0)
 	{
  		diffuseTexture = texture2D(u_material.diffuseTexture, v_texCoord);
+ 	}
+
+	vec4 specularTexture = vec4(1.0, 1.0, 1.0, 1.0);
+
+	if (u_hasSpecularTexture != 0)
+	{
+ 		specularTexture = texture2D(u_material.specularTexture, v_texCoord);
  	}
 
 	vec3 normal;
@@ -140,7 +149,7 @@ void main(void)
 		specularIntensity = pow(eDotR, u_material.shininess);
 	}
 	
-	vec4 color = u_material.emissiveColor*diffuseTexture + attenuation*u_light.ambientColor*u_material.ambientColor*diffuseTexture + attenuation*u_light.diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + attenuation*u_light.specularColor*u_material.specularColor * specularIntensity;
+	vec4 color = u_material.emissiveColor*diffuseTexture + attenuation*u_light.ambientColor*u_material.ambientColor*diffuseTexture + attenuation*u_light.diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + attenuation*u_light.specularColor*u_material.specularColor*specularTexture * specularIntensity;
 	
 	if (u_hasCubeMapTexture != 0 && (dot(vec3(1.0), u_material.reflectionColor.rgb) > 0.0 || dot(vec3(1.0), u_material.refractionColor.rgb) > 0.0))
 	{

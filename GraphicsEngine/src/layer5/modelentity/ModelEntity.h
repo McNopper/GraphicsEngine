@@ -59,6 +59,7 @@ class ModelEntity : public GeneralEntity, public NodeOwner
 private:
 
 	BoundingSphere boundingSphere;
+	bool usePositionAsBoundingSphereCenter;
 	bool updateable;
 	boost::int32_t animStackIndex;
 	boost::int32_t animLayerIndex;
@@ -143,9 +144,11 @@ public:
 
 	void setDebugAsMesh(bool debugAsMesh);
 
+	bool isUsePositionAsBoundingSphereCenter() const;
+
+	void setUsePositionAsBoundingSphereCenter(bool useCenterBoundingSphereCenter);
+
 	virtual const std::string& getName() const;
-
-
 
 	//
 
@@ -154,7 +157,6 @@ public:
 	virtual void updateOrientation(const Quaternion& orientation);
 
 	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
-
 };
 
 typedef boost::shared_ptr<ModelEntity> ModelEntitySP;
