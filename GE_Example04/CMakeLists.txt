@@ -44,11 +44,12 @@ add_executable(GE_Example04 ${CPP_FILES} ${H_FILES})
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	# Windows
 	
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${GE_Example04_SOURCE_DIR}/../GE_Binaries)
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${GE_Example04_SOURCE_DIR}/../GE_Binaries)
-			
 	target_link_libraries(GE_Example04 GLUS GraphicsEngine glfw glew32s opengl32 gdi32 user32 Advapi32 wininet DevIL ILU)
 	target_link_libraries(GE_Example04 debug fbxsdk-2013.3-mdd.lib)
 	target_link_libraries(GE_Example04 optimized fbxsdk-2013.3-md.lib)
 			
+	message("Executable is deployed either to GE_Binaries/Release or GE_Binaries/Debug.")
+	message("Copy the executable to the GE_Binaries folder.")
+	message("CMAKE_RUNTIME_OUTPUT_DIRECTORY is set to GE_Binaries, but Release/Debug is appended.")
+					
 ENDIF()
