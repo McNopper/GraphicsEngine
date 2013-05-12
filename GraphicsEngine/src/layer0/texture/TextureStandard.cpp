@@ -13,7 +13,7 @@ TextureStandard::TextureStandard(GLenum target, GLint internalFormat, int32_t wi
 		Texture(target, internalFormat, width, height),
 		format(format), type(type), sizeOfData(sizeOfData), mipMap(mipMap), minFilter(minFilter), magFilter(magFilter), wrapS(wrapS), wrapT(wrapT), anisotropic(1.0)
 {
-	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic");
+	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
 
 	setAnisotropic(anisotropic);
 }

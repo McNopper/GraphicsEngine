@@ -310,7 +310,7 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	FbxProperty transparencyFactorProperty = surfaceMaterial->FindProperty(FbxSurfaceMaterial::sTransparencyFactor);
 	if (transparencyFactorProperty.IsValid())
 	{
-		currentSurfaceMaterial->setTransparency(transparencyFactorProperty.Get<double>());
+		currentSurfaceMaterial->setTransparency(static_cast<float>(transparencyFactorProperty.Get<double>()));
 	}
 
 	FbxProperty normalMapProperty = surfaceMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
@@ -584,7 +584,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 			node->GetTranslationLimits().GetMaxActive(max[0], max[1], max[2]);
 			for (int32_t index = 0; index < 3; index++)
 			{
-				nodeTreeFactory.setTranslationLimits(newNode->getName(), min[index], node->GetTranslationLimits().GetMin()[index], max[index], node->GetTranslationLimits().GetMax()[index], index);
+				nodeTreeFactory.setTranslationLimits(newNode->getName(), min[index], static_cast<float>(node->GetTranslationLimits().GetMin()[index]), max[index], static_cast<float>(node->GetTranslationLimits().GetMax()[index]), index);
 			}
 		}
 
@@ -601,7 +601,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 			node->GetRotationLimits().GetMaxActive(max[0], max[1], max[2]);
 			for (int32_t index = 0; index < 3; index++)
 			{
-				nodeTreeFactory.setRotationLimits(newNode->getName(), min[index], node->GetRotationLimits().GetMin()[index], max[index], node->GetRotationLimits().GetMax()[index], index);
+				nodeTreeFactory.setRotationLimits(newNode->getName(), min[index], static_cast<float>(node->GetRotationLimits().GetMin()[index]), max[index], static_cast<float>(node->GetRotationLimits().GetMax()[index]), index);
 			}
 		}
 
@@ -618,7 +618,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 			node->GetScalingLimits().GetMaxActive(max[0], max[1], max[2]);
 			for (int32_t index = 0; index < 3; index++)
 			{
-				nodeTreeFactory.setScalingLimits(newNode->getName(), min[index], node->GetScalingLimits().GetMin()[index], max[index], node->GetScalingLimits().GetMax()[index], index);
+				nodeTreeFactory.setScalingLimits(newNode->getName(), min[index], static_cast<float>(node->GetScalingLimits().GetMin()[index]), max[index], static_cast<float>(node->GetScalingLimits().GetMax()[index]), index);
 			}
 		}
 

@@ -13,7 +13,7 @@ using namespace boost;
 
 GLUSvoid mouseButtonEngine(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos)
 {
-	User::defaultUser.mouseButton(pressed, button, xPos, yPos);
+	User::defaultUser.mouseButton(pressed ? true : false, button, xPos, yPos);
 }
 
 GLUSvoid mouseWheelEngine(GLUSint buttons, GLUSint ticks, GLUSint xPos, GLUSint yPos)
@@ -32,7 +32,7 @@ GLUSvoid mouseMoveEngine(GLUSint buttons, GLUSint xPos, GLUSint yPos)
 
 GLUSvoid keyEngine(GLUSboolean pressed, GLUSint key)
 {
-	User::defaultUser.key(pressed, key);
+	User::defaultUser.key(pressed ? true : false, key);
 }
 
 GLUSboolean initEngine(GLUSuint logLevel, int32_t numberWorker)

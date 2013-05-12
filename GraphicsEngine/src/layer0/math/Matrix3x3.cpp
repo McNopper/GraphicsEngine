@@ -88,7 +88,7 @@ void Matrix3x3::identity()
 
 bool Matrix3x3::inverse()
 {
-	return glusMatrix3x3Inversef(m);
+	return glusMatrix3x3Inversef(m) ? true : false;
 }
 
 void Matrix3x3::transpose()

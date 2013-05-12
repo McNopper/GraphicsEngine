@@ -28,22 +28,22 @@ void OrthographicCamera::updateProjectionMatrix()
 
 float OrthographicCamera::getNearWidth() const
 {
-	return viewport.getWidth();
+	return static_cast<float>(viewport.getWidth());
 }
 
 float OrthographicCamera::getNearHeight() const
 {
-	return viewport.getHeight();
+	return static_cast<float>(viewport.getHeight());
 }
 
 float OrthographicCamera::getFarWidth() const
 {
-	return viewport.getWidth();
+	return static_cast<float>(viewport.getWidth());
 }
 
 float OrthographicCamera::getFarHeight() const
 {
-	return viewport.getHeight();
+	return static_cast<float>(viewport.getHeight());
 }
 
 void OrthographicCamera::orthographic(const Viewport& viewport, float nearVal, float farVal)
