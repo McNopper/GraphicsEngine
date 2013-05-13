@@ -26,7 +26,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	NodeOwner(), translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), model(model), time(0.0f), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), name(name), jointIndex(-1)
+	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -53,139 +53,6 @@ ModelEntity::~ModelEntity()
 {
 }
 
-void ModelEntity::updateMetrics()
-{
-	modelMatrix.identity();
-	modelMatrix.translate(translateX, translateY, translateZ);
-	modelMatrix *= rotation.getRotationMatrix4x4();
-	modelMatrix.scale(scaleX, scaleY, scaleZ);
-
-	if (updateNormalModelMatrix)
-	{
-		normalModelMatrix = modelMatrix.extractMatrix3x3();
-		normalModelMatrix.inverse();
-
-		updateNormalModelMatrix = false;
-	}
-}
-
-const BoundingSphere& ModelEntity::getBoundingSphere() const
-{
-	return boundingSphere;
-}
-
-void ModelEntity::setBoundingSphere(const BoundingSphere& boundingSphere)
-{
-	this->boundingSphere = boundingSphere;
-}
-
-const Point4& ModelEntity::getPosition() const
-{
-	return position;
-}
-
-void ModelEntity::setPosition(const Point4& position)
-{
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
-	this->position = position;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void ModelEntity::setRotation(float angleX, float angleY, float angleZ)
-{
-	Quaternion rotation;
-	rotation.rotateRzRyRxf(angleZ, angleY, angleX);
-
-	this->rotation = rotation;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-}
-
-void ModelEntity::setRotation(const Quaternion& rotation)
-{
-	this->rotation = rotation;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-}
-
-void ModelEntity::setScale(float scaleX, float scaleY, float scaleZ)
-{
-	this->scaleX = scaleX;
-	this->scaleY = scaleY;
-	this->scaleZ = scaleZ;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void ModelEntity::setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ)
-{
-	Quaternion rotation;
-	rotation.rotateRzRyRxf(angleZ, angleY, angleX);
-
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
-	this->position = position;
-
-	this->rotation = rotation;
-
-	this->scaleX = scaleX;
-	this->scaleY = scaleY;
-	this->scaleZ = scaleZ;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void ModelEntity::setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ)
-{
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
-	this->position = position;
-
-	this->rotation = rotation;
-
-	this->scaleX = scaleX;
-	this->scaleY = scaleY;
-	this->scaleZ = scaleZ;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-bool ModelEntity::isUpdateable() const
-{
-	return updateable;
-}
-
-void ModelEntity::setUpdateable(bool updateable)
-{
-	this->updateable = updateable;
-}
-
 void ModelEntity::setAnimation(int32_t animStackIndex, int32_t animLayerIndex) {
 	this->animStackIndex = animStackIndex;
 	this->animLayerIndex = animLayerIndex;
@@ -197,16 +64,6 @@ int32_t ModelEntity::getAnimStackIndex() const {
 
 int32_t ModelEntity::getAnimLayerIndex() const {
 	return animLayerIndex;
-}
-
-const Matrix4x4& ModelEntity::getModelMatrix() const
-{
-	return modelMatrix;
-}
-
-const Matrix3x3& ModelEntity::getNormalModelMatrix() const
-{
-	return normalModelMatrix;
 }
 
 void ModelEntity::updateBoundingSphereCenter(bool force)
@@ -227,17 +84,12 @@ void ModelEntity::updateBoundingSphereCenter(bool force)
 		}
 
 		Matrix4x4 renderingMatrix;
-		model->getRootNode()->updateRenderingMatrix(renderingMatrix, modelMatrix, time, getAnimStackIndex(), getAnimLayerIndex());
+		model->getRootNode()->updateRenderingMatrix(renderingMatrix, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
 
 		Point4 center = renderingMatrix * skinningMatrix * Point4();
 
 		setBoundingSphereCenter(center);
 	}
-}
-
-void ModelEntity::updateDistanceToCamera()
-{
-	setDistanceToCamera(ModelEntity::currentCamera->distanceToCamera(boundingSphere));
 }
 
 void ModelEntity::update()
@@ -262,11 +114,11 @@ void ModelEntity::update()
 
 void ModelEntity::render() const
 {
-	model->getRootNode()->render(*this, *rootInstanceNode, modelMatrix, time, getAnimStackIndex(), getAnimLayerIndex());
+	model->getRootNode()->render(*this, *rootInstanceNode, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
 
-	if (debug)
+	if (isDebug())
 	{
-		DebugDraw::drawer.draw(boundingSphere, Color::RED, debugAsMesh);
+		DebugDraw::drawer.draw(getBoundingSphere(), Color::RED, isDebugAsMesh());
 	}
 }
 
@@ -316,18 +168,6 @@ void ModelEntity::setRefractiveIndex(float refractiveIndex)
 	this->refractiveIndex = refractiveIndex;
 }
 
-void ModelEntity::setBoundingSphereCenter(const Point4& center)
-{
-	if (usePositionAsBoundingSphereCenter)
-	{
-		boundingSphere.setCenter(position);
-	}
-	else
-	{
-		boundingSphere.setCenter(center);
-	}
-}
-
 const ModelSP& ModelEntity::getModel() const
 {
 	return model;
@@ -345,76 +185,5 @@ InstanceNodeSP ModelEntity::findInstanceNodeRecursive(const string& name) const
 
 ModelEntitySP ModelEntity::getNewInstance(const string& name) const
 {
-	return ModelEntitySP(new ModelEntity(name, model, scaleX, scaleY, scaleZ));
-}
-
-bool ModelEntity::isDebug() const
-{
-	return debug;
-}
-
-void ModelEntity::setDebug(bool debug)
-{
-	this->debug = debug;
-}
-
-bool ModelEntity::isDebugAsMesh() const
-{
-	return debugAsMesh;
-}
-
-void ModelEntity::setDebugAsMesh(bool debugAsMesh)
-{
-	this->debugAsMesh = debugAsMesh;
-}
-
-const string& ModelEntity::getName() const
-{
-	return name;
-}
-
-void ModelEntity::updateLocation(const Point4& location)
-{
-	this->translateX = location.getX();
-	this->translateY = location.getY();
-	this->translateZ = location.getZ();
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void ModelEntity::updateOrientation(const Quaternion& orientation)
-{
-	this->rotation = orientation;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-}
-
-void ModelEntity::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
-{
-	this->translateX = location.getX();
-	this->translateY = location.getY();
-	this->translateZ = location.getZ();
-	this->rotation = orientation;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-bool ModelEntity::isUsePositionAsBoundingSphereCenter() const
-{
-	return usePositionAsBoundingSphereCenter;
-}
-
-void ModelEntity::setUsePositionAsBoundingSphereCenter(bool usePositionAsBoundingSphereCenter)
-{
-	this->usePositionAsBoundingSphereCenter = usePositionAsBoundingSphereCenter;
-
-	updateBoundingSphereCenter(true);
+	return ModelEntitySP(new ModelEntity(name, model, getScaleX(), getScaleY(), getScaleZ()));
 }

@@ -12,9 +12,6 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/math/Point4.h"
-#include "../../layer0/math/Matrix3x3.h"
-#include "../../layer1/collision/BoundingSphere.h"
 #include "../../layer3/environment/DynamicEnvironment.h"
 #include "../../layer3/node/InstanceNode.h"
 #include "../../layer3/node/NodeOwner.h"
@@ -24,19 +21,10 @@
 class ModelEntity : public GeneralEntity, public NodeOwner
 {
 
-	float translateX;
-	float translateY;
-	float translateZ;
-	Quaternion rotation;
-	float scaleX;
-	float scaleY;
-	float scaleZ;
-	Matrix4x4 modelMatrix;
-	Matrix3x3 normalModelMatrix;
-	bool updateNormalModelMatrix;
+	bool writeBrightColor;
+	float brightColorLimit;
 
-	Point4 position;
-	Point4 origin;
+	float refractiveIndex;
 
 	ModelSP model;
 
@@ -47,33 +35,13 @@ class ModelEntity : public GeneralEntity, public NodeOwner
 	Matrix4x4 jointMatrices[MAX_MATRICES];
 	Matrix3x3 jointNormalMatrices[MAX_MATRICES];
 
-	bool writeBrightColor;
-	float brightColorLimit;
-
-	float refractiveIndex;
-
-	bool debug;
-
-	bool debugAsMesh;
-
 private:
 
-	BoundingSphere boundingSphere;
-	bool usePositionAsBoundingSphereCenter;
-	bool updateable;
 	boost::int32_t animStackIndex;
 	boost::int32_t animLayerIndex;
 	InstanceNodeSP rootInstanceNode;
 
-	std::string name;
-
 	boost::int32_t jointIndex;
-
-protected:
-
-	void updateMetrics();
-
-    void setBoundingSphereCenter(const Point4& center);
 
 public:
 
@@ -85,35 +53,13 @@ public:
 	virtual ~ModelEntity();
 
     virtual void updateBoundingSphereCenter(bool force = false);
-	virtual void updateDistanceToCamera();
     virtual void update();
     virtual void render() const;
-
-    virtual const BoundingSphere & getBoundingSphere() const;
-    void setBoundingSphere(const BoundingSphere& boundingSphere);
-
-    const Point4& getPosition() const;
-    void setPosition(const Point4& position);
-
-    void setRotation(float angleX, float angleY, float angleZ);
-    void setRotation(const Quaternion& rotation);
-
-    void setScale(float scaleX, float scaleY, float scaleZ);
-
-    void setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ);
-    void setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ);
-
-    virtual bool isUpdateable() const;
-    virtual void setUpdateable(bool updateable);
 
 	void setAnimation(boost::int32_t animStackIndex, boost::int32_t animLayerIndex);
 
 	boost::int32_t getAnimStackIndex() const;
 	boost::int32_t getAnimLayerIndex() const;
-
-	const Matrix4x4& getModelMatrix() const;
-
-	const Matrix3x3& getNormalModelMatrix() const;
 
     const ModelSP& getModel() const;
 
@@ -136,27 +82,6 @@ public:
 
     boost::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
 
-	bool isDebug() const;
-
-	void setDebug(bool debug);
-
-	bool isDebugAsMesh() const;
-
-	void setDebugAsMesh(bool debugAsMesh);
-
-	bool isUsePositionAsBoundingSphereCenter() const;
-
-	void setUsePositionAsBoundingSphereCenter(bool useCenterBoundingSphereCenter);
-
-	virtual const std::string& getName() const;
-
-	//
-
-	virtual void updateLocation(const Point4& location);
-
-	virtual void updateOrientation(const Quaternion& orientation);
-
-	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
 };
 
 typedef boost::shared_ptr<ModelEntity> ModelEntitySP;
