@@ -54,10 +54,10 @@ GLUSboolean initGame(GLUSvoid)
 	//entity->setDebug(true);
 
 	// Light up the material a little bit
-	for (int32_t i = 0; i < entity->getModel()->getSurfaceMaterialCount(); i++)
+	/*for (int32_t i = 0; i < entity->getModel()->getSurfaceMaterialCount(); i++)
 	{
 		entity->getModel()->getSurfaceMaterialAt(i)->setAmbient(Color(1.0f, 1.0f, 1.0f));
-	}
+	}*/
 
 	GeneralEntityManager::getInstance()->updateEntity(entity);
 
@@ -67,17 +67,17 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Lights
 
-	Color ambient(0.25f, 0.25f, 0.25f, 1.0f);
-	Color specular(1.0f, 1.0f, 1.0f, 1.0f);
-
-	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(0.0f, 0.0f, 1.0f), ambient, Color::WHITE, specular));
+	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(-1.0f, 0.0f, -1.0f), Color::BLACK, Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
-	LightSP pointLight = LightSP(new PointLight(Point4(0.0f, 0.0f, 5.0f), 1.0f, 0.0f, 0.0f, ambient, Color::WHITE, specular));
-	LightManager::getInstance()->setLight("PointLight", pointLight);
-	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, 0.0f, -1.0f), 0.5f, 2.0f, Point4(0.0f, 0.0f, 10.0f), 1.0f, 0.0f, 0.0f, ambient, Color::WHITE, specular));
+
+	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -1.0f, -1.0f), 0.95f, 0.90f, 2.0f, Point4(0.0f, 2.0f, 1.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
-	ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, directionalLight);
+	//ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, directionalLight);
+	vector<LightSP> lights;
+	lights.push_back(directionalLight);
+	lights.push_back(spotLight);
+	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
 
 	// Basic OpenGL settings
 

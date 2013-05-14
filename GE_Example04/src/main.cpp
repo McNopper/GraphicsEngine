@@ -198,10 +198,11 @@ GLUSboolean initGame(GLUSvoid)
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 	LightSP pointLight = LightSP(new PointLight(Point4(0.0f, 0.0f, 5.0f), 1.0f, 0.0f, 0.0f, ambient, Color::WHITE, specular));
 	LightManager::getInstance()->setLight("PointLight", pointLight);
-	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, 0.0f, -1.0f), 0.5f, 2.0f, Point4(0.0f, 0.0f, 10.0f), 1.0f, 0.0f, 0.0f, ambient, Color::WHITE, specular));
+	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, 0.0f, -1.0f), 0.5f, 0.5f, 2.0f, Point4(0.0f, 0.0f, 10.0f), 1.0f, 0.0f, 0.0f, ambient, Color::WHITE, specular));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
 	ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, directionalLight);
+	ProgramManagerProxy::setLightByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, directionalLight);
 
 	// Basic OpenGL settings
 

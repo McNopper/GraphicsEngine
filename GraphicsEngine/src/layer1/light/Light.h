@@ -8,6 +8,8 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 
+#include "../../UsedLibs.h"
+
 #include "../../layer0/color/Color.h"
 #include "../../layer0/shader/Program.h"
 #include "../../layer0/shader/Variables.h"
@@ -33,7 +35,7 @@ public:
 	const Color& getSpecular() const;
 	void setSpecular(const Color& specular);
 
-	virtual void setLightProperties(const ProgramSP& program) const = 0;
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const = 0;
 
 };
 

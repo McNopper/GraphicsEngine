@@ -39,7 +39,7 @@ public:
 	float getQuadraticAttenuation() const;
 	void setQuadraticAttenuation(float quadraticAttenuation);
 
-	virtual void setLightProperties(const ProgramSP& program) const;
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
 
 	//
 

@@ -19,21 +19,24 @@ private:
 
 	Vector3 spotDirection;
 	float spotCosCutOff;
+	float spotCosCutOffOuter;
 	float spotExponent;
 
 public:
-	SpotLight(const Vector3& spotDirection, float spotCosCutOff, float spotExponent, const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	SpotLight(const Vector3& spotDirection, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~SpotLight();
 
 	float getSpotCosCutOff() const;
 	void setSpotCosCutOff(float spotCosCutOff);
+	float getSpotCosCutOffOuter() const;
+	void setSpotCosCutOffOuter(float spotCosCutOffOuter);
 	const Vector3& getSpotDirection() const;
 	void setSpotDirection(const Vector3& spotDirection);
 	float getSpotExponent() const;
 	void setSpotExponent(float spotExponent);
 
-	virtual void setLightProperties(const ProgramSP& program) const;
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
 
 	virtual void updateLocation(const Point4& location);
 

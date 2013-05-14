@@ -8,6 +8,8 @@
 #ifndef PROGRAMMANAGERPROXY_H_
 #define PROGRAMMANAGERPROXY_H_
 
+#include "../../UsedLibs.h"
+
 #include "../../layer0/math/Matrix4x4.h"
 #include "../../layer1/camera/Camera.h"
 #include "../../layer1/light/Light.h"
@@ -23,6 +25,8 @@ private:
 public:
 
 	static void setLightByType(const std::string& programType, const LightSP& light);
+
+	static void setLightsByType(const std::string& programType, const std::vector<LightSP>& lights);
 
 	static void setCameraByType(const std::string& programType, const CameraSP& camera);
 
