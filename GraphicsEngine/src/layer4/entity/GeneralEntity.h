@@ -112,10 +112,6 @@ public:
 
 	//
 
-    virtual bool isWriteBrightColor() const = 0;
-    virtual float getBrightColorLimit() const = 0;
-    virtual float getRefractiveIndex() const = 0;
-
     virtual void setWriteBrightColor(bool writeBrightColor) = 0;
     virtual void setBrightColorLimit(float brightColorLimit) = 0;
     virtual void setRefractiveIndex(float refractiveIndex) = 0;

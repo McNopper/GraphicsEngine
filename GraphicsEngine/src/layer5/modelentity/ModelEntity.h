@@ -21,6 +21,8 @@
 class ModelEntity : public GeneralEntity, public NodeOwner
 {
 
+private:
+
 	bool writeBrightColor;
 	float brightColorLimit;
 
@@ -34,8 +36,6 @@ class ModelEntity : public GeneralEntity, public NodeOwner
 	Matrix3x3 bindNormalMatrices[MAX_MATRICES];
 	Matrix4x4 jointMatrices[MAX_MATRICES];
 	Matrix3x3 jointNormalMatrices[MAX_MATRICES];
-
-private:
 
 	boost::int32_t animStackIndex;
 	boost::int32_t animLayerIndex;
