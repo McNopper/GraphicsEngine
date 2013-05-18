@@ -4,6 +4,8 @@ using namespace std;
 
 static GroundPlane groundPlane;
 
+static bool wireframe = false;
+
 GLUSboolean initGame(GLUSvoid)
 {
 	if (!initEngine(GLUS_LOG_INFO, 7))
@@ -20,7 +22,11 @@ GLUSboolean initGame(GLUSvoid)
 
 	FbxEntityFactory entityFactory;
 
-	ModelEntitySP entity;
+	ModelEntitySP modelEntity;
+
+	GroundEntityFactory groundEntityFactory;
+
+	GroundEntitySP groundEntity;
 
 	SurfaceMaterialFactory surfaceMaterialFactory;
 	SurfaceMaterialSP surfaceMaterial;
@@ -39,27 +45,42 @@ GLUSboolean initGame(GLUSvoid)
 	// Building
 
 	filename = "Medieval_building.FBX";
-	entity = entityFactory.loadFbxFile("Medieval_building", filename, 1.0f);
-	if (!entity.get())
+	modelEntity = entityFactory.loadFbxFile("Medieval_building", filename, 1.0f);
+	if (!modelEntity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
 
 		return GLUS_FALSE;
 	}
 	position = Point4(0.0f, 0.0f, -10.0f);
-	entity->setPosition(position);
-	entity->setRotation(0.0f, 90.0f, 0.0f);
+	modelEntity->setPosition(position);
+	modelEntity->setRotation(0.0f, 90.0f, 0.0f);
 
-	entity->setUsePositionAsBoundingSphereCenter(true);
-	//entity->setDebug(true);
+	modelEntity->setUsePositionAsBoundingSphereCenter(true);
+	//modelEntity->setDebug(true);
 
-	// Light up the material a little bit
-	/*for (int32_t i = 0; i < entity->getModel()->getSurfaceMaterialCount(); i++)
-	{
-		entity->getModel()->getSurfaceMaterialAt(i)->setAmbient(Color(1.0f, 1.0f, 1.0f));
-	}*/
+	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
-	GeneralEntityManager::getInstance()->updateEntity(entity);
+	//
+
+	Texture2DSP stoneTexture = Texture2DManager::getInstance()->createTexture("rocks.jpg");
+	Texture2DSP displacementTexture = Texture2DManager::getInstance()->createTexture("rocks_NM_height.dds");
+
+	SurfaceMaterialSP stoneMaterial = surfaceMaterialFactory.createSurfaceMaterial("Stones", stoneTexture, displacementTexture);
+
+	groundEntity = groundEntityFactory.createGroundEntity("Stones", 8.0f, 8.0f, 8.0f, stoneMaterial);
+	groundEntity->setPosition(position);
+	groundEntity->setRotation(-90.0f, 0.0f, 0.0f);
+	// Repeat the texture four times
+	groundEntity->setRepeat(4.0f);
+	// Displace given unit
+	groundEntity->setDisplacementScale(0.01f);
+	// Tessellate depending on screen space
+	groundEntity->setScreenDistance(8.0f);
+
+	//groundEntity->setDebug(true);
+
+	GeneralEntityManager::getInstance()->updateEntity(groundEntity);
 
 	//
 	//
@@ -70,14 +91,17 @@ GLUSboolean initGame(GLUSvoid)
 	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(-1.0f, 0.0f, -1.0f), Color::BLACK, Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
-	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -1.0f, -1.0f), 0.95f, 0.90f, 2.0f, Point4(0.0f, 2.0f, 1.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
+	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -0.1f, -1.0f), 0.9f, 0.75f, 2.0f, Point4(0.0f, 1.0f, -5.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
-	//ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, directionalLight);
 	vector<LightSP> lights;
 	lights.push_back(directionalLight);
 	lights.push_back(spotLight);
 	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
+
+	// Position the user
+
+	User::defaultUser.setPosition(Point4(0.0f, 0.5f, 0.0f));
 
 	// Basic OpenGL settings
 
@@ -117,15 +141,31 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// Debug plane
 
+	glDepthMask(GL_FALSE);
 	groundPlane.draw(CameraManager::getInstance()->getDefaultPerspectiveCamera()->getEye(), Color::GREY);
+	glDepthMask(GL_TRUE);
 
 	// All the primitves
+
+	if (wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
 	GeneralEntityManager::getInstance()->render();
 
 	// FPS
 
 	FpsPrinter::printer.print(deltaTime);
+
+	// Debug Menu
+
+	FontSP font = FontManager::getInstance()->getFont("CourierNew");
+	font->print(760.0f, 10.0f, Color::RED, "Toggle wireframe: [Space]");
 
 	return GLUS_TRUE;
 }
@@ -156,6 +196,17 @@ GLUSvoid mouseMoveGame(GLUSint buttons, GLUSint xPos, GLUSint yPos)
 GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 {
 	glusLogPrint(GLUS_LOG_DEBUG, "key %d %d %c", pressed, key, (char)key);
+
+	if (!pressed)
+	{
+		if (key == ' ')
+		{
+			wireframe = !wireframe;
+
+			return;
+		}
+	}
+
 	keyEngine(pressed, key);
 }
 

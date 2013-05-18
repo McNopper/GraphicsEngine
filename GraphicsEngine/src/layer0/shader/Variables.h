@@ -55,6 +55,14 @@
 #define u_hasCubeMapTexture "u_hasCubeMapTexture"
 #define u_hasDynamicCubeMapTexture "u_hasDynamicCubeMapTexture"
 
+#define u_convertDirectX "u_convertDirectX"
+#define u_doTessellate "u_doTessellate"
+#define u_repeat "u_repeat"
+#define u_displacementScale "u_displacementScale"
+#define u_width "u_width"
+#define u_height "u_height"
+#define u_screenDistance "u_screenDistance"
+
 #define u_writeBrightColor "u_writeBrightColor"
 #define u_brightColorLimit "u_brightColorLimit"
 

@@ -58,6 +58,8 @@ uniform	int u_hasNormalMapTexture;
 uniform	int u_hasCubeMapTexture;
 uniform	int u_hasDynamicCubeMapTexture;
 
+uniform int u_convertDirectX;
+
 uniform	int u_writeBrightColor;
 uniform	float u_brightColorLimit;
 
@@ -100,13 +102,19 @@ void main(void)
 		vec3 normalTextureSpace = normalize(texture2D(u_material.normalMapTexture, v_texCoord).xyz * 2.0 - 1.0);
 		mat3 textureToWorldSpace = mat3(normalize(v_tangent), normalize(v_bitangent), normalize(v_normal));	
 		vec3 normalDX = textureToWorldSpace * normalTextureSpace;
-		// DirectX to OpenGL tangent space
-		normal.x = dot(vec3(1.0, 0.0, 0.0), normalDX);
-		normal.y = dot(vec3(0.0, -1.0, 0.0), normalDX);
-		normal.z = dot(vec3(0.0, 0.0, 1.0), normalDX);
+		if (u_convertDirectX != 0)
+		{
+			// DirectX to OpenGL tangent space
+			normal.x = dot(vec3(1.0, 0.0, 0.0), normalDX);
+			normal.y = dot(vec3(0.0, -1.0, 0.0), normalDX);
+			normal.z = dot(vec3(0.0, 0.0, 1.0), normalDX);
+		}
+		else
+		{
+			normal = normalDX; 
+		}
 	}
-	
-	
+		
 	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 	
 	vec3 eyeDirection = normalize(u_eyePosition.xyz - v_vertex.xyz);

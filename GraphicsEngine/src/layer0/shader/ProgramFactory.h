@@ -30,6 +30,10 @@ public:
 
 	ProgramSP createSkyProgram() const;
 
+	ProgramSP createGroundProgram() const;
+
+	ProgramSP createGroundRenderToCubeMapProgram() const;
+
 };
 
 #endif /* PROGRAMFACTORY_H_ */

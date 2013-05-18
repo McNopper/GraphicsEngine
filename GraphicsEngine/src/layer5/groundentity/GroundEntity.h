@@ -10,8 +10,9 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer1/material/SurfaceMaterial.h"
+#include "../../layer2/ground/Ground.h"
 #include "../../layer4/entity/GeneralEntity.h"
-#include "../../layer4/ground/Ground.h"
 
 class GroundEntity : public GeneralEntity
 {
@@ -23,11 +24,23 @@ private:
 
 	float refractiveIndex;
 
+	float repeat;
+
+	float displacementScale;
+
+	bool transparent;
+
+	bool tessellate;
+
+	float screenDistance;
+
 	GroundSP ground;
+
+	SurfaceMaterialSP surfaceMaterial;
 
 public:
 
-	GroundEntity(const std::string& name, const GroundSP& ground, float scaleX, float scaleY, float scaleZ);
+	GroundEntity(const std::string& name, const GroundSP& ground, const SurfaceMaterialSP& surfaceMaterial, float scaleX, float scaleY, float scaleZ);
 	virtual ~GroundEntity();
 
 	virtual void updateBoundingSphereCenter(bool force = false);
@@ -38,6 +51,32 @@ public:
 	virtual void setBrightColorLimit(float brightColorLimit);
 	virtual void setRefractiveIndex(float refractiveIndex);
 
+	const SurfaceMaterialSP& getSurfaceMaterial() const;
+
+	void setSurfaceMaterial(const SurfaceMaterialSP& surfaceMaterial);
+
+	float getRepeat() const;
+
+	void setRepeat(float repeat);
+
+	float getDisplacementScale() const;
+
+	void setDisplacementScale(float displacementScale);
+
+	bool isTransparent() const;
+
+	void setTransparent(bool transparent);
+
+	bool isTessellate() const;
+
+	void setTessellate(bool tessellate);
+
+	float getScreenDistance() const;
+
+	void setScreenDistance(float screenDistance);
+
 };
+
+typedef boost::shared_ptr<GroundEntity> GroundEntitySP;
 
 #endif /* GROUNDENTITY_H_ */

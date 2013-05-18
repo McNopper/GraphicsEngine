@@ -58,7 +58,5 @@ const ModelSP& ModelManager::getModelByKey(const string& key) const
 
 void ModelManager::setModel(const string& key, const ModelSP& model)
 {
-	ModelSP currentModel = allModels[key];
-
 	allModels[key] = model;
 }

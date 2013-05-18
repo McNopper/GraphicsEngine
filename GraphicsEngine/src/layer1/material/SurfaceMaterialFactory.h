@@ -21,6 +21,8 @@ public:
 	SurfaceMaterialFactory();
 	virtual ~SurfaceMaterialFactory();
 
+	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Texture2DSP& diffuseTexture, const Texture2DSP& displacementTexture) const;
+
 	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& diffuse) const;
 
 	SurfaceMaterialSP createSurfaceMaterial(const std::string& name, const Color& emissive, const Color& ambient, const Color& diffuse, const Color& specular, float shininess) const;

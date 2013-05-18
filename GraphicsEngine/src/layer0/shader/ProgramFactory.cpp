@@ -86,4 +86,20 @@ ProgramSP ProgramFactory::createSkyProgram() const
 	return program;
 }
 
+ProgramSP ProgramFactory::createGroundProgram() const
+{
+	ProgramSP program;
 
+	program = ProgramManager::getInstance()->getVertexControlEvaluateGeometryFragmentProgramBy("../GraphicsEngine/shader/Ground.vert.glsl", "../GraphicsEngine/shader/Ground.cont.glsl", "../GraphicsEngine/shader/Ground.eval.glsl", "../GraphicsEngine/shader/Ground.geom.glsl", "../GraphicsEngine/shader/Phong.frag.glsl");
+
+	return program;
+}
+
+ProgramSP ProgramFactory::createGroundRenderToCubeMapProgram() const
+{
+	ProgramSP program;
+
+	program = ProgramManager::getInstance()->getVertexControlEvaluateGeometryFragmentProgramBy("../GraphicsEngine/shader/Ground.vert.glsl", "../GraphicsEngine/shader/Ground.cont.glsl", "../GraphicsEngine/shader/Ground.eval.glsl", "../GraphicsEngine/shader/GroundToCubeMap.geom.glsl", "../GraphicsEngine/shader/Phong.frag.glsl", ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE);
+
+	return program;
+}

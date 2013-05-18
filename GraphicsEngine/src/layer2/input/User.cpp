@@ -236,3 +236,23 @@ float User::getZoomingFactor() const {
 void User::setZoomingFactor(float zoomingFactor) {
 	this->zoomingFactor = zoomingFactor;
 }
+
+const Point4& User::getPosition() const
+{
+	return position;
+}
+
+void User::setPosition(const Point4& position)
+{
+	this->position = position;
+}
+
+const Quaternion& User::getRotation() const
+{
+	return rotation;
+}
+
+void User::setRotation(const Quaternion& rotation)
+{
+	this->rotation = rotation;
+}

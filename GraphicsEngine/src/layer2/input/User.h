@@ -74,6 +74,13 @@ public:
 	void setRotationFactor(float rotationFactor);
 	float getZoomingFactor() const;
 	void setZoomingFactor(float zoomingFactor);
+
+	const Point4& getPosition() const;
+	void setPosition(const Point4& position);
+
+	const Quaternion& getRotation() const;
+	void setRotation(const Quaternion& rotation);
+
 };
 
 #endif /* USER_H_ */

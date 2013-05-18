@@ -809,6 +809,8 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 				glActiveTexture(GL_TEXTURE0);
 			}
 
+			glUniform1i(currentProgram->getUniformLocation(u_convertDirectX), currentSurfaceMaterial->isConvertDirectX());
+
 			glUniform4fv(currentProgram->getUniformLocation(u_reflectionColor), 1, currentReflection);
 			glUniform4fv(currentProgram->getUniformLocation(u_refractionColor), 1, currentRefraction);
 

@@ -17,6 +17,20 @@ SurfaceMaterialFactory::~SurfaceMaterialFactory()
 {
 }
 
+SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Texture2DSP& diffuseTexture, const Texture2DSP& displacementTexture) const
+{
+	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));
+
+	surfaceMaterial->setDiffuse(Color::WHITE);
+
+	surfaceMaterial->setDiffuseTexture(diffuseTexture);
+	surfaceMaterial->setDisplacementMapTexture(displacementTexture);
+
+	surfaceMaterial->setConvertDirectX(false);
+
+	return surfaceMaterial;
+}
+
 SurfaceMaterialSP SurfaceMaterialFactory::createSurfaceMaterial(const string& name, const Color& diffuse) const
 {
 	SurfaceMaterialSP surfaceMaterial = SurfaceMaterialSP(new SurfaceMaterial(name));

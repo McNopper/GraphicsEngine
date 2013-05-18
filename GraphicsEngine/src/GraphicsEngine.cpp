@@ -98,6 +98,7 @@ GLUSvoid terminateEngine(GLUSvoid)
 	PostProcessor2DMultisampleManager::terminate();
 
 	SkyManager::terminate();
+	GroundManager::terminate();
 	FontManager::terminate();
 	FrameBuffer2DManager::terminate();
 	FrameBuffer2DMultisampleManager::terminate();

@@ -10,7 +10,7 @@
 using namespace std;
 
 SurfaceMaterial::SurfaceMaterial(const string& name) :
-	name(name), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(1.0f), normalMapTexture(), dynamicCubeMapTexture()
+	name(name), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(1.0f), normalMapTexture(), displacementMapTexture(), dynamicCubeMapTexture(), convertDirectX(true)
 {
 }
 
@@ -138,6 +138,16 @@ GLuint SurfaceMaterial::getNormalMapTextureName() const
 	return 0;
 }
 
+GLuint SurfaceMaterial::getDisplacementMapTextureName() const
+{
+	if (displacementMapTexture.get())
+	{
+		return displacementMapTexture->getTextureName();
+	}
+
+	return 0;
+}
+
 GLuint SurfaceMaterial::getDynamicCubeMapTextureName() const
 {
 	if (dynamicCubeMapTexture.get())
@@ -228,6 +238,11 @@ void SurfaceMaterial::setNormalMapTexture(const Texture2DSP& normalMapTexture)
 	this->normalMapTexture = normalMapTexture;
 }
 
+void SurfaceMaterial::setDisplacementMapTexture(const Texture2DSP& displacementMapTexture)
+{
+	this->displacementMapTexture = displacementMapTexture;
+}
+
 void SurfaceMaterial::setDynamicCubeMapTexture(const TextureCubeMapSP& dynamicCubeMapTexture)
 {
 	this->dynamicCubeMapTexture = dynamicCubeMapTexture;
@@ -253,6 +268,11 @@ const Texture2DSP& SurfaceMaterial::getNormalMapTexture() const
 	return normalMapTexture;
 }
 
+const Texture2DSP& SurfaceMaterial::getDisplacementMapTexture() const
+{
+	return displacementMapTexture;
+}
+
 const Texture2DSP& SurfaceMaterial::getReflectionTexture() const
 {
 	return reflectionTexture;
@@ -273,3 +293,12 @@ const TextureCubeMapSP& SurfaceMaterial::getDynamicCubeMapTexture() const
 	return dynamicCubeMapTexture;
 }
 
+bool SurfaceMaterial::isConvertDirectX() const
+{
+	return convertDirectX;
+}
+
+void SurfaceMaterial::setConvertDirectX(bool convertDirectX)
+{
+	this->convertDirectX = convertDirectX;
+}

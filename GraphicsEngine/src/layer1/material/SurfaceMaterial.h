@@ -48,7 +48,11 @@ private:
 
 	Texture2DSP normalMapTexture;
 
+	Texture2DSP displacementMapTexture;
+
 	TextureCubeMapSP dynamicCubeMapTexture;
+
+	bool convertDirectX;
 
 public:
 
@@ -90,6 +94,9 @@ public:
 	const Texture2DSP& getNormalMapTexture() const;
     GLuint getNormalMapTextureName() const;
 
+	const Texture2DSP& getDisplacementMapTexture() const;
+    GLuint getDisplacementMapTextureName() const;
+
 	const TextureCubeMapSP& getDynamicCubeMapTexture() const;
     GLuint getDynamicCubeMapTextureName() const;
 
@@ -119,8 +126,13 @@ public:
 
     void setNormalMapTexture(const Texture2DSP& normalMapTexture);
 
+    void setDisplacementMapTexture(const Texture2DSP& displacementMapTexture);
+
     void setDynamicCubeMapTexture(const TextureCubeMapSP& dynamicCubeMapTexture);
 
+	bool isConvertDirectX() const;
+
+	void setConvertDirectX(bool convertDirectX);
 };
 
 typedef boost::shared_ptr<SurfaceMaterial> SurfaceMaterialSP;
