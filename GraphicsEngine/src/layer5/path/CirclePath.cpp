@@ -100,7 +100,7 @@ void CirclePath::start()
 	setLocation(startLocation);
 }
 
-bool CirclePath::update(float deltaTime, Geometry& geometry, bool updateOrientation)
+bool CirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
 {
 	float elapsedAngle= updateTransform();
 

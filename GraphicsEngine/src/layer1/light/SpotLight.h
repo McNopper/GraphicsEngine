@@ -38,11 +38,7 @@ public:
 
 	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
 
-	virtual void updateLocation(const Point4& location);
-
-	virtual void updateOrientation(const Quaternion& orientation);
-
-	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
+	virtual void setRotation(const Quaternion& rotation);
 
 };
 

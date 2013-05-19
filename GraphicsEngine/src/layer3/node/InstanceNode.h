@@ -10,6 +10,9 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/math/Matrix3x3.h"
+#include "../../layer0/math/Matrix4x4.h"
+
 class InstanceNode
 {
 
@@ -24,6 +27,10 @@ private:
 
 	bool transparent;
 	bool transparentActive;
+
+	Matrix4x4 modelMatrix;
+
+	Matrix3x3 normalModelMatrix;
 
 	std::vector<boost::shared_ptr<InstanceNode> > allChilds;
 

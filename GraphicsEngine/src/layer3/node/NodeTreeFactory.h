@@ -10,6 +10,8 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer1/camera/Camera.h"
+#include "../../layer1/light/Light.h"
 #include "../../layer2/animation/AnimationStack.h"
 #include "../../layer2/mesh/Mesh.h"
 #include "Node.h"
@@ -33,9 +35,9 @@ public:
 
 	NodeSP getRootNode() const;
 
-	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, const MeshSP& mesh, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
+	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
 
-	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
+	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
 
 	boost::int32_t createIndex() const;
 

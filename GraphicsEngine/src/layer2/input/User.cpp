@@ -46,6 +46,16 @@ void User::setUserCamera(const CameraSP& userCamera)
 {
 	this->userCamera = userCamera;
 
+	if (userCamera.get())
+	{
+		this->position = userCamera->getEye();
+		this->direction = userCamera->getDirection();
+		this->up = userCamera->getUp();
+		this->left = up.cross(direction);
+
+		this->rotation = userCamera->getRotation();
+	}
+
 	dirtyFlag = true;
 }
 

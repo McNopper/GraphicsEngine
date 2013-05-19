@@ -5,6 +5,8 @@
  *      Author: nopper
  */
 
+#include "../../layer1/camera/Camera.h"
+#include "../../layer1/light/Light.h"
 #include "../../layer2/mesh/MeshFactory.h"
 #include "../../layer3/node/Node.h"
 #include "../../layer3/node/NodeTreeFactory.h"
@@ -32,7 +34,7 @@ ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boun
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks, joint);
 
 	return ModelSP(new Model(boundingSphere, node, 0, false, false));
 }
@@ -47,7 +49,7 @@ ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boun
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks, joint);
 
 	return ModelSP(new Model(boundingSphere, node, 0, true, false));
 }

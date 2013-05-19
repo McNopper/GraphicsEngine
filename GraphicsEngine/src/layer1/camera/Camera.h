@@ -10,7 +10,6 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Quaternion.h"
 #include "../../layer0/math/Vector3.h"
@@ -97,13 +96,7 @@ public:
 
 	void setCameraProperties(const ProgramSP& program) const;
 
-	//
-
-	virtual void updateLocation(const Point4& location);
-
-	virtual void updateOrientation(const Quaternion& orientation);
-
-	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
+	Quaternion getRotation() const;
 
 };
 

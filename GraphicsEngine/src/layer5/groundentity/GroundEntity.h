@@ -19,11 +19,6 @@ class GroundEntity : public GeneralEntity
 
 private:
 
-	bool writeBrightColor;
-	float brightColorLimit;
-
-	float refractiveIndex;
-
 	float repeat;
 
 	float displacementScale;
@@ -46,10 +41,6 @@ public:
 	virtual void updateBoundingSphereCenter(bool force = false);
 	virtual void update();
 	virtual void render() const;
-
-	virtual void setWriteBrightColor(bool writeBrightColor);
-	virtual void setBrightColorLimit(float brightColorLimit);
-	virtual void setRefractiveIndex(float refractiveIndex);
 
 	const SurfaceMaterialSP& getSurfaceMaterial() const;
 

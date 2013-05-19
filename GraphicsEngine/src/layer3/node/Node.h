@@ -12,6 +12,8 @@
 
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer0/math/Matrix4x4.h"
+#include "../../layer1/camera/Camera.h"
+#include "../../layer1/light/Light.h"
 #include "../../layer2/animation/AnimationStack.h"
 #include "../../layer2/mesh/Mesh.h"
 #include "InstanceNode.h"
@@ -52,6 +54,10 @@ private:
 	float scale[3];
 
 	MeshSP mesh;
+
+	CameraSP camera;
+
+	LightSP light;
 
 	std::vector<boost::shared_ptr<AnimationStack> > allAnimStacks;
 
@@ -103,7 +109,7 @@ private:
 
 public:
 
-	Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
+	Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
 	virtual ~Node();
 
 	const MeshSP& getMesh() const;
@@ -131,7 +137,9 @@ public:
 
 	void updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
-	void render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	void updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+
+	void render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
 	const Matrix4x4& getGeometricTransform() const;
 

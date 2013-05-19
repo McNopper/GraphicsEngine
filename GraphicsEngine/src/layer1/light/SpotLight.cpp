@@ -48,6 +48,16 @@ const Vector3& SpotLight::getSpotDirection() const
 void SpotLight::setSpotDirection(const Vector3& spotDirection)
 {
 	this->spotDirection = spotDirection;
+	this->spotDirection.normalize();
+
+	Quaternion rotation;
+
+	float alpha = acosf(Vector3(-1.0f, 0.0f, 0.0f).dot(spotDirection));
+	float beta = acosf(Vector3(0.0f, 1.0f, 0.0f).dot(spotDirection));
+
+	rotation.rotateRzRyRxf(0.0f, glusRadToDegf(alpha), 90.0f - glusRadToDegf(beta));
+
+	Light::setRotation(rotation);
 }
 
 float SpotLight::getSpotExponent() const
@@ -80,20 +90,9 @@ void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progra
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotExponent), spotExponent);
 }
 
-void SpotLight::updateLocation(const Point4& location)
+void SpotLight::setRotation(const Quaternion& rotation)
 {
-	position = location;
+	Light::setRotation(rotation);
+
+	this->spotDirection = rotation * Vector3(0.0f, 0.0f, -1.0f);
 }
-
-void SpotLight::updateOrientation(const Quaternion& orientation)
-{
-	spotDirection = orientation * Vector3(0.0f, 0.0f, -1.0f);
-}
-
-void SpotLight::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
-{
-	position = location;
-
-	spotDirection = orientation * Vector3(0.0f, 0.0f, -1.0f);
-}
-

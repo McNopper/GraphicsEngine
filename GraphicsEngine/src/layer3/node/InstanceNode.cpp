@@ -12,7 +12,7 @@ using namespace std;
 using namespace boost;
 
 InstanceNode::InstanceNode(const string& name) :
-	name(name), visible(true), visibleActive(false), transparent(false), transparentActive(false), allChilds()
+	name(name), visible(true), visibleActive(false), transparent(false), transparentActive(false), modelMatrix(), normalModelMatrix(), allChilds()
 {
 }
 

@@ -25,7 +25,7 @@ void LinePath::start()
 	goToEnd = true;
 }
 
-bool LinePath::update(float deltaTime, Geometry& geometry, bool updateOrientation)
+bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
 {
 	bool result = false;
 

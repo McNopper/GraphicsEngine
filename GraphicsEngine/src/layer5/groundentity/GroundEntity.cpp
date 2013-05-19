@@ -7,7 +7,6 @@
 
 #include "../../layer0/shader/Variables.h"
 #include "../../layer1/debug/DebugDraw.h"
-#include "../../layer1/material/RefractiveIndices.h"
 #include "../../layer2/environment/Sky.h"
 #include "../../layer2/environment/SkyManager.h"
 
@@ -18,7 +17,7 @@ using namespace boost;
 using namespace std;
 
 GroundEntity::GroundEntity(const string& name, const GroundSP& ground, const SurfaceMaterialSP& surfaceMaterial, float scaleX, float scaleY, float scaleZ) :
-		GeneralEntity(name, scaleX, scaleY, scaleZ), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), repeat(1.0f), displacementScale(1.0f), transparent(false), tessellate(true), screenDistance(8.0f), ground(ground), surfaceMaterial(surfaceMaterial)
+		GeneralEntity(name, scaleX, scaleY, scaleZ), repeat(1.0f), displacementScale(1.0f), transparent(false), tessellate(true), screenDistance(8.0f), ground(ground), surfaceMaterial(surfaceMaterial)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -283,21 +282,6 @@ void GroundEntity::render() const
 	{
 		DebugDraw::drawer.draw(getBoundingSphere(), Color::RED, isDebugAsMesh());
 	}
-}
-
-void GroundEntity::setWriteBrightColor(bool writeBrightColor)
-{
-	this->writeBrightColor = writeBrightColor;
-}
-
-void GroundEntity::setBrightColorLimit(float brightColorLimit)
-{
-	this->brightColorLimit = brightColorLimit;
-}
-
-void GroundEntity::setRefractiveIndex(float refractiveIndex)
-{
-	this->refractiveIndex = refractiveIndex;
 }
 
 const SurfaceMaterialSP& GroundEntity::getSurfaceMaterial() const

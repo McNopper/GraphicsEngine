@@ -48,6 +48,18 @@ Quaternion::Quaternion(float angle, const Vector3& axis) :
 	glusQuaternionRotatef(q, angle, axis.getX(), axis.getY(), axis.getZ());
 }
 
+Quaternion::Quaternion(const Matrix3x3& matrix) :
+	dirtyFlag(true)
+{
+	float angles[3];
+
+	glusQuaternionIdentityf(q);
+
+	glusMatrix3x3GetEulerRzRyRxf(angles, matrix.m);
+
+	glusQuaternionRotateRzRyRxf(q, angles[2], angles[1], angles[0]);
+}
+
 Quaternion::~Quaternion()
 {
 }

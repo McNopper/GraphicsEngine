@@ -27,6 +27,8 @@ public:
 	const Vector3& getDirection() const;
 	void setDirection(const Vector3& direction);
 
+	virtual void setRotation(const Quaternion& rotation);
+
 	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
 
 };

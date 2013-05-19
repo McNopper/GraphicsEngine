@@ -13,6 +13,8 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/texture/Texture2D.h"
+#include "../../layer1/camera/Camera.h"
+#include "../../layer1/light/Light.h"
 #include "../../layer1/material/SurfaceMaterial.h"
 #include "../../layer2/animation/AnimationStack.h"
 #include "../../layer2/mesh/Mesh.h"

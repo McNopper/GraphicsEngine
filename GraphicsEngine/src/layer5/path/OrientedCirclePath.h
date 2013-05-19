@@ -20,7 +20,7 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, Geometry& geometry, bool updateOrientation = true);
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true);
 
 public:
 

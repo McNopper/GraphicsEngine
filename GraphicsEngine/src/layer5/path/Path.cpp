@@ -36,13 +36,13 @@ void Path::continuePath()
 	paused = false;
 }
 
-bool Path::updatePath(float deltaTime, Geometry& geometry)
+bool Path::updatePath(float deltaTime, const GeneralEntitySP& entity)
 {
 	if (!paused && !ended)
 	{
 		elapsedTime += deltaTime;
 
-		ended = update(deltaTime, geometry);
+		ended = update(deltaTime, entity);
 	}
 
 	return ended;

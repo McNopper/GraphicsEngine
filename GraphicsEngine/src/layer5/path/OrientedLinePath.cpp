@@ -21,9 +21,9 @@ void OrientedLinePath::start()
 	LinePath::start();
 }
 
-bool OrientedLinePath::update(float deltaTime, Geometry& geometry, bool updateOrientation)
+bool OrientedLinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
 {
-	bool result = LinePath::update(deltaTime, geometry, false);
+	bool result = LinePath::update(deltaTime, entity, false);
 
 	float rotY = -glusRadToDegf(asinf(direction.getX()));
 	float rotX = glusRadToDegf(asinf(direction.getY()));

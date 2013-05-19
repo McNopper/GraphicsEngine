@@ -63,7 +63,7 @@ NodeSP NodeTreeFactory::getRootNode() const
 	return rootNode;
 }
 
-NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const MeshSP& mesh, const vector<AnimationStackSP>& allAnimStacks, bool joint)
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint)
 {
 	float translate[3] = {0.0f, 0.0f, 0.0f};
 	float rotateOffset[3] = {0.0f, 0.0f, 0.0f};
@@ -78,14 +78,14 @@ NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentN
 	float geoRotate[3] = {0.0f, 0.0f, 0.0f};
 	float geoScale[3] = {1.0f, 1.0f, 1.0f};
 
-	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, allAnimStacks, joint);
+	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks, joint);
 }
 
-NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const vector<AnimationStackSP>& allAnimStacks, bool joint)
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint)
 {
 	NodeSP parentNode = findNode(parentNodeName, rootNode);
 
-	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, allAnimStacks, joint));
+	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks, joint));
 
 	if (parentNode.get())
 	{

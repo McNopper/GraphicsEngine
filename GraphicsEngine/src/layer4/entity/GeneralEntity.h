@@ -10,13 +10,13 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/math/Geometry.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer1/collision/BoundingSphere.h"
+#include "../../layer1/material/RefractiveIndices.h"
 #include "../../layer3/octree/OctreeEntity.h"
 
-class GeneralEntity : public OctreeEntity, public Geometry
+class GeneralEntity : public OctreeEntity
 {
 
 private:
@@ -50,6 +50,11 @@ protected:
 	static float currentDeltaTime;
 	static std::string currentProgramType;
 
+	bool writeBrightColor;
+	float brightColorLimit;
+
+	float refractiveIndex;
+
 	void updateMetrics();
 
     void setBoundingSphereCenter(const Point4& center);
@@ -67,19 +72,18 @@ public:
     void setBoundingSphere(const BoundingSphere& boundingSphere);
 
     const Point4& getPosition() const;
-    void setPosition(const Point4& position);
+    virtual void setPosition(const Point4& position);
 
-    void setRotation(float angleX, float angleY, float angleZ);
-    void setRotation(const Quaternion& rotation);
+    virtual void setRotation(float angleX, float angleY, float angleZ);
+    virtual void setRotation(const Quaternion& rotation);
 
-    void setScale(float scaleX, float scaleY, float scaleZ);
+	virtual void setPositionOrientation(const Point4& position, const Quaternion& orientation);
+
+	virtual void setScale(float scaleX, float scaleY, float scaleZ);
 
     float getScaleX() const;
     float getScaleY() const;
     float getScaleZ() const;
-
-    void setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ);
-    void setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ);
 
     virtual bool isUpdateable() const;
     virtual void setUpdateable(bool updateable);
@@ -104,17 +108,9 @@ public:
 
 	//
 
-	virtual void updateLocation(const Point4& location);
-
-	virtual void updateOrientation(const Quaternion& orientation);
-
-	virtual void updateLocationOrientation(const Point4& location, const Quaternion& orientation);
-
-	//
-
-    virtual void setWriteBrightColor(bool writeBrightColor) = 0;
-    virtual void setBrightColorLimit(float brightColorLimit) = 0;
-    virtual void setRefractiveIndex(float refractiveIndex) = 0;
+    void setWriteBrightColor(bool writeBrightColor);
+    void setBrightColorLimit(float brightColorLimit);
+    void setRefractiveIndex(float refractiveIndex);
 
 };
 

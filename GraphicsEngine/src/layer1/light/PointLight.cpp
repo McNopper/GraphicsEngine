@@ -13,22 +13,13 @@ using namespace std;
 
 PointLight::PointLight(const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 		const Color& specular) :
-		Light(ambient, diffuse, specular), position(position), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
+		Light(ambient, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
 {
+	setPosition(position);
 }
 
 PointLight::~PointLight()
 {
-}
-
-const Point4& PointLight::getPosition() const
-{
-	return position;
-}
-
-void PointLight::setPosition(const Point4& position)
-{
-	this->position = position;
 }
 
 float PointLight::getConstantAttenuation() const
@@ -74,19 +65,4 @@ void PointLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progr
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightConstantAttenuation), constantAttenuation);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightLinearAttenuation), linearAttenuation);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightQuadraticAttenuation), quadraticAttenuation);
-}
-
-void PointLight::updateLocation(const Point4& location)
-{
-	position = location;
-}
-
-void PointLight::updateOrientation(const Quaternion& orientation)
-{
-	// Do nothing
-}
-
-void PointLight::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
-{
-	position = location;
 }

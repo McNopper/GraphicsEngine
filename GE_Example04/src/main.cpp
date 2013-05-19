@@ -69,7 +69,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Path animation
 
 	PathSP path = PathSP(new OrientedLinePath(Quaternion(), entity->getPosition(), entity->getPosition() + Vector3(5.0f, 5.0f, -5.0f)));
-	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	PathEntityManager::getInstance()->addEntity(entity, path);
 	path->setSpeed(4.0f);
 	path->setLooping(true);
 	path->startPath();
@@ -99,7 +99,7 @@ GLUSboolean initGame(GLUSvoid)
 	Quaternion baseRotation(90.0f, Vector3(0.0f, 1.0f, 0.0f));
 
 	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -5.0f), false));
-	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	PathEntityManager::getInstance()->addEntity(entity, path);
 	path->setSpeed(2.5f);
 	path->setLooping(true);
 	path->startPath();
@@ -129,7 +129,7 @@ GLUSboolean initGame(GLUSvoid)
 	baseRotation = Quaternion(-90.0f, Vector3(1.0f, 1.0f, 0.0f));
 
 	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -3.0f), true, Vector3(1.0f, 1.0f, 0.0f)));
-	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	PathEntityManager::getInstance()->addEntity(entity, path);
 	path->setSpeed(5.0f);
 	path->setLooping(true);
 	path->startPath();
@@ -150,7 +150,7 @@ GLUSboolean initGame(GLUSvoid)
 	baseRotation = Quaternion(90.0f, Vector3(-1.0f, 1.0f, 0.0f));
 
 	path = PathSP(new OrientedCirclePath(baseRotation, entity->getPosition(), entity->getPosition() + Vector3(0.0f, 0.0f, -4.0f), false, Vector3(-1.0f, 1.0f, 0.0f)));
-	PathEntityManager::getInstance()->addEntity(entity.get(), path);
+	PathEntityManager::getInstance()->addEntity(entity, path);
 	path->setSpeed(3.0f);
 	path->setLooping(true);
 	path->startPath();

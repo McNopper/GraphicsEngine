@@ -26,7 +26,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1)
+	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1), dirty(true)
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -42,7 +42,6 @@ ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX,
 		model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices);
 		model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), 0.0f, getAnimStackIndex(), getAnimLayerIndex());
 	}
-
 	rootInstanceNode = InstanceNodeSP(new InstanceNode(model->getRootNode()->getName()));
 	model->getRootNode()->updateInstanceNode(rootInstanceNode);
 
@@ -109,12 +108,21 @@ void ModelEntity::update()
 		{
 			model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), time, getAnimStackIndex(), getAnimLayerIndex());
 		}
+
+		dirty = true;
+	}
+
+	if (dirty)
+	{
+		model->getRootNode()->updateRenderMatrix(*this, *rootInstanceNode, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
+
+		dirty = false;
 	}
 }
 
 void ModelEntity::render() const
 {
-	model->getRootNode()->render(*this, *rootInstanceNode, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
+	model->getRootNode()->render(*this, *rootInstanceNode, time, getAnimStackIndex(), getAnimLayerIndex());
 
 	if (isDebug())
 	{
@@ -151,21 +159,6 @@ float ModelEntity::getBrightColorLimit() const
 float ModelEntity::getRefractiveIndex() const
 {
 	return refractiveIndex;
-}
-
-void ModelEntity::setWriteBrightColor(bool writeBrightColor)
-{
-	this->writeBrightColor = writeBrightColor;
-}
-
-void ModelEntity::setBrightColorLimit(float brightColorLimit)
-{
-	this->brightColorLimit = brightColorLimit;
-}
-
-void ModelEntity::setRefractiveIndex(float refractiveIndex)
-{
-	this->refractiveIndex = refractiveIndex;
 }
 
 const ModelSP& ModelEntity::getModel() const

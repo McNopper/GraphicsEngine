@@ -8,7 +8,7 @@
 #include "Light.h"
 
 Light::Light(const Color& ambient, const Color& diffuse, const Color& specular) :
-		ambient(ambient), diffuse(diffuse), specular(specular)
+		ambient(ambient), diffuse(diffuse), specular(specular), position(), rotation()
 {
 }
 
@@ -44,4 +44,24 @@ const Color& Light::getSpecular() const
 void Light::setSpecular(const Color& specular)
 {
 	this->specular = specular;
+}
+
+const Point4& Light::getPosition() const
+{
+	return position;
+}
+
+void Light::setPosition(const Point4& position)
+{
+	this->position = position;
+}
+
+const Quaternion& Light::getRotation() const
+{
+	return rotation;
+}
+
+void Light::setRotation(const Quaternion& rotation)
+{
+	this->rotation = rotation;
 }

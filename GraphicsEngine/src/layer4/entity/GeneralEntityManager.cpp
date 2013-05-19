@@ -194,6 +194,7 @@ void GeneralEntityManager::updateEntity(const GeneralEntitySP& entity)
 		{
 			octree->updateEntity(entity);
 		}
+		entity->update();
 	}
 	walker = find(allUpdatableEntities.begin(), allUpdatableEntities.end(), entity);
 

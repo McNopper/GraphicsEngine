@@ -30,9 +30,9 @@ void OrientedCirclePath::start()
 	setOrientation(orientation * baseRotation);
 }
 
-bool OrientedCirclePath::update(float deltaTime, Geometry& geometry, bool updateOrientation)
+bool OrientedCirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
 {
-	bool result = CirclePath::update(deltaTime, geometry, false);
+	bool result = CirclePath::update(deltaTime, entity, false);
 
 	Quaternion orientation(elapsedAngle, rotationAxis);
 

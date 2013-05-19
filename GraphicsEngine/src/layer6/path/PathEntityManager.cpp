@@ -47,14 +47,14 @@ void PathEntityManager::terminate()
 	}
 }
 
-void PathEntityManager::addEntity(Geometry* geometry, const PathSP& path)
+void PathEntityManager::addEntity(const GeneralEntitySP& entity, const PathSP& path)
 {
-	allPaths[geometry] = path;
+	allPaths[entity] = path;
 }
 
-PathSP PathEntityManager::findPath(Geometry* geometry) const
+PathSP PathEntityManager::findPath(const GeneralEntitySP& entity) const
 {
-	auto result = allPaths.find(geometry);
+	auto result = allPaths.find(entity);
 
 	if (result != allPaths.end())
 	{
@@ -64,19 +64,19 @@ PathSP PathEntityManager::findPath(Geometry* geometry) const
 	return PathSP();
 }
 
-bool PathEntityManager::updateEntity(Geometry* geometry, float deltaTime)
+bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaTime)
 {
 	if (deltaTime == 0.0f)
 	{
 		return false;
 	}
 
-	if (!geometry)
+	if (!entity.get())
 	{
 		return false;
 	}
 
-	auto result = allPaths.find(geometry);
+	auto result = allPaths.find(entity);
 
 	if (result == allPaths.end())
 	{
@@ -95,11 +95,11 @@ bool PathEntityManager::updateEntity(Geometry* geometry, float deltaTime)
 		return false;
 	}
 
-	path->updatePath(deltaTime, *geometry);
+	path->updatePath(deltaTime, entity);
 
 	if (!path->isPaused())
 	{
-		geometry->updateLocationOrientation(path->getLocation(), path->getOrientation());
+		entity->setPositionOrientation(path->getLocation(), path->getOrientation());
 	}
 
 	return true;

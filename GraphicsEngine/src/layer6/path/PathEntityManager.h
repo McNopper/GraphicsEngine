@@ -8,9 +8,8 @@
 #ifndef PATHENTITYMANAGER_H_
 #define PATHENTITYMANAGER_H_
 
-#include "../../layer0/math/Geometry.h"
-#include "../../layer2/path/Path.h"
-#include "../../layer5/modelentity/ModelEntity.h"
+#include "../../layer4/entity/GeneralEntity.h"
+#include "../../layer5/path/Path.h"
 
 class PathEntityManager
 {
@@ -19,7 +18,7 @@ private:
 
 	static PathEntityManager* instance;
 
-	std::map<Geometry*, PathSP> allPaths;
+	std::map<GeneralEntitySP, PathSP> allPaths;
 
 	PathEntityManager();
 	virtual ~PathEntityManager();
@@ -30,11 +29,11 @@ public:
 
 	static void terminate();
 
-	void addEntity(Geometry* geometry, const PathSP& path);
+	void addEntity(const GeneralEntitySP& entity, const PathSP& path);
 
-	PathSP findPath(Geometry* geometry) const;
+	PathSP findPath(const GeneralEntitySP& entity) const;
 
-	bool updateEntity(Geometry* geometry, float deltaTime);
+	bool updateEntity(const GeneralEntitySP& entity, float deltaTime);
 
 	void updateEntities(float deltaTime);
 

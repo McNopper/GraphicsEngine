@@ -21,8 +21,8 @@ void GeneralEntity::setCurrentValues(const string& currentProgramType, const Cam
 	GeneralEntity::currentDeltaTime = currentDeltaTime;
 }
 
-GeneralEntity::GeneralEntity(const string& name, float scaleX, float scaleY, float scaleZ) : OctreeEntity(), Geometry(),
-		translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), name(name)
+GeneralEntity::GeneralEntity(const string& name, float scaleX, float scaleY, float scaleZ) : OctreeEntity(),
+		translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), name(name), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR)
 {
 }
 
@@ -140,51 +140,6 @@ void GeneralEntity::setRotation(const Quaternion& rotation)
 	updateMetrics();
 }
 
-void GeneralEntity::setMetrics(const Point4& position, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ)
-{
-	Quaternion rotation;
-	rotation.rotateRzRyRxf(angleZ, angleY, angleX);
-
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
-	this->position = position;
-
-	this->rotation = rotation;
-
-	this->scaleX = scaleX;
-	this->scaleY = scaleY;
-	this->scaleZ = scaleZ;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void GeneralEntity::setMetrics(const Point4& position, const Quaternion& rotation, float scaleX, float scaleY, float scaleZ)
-{
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
-	this->position = position;
-
-	this->rotation = rotation;
-
-	this->scaleX = scaleX;
-	this->scaleY = scaleY;
-	this->scaleZ = scaleZ;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
 bool GeneralEntity::isUpdateable() const
 {
 	return updateable;
@@ -242,31 +197,11 @@ const string& GeneralEntity::getName() const
 	return name;
 }
 
-void GeneralEntity::updateLocation(const Point4& location)
+void GeneralEntity::setPositionOrientation(const Point4& position, const Quaternion& orientation)
 {
-	this->translateX = location.getX();
-	this->translateY = location.getY();
-	this->translateZ = location.getZ();
-
-	updateMetrics();
-
-	updateBoundingSphereCenter(true);
-}
-
-void GeneralEntity::updateOrientation(const Quaternion& orientation)
-{
-	this->rotation = orientation;
-
-	this->updateNormalModelMatrix = true;
-
-	updateMetrics();
-}
-
-void GeneralEntity::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
-{
-	this->translateX = location.getX();
-	this->translateY = location.getY();
-	this->translateZ = location.getZ();
+	this->translateX = position.getX();
+	this->translateY = position.getY();
+	this->translateZ = position.getZ();
 	this->rotation = orientation;
 
 	this->updateNormalModelMatrix = true;
@@ -275,3 +210,20 @@ void GeneralEntity::updateLocationOrientation(const Point4& location, const Quat
 
 	updateBoundingSphereCenter(true);
 }
+
+void GeneralEntity::setWriteBrightColor(bool writeBrightColor)
+{
+	this->writeBrightColor = writeBrightColor;
+}
+
+void GeneralEntity::setBrightColorLimit(float brightColorLimit)
+{
+	this->brightColorLimit = brightColorLimit;
+}
+
+void GeneralEntity::setRefractiveIndex(float refractiveIndex)
+{
+	this->refractiveIndex = refractiveIndex;
+}
+
+

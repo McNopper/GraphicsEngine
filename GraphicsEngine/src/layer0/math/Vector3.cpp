@@ -43,6 +43,11 @@ Vector3::~Vector3()
 {
 }
 
+Vector3 Vector3::operator -() const
+{
+	return Vector3(-v[0], -v[1], -v[2]);
+}
+
 Vector3 Vector3::operator +(const Vector3& other) const
 {
 	Vector3 result;

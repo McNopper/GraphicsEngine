@@ -10,7 +10,7 @@
 #include "Camera.h"
 
 Camera::Camera() :
-	dirty(true), eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum()
+	dirty(true), eye(0.0f, 0.0f, 5.0f), center(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(0.0f, 0.0f, -1.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum()
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
@@ -63,8 +63,8 @@ void Camera::setRotation(const Quaternion& rotation)
 	Vector3 direction(0.0f, 0.0f, -1.0f);
 	Vector3 up(0.0f, 1.0f, 0.0f);
 
-	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
-	this->up = rotation.getRotationMatrix4x4() * up;
+	this->center = this->eye + rotation * direction;
+	this->up = rotation * up;
 
 	lookAt(this->eye, this->center, this->up);
 }
@@ -75,10 +75,8 @@ void Camera::setPositionRotation(const Point4& position, const Quaternion& rotat
 	Vector3 up(0.0f, 1.0f, 0.0f);
 
 	this->eye = position;
-	this->center = position + direction;
-
-	this->center = this->eye + rotation.getRotationMatrix4x4() * direction;
-	this->up = rotation.getRotationMatrix4x4() * up;
+	this->center = this->eye + rotation * direction;
+	this->up = rotation * up;
 
 	lookAt(this->eye, this->center, this->up);
 }
@@ -91,6 +89,10 @@ void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
 	this->center = center;
 	this->up = up;
 	this->direction = (center - eye).normalize();
+
+	Vector3 left = up.cross(direction).normalize();
+
+	this->up = direction.cross(left).normalize();
 
 	glusLookAtf(result, eye.getX(), eye.getY(), eye.getZ(), center.getX(), center.getY(), center.getZ(), up.getX(), up.getY(), up.getZ());
 
@@ -177,17 +179,11 @@ void Camera::setCameraProperties(const ProgramSP& program) const
 	glUniform4fv(program->getUniformLocation(u_eyePosition), 1, eye.getP());
 }
 
-void Camera::updateLocation(const Point4& location)
+Quaternion Camera::getRotation() const
 {
-	setPosition(location);
+	Vector3 left = up.cross(direction);
+
+	return  Quaternion(Matrix3x3(-left, up, -direction));
 }
 
-void Camera::updateOrientation(const Quaternion& orientation)
-{
-	setRotation(orientation);
-}
 
-void Camera::updateLocationOrientation(const Point4& location, const Quaternion& orientation)
-{
-	setPositionRotation(location, orientation);
-}

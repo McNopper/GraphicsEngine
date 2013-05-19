@@ -10,7 +10,7 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/math/Geometry.h"
+#include "../../layer4/entity/GeneralEntity.h"
 
 class Path
 {
@@ -42,7 +42,7 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, Geometry& geometry, bool updateOrientation = true) = 0;
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true) = 0;
 
 	void setLocation(const Point4& location);
 	void setOrientation(const Quaternion& orientation);
@@ -61,7 +61,7 @@ public:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	bool updatePath(float deltaTime, Geometry& geometry);
+	bool updatePath(float deltaTime, const GeneralEntitySP& entity);
 
 	bool isPaused() const;
 

@@ -22,8 +22,8 @@
 using namespace std;
 using namespace boost;
 
-Node::Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
-	name(name), parentNode(parent), transformMatrix(), transformLinkMatrix(), rotateOffsetMatrix(), rotatePivotMatrix(), preRotateMatrix(), postRotateMatrix(), inverseRotatePivotMatrix(), scaleOffsetMatrix(), scalePivotMatrix(), inverseScalePivotMatrix(), geometricTransformMatrix(), localFinalMatrix(), mesh(mesh), allAnimStacks(allAnimStacks), allChilds(), index(-1), joint(joint), usedJoint(false), visible(true), transparent(false)
+Node::Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
+	name(name), parentNode(parent), transformMatrix(), transformLinkMatrix(), rotateOffsetMatrix(), rotatePivotMatrix(), preRotateMatrix(), postRotateMatrix(), inverseRotatePivotMatrix(), scaleOffsetMatrix(), scalePivotMatrix(), inverseScalePivotMatrix(), geometricTransformMatrix(), localFinalMatrix(), mesh(mesh), camera(camera), light(light), allAnimStacks(allAnimStacks), allChilds(), index(-1), joint(joint), usedJoint(false), visible(true), transparent(false)
 {
 	this->translate[0] = translate[0];
 	this->translate[1] = translate[1];
@@ -82,6 +82,16 @@ Node::~Node()
 	if (mesh.get())
 	{
 		mesh.reset();
+	}
+
+	if (camera.get())
+	{
+		camera.reset();
+	}
+
+	if (light.get())
+	{
+		light.reset();
 	}
 
 	vector<NodeSP>::iterator walkerNode = allChilds.begin();
@@ -453,7 +463,7 @@ bool Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 
 	Matrix4x4 newParentMatrix = parentMatrix * localMatrix;
 
-	if (mesh)
+	if (mesh.get() || camera.get() || light.get())
 	{
 		matrix = newParentMatrix * geometricTransformMatrix;
 
@@ -592,7 +602,7 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 	}
 }
 
-void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
+void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
 {
 	if (joint || (instanceNode.isVisibleActive() && !instanceNode.isVisible()) || (!instanceNode.isVisibleActive() && !visible))
 	{
@@ -648,10 +658,47 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 	Matrix4x4 newParentMatrix = parentMatrix * localMatrix;
 
-	Matrix4x4 matrix = newParentMatrix * geometricTransformMatrix;
+	instanceNode.modelMatrix = newParentMatrix * geometricTransformMatrix;
 
-	Matrix3x3 normalMatrix = matrix.extractMatrix3x3();
-	normalMatrix.inverse();
+	instanceNode.normalModelMatrix = instanceNode.modelMatrix.extractMatrix3x3();
+	instanceNode.normalModelMatrix.inverse();
+
+	//
+
+	Point4 position(instanceNode.modelMatrix * Point4());
+	Quaternion rotation(instanceNode.modelMatrix.extractMatrix3x3());
+
+	if (camera.get())
+	{
+		camera->setPositionRotation(position, rotation);
+	}
+
+	if (light.get())
+	{
+		light->setPosition(position);
+		light->setRotation(rotation);
+	}
+
+	//
+
+	vector<NodeSP>::const_iterator walker = allChilds.begin();
+
+	int32_t i = 0;
+	while (walker != allChilds.end())
+	{
+		(*walker)->updateRenderMatrix(nodeOwner, *instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
+
+		walker++;
+		i++;
+	}
+}
+
+void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, float time, int32_t animStackIndex, int32_t animLayerIndex) const
+{
+	if (joint || (instanceNode.isVisibleActive() && !instanceNode.isVisible()) || (!instanceNode.isVisibleActive() && !visible))
+	{
+		return;
+	}
 
 	//
 
@@ -741,10 +788,10 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 			currentProgram->use();
 
-			glUniformMatrix4fv(currentProgram->getUniformLocation(u_modelMatrix), 1, GL_FALSE, matrix.getM());
+			glUniformMatrix4fv(currentProgram->getUniformLocation(u_modelMatrix), 1, GL_FALSE, instanceNode.modelMatrix.getM());
 
 			// We have the inverse and transpose by setting the matrix
-			glUniformMatrix3fv(currentProgram->getUniformLocation(u_normalModelMatrix), 1, GL_TRUE, normalMatrix.getM());
+			glUniformMatrix3fv(currentProgram->getUniformLocation(u_normalModelMatrix), 1, GL_TRUE, instanceNode.normalModelMatrix.getM());
 
 			currentVAO->bind();
 
@@ -960,7 +1007,7 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 	int32_t i = 0;
 	while (walker != allChilds.end())
 	{
-		(*walker)->render(nodeOwner, *instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
+		(*walker)->render(nodeOwner, *instanceNode.getChild(i), time, animStackIndex, animLayerIndex);
 
 		walker++;
 		i++;

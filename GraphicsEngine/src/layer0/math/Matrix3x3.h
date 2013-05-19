@@ -27,6 +27,7 @@ public:
 	Matrix3x3();
 	Matrix3x3(const Matrix3x3& other);
 	Matrix3x3(const float other[9]);
+	Matrix3x3(const Vector3& col0, const Vector3& col1, const Vector3& col2);
 	~Matrix3x3();
 
 	Matrix3x3 copy() const;

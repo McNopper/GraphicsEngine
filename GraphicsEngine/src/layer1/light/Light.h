@@ -11,6 +11,8 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/color/Color.h"
+#include "../../layer0/math/Point4.h"
+#include "../../layer0/math/Quaternion.h"
 #include "../../layer0/shader/Program.h"
 #include "../../layer0/shader/Variables.h"
 
@@ -23,6 +25,9 @@ protected:
 	Color diffuse;
 	Color specular;
 
+	Point4 position;
+	Quaternion rotation;
+
 public:
 
 	Light(const Color& ambient, const Color& diffuse, const Color& specular);
@@ -34,6 +39,12 @@ public:
 	void setDiffuse(const Color& diffuse);
 	const Color& getSpecular() const;
 	void setSpecular(const Color& specular);
+
+	virtual const Point4& getPosition() const;
+	virtual void setPosition(const Point4& position);
+
+	virtual const Quaternion& getRotation() const;
+	virtual void setRotation(const Quaternion& rotation);
 
 	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const = 0;
 

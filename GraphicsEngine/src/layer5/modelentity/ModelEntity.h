@@ -23,11 +23,6 @@ class ModelEntity : public GeneralEntity, public NodeOwner
 
 private:
 
-	bool writeBrightColor;
-	float brightColorLimit;
-
-	float refractiveIndex;
-
 	ModelSP model;
 
 	float time;
@@ -42,6 +37,8 @@ private:
 	InstanceNodeSP rootInstanceNode;
 
 	boost::int32_t jointIndex;
+
+	bool dirty;
 
 public:
 
@@ -71,10 +68,6 @@ public:
     virtual bool isWriteBrightColor() const;
     virtual float getBrightColorLimit() const;
     virtual float getRefractiveIndex() const;
-
-    virtual void setWriteBrightColor(bool writeBrightColor);
-    virtual void setBrightColorLimit(float brightColorLimit);
-    virtual void setRefractiveIndex(float refractiveIndex);
 
     const boost::shared_ptr<InstanceNode>& getRootInstanceNode() const;
 

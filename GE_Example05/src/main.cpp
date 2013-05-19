@@ -6,6 +6,8 @@ static GroundPlane groundPlane;
 
 static bool wireframe = false;
 
+static CameraSP currentCamera;
+
 GLUSboolean initGame(GLUSvoid)
 {
 	if (!initEngine(GLUS_LOG_INFO, 7))
@@ -22,11 +24,15 @@ GLUSboolean initGame(GLUSvoid)
 
 	FbxEntityFactory entityFactory;
 
+	NodeEntityFactory nodeEntityFactory;
+
 	ModelEntitySP modelEntity;
 
 	GroundEntityFactory groundEntityFactory;
 
 	GroundEntitySP groundEntity;
+
+	NodeEntitySP nodeEntity;
 
 	SurfaceMaterialFactory surfaceMaterialFactory;
 	SurfaceMaterialSP surfaceMaterial;
@@ -94,10 +100,42 @@ GLUSboolean initGame(GLUSvoid)
 	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -0.1f, -1.0f), 0.9f, 0.75f, 2.0f, Point4(0.0f, 1.0f, -5.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
+	// The spot light is treated as a node entity
+
+	nodeEntity = nodeEntityFactory.createLightEntity("SpotLight", spotLight);
+
+	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+
+	// Update the programs with the current light properties
+
 	vector<LightSP> lights;
 	lights.push_back(directionalLight);
 	lights.push_back(spotLight);
+
 	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
+
+	//
+	//
+	//
+
+	PerspectiveCameraSP camera = PerspectiveCameraSP(new PerspectiveCamera());
+	camera->lookAt(Point4(0.0f, 10.0f, 0.0f), Point4(0.0f, 0.0f, -10.0f), Vector3(0.0f, 1.0f, 0.0f));
+
+	CameraManager::getInstance()->setCamera("Render", camera, true);
+
+	// The render camera is treated as a node entity
+
+	nodeEntity = nodeEntityFactory.createCameraEntity("RenderCamera", camera);
+
+	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+
+	//
+
+	currentCamera = CameraManager::getInstance()->getDefaultPerspectiveCamera();
+
+	//
+	//
+	//
 
 	// Position the user
 
@@ -128,9 +166,9 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	GeneralEntityManager::getInstance()->update();
 
-	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
+	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera);
 
-	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), deltaTime, false);
+	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, deltaTime, false);
 
 	GeneralEntityManager::getInstance()->sort();
 
@@ -142,7 +180,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	// Debug plane
 
 	glDepthMask(GL_FALSE);
-	groundPlane.draw(CameraManager::getInstance()->getDefaultPerspectiveCamera()->getEye(), Color::GREY);
+	groundPlane.draw(currentCamera->getEye(), Color::GREY);
 	glDepthMask(GL_TRUE);
 
 	// All the primitves
@@ -158,6 +196,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	GeneralEntityManager::getInstance()->render();
 
+	//
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	// FPS
 
 	FpsPrinter::printer.print(deltaTime);
@@ -166,6 +208,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	FontSP font = FontManager::getInstance()->getFont("CourierNew");
 	font->print(760.0f, 10.0f, Color::RED, "Toggle wireframe: [Space]");
+	font->print(760.0f, 40.0f, Color::RED, "Toggle camera:    [c]");
 
 	return GLUS_TRUE;
 }
@@ -202,6 +245,21 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 		if (key == ' ')
 		{
 			wireframe = !wireframe;
+
+			return;
+		}
+		else if (key == 'c')
+		{
+			if (currentCamera == CameraManager::getInstance()->getDefaultPerspectiveCamera())
+			{
+				currentCamera = CameraManager::getInstance()->getCamera("Render");
+			}
+			else
+			{
+				currentCamera = CameraManager::getInstance()->getDefaultPerspectiveCamera();
+			}
+
+			User::defaultUser.setUserCamera(currentCamera);
 
 			return;
 		}

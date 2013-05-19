@@ -409,6 +409,8 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 	bool joint = false;
 
 	MeshSP newMesh;
+	CameraSP newCamera;
+	LightSP newLight;
 
 	switch (attributeType)
 	{
@@ -564,7 +566,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 
 		string parentNodeName = parentNode.get() ? parentNode->getName() : "[NULL]";
 
-		NodeSP newNode = nodeTreeFactory.createNode(node->GetName(), parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, newMesh, allAnimationStacks, joint);
+		NodeSP newNode = nodeTreeFactory.createNode(node->GetName(), parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, newMesh, newCamera, newLight, allAnimationStacks, joint);
 
 		glusLogPrint(GLUS_LOG_INFO, "Created node: %s", node->GetName());
 

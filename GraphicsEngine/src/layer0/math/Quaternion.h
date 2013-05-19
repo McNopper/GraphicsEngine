@@ -30,6 +30,7 @@ public:
 	Quaternion(const float other[4]);
 	Quaternion(const Quaternion& other);
 	Quaternion(float angle, const Vector3& axis);
+	Quaternion(const Matrix3x3& matrix);
 	~Quaternion();
 
 	Quaternion& operator =(const Quaternion& other);
