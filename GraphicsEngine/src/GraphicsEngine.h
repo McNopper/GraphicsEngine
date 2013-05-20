@@ -20,6 +20,7 @@
 #include "layer0/renderbuffer/RenderBufferMultisample.h"
 #include "layer0/renderbuffer/RenderBufferMultisampleManager.h"
 #include "layer0/shader/Program.h"
+#include "layer0/shader/ProgramFactory.h"
 #include "layer0/shader/ProgramManager.h"
 #include "layer0/statistic/FrameCounter.h"
 #include "layer0/texture/Texture1DManager.h"

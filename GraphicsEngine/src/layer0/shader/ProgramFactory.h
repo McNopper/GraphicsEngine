@@ -8,13 +8,24 @@
 #ifndef PROGRAMFACTORY_H_
 #define PROGRAMFACTORY_H_
 
+#include "../../UsedLibs.h"
+
 #include "Program.h"
 
 class ProgramFactory
 {
+
+private:
+
+	static std::string path;
+
 public:
 	ProgramFactory();
 	virtual ~ProgramFactory();
+
+	static const std::string& getPath();
+
+	static void setPath(const std::string& path);
 
 	ProgramSP createPhongProgram() const;
 

@@ -29,7 +29,7 @@ vec4 interpolateVec4(in vec4 v0, in vec4 v1, in vec4 v2)
 	return v0 * gl_TessCoord.x + v1 * gl_TessCoord.y + v2 * gl_TessCoord.z;
 }
 
-void main()
+void main(void)
 {
 	v_g_vertex = interpolateVec4(v_e_vertex[0], v_e_vertex[1], v_e_vertex[2]);
 	v_g_tangent = interpolateVec3(v_e_tangent[0], v_e_tangent[1], v_e_tangent[2]);
