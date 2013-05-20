@@ -20,12 +20,12 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true);
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation = true);
 
 public:
 
-	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise);
-	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis);
+	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise);
+	OrientedCirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise, const Vector3& rotationAxis);
 	virtual ~OrientedCirclePath();
 
 };

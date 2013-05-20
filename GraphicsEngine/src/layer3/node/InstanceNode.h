@@ -59,6 +59,8 @@ public:
 	void setTransparent(bool transparent, bool transparentActive);
 	void setTransparentRecursive(bool transparent, bool transparentActive);
 
+	const Matrix4x4& getModelMatrix() const;
+	const Matrix3x3& getNormalModelMatrix() const;
 };
 
 typedef boost::shared_ptr<InstanceNode> InstanceNodeSP;

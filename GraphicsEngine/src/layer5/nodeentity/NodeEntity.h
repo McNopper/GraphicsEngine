@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer3/node/InstanceNode.h"
 #include "../../layer3/node/Node.h"
 #include "../../layer3/node/NodeOwner.h"
 #include "../../layer4/entity/GeneralEntity.h"
@@ -39,24 +40,15 @@ public:
 	boost::int32_t getAnimStackIndex() const;
 	boost::int32_t getAnimLayerIndex() const;
 
+	//
+
     virtual void updateBoundingSphereCenter(bool force = false);
     virtual void update();
     virtual void render() const;
 
-	virtual const std::string& getCurrentProgramType() const;
+    //
 
-	virtual boost::int32_t getNumberJoints() const;
-
-    virtual const Matrix4x4* getBindMatrices() const;
-    virtual const Matrix3x3* getBindNormalMatrices() const;
-    virtual const Matrix4x4* getJointMatrices() const;
-    virtual const Matrix3x3* getJointNormalMatrices() const;
-
-    virtual bool isWriteBrightColor() const;
-    virtual float getBrightColorLimit() const;
-
-    virtual float getRefractiveIndex() const;
-
+    virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 };
 
 typedef boost::shared_ptr<NodeEntity> NodeEntitySP;

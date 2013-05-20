@@ -128,3 +128,12 @@ void InstanceNode::setTransparentRecursive(bool transparent, bool transparentAct
 	}
 }
 
+const Matrix4x4& InstanceNode::getModelMatrix() const
+{
+	return modelMatrix;
+}
+
+const Matrix3x3& InstanceNode::getNormalModelMatrix() const
+{
+	return normalModelMatrix;
+}

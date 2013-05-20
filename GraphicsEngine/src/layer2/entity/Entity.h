@@ -17,6 +17,10 @@ class Entity {
 
 	friend void boost::checked_delete<Entity>(Entity* x);
 
+private:
+
+	float distanceToCamera;
+
 protected:
 
 	static CameraSP currentCamera;
@@ -24,10 +28,11 @@ protected:
 	static enum RenderFilter renderFilter;
 	static bool dynamicCubeMaps;
 
+	/**
+	 * For dynamic cube map rendering.
+	 */
 	static Matrix4x4 viewMatrix[6];
 	static Matrix4x4 projectionMatrix;
-
-	float distanceToCamera;
 
 	Entity();
 	virtual ~Entity();

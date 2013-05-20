@@ -12,6 +12,10 @@
 
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer0/math/Matrix4x4.h"
+#include "../../layer2/animation/AnimationStack.h"
+
+class InstanceNode;
+class Node;
 
 class NodeOwner {
 public:
@@ -23,19 +27,7 @@ public:
 	{
 	}
 
-	virtual const std::string& getCurrentProgramType() const = 0;
-
-	virtual boost::int32_t getNumberJoints() const = 0;
-
-    virtual const Matrix4x4* getBindMatrices() const = 0;
-    virtual const Matrix3x3* getBindNormalMatrices() const = 0;
-    virtual const Matrix4x4* getJointMatrices() const = 0;
-    virtual const Matrix3x3* getJointNormalMatrices() const = 0;
-
-    virtual bool isWriteBrightColor() const = 0;
-    virtual float getBrightColorLimit() const = 0;
-
-    virtual float getRefractiveIndex() const = 0;
+    virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const = 0;
 
 };
 

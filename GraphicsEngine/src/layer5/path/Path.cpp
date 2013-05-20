@@ -8,7 +8,7 @@
 #include "Path.h"
 
 Path::Path(const Quaternion& baseRotation) :
-	baseRotation(baseRotation), paused(true), looping(false), ended(false), elapsedTime(0.0f), speed(1.0f), location(), orientation()
+	baseRotation(baseRotation), paused(true), looping(false), ended(false), elapsedTime(0.0f), speed(1.0f), position(), rotation()
 {
 }
 
@@ -75,24 +75,24 @@ float Path::getElapsedTime() const
 	return elapsedTime;
 }
 
-const Point4& Path::getLocation() const
+const Point4& Path::getPosition() const
 {
-	return location;
+	return position;
 }
 
-void Path::setLocation(const Point4& location)
+void Path::setPosition(const Point4& position)
 {
-	this->location = location;
+	this->position = position;
 }
 
-void Path::setOrientation(const Quaternion& orientation)
+void Path::setRotation(const Quaternion& rotation)
 {
-	this->orientation = orientation;
+	this->rotation = rotation;
 }
 
-const Quaternion& Path::getOrientation() const
+const Quaternion& Path::getRotation() const
 {
-	return orientation;
+	return rotation;
 }
 
 float Path::getSpeed() const

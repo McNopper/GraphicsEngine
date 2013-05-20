@@ -9,7 +9,7 @@
 #define PATHENTITYMANAGER_H_
 
 #include "../../layer4/entity/GeneralEntity.h"
-#include "../../layer5/path/Path.h"
+#include "Path.h"
 
 class PathEntityManager
 {

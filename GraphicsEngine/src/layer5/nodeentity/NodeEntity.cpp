@@ -65,7 +65,7 @@ void NodeEntity::update()
 
 	if (dirty)
 	{
-		rootNode->updateRenderMatrix(*this, *rootInstanceNode, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
+		rootNode->updateRenderMatrix(*rootInstanceNode, getModelMatrix(), time, getAnimStackIndex(), getAnimLayerIndex());
 
 		dirty = false;
 	}
@@ -76,47 +76,8 @@ void NodeEntity::render() const
 	// Nothing to do
 }
 
-const string& NodeEntity::getCurrentProgramType() const
+void NodeEntity::renderNode(const Node& node, const InstanceNode& instanceNode, float time, int32_t animStackIndex, int32_t animLayerIndex) const
 {
-	return GeneralEntity::currentProgramType;
+	// Nothing to do
 }
 
-int32_t NodeEntity::getNumberJoints() const
-{
-	return 0;
-}
-
-const Matrix4x4* NodeEntity::getBindMatrices() const
-{
-	return nullptr;
-}
-
-const Matrix3x3* NodeEntity::getBindNormalMatrices() const
-{
-	return nullptr;
-}
-
-const Matrix4x4* NodeEntity::getJointMatrices() const
-{
-	return nullptr;
-}
-
-const Matrix3x3* NodeEntity::getJointNormalMatrices() const
-{
-	return nullptr;
-}
-
-bool NodeEntity::isWriteBrightColor() const
-{
-	return false;
-}
-
-float NodeEntity::getBrightColorLimit() const
-{
-	return 0.0f;
-}
-
-float NodeEntity::getRefractiveIndex() const
-{
-	return 0.0f;
-}

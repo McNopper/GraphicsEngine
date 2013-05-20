@@ -16,7 +16,6 @@
 #include "../../layer2/environment/SkyManager.h"
 #include "../../layer2/entity/Entity.h"
 #include "../../layer2/mesh/Mesh.h"
-
 #include "Node.h"
 
 using namespace std;
@@ -602,7 +601,7 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 	}
 }
 
-void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
+void Node::updateRenderMatrix(InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
 {
 	if (joint || (instanceNode.isVisibleActive() && !instanceNode.isVisible()) || (!instanceNode.isVisibleActive() && !visible))
 	{
@@ -675,8 +674,7 @@ void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instance
 
 	if (light.get())
 	{
-		light->setPosition(position);
-		light->setRotation(rotation);
+		light->setPositionRotation(position, rotation);
 	}
 
 	//
@@ -686,7 +684,7 @@ void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instance
 	int32_t i = 0;
 	while (walker != allChilds.end())
 	{
-		(*walker)->updateRenderMatrix(nodeOwner, *instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
+		(*walker)->updateRenderMatrix(*instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
 
 		walker++;
 		i++;
@@ -702,303 +700,7 @@ void Node::render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, 
 
 	//
 
-	enum RenderFilter renderFilter = Entity::getRenderFilter();
-	bool finalTransparent = (instanceNode.isTransparentActive() && instanceNode.isTransparent()) || (!instanceNode.isTransparentActive() && transparent);
-	bool renderMesh = (renderFilter == RENDER_ALL) || (finalTransparent && renderFilter == RENDER_TRANSPARENT) || (!finalTransparent && renderFilter == RENDER_OPAQUE);
-
-	if (mesh && renderMesh)
-	{
-		VAOSP currentVAO;
-		ProgramSP currentProgram;
-		SubMeshSP currentSubMesh;
-		SurfaceMaterialSP currentSurfaceMaterial;
-		for (uint32_t subMeshIndex = 0; subMeshIndex < mesh->getSubMeshesCount(); subMeshIndex++)
-		{
-			currentSubMesh = mesh->getSubMeshAt(subMeshIndex);
-
-			currentSurfaceMaterial = mesh->getSurfaceMaterialAt(subMeshIndex);
-
-			float currentEmissive[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentAmbient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentDiffuse[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentSpecular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentReflection[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentRefraction[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentShininess = 0.0f;
-			float currentTransparency = 0.0f;
-
-			for (int32_t i = 0; i < 4; i++)
-			{
-				currentEmissive[i] = currentSurfaceMaterial->getEmissive().getRGBA()[i];
-				currentAmbient[i] = currentSurfaceMaterial->getAmbient().getRGBA()[i];
-				currentDiffuse[i] = currentSurfaceMaterial->getDiffuse().getRGBA()[i];
-				currentSpecular[i] = currentSurfaceMaterial->getSpecular().getRGBA()[i];
-				currentReflection[i] = currentSurfaceMaterial->getReflection().getRGBA()[i];
-				currentRefraction[i] = currentSurfaceMaterial->getRefraction().getRGBA()[i];
-			}
-			currentShininess = currentSurfaceMaterial->getShininess();
-			currentTransparency = currentSurfaceMaterial->getTransparency();
-
-			if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
-			{
-				// Animate values depending on time
-				const AnimationLayerSP& animLayer = allAnimStacks[animStackIndex]->getAnimationLayer(animLayerIndex);
-
-				for (enum AnimationLayer::eCHANNELS_RGBA i = AnimationLayer::R; i <= AnimationLayer::A; i = static_cast<enum AnimationLayer::eCHANNELS_RGBA>(i + 1))
-				{
-					if (animLayer->hasEmissiveColorValue(i))
-					{
-						currentEmissive[i] = animLayer->getEmissiveColorValue(i, time);
-					}
-					if (animLayer->hasAmbientColorValue(i))
-					{
-						currentAmbient[i] = animLayer->getAmbientColorValue(i, time);
-					}
-					if (animLayer->hasDiffuseColorValue(i))
-					{
-						currentDiffuse[i] = animLayer->getDiffuseColorValue(i, time);
-					}
-					if (animLayer->hasSpecularColorValue(i))
-					{
-						currentSpecular[i] = animLayer->getSpecularColorValue(i, time);
-					}
-					if (animLayer->hasReflectionColorValue(i))
-					{
-						currentReflection[i] = animLayer->getReflectionColorValue(i, time);
-					}
-					if (animLayer->hasRefractionColorValue(i))
-					{
-						currentRefraction[i] = animLayer->getRefractionColorValue(i, time);
-					}
-				}
-
-				if (animLayer->hasShininessValue(AnimationLayer::S))
-				{
-					currentShininess = animLayer->getShininessValue(AnimationLayer::S, time);
-				}
-				if (animLayer->hasTransparencyValue(AnimationLayer::S))
-				{
-					currentTransparency = animLayer->getTransparencyValue(AnimationLayer::S, time);
-				}
-			}
-
-			currentVAO = currentSubMesh->getVAOByProgramType(nodeOwner.getCurrentProgramType());
-
-			currentProgram = currentVAO->getProgram();
-
-			currentProgram->use();
-
-			glUniformMatrix4fv(currentProgram->getUniformLocation(u_modelMatrix), 1, GL_FALSE, instanceNode.modelMatrix.getM());
-
-			// We have the inverse and transpose by setting the matrix
-			glUniformMatrix3fv(currentProgram->getUniformLocation(u_normalModelMatrix), 1, GL_TRUE, instanceNode.normalModelMatrix.getM());
-
-			currentVAO->bind();
-
-			glUniform4fv(currentProgram->getUniformLocation(u_emissiveColor), 1, currentEmissive);
-			glUniform4fv(currentProgram->getUniformLocation(u_ambientColor), 1, currentAmbient);
-
-			if (currentSurfaceMaterial->getDiffuseTextureName() != 0)
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasDiffuseTexture), 1);
-
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, currentSurfaceMaterial->getDiffuseTextureName());
-				glUniform1i(currentProgram->getUniformLocation(u_diffuseTexture), 0);
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasDiffuseTexture), 0);
-
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(currentProgram->getUniformLocation(u_diffuseTexture), 0);
-			}
-			glUniform4fv(currentProgram->getUniformLocation(u_diffuseColor), 1, currentDiffuse);
-
-			if (currentSurfaceMaterial->getSpecularTextureName() != 0)
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasSpecularTexture), 1);
-
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, currentSurfaceMaterial->getSpecularTextureName());
-				glUniform1i(currentProgram->getUniformLocation(u_specularTexture), 1);
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasSpecularTexture), 0);
-
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(currentProgram->getUniformLocation(u_specularTexture), 0);
-			}
-			glUniform4fv(currentProgram->getUniformLocation(u_specularColor), 1, currentSpecular);
-			glUniform1f(currentProgram->getUniformLocation(u_shininess), currentShininess);
-
-			glUniform1f(currentProgram->getUniformLocation(u_transparency), currentTransparency);
-
-			if (currentSurfaceMaterial->getNormalMapTextureName() != 0)
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasNormalMapTexture), 1);
-
-				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, currentSurfaceMaterial->getNormalMapTextureName());
-				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 2);
-				glActiveTexture(GL_TEXTURE0);
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasNormalMapTexture), 0);
-
-				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(currentProgram->getUniformLocation(u_normalMapTexture), 2);
-				glActiveTexture(GL_TEXTURE0);
-			}
-
-			glUniform1i(currentProgram->getUniformLocation(u_convertDirectX), currentSurfaceMaterial->isConvertDirectX());
-
-			glUniform4fv(currentProgram->getUniformLocation(u_reflectionColor), 1, currentReflection);
-			glUniform4fv(currentProgram->getUniformLocation(u_refractionColor), 1, currentRefraction);
-
-			float environmentRefractiveIndex = nodeOwner.getRefractiveIndex();
-
-			if (environmentRefractiveIndex != RI_NOTHING)
-			{
-				float materialRefractiveIndex = currentSurfaceMaterial->getRefractiveIndex();
-
-				float eta = environmentRefractiveIndex / materialRefractiveIndex;
-
-				float reflectanceNormalIncidence = ((environmentRefractiveIndex - materialRefractiveIndex) * (environmentRefractiveIndex - materialRefractiveIndex)) / ((environmentRefractiveIndex + materialRefractiveIndex) * (environmentRefractiveIndex + materialRefractiveIndex));
-
-				glUniform1f(currentProgram->getUniformLocation(u_eta), eta);
-				glUniform1f(currentProgram->getUniformLocation(u_reflectanceNormalIncidence), reflectanceNormalIncidence);
-			}
-			else
-			{
-				glUniform1f(currentProgram->getUniformLocation(u_eta), 0.0f);
-				glUniform1f(currentProgram->getUniformLocation(u_reflectanceNormalIncidence), 0.0f);
-			}
-
-			if (SkyManager::getInstance()->hasActiveSky())
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasCubeMapTexture), 1);
-
-				SkySP activeSky = SkyManager::getInstance()->getActiveSky();
-
-				glActiveTexture(GL_TEXTURE3);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, activeSky->getSkyTextureName());
-			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 3);
-				glActiveTexture(GL_TEXTURE0);
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasCubeMapTexture), 0);
-
-				glActiveTexture(GL_TEXTURE3);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			    glUniform1i(currentProgram->getUniformLocation(u_cubemap), 3);
-				glActiveTexture(GL_TEXTURE0);
-			}
-
-			// Only allow dynamic cube map, if also a sky cube map is available
-			if (Entity::getDynamicCubeMaps() && currentSurfaceMaterial->getDynamicCubeMapTextureName() != 0 && SkyManager::getInstance()->hasActiveSky())
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 1);
-				glActiveTexture(GL_TEXTURE4);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, currentSurfaceMaterial->getDynamicCubeMapTextureName());
-			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 4);
-				glActiveTexture(GL_TEXTURE0);
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasDynamicCubeMapTexture), 0);
-				glActiveTexture(GL_TEXTURE4);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			    glUniform1i(currentProgram->getUniformLocation(u_dynamicCubeMapTexture), 4);
-				glActiveTexture(GL_TEXTURE0);
-			}
-
-			if (!Entity::getDynamicCubeMaps())
-			{
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_cubeMapViewMatrix), 6, GL_FALSE, Entity::getCubeMapViewMatrices()[0].getM());
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_cubeMapProjectionMatrix), 1, GL_FALSE, Entity::getCubeMapProjectionMatrix().getM());
-			}
-
-			// Skinning
-			if (mesh->hasSkinning())
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasSkinning), 1);
-
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), nodeOwner.getNumberJoints(), GL_FALSE, nodeOwner.getBindMatrices()[0].getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, nodeOwner.getBindNormalMatrices()[0].getM());
-
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), nodeOwner.getNumberJoints(), GL_FALSE, nodeOwner.getJointMatrices()[0].getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, nodeOwner.getJointNormalMatrices()[0].getM());
-			}
-			else
-			{
-				glUniform1i(currentProgram->getUniformLocation(u_hasSkinning), 0);
-
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), nodeOwner.getNumberJoints(), GL_FALSE, Matrix4x4().getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, Matrix3x3().getM());
-
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), nodeOwner.getNumberJoints(), GL_FALSE, Matrix4x4().getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), nodeOwner.getNumberJoints(), GL_TRUE, Matrix3x3().getM());
-			}
-
-			// Write bright color
-			glUniform1i(currentProgram->getUniformLocation(u_writeBrightColor), nodeOwner.isWriteBrightColor());
-			glUniform1f(currentProgram->getUniformLocation(u_brightColorLimit), nodeOwner.getBrightColorLimit());
-
-			if (finalTransparent)
-			{
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			}
-
-			glDrawElements(GL_TRIANGLES, currentSubMesh->getTriangleCount() * 3, GL_UNSIGNED_INT, reinterpret_cast<const GLvoid *>(currentSubMesh->getIndicesOffset()*sizeof(uint32_t)));
-
-			if (finalTransparent)
-			{
-				glDisable(GL_BLEND);
-			}
-
-			if (currentSurfaceMaterial->getDiffuseTextureName() != 0)
-			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
-
-			if (currentSurfaceMaterial->getSpecularTextureName() != 0)
-			{
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
-
-			if (currentSurfaceMaterial->getNormalMapTextureName() != 0)
-			{
-				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
-
-			if (SkyManager::getInstance()->hasActiveSky())
-			{
-				glActiveTexture(GL_TEXTURE3);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			}
-
-			if (currentSurfaceMaterial->getDynamicCubeMapTexture() != 0)
-			{
-				glActiveTexture(GL_TEXTURE4);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			}
-
-			glActiveTexture(GL_TEXTURE0);
-
-			currentVAO->unbind();
-		}
-	}
+	nodeOwner.renderNode(*this, instanceNode, time, animStackIndex, animLayerIndex);
 
 	//
 
@@ -1097,3 +799,9 @@ void Node::setVisibleRecursive(bool visible)
 		walker++;
 	}
 }
+
+const std::vector<boost::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() const
+{
+	return allAnimStacks;
+}
+

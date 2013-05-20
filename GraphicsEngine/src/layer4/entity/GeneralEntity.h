@@ -21,19 +21,17 @@ class GeneralEntity : public OctreeEntity
 
 private:
 
-		float translateX;
-		float translateY;
-		float translateZ;
+		Point4 position;
+
 		Quaternion rotation;
+
 		float scaleX;
 		float scaleY;
 		float scaleZ;
+
 		Matrix4x4 modelMatrix;
 		Matrix3x3 normalModelMatrix;
 		bool updateNormalModelMatrix;
-
-		Point4 position;
-		Point4 origin;
 
 		bool debug;
 
@@ -41,6 +39,7 @@ private:
 
 		BoundingSphere boundingSphere;
 		bool usePositionAsBoundingSphereCenter;
+
 		bool updateable;
 
 		std::string name;
@@ -77,7 +76,7 @@ public:
     virtual void setRotation(float angleX, float angleY, float angleZ);
     virtual void setRotation(const Quaternion& rotation);
 
-	virtual void setPositionOrientation(const Point4& position, const Quaternion& orientation);
+	virtual void setPositionRotation(const Point4& position, const Quaternion& rotation);
 
 	virtual void setScale(float scaleX, float scaleY, float scaleZ);
 

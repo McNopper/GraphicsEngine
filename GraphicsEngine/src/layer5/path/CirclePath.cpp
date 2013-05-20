@@ -7,10 +7,10 @@
 
 #include "CirclePath.h"
 
-CirclePath::CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise) :
-		Path(baseRotation), startLocation(startLocation), orbitPoint(orbitPoint), clockWise(clockWise)
+CirclePath::CirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise) :
+		Path(baseRotation), startPosition(startPosition), orbitPosition(orbitPosition), clockWise(clockWise)
 {
-	Vector3 orbitDirection = orbitPoint - startLocation;
+	Vector3 orbitDirection = orbitPosition - startPosition;
 
 	radius = orbitDirection.length();
 
@@ -28,10 +28,10 @@ CirclePath::CirclePath(const Quaternion& baseRotation, const Point4& startLocati
 	elapsedAngle = 0.0f;
 }
 
-CirclePath::CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis) :
-		Path(baseRotation), startLocation(startLocation), orbitPoint(orbitPoint), clockWise(clockWise)
+CirclePath::CirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise, const Vector3& rotationAxis) :
+		Path(baseRotation), startPosition(startPosition), orbitPosition(orbitPosition), clockWise(clockWise)
 {
-	Vector3 orbitDirection = orbitPoint - startLocation;
+	Vector3 orbitDirection = orbitPosition - startPosition;
 
 	radius = orbitDirection.length();
 
@@ -87,40 +87,40 @@ float CirclePath::updateTransform()
 	}
 
 	transform.identity();
-	transform.translate(orbitPoint.getX(), orbitPoint.getY(), orbitPoint.getZ());
+	transform.translate(orbitPosition.getX(), orbitPosition.getY(), orbitPosition.getZ());
 	Quaternion rotation(elapsedAngle, rotationAxis);
 	transform *= rotation.getRotationMatrix4x4();
-	transform.translate(-orbitPoint.getX(), -orbitPoint.getY(), -orbitPoint.getZ());
+	transform.translate(-orbitPosition.getX(), -orbitPosition.getY(), -orbitPosition.getZ());
 
 	return elapsedAngle;
 }
 
 void CirclePath::start()
 {
-	setLocation(startLocation);
+	setPosition(startPosition);
 }
 
-bool CirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
+bool CirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation)
 {
 	float elapsedAngle= updateTransform();
 
 	if (!isLooping() && elapsedAngle >= 360.0f)
 	{
-		setLocation(startLocation);
+		setPosition(startPosition);
 
-		if (updateOrientation)
+		if (updateRotation)
 		{
-			setOrientation(baseRotation);
+			setRotation(baseRotation);
 		}
 
 		return true;
 	}
 
-	setLocation(transform * startLocation);
+	setPosition(transform * startPosition);
 
-	if (updateOrientation)
+	if (updateRotation)
 	{
-		setOrientation(baseRotation);
+		setRotation(baseRotation);
 	}
 
 	return false;

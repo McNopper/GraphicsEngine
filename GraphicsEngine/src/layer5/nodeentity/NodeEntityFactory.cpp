@@ -29,7 +29,7 @@ NodeEntitySP NodeEntityFactory::createLightEntity(const string& name, const Ligh
 
 	NodeEntitySP nodeEntity = NodeEntitySP(new NodeEntity(name, rootNode, 1.0f, 1.0f, 1.0f, false));
 
-	nodeEntity->setPositionOrientation(light->getPosition(), light->getRotation());
+	nodeEntity->setPositionRotation(light->getPosition(), light->getRotation());
 
 	return nodeEntity;
 }
@@ -42,7 +42,7 @@ NodeEntitySP NodeEntityFactory::createLightEntity(const string& name, const Ligh
 
 	NodeEntitySP nodeEntity = NodeEntitySP(new NodeEntity(name, rootNode, 1.0f, 1.0f, 1.0f, true));
 
-	nodeEntity->setPositionOrientation(light->getPosition(), light->getRotation());
+	nodeEntity->setPositionRotation(light->getPosition(), light->getRotation());
 
 	return nodeEntity;
 }
@@ -57,7 +57,7 @@ NodeEntitySP NodeEntityFactory::createCameraEntity(const string& name, const Cam
 
 	NodeEntitySP nodeEntity = NodeEntitySP(new NodeEntity(name, rootNode, 1.0f, 1.0f, 1.0f, false));
 
-	nodeEntity->setPositionOrientation(camera->getEye(), camera->getRotation());
+	nodeEntity->setPositionRotation(camera->getEye(), camera->getRotation());
 
 	return nodeEntity;
 }
@@ -70,7 +70,7 @@ NodeEntitySP NodeEntityFactory::createCameraEntity(const string& name, const Cam
 
 	NodeEntitySP nodeEntity = NodeEntitySP(new NodeEntity(name, rootNode, 1.0f, 1.0f, 1.0f, true));
 
-	nodeEntity->setPositionOrientation(camera->getEye(), camera->getRotation());
+	nodeEntity->setPositionRotation(camera->getEye(), camera->getRotation());
 
 	return nodeEntity;
 }

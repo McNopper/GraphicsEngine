@@ -31,9 +31,9 @@ private:
 
 	float speed;
 
-	Point4 location;
+	Point4 position;
 
-	Quaternion orientation;
+	Quaternion rotation;
 
 protected:
 
@@ -42,10 +42,10 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true) = 0;
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation = true) = 0;
 
-	void setLocation(const Point4& location);
-	void setOrientation(const Quaternion& orientation);
+	void setPosition(const Point4& position);
+	void setRotation(const Quaternion& rotation);
 
 public:
 
@@ -72,9 +72,9 @@ public:
 
 	float getElapsedTime() const;
 
-	const Point4& getLocation() const;
+	const Point4& getPosition() const;
 
-	const Quaternion& getOrientation() const;
+	const Quaternion& getRotation() const;
 
 	float getSpeed() const;
 	void setSpeed(float speed);

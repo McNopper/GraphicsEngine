@@ -7,8 +7,8 @@
 
 #include "LinePath.h"
 
-LinePath::LinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation) :
-		Path(baseRotation), startLocation(startLocation), endLocation(endLocation), direction(), goToEnd(true)
+LinePath::LinePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& endPosition) :
+		Path(baseRotation), startPosition(startPosition), endPosition(endPosition), direction(), goToEnd(true)
 {
 }
 
@@ -18,29 +18,29 @@ LinePath::~LinePath()
 
 void LinePath::start()
 {
-	setLocation(startLocation);
+	setPosition(startPosition);
 
-	direction = (endLocation - startLocation).normalize();
+	direction = (endPosition - startPosition).normalize();
 
 	goToEnd = true;
 }
 
-bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
+bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation)
 {
 	bool result = false;
 
-	Point4 currentLocation = getLocation();
+	Point4 currentPosition = getPosition();
 
 	if (goToEnd)
 	{
-		currentLocation += direction * getSpeed() * deltaTime;
+		currentPosition += direction * getSpeed() * deltaTime;
 	}
 	else
 	{
-		currentLocation -= direction * getSpeed() * deltaTime;
+		currentPosition -= direction * getSpeed() * deltaTime;
 	}
 
-	float checkStart = (currentLocation - startLocation).dot(direction);
+	float checkStart = (currentPosition - startPosition).dot(direction);
 
 	bool reversed = false;
 
@@ -48,7 +48,7 @@ bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updat
 	{
 		if (isLooping())
 		{
-			currentLocation = startLocation - direction * checkStart;
+			currentPosition = startPosition - direction * checkStart;
 
 			goToEnd = true;
 
@@ -56,13 +56,13 @@ bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updat
 		}
 		else
 		{
-			currentLocation = startLocation;
+			currentPosition = startPosition;
 
 			result = true;
 		}
 	}
 
-	float checkEnd = (currentLocation - endLocation).dot(direction);
+	float checkEnd = (currentPosition - endPosition).dot(direction);
 
 	if (checkEnd > 0.0f)
 	{
@@ -71,28 +71,28 @@ bool LinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updat
 			// Always keep inside, so check if we already did reverse
 			if (!reversed)
 			{
-				currentLocation = endLocation - direction * checkEnd;
+				currentPosition = endPosition - direction * checkEnd;
 			}
 			else
 			{
-				currentLocation = endLocation;
+				currentPosition = endPosition;
 			}
 
 			goToEnd = false;
 		}
 		else
 		{
-			currentLocation = endLocation;
+			currentPosition = endPosition;
 
 			result = true;
 		}
 	}
 
-	setLocation(currentLocation);
+	setPosition(currentPosition);
 
-	if (updateOrientation)
+	if (updateRotation)
 	{
-		setOrientation(baseRotation);
+		setRotation(baseRotation);
 	}
 
 	return result;

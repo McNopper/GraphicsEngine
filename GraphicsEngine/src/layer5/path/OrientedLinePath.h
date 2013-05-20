@@ -20,11 +20,11 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true);
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation = true);
 
 public:
 
-	OrientedLinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation);
+	OrientedLinePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& endPosition);
 	virtual ~OrientedLinePath();
 
 };

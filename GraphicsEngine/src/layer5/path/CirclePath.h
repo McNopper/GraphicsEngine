@@ -19,9 +19,9 @@ class CirclePath : public Path
 
 protected:
 
-	Point4 startLocation;
+	Point4 startPosition;
 
-	Point4 orbitPoint;
+	Point4 orbitPosition;
 
 	bool clockWise;
 
@@ -40,14 +40,14 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true);
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation = true);
 
 	float updateTransform();
 
 public:
 
-	CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise);
-	CirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis);
+	CirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise);
+	CirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise, const Vector3& rotationAxis);
 	virtual ~CirclePath();
 
 };

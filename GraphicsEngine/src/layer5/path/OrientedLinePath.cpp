@@ -7,8 +7,8 @@
 
 #include "OrientedLinePath.h"
 
-OrientedLinePath::OrientedLinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation) :
-	LinePath(baseRotation, startLocation, endLocation)
+OrientedLinePath::OrientedLinePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& endPosition) :
+	LinePath(baseRotation, startPosition, endPosition)
 {
 }
 
@@ -21,16 +21,16 @@ void OrientedLinePath::start()
 	LinePath::start();
 }
 
-bool OrientedLinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
+bool OrientedLinePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation)
 {
 	bool result = LinePath::update(deltaTime, entity, false);
 
 	float rotY = -glusRadToDegf(asinf(direction.getX()));
 	float rotX = glusRadToDegf(asinf(direction.getY()));
 
-	Quaternion orientation;
-	orientation.rotateRzRyRxf(0.0f, rotY, rotX);
-	setOrientation(orientation * baseRotation);
+	Quaternion rotation;
+	rotation.rotateRzRyRxf(0.0f, rotY, rotX);
+	setRotation(rotation * baseRotation);
 
 	return result;
 }

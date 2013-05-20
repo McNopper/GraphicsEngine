@@ -22,7 +22,7 @@ void GeneralEntity::setCurrentValues(const string& currentProgramType, const Cam
 }
 
 GeneralEntity::GeneralEntity(const string& name, float scaleX, float scaleY, float scaleZ) : OctreeEntity(),
-		translateX(0.0f), translateY(0.0f), translateZ(0.0f), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), position(), origin(), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), name(name), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR)
+		position(), rotation(), scaleX(scaleX), scaleY(scaleY), scaleZ(scaleZ), modelMatrix(), normalModelMatrix(), updateNormalModelMatrix(true), debug(false), debugAsMesh(false), boundingSphere(), usePositionAsBoundingSphereCenter(false), updateable(false), name(name), writeBrightColor(false), brightColorLimit(1.0f), refractiveIndex(RI_AIR)
 {
 }
 
@@ -33,7 +33,7 @@ GeneralEntity::~GeneralEntity()
 void GeneralEntity::updateMetrics()
 {
 	modelMatrix.identity();
-	modelMatrix.translate(translateX, translateY, translateZ);
+	modelMatrix.translate(position.getX(), position.getY(), position.getZ());
 	modelMatrix *= rotation.getRotationMatrix4x4();
 	modelMatrix.scale(scaleX, scaleY, scaleZ);
 
@@ -80,10 +80,6 @@ const Point4& GeneralEntity::getPosition() const
 
 void GeneralEntity::setPosition(const Point4& position)
 {
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-
 	this->position = position;
 
 	updateMetrics();
@@ -197,12 +193,10 @@ const string& GeneralEntity::getName() const
 	return name;
 }
 
-void GeneralEntity::setPositionOrientation(const Point4& position, const Quaternion& orientation)
+void GeneralEntity::setPositionRotation(const Point4& position, const Quaternion& rotation)
 {
-	this->translateX = position.getX();
-	this->translateY = position.getY();
-	this->translateZ = position.getZ();
-	this->rotation = orientation;
+	this->position = position;
+	this->rotation = rotation;
 
 	this->updateNormalModelMatrix = true;
 

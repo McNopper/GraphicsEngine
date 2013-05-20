@@ -19,6 +19,8 @@
 #include "InstanceNode.h"
 #include "NodeOwner.h"
 
+class NodeOwner;
+
 class Node
 {
 
@@ -137,7 +139,7 @@ public:
 
 	void updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
-	void updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	void updateRenderMatrix(InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
 	void render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
@@ -156,6 +158,8 @@ public:
 	bool isVisible() const;
 	void setVisible(bool visible);
 	void setVisibleRecursive(bool transparent);
+
+	const std::vector<boost::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
 };
 
 typedef boost::shared_ptr<Node> NodeSP;

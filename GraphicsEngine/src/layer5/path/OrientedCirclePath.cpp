@@ -7,13 +7,13 @@
 
 #include "OrientedCirclePath.h"
 
-OrientedCirclePath::OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise) :
-		CirclePath(baseRotation, startLocation, orbitPoint, clockWise)
+OrientedCirclePath::OrientedCirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise) :
+		CirclePath(baseRotation, startPosition, orbitPosition, clockWise)
 {
 }
 
-OrientedCirclePath::OrientedCirclePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& orbitPoint, bool clockWise, const Vector3& rotationAxis) :
-		CirclePath(baseRotation, startLocation, orbitPoint, clockWise, rotationAxis)
+OrientedCirclePath::OrientedCirclePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& orbitPosition, bool clockWise, const Vector3& rotationAxis) :
+		CirclePath(baseRotation, startPosition, orbitPosition, clockWise, rotationAxis)
 {
 }
 
@@ -25,18 +25,18 @@ void OrientedCirclePath::start()
 {
 	CirclePath::start();
 
-	Quaternion orientation(elapsedAngle, rotationAxis);
+	Quaternion rotation(elapsedAngle, rotationAxis);
 
-	setOrientation(orientation * baseRotation);
+	setRotation(rotation * baseRotation);
 }
 
-bool OrientedCirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation)
+bool OrientedCirclePath::update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation)
 {
 	bool result = CirclePath::update(deltaTime, entity, false);
 
-	Quaternion orientation(elapsedAngle, rotationAxis);
+	Quaternion rotation(elapsedAngle, rotationAxis);
 
-	setOrientation(orientation * baseRotation);
+	setRotation(rotation * baseRotation);
 
 	return result;
 }

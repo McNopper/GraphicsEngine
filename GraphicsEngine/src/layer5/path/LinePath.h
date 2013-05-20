@@ -17,9 +17,9 @@ class LinePath : public Path
 
 protected:
 
-	Point4 startLocation;
+	Point4 startPosition;
 
-	Point4 endLocation;
+	Point4 endPosition;
 
 	Vector3 direction;
 
@@ -32,11 +32,11 @@ protected:
 	/**
 	 * @return true, if end of path reached. If looping, always false.
 	 */
-	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateOrientation = true);
+	virtual bool update(float deltaTime, const GeneralEntitySP& entity, bool updateRotation = true);
 
 public:
 
-	LinePath(const Quaternion& baseRotation, const Point4& startLocation, const Point4& endLocation);
+	LinePath(const Quaternion& baseRotation, const Point4& startPosition, const Point4& endPosition);
 	virtual ~LinePath();
 
 };

@@ -28,17 +28,7 @@ Matrix3x3::Matrix3x3(const float other[9])
 
 Matrix3x3::Matrix3x3(const Vector3& col0, const Vector3& col1, const Vector3& col2)
 {
-	m[0] = col0.v[0];
-	m[1] = col0.v[1];
-	m[2] = col0.v[2];
-
-	m[3] = col1.v[0];
-	m[4] = col1.v[1];
-	m[5] = col1.v[2];
-
-	m[6] = col2.v[0];
-	m[7] = col2.v[1];
-	m[8] = col2.v[2];
+	glusMatrix3x3Initf(m, col0.v, col1.v, col2.v);
 }
 
 Matrix3x3::~Matrix3x3()

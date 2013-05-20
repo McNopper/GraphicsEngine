@@ -55,25 +55,17 @@ public:
 
 	void setAnimation(boost::int32_t animStackIndex, boost::int32_t animLayerIndex);
 
-	boost::int32_t getAnimStackIndex() const;
-	boost::int32_t getAnimLayerIndex() const;
-
     const ModelSP& getModel() const;
-
-    virtual const Matrix4x4* getBindMatrices() const;
-    virtual const Matrix3x3* getBindNormalMatrices() const;
-    virtual const Matrix4x4* getJointMatrices() const;
-    virtual const Matrix3x3* getJointNormalMatrices() const;
-
-    virtual bool isWriteBrightColor() const;
-    virtual float getBrightColorLimit() const;
-    virtual float getRefractiveIndex() const;
 
     const boost::shared_ptr<InstanceNode>& getRootInstanceNode() const;
 
     boost::shared_ptr<InstanceNode> findInstanceNodeRecursive(const std::string& name) const;
 
     boost::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
+
+    //
+
+    virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
 
 };
 

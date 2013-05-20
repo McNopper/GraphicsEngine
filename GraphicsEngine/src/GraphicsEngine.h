@@ -76,16 +76,16 @@
 #include "layer4/entity/GeneralEntityManager.h"
 #include "layer4/model/ModelManager.h"
 #include "layer5/nodeentity/NodeEntity.h"
+#include "layer5/nodeentity/NodeEntityFactory.h"
 #include "layer5/groundentity/GroundEntity.h"
 #include "layer5/groundentity/GroundEntityFactory.h"
 #include "layer5/path/CirclePath.h"
 #include "layer5/path/LinePath.h"
 #include "layer5/path/Path.h"
+#include "layer5/path/PathEntityManager.h"
 #include "layer5/path/OrientedCirclePath.h"
 #include "layer5/path/OrientedLinePath.h"
 #include "layer6/fbx/FbxEntityFactory.h"
-#include "layer6/nodefactory/NodeEntityFactory.h"
-#include "layer6/path/PathEntityManager.h"
 #include "layer6/primitives/PrimitiveEntityFactory.h"
 
 GLUSvoid mouseButtonEngine(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos);

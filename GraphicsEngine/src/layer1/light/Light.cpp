@@ -65,3 +65,9 @@ void Light::setRotation(const Quaternion& rotation)
 {
 	this->rotation = rotation;
 }
+
+void Light::setPositionRotation(const Point4& position, const Quaternion& rotation)
+{
+	this->position = position;
+	this->rotation = rotation;
+}

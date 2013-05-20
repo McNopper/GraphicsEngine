@@ -99,7 +99,7 @@ bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaT
 
 	if (!path->isPaused())
 	{
-		entity->setPositionOrientation(path->getLocation(), path->getOrientation());
+		entity->setPositionRotation(path->getPosition(), path->getRotation());
 	}
 
 	return true;

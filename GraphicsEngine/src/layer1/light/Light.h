@@ -46,6 +46,8 @@ public:
 	virtual const Quaternion& getRotation() const;
 	virtual void setRotation(const Quaternion& rotation);
 
+	virtual void setPositionRotation(const Point4& position, const Quaternion& rotation);
+
 	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const = 0;
 
 };

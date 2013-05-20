@@ -25,8 +25,6 @@ private:
 
 	Octant* visitingOctant;
 
-private:
-
 	Octant* getPreviousVisitingOctant() const;
 	void setPreviousVisitingOctant(Octant *previousVisitingOctant);
 
