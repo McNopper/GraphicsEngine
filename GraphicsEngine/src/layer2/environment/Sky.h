@@ -10,7 +10,7 @@
 
 #include "../../layer0/primitive/Shape.h"
 #include "../../layer0/math/Matrix4x4.h"
-#include "../../layer0/texture/TextureCubeMap.h"
+#include "../../layer1/texture/TextureCubeMap.h"
 
 #include "SkyVAO.h"
 

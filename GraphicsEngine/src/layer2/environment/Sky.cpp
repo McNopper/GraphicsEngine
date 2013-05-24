@@ -5,9 +5,9 @@
  *      Author: nopper
  */
 
-#include "../../layer0/shader/ProgramFactory.h"
-#include "../../layer0/shader/Variables.h"
-#include "../../layer0/texture/TextureCubeMapManager.h"
+#include "../../layer1/shader/ProgramFactory.h"
+#include "../../layer1/shader/Variables.h"
+#include "../../layer1/texture/TextureCubeMapManager.h"
 
 #include "Sky.h"
 

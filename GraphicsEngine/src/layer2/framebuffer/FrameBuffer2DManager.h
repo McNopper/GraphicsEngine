@@ -10,8 +10,6 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer1/camera/Viewport.h"
-
 #include "FrameBuffer2D.h"
 
 class FrameBuffer2DManager

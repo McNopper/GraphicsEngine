@@ -9,7 +9,7 @@
 #define STOPCOMMAND_H_
 
 
-#include "../../layer0/algorithm/ThreadsafeQueue.h"
+#include "../../layer0/concurrency/ThreadsafeQueue.h"
 #include "Command.h"
 
 class StopCommand: public Command

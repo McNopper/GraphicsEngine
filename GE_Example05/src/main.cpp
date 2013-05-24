@@ -4,9 +4,11 @@ using namespace std;
 
 static GroundPlane groundPlane;
 
-static bool wireframe = false;
-
 static CameraSP currentCamera;
+
+static vector<GeneralEntitySP> wireframeEntities;
+
+static vector<GeneralEntitySP> debugEntities;
 
 GLUSboolean initGame(GLUSvoid)
 {
@@ -67,6 +69,8 @@ GLUSboolean initGame(GLUSvoid)
 
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
+	wireframeEntities.push_back(modelEntity);
+
 	//
 
 	Texture2DSP stoneTexture = Texture2DManager::getInstance()->createTexture("rocks.jpg");
@@ -88,23 +92,38 @@ GLUSboolean initGame(GLUSvoid)
 
 	GeneralEntityManager::getInstance()->updateEntity(groundEntity);
 
+	wireframeEntities.push_back(groundEntity);
+
 	//
 	//
 	//
 
 	// Lights
 
-	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(-1.0f, 0.0f, -1.0f), Color::BLACK, Color::GREY, Color::BLACK));
+	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(0.0f, 1.0f, -1.0f), Color::BLACK, Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
 	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -0.1f, -1.0f), 0.9f, 0.75f, 2.0f, Point4(0.0f, 1.0f, -5.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
-	// The spot light is treated as a node entity
+	// The lights are treated as node entities
 
-	nodeEntity = nodeEntityFactory.createLightEntity("SpotLight", spotLight);
+	directionalLight->setPosition(Point4(0.0f, 10.0f, -20.0f));		// Position is just for debugging
+	nodeEntity = nodeEntityFactory.createLightEntity("DirectionalLight", directionalLight);
+	nodeEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+
+	debugEntities.push_back(nodeEntity);
+
+	//
+
+	nodeEntity = nodeEntityFactory.createLightEntity("SpotLight", spotLight);
+	nodeEntity->setDebug(true);
+
+	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+
+	debugEntities.push_back(nodeEntity);
 
 	// Update the programs with the current light properties
 
@@ -121,13 +140,16 @@ GLUSboolean initGame(GLUSvoid)
 	PerspectiveCameraSP camera = PerspectiveCameraSP(new PerspectiveCamera());
 	camera->lookAt(Point4(0.0f, 10.0f, 0.0f), Point4(0.0f, 0.0f, -10.0f), Vector3(0.0f, 1.0f, 0.0f));
 
-	CameraManager::getInstance()->setCamera("Render", camera, true);
+	CameraManager::getInstance()->setCamera("RenderCamera", camera, true);
 
 	// The render camera is treated as a node entity
 
 	nodeEntity = nodeEntityFactory.createCameraEntity("RenderCamera", camera);
+	nodeEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+
+	debugEntities.push_back(nodeEntity);
 
 	//
 
@@ -185,15 +207,6 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// All the primitves
 
-	if (wireframe)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-
 	GeneralEntityManager::getInstance()->render();
 
 	//
@@ -209,12 +222,16 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	FontSP font = FontManager::getInstance()->getFont("CourierNew");
 	font->print(760.0f, 10.0f, Color::RED, "Toggle wireframe: [Space]");
 	font->print(760.0f, 40.0f, Color::RED, "Toggle camera:    [c]");
+	font->print(760.0f, 70.0f, Color::RED, "Toggle debug:     [v]");
 
 	return GLUS_TRUE;
 }
 
 GLUSvoid terminateGame(GLUSvoid)
 {
+	debugEntities.clear();
+	wireframeEntities.clear();
+
 	terminateEngine();
 }
 
@@ -244,7 +261,14 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 	{
 		if (key == ' ')
 		{
-			wireframe = !wireframe;
+			auto walker = wireframeEntities.begin();
+
+			while (walker != wireframeEntities.end())
+			{
+				(*walker)->setWireframe(!(*walker)->isWireframe());
+
+				walker++;
+			}
 
 			return;
 		}
@@ -252,14 +276,29 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 		{
 			if (currentCamera == CameraManager::getInstance()->getDefaultPerspectiveCamera())
 			{
-				currentCamera = CameraManager::getInstance()->getCamera("Render");
+				currentCamera = CameraManager::getInstance()->getCamera("RenderCamera");
+
+				User::defaultUser.setUserCamera(CameraSP());
 			}
 			else
 			{
 				currentCamera = CameraManager::getInstance()->getDefaultPerspectiveCamera();
+
+				User::defaultUser.setUserCamera(currentCamera);
 			}
 
-			User::defaultUser.setUserCamera(currentCamera);
+			return;
+		}
+		else if (key == 'v')
+		{
+			auto walker = debugEntities.begin();
+
+			while (walker != debugEntities.end())
+			{
+				(*walker)->setDebug(!(*walker)->isDebug());
+
+				walker++;
+			}
 
 			return;
 		}

@@ -5,7 +5,7 @@
  *      Author: nopper
  */
 
-#include "../../layer1/debug/DebugDraw.h"
+#include "DebugDraw.h"
 
 #include "GroundPlane.h"
 

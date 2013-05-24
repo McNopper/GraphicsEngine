@@ -8,8 +8,8 @@
 #ifndef GROUNDVAO_H_
 #define GROUNDVAO_H_
 
-#include "../../layer0/shader/Program.h"
-#include "../../layer0/shader/VAO.h"
+#include "../../layer1/shader/Program.h"
+#include "../../layer1/shader/VAO.h"
 
 class Ground;
 

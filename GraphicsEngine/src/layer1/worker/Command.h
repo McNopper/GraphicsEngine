@@ -10,7 +10,7 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/algorithm/ThreadsafeQueue.h"
+#include "../../layer0/concurrency/ThreadsafeQueue.h"
 
 class Command
 {

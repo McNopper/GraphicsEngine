@@ -9,9 +9,7 @@
 
 using namespace std;
 
-SkyManager* SkyManager::instance = nullptr;
-
-SkyManager::SkyManager() : allSkies(), activeSky()
+SkyManager::SkyManager() : Singleton<SkyManager>(), allSkies(), activeSky()
 {
 }
 
@@ -26,26 +24,6 @@ SkyManager::~SkyManager()
 		walker++;
 	}
 	allSkies.clear();
-}
-
-SkyManager* SkyManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new SkyManager();
-	}
-
-	return instance;
-}
-
-void SkyManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-
-		instance = nullptr;
-	}
 }
 
 const SkySP& SkyManager::getSky(const string& key) const

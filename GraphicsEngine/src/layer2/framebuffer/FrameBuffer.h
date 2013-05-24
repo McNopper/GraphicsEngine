@@ -8,8 +8,8 @@
 #ifndef FRAMEBUFFER_H_
 #define FRAMEBUFFER_H_
 
-#include "../../layer0/texture/Texture.h"
-#include "../../layer0/renderbuffer/RenderBuffer.h"
+#include "../../layer1/texture/Texture.h"
+#include "../../layer1/renderbuffer/RenderBuffer.h"
 
 #include "FrameBufferBase.h"
 

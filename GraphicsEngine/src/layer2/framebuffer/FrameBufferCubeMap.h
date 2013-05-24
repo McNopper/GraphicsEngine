@@ -8,9 +8,9 @@
 #ifndef FRAMEBUFFERCUBEMAP_H_
 #define FRAMEBUFFERCUBEMAP_H_
 
-#include "../../layer0/renderbuffer/RenderBuffer.h"
-#include "../../layer0/texture/Texture2D.h"
-#include "../../layer0/texture/TextureCubeMap.h"
+#include "../../layer1/renderbuffer/RenderBuffer.h"
+#include "../../layer1/texture/Texture2D.h"
+#include "../../layer1/texture/TextureCubeMap.h"
 
 #include "FrameBufferBase.h"
 

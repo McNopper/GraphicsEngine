@@ -10,27 +10,27 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Sky.h"
 
-class SkyManager
+class SkyManager : public Singleton<SkyManager>
 {
 
-private:
+	friend class Singleton<SkyManager>;
 
-	static SkyManager* instance;
+private:
 
 	std::map<std::string, SkySP> allSkies;
 
 	SkySP activeSky;
 
+protected:
+
 	SkyManager();
 	virtual ~SkyManager();
 
 public:
-
-	static SkyManager* getInstance();
-
-	static void terminate();
 
 	const SkySP& getSky(const std::string& key) const;
 
