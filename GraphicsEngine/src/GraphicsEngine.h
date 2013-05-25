@@ -78,15 +78,15 @@
 #include "layer6/model/ModelManager.h"
 #include "layer7/groundentity/GroundEntity.h"
 #include "layer7/groundentity/GroundEntityFactory.h"
-#include "layer7/nodeentity/NodeEntity.h"
-#include "layer7/nodeentity/NodeEntityFactory.h"
 #include "layer7/path/CirclePath.h"
 #include "layer7/path/LinePath.h"
 #include "layer7/path/Path.h"
 #include "layer7/path/PathEntityManager.h"
 #include "layer7/path/OrientedCirclePath.h"
 #include "layer7/path/OrientedLinePath.h"
+#include "layer8/cameras/CameraEntityFactory.h"
 #include "layer8/fbx/FbxEntityFactory.h"
+#include "layer8/lights/LightEntityFactory.h"
 #include "layer8/primitives/PrimitiveEntityFactory.h"
 
 GLUSvoid mouseButtonEngine(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos);

@@ -189,5 +189,7 @@ Quaternion Camera::getRotation() const
 
 void Camera::debugDraw() const
 {
-	DebugDraw::drawer.drawPyramid(eye, Vector3(0.0f, -0.5f, 0.0f), getRotation() * Quaternion(90.0f, Vector3(1.0f, 0.0f, 0.0f)), getNearWidth() / zNear * 0.5f, getNearHeight() / zNear * 0.5f, 0.5f, Color::BLUE);
+	Quaternion baseRotation(90.0f, Vector3(1.0f, 0.0f, 0.0f));
+
+	DebugDraw::drawer.drawPyramid(eye, Vector3(0.0f, -0.5f, 0.0f), getRotation() * baseRotation, getNearWidth() / zNear * 0.5f, getNearHeight() / zNear * 0.5f, 0.5f, Color::BLUE);
 }

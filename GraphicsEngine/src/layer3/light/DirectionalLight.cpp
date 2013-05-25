@@ -62,12 +62,12 @@ void DirectionalLight::setPositionRotation(const Point4& position, const Quatern
 
 void DirectionalLight::debugDraw() const
 {
-	Quaternion rotation;
+	Quaternion localRotation;
 
-	float dotAlpha = Vector3(-1.0f, 0.0f, 0.0f).dot(direction);
-	float dotBeta = Vector3(0.0f, 1.0f, 0.0f).dot(direction);
+	float dotAlpha = Vector3(-1.0f, 0.0f, 0.0f).dot(directionOrignal);
+	float dotBeta = Vector3(0.0f, 1.0f, 0.0f).dot(directionOrignal);
 
-	rotation.rotateRzRyRxf(0.0f, 180.0f - 180.0f * dotAlpha, -180.0f * dotBeta);
+	localRotation.rotateRzRyRxf(0.0f, 180.0f - 180.0f * dotAlpha, -180.0f * dotBeta);
 
-	DebugDraw::drawer.drawArrow(getPosition(), Vector3(0.0f, 0.0f, 0.0f), rotation, 1.0f, 0.1f, 0.5f, 0.3f, Color::YELLOW);
+	DebugDraw::drawer.drawArrow(getPosition(), Vector3(0.0f, 0.0f, 0.0f), getRotation() * localRotation, 1.0f, 0.1f, 0.5f, 0.3f, Color::YELLOW);
 }

@@ -10,6 +10,8 @@ static vector<GeneralEntitySP> wireframeEntities;
 
 static vector<GeneralEntitySP> debugEntities;
 
+static vector<LightSP> lights;
+
 GLUSboolean initGame(GLUSvoid)
 {
 	if (!initEngine(GLUS_LOG_INFO, 7))
@@ -26,15 +28,15 @@ GLUSboolean initGame(GLUSvoid)
 
 	FbxEntityFactory entityFactory;
 
-	NodeEntityFactory nodeEntityFactory;
+	CameraEntityFactory cameraEntityFactory;
+
+	LightEntityFactory lightEntityFactory;
 
 	ModelEntitySP modelEntity;
 
 	GroundEntityFactory groundEntityFactory;
 
 	GroundEntitySP groundEntity;
-
-	NodeEntitySP nodeEntity;
 
 	SurfaceMaterialFactory surfaceMaterialFactory;
 	SurfaceMaterialSP surfaceMaterial;
@@ -109,25 +111,36 @@ GLUSboolean initGame(GLUSvoid)
 	// The lights are treated as node entities
 
 	directionalLight->setPosition(Point4(0.0f, 10.0f, -20.0f));		// Position is just for debugging
-	nodeEntity = nodeEntityFactory.createLightEntity("DirectionalLight", directionalLight);
-	nodeEntity->setDebug(true);
+	modelEntity = lightEntityFactory.createLightEntity("DirectionalLight", directionalLight);
+	modelEntity->setDebug(true);
 
-	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
-	debugEntities.push_back(nodeEntity);
+	debugEntities.push_back(modelEntity);
 
 	//
 
-	nodeEntity = nodeEntityFactory.createLightEntity("SpotLight", spotLight);
-	nodeEntity->setDebug(true);
+	animationLayer = AnimationLayerSP(new AnimationLayer());
+	animationLayer->addRotationValue(AnimationLayer::Y, 0.0f, 0.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Y, 1.0f, 45.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Y, 3.0f, -45.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Y, 4.0f, 0.0f, LinearInterpolator::interpolator);
+	allAnimStacks.push_back(AnimationStackSP(new AnimationStack(0.0f, 4.0f)));
+	allAnimStacks[0]->addAnimationLayer(animationLayer);
 
-	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+	//
 
-	debugEntities.push_back(nodeEntity);
+	modelEntity = lightEntityFactory.createLightEntity("SpotLight", spotLight, allAnimStacks);
+	modelEntity->setAnimation(0, 0);
+	modelEntity->setDebug(true);
+
+	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
+
+	debugEntities.push_back(modelEntity);
 
 	// Update the programs with the current light properties
 
-	vector<LightSP> lights;
+
 	lights.push_back(directionalLight);
 	lights.push_back(spotLight);
 
@@ -144,12 +157,12 @@ GLUSboolean initGame(GLUSvoid)
 
 	// The render camera is treated as a node entity
 
-	nodeEntity = nodeEntityFactory.createCameraEntity("RenderCamera", camera);
-	nodeEntity->setDebug(true);
+	modelEntity = cameraEntityFactory.createCameraEntity("RenderCamera", camera);
+	modelEntity->setDebug(true);
 
-	GeneralEntityManager::getInstance()->updateEntity(nodeEntity);
+	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
-	debugEntities.push_back(nodeEntity);
+	debugEntities.push_back(modelEntity);
 
 	//
 
@@ -189,6 +202,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	GeneralEntityManager::getInstance()->update();
 
 	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera);
+	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
 
 	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, deltaTime, false);
 
@@ -229,6 +243,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 GLUSvoid terminateGame(GLUSvoid)
 {
+	lights.clear();
 	debugEntities.clear();
 	wireframeEntities.clear();
 

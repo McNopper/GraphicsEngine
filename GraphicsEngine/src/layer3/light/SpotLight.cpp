@@ -101,16 +101,16 @@ void SpotLight::setPositionRotation(const Point4& position, const Quaternion& ro
 
 void SpotLight::debugDraw() const
 {
-	Quaternion baseRotation(90.0f, Vector3(1.0f, 0.0f, 0.0f));
-	Quaternion rotation;
+	Quaternion baseRotation(-90.0f, Vector3(1.0f, 0.0f, 0.0f));
+	Quaternion localRotation;
 
-	float dotAlpha = Vector3(-1.0f, 0.0f, 0.0f).dot(spotDirection);
-	float dotBeta = Vector3(0.0f, 1.0f, 0.0f).dot(spotDirection);
+	float dotAlpha = Vector3(-1.0f, 0.0f, 0.0f).dot(spotDirectionOriginal);
+	float dotBeta = Vector3(0.0f, 1.0f, 0.0f).dot(spotDirectionOriginal);
 
-	rotation.rotateRzRyRxf(0.0f, 180.0f - 180.0f * dotAlpha, -180.0f * dotBeta);
+	localRotation.rotateRzRyRxf(0.0f, 180.0f - 180.0f * dotAlpha, -180.0f * dotBeta);
 
 	float halfExtend = 0.5f;
 
-	DebugDraw::drawer.drawCone(getPosition(), Vector3(0.0f, -halfExtend, 0.0f), baseRotation * rotation, halfExtend, 0.4f, Color::YELLOW);
+	DebugDraw::drawer.drawCone(getPosition(), Vector3(0.0f, -halfExtend, 0.0f), getRotation() * localRotation * baseRotation, halfExtend, 0.4f, Color::YELLOW);
 }
 
