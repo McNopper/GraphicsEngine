@@ -5,7 +5,7 @@
  *      Author: nopper
  */
 
-#include "../../layer1/worker/WorkerManager.h"
+#include "../../layer1/command/WorkerManager.h"
 
 #include "EntityCommandManager.h"
 

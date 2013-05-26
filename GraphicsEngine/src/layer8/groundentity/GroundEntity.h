@@ -12,7 +12,7 @@
 
 #include "../../layer2/ground/Ground.h"
 #include "../../layer2/material/SurfaceMaterial.h"
-#include "../../layer6/entity/GeneralEntity.h"
+#include "../../layer7/entity/GeneralEntity.h"
 
 class GroundEntity : public GeneralEntity
 {

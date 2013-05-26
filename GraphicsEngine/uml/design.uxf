@@ -1,4 +1,134 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="11.5.1">
   <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>570</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer2
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>490</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer3
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>410</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer4
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>330</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer5
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>250</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer6
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>170</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer7
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>650</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer1
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>730</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer0
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>90</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer8
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>40</x>
+      <y>10</y>
+      <w>510</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>layer9
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
 </diagram>

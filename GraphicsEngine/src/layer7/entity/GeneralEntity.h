@@ -14,7 +14,7 @@
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer1/collision/BoundingSphere.h"
 #include "../../layer2/material/RefractiveIndices.h"
-#include "../../layer5/octree/OctreeEntity.h"
+#include "../../layer6/octree/OctreeEntity.h"
 
 class GeneralEntity : public OctreeEntity
 {

@@ -9,8 +9,8 @@
 #define ENTITYCOMMANDMANAGER_H_
 
 #include "../../layer0/concurrency/ThreadSafeCounter.h"
+#include "../../layer4/entity/Entity.h"
 
-#include "Entity.h"
 #include "UpdateCommand.h"
 
 class EntityCommandManager

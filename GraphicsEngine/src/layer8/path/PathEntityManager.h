@@ -9,7 +9,7 @@
 #define PATHENTITYMANAGER_H_
 
 #include "../../layer0/stereotype/Singleton.h"
-#include "../../layer6/entity/GeneralEntity.h"
+#include "../../layer7/entity/GeneralEntity.h"
 #include "Path.h"
 
 class PathEntityManager : public Singleton<PathEntityManager>

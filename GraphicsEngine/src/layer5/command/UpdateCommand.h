@@ -9,8 +9,8 @@
 #define UPDATECOMMAND_H_
 
 #include "../../layer0/concurrency/ThreadSafeCounter.h"
-#include "../../layer1/worker/Command.h"
-#include "Entity.h"
+#include "../../layer1/command/Command.h"
+#include "../../layer4/entity/Entity.h"
 
 class UpdateCommand: public Command
 {

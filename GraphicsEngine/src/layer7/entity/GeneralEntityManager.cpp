@@ -5,8 +5,8 @@
  *      Author: Norbert Nopper
  */
 
-#include "../../layer1/worker/WorkerManager.h"
-#include "../../layer4/entity/EntityCommandManager.h"
+#include "../../layer1/command/WorkerManager.h"
+#include "../../layer5/command/EntityCommandManager.h"
 
 #include "GeneralEntityManager.h"
 

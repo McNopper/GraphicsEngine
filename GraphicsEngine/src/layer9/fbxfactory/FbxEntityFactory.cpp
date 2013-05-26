@@ -12,7 +12,6 @@
 #include "../../layer2/interpolation/LinearInterpolator.h"
 #include "../../layer3/animation/AnimationLayer.h"
 #include "../../layer6/model/ModelManager.h"
-#include "../../layer7/modelentity/ModelEntity.h"
 #include "FbxSubMesh.h"
 
 #include "FbxEntityFactory.h"

@@ -15,8 +15,8 @@
 #include "../../layer5/environment/DynamicEnvironment.h"
 #include "../../layer5/node/InstanceNode.h"
 #include "../../layer5/node/NodeOwner.h"
-#include "../../layer6/entity/GeneralEntity.h"
 #include "../../layer6/model/Model.h"
+#include "../../layer7/entity/GeneralEntity.h"
 
 class ModelEntity : public GeneralEntity, public NodeOwner
 {

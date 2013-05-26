@@ -13,7 +13,7 @@
 #include "../../layer0/color/Color.h"
 #include "../../layer2/material/SurfaceMaterial.h"
 #include "../../layer3/animation/AnimationStack.h"
-#include "../../layer7/modelentity/ModelEntity.h"
+#include "../../layer8/modelentity/ModelEntity.h"
 
 class PrimitiveEntityFactory
 {

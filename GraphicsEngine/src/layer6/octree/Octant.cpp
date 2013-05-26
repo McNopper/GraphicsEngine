@@ -6,9 +6,9 @@
  */
 
 #include "../../layer0/color/Color.h"
-#include "../../layer1/worker/WorkerManager.h"
+#include "../../layer1/command/WorkerManager.h"
 #include "../../layer2/debug/DebugDraw.h"
-#include "../../layer4/entity/EntityCommandManager.h"
+#include "../../layer5/command/EntityCommandManager.h"
 
 #include "Octree.h"
 

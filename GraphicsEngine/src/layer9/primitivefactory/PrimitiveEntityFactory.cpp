@@ -7,7 +7,6 @@
 
 #include "../../layer6/model/Model.h"
 #include "../../layer6/model/ModelFactory.h"
-#include "../../layer7/modelentity/ModelEntity.h"
 
 #include "PrimitiveEntityFactory.h"
 

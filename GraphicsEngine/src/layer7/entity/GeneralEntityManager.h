@@ -13,7 +13,7 @@
 #include "../../layer0/algorithm/Quicksort.h"
 #include "../../layer0/stereotype/Singleton.h"
 #include "../../layer4/entity/EntityList.h"
-#include "../../layer5/octree/Octree.h"
+#include "../../layer6/octree/Octree.h"
 #include "GeneralEntity.h"
 
 class GeneralEntityManager : public Singleton<GeneralEntityManager>
