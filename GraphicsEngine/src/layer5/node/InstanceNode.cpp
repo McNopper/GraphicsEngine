@@ -5,15 +5,18 @@
  *      Author: nopper
  */
 
+#include "Node.h"
+
 #include "InstanceNode.h"
 
 using namespace std;
 
 using namespace boost;
 
-InstanceNode::InstanceNode(const string& name) :
-	name(name), visible(true), visibleActive(false), transparent(false), transparentActive(false), modelMatrix(), normalModelMatrix(), allChilds()
+InstanceNode::InstanceNode(const Node* node) :
+	node(node), visible(true), visibleActive(false), transparent(false), transparentActive(false), modelMatrix(), normalModelMatrix(), position(), rotation(), allChilds()
 {
+	name = node->getName();
 }
 
 InstanceNode::~InstanceNode()
@@ -137,3 +140,19 @@ const Matrix3x3& InstanceNode::getNormalModelMatrix() const
 {
 	return normalModelMatrix;
 }
+
+const Point4& InstanceNode::getPosition() const
+{
+	return position;
+}
+
+const Quaternion& InstanceNode::getRotation() const
+{
+	return rotation;
+}
+
+const Node* InstanceNode::getNode() const
+{
+	return node;
+}
+

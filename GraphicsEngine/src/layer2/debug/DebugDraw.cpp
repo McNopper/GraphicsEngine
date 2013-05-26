@@ -156,6 +156,7 @@ void DebugDraw::drawSphere(const Point4& position, const Vector3& offset, float 
 	modelMatrix.identity();
 	modelMatrix.translate(position.getX() + offset.getX(), position.getY() + offset.getY(), position.getZ() + offset.getZ());
 	modelMatrix.scale(radius * 2.0f, radius * 2.0f, radius * 2.0f);
+	glEnable(GL_CULL_FACE);
 	LineGeometryManager::getInstance()->getLineGeometry("Sphere")->draw(modelMatrix, color);
 }
 
@@ -173,9 +174,8 @@ void DebugDraw::drawCone(const Point4& position, const Vector3& offset, const Qu
 	modelMatrix.multiply(rotation.getRotationMatrix4x4());
 	modelMatrix.translate(offset.getX(), offset.getY(), offset.getZ());
 	modelMatrix.scale(radius * 2.0f, halfExtend * 2.0f, radius * 2.0f);
-	glDisable(GL_CULL_FACE);
-	LineGeometryManager::getInstance()->getLineGeometry("Cone")->draw(modelMatrix, color);
 	glEnable(GL_CULL_FACE);
+	LineGeometryManager::getInstance()->getLineGeometry("Cone")->draw(modelMatrix, color);
 }
 
 void DebugDraw::drawCylinder(const Point4& position, const Vector3& offset, const Quaternion& rotation, float halfExtend, float radius, const Color& color) const
@@ -192,9 +192,8 @@ void DebugDraw::drawCylinder(const Point4& position, const Vector3& offset, cons
 	modelMatrix.multiply(rotation.getRotationMatrix4x4());
 	modelMatrix.translate(offset.getX(), offset.getY(), offset.getZ());
 	modelMatrix.scale(radius * 2.0f, halfExtend * 2.0f, radius * 2.0f);
-	glDisable(GL_CULL_FACE);
-	LineGeometryManager::getInstance()->getLineGeometry("Cylinder")->draw(modelMatrix, color);
 	glEnable(GL_CULL_FACE);
+	LineGeometryManager::getInstance()->getLineGeometry("Cylinder")->draw(modelMatrix, color);
 }
 
 void DebugDraw::drawArrow(const Point4& position, const Vector3& offset, const Quaternion& rotation, float lengthTail, float radiusTail, float lengthHead, float radiusHead, const Color& color) const
@@ -217,8 +216,7 @@ void DebugDraw::drawPyramid(const Point4& position, const Vector3& offset, const
 	modelMatrix.multiply(rotation.getRotationMatrix4x4());
 	modelMatrix.translate(offset.getX(), offset.getY(), offset.getZ());
 	modelMatrix.scale(halfWidth * 2.0f, halfHeight * 2.0f, halfDepth * 2.0f);
-	glDisable(GL_CULL_FACE);
-	LineGeometryManager::getInstance()->getLineGeometry("Pyramid")->draw(modelMatrix, color);
 	glEnable(GL_CULL_FACE);
+	LineGeometryManager::getInstance()->getLineGeometry("Pyramid")->draw(modelMatrix, color);
 }
 

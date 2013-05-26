@@ -24,11 +24,11 @@ private:
 
 public:
 
-	static void setLightByType(const std::string& programType, const LightSP& light);
+	static void setLightByType(const std::string& programType, boost::int32_t index, const LightSP& light, const Point4& position, const Quaternion& rotation);
 
-	static void setLightsByType(const std::string& programType, const std::vector<LightSP>& lights);
+	static void setNumberLightsByType(const std::string& programType, boost::int32_t numberLights);
 
-	static void setCameraByType(const std::string& programType, const CameraSP& camera);
+	static void setCameraByType(const std::string& programType, const CameraSP& camera, const Point4& position, const Quaternion& rotation, bool useLocation = false);
 
 };
 

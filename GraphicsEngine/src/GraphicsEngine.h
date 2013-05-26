@@ -77,7 +77,6 @@
 #include "layer6/entity/GeneralEntityManager.h"
 #include "layer6/model/ModelManager.h"
 #include "layer7/groundentity/GroundEntity.h"
-#include "layer7/groundentity/GroundEntityFactory.h"
 #include "layer7/path/CirclePath.h"
 #include "layer7/path/LinePath.h"
 #include "layer7/path/Path.h"
@@ -86,6 +85,7 @@
 #include "layer7/path/OrientedLinePath.h"
 #include "layer8/cameras/CameraEntityFactory.h"
 #include "layer8/fbx/FbxEntityFactory.h"
+#include "layer8/grounds/GroundEntityFactory.h"
 #include "layer8/lights/LightEntityFactory.h"
 #include "layer8/primitives/PrimitiveEntityFactory.h"
 

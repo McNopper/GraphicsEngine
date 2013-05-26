@@ -23,7 +23,7 @@ ProgramManagerProxy::~ProgramManagerProxy()
 {
 }
 
-void ProgramManagerProxy::setLightByType(const string& programType, const LightSP& light)
+void ProgramManagerProxy::setLightByType(const string& programType, int32_t index, const LightSP& light, const Point4& position, const Quaternion& rotation)
 {
 	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
 
@@ -34,13 +34,12 @@ void ProgramManagerProxy::setLightByType(const string& programType, const LightS
 	{
 		currentProgram = walker->second;
 		currentProgram->use();
-		glUniform1i(currentProgram->getUniformLocation(u_numberLights), 1);
-		light->setLightProperties(0, currentProgram);
+		light->setLightProperties(index, currentProgram, position, rotation);
 		walker++;
 	}
 }
 
-void ProgramManagerProxy::setLightsByType(const std::string& programType, const std::vector<LightSP>& lights)
+void ProgramManagerProxy::setNumberLightsByType(const std::string& programType, boost::int32_t numberLights)
 {
 	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
 
@@ -51,17 +50,12 @@ void ProgramManagerProxy::setLightsByType(const std::string& programType, const 
 	{
 		currentProgram = walker->second;
 		currentProgram->use();
-		glUniform1i(currentProgram->getUniformLocation(u_numberLights), static_cast<int32_t>(lights.size()));
-
-		for (uint32_t i = 0; i < lights.size(); i++)
-		{
-			lights[i]->setLightProperties(i, currentProgram);
-		}
+		glUniform1i(currentProgram->getUniformLocation(u_numberLights), numberLights);
 		walker++;
 	}
 }
 
-void ProgramManagerProxy::setCameraByType(const string& programType, const CameraSP& camera)
+void ProgramManagerProxy::setCameraByType(const string& programType, const CameraSP& camera, const Point4& position, const Quaternion& rotation, bool useLocation)
 {
 	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
 
@@ -72,7 +66,7 @@ void ProgramManagerProxy::setCameraByType(const string& programType, const Camer
 	{
 		currentProgram = walker->second;
 		currentProgram->use();
-		camera->setCameraProperties(currentProgram);
+		camera->setCameraProperties(currentProgram, position, rotation, useLocation);
 		walker++;
 	}
 }

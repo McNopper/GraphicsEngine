@@ -12,7 +12,7 @@
 
 #include "../../layer2/material/SurfaceMaterial.h"
 
-#include "GroundEntity.h"
+#include "../../layer7/groundentity/GroundEntity.h"
 
 class GroundEntityFactory
 {

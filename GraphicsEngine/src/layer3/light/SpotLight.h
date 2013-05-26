@@ -17,14 +17,13 @@ class SpotLight: public PointLight
 
 private:
 
-	Vector3 spotDirectionOriginal;
 	Vector3 spotDirection;
 	float spotCosCutOff;
 	float spotCosCutOffOuter;
 	float spotExponent;
 
 public:
-	SpotLight(const Vector3& spotDirection, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	SpotLight(float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~SpotLight();
 
@@ -32,18 +31,12 @@ public:
 	void setSpotCosCutOff(float spotCosCutOff);
 	float getSpotCosCutOffOuter() const;
 	void setSpotCosCutOffOuter(float spotCosCutOffOuter);
-	const Vector3& getSpotDirection() const;
-	void setSpotDirection(const Vector3& spotDirection);
 	float getSpotExponent() const;
 	void setSpotExponent(float spotExponent);
 
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
-	virtual void setRotation(const Quaternion& rotation);
-
-	virtual void setPositionRotation(const Point4& position, const Quaternion& rotation);
-
-	virtual void debugDraw() const;
+	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
 

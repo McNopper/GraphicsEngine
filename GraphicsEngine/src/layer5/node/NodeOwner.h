@@ -29,6 +29,10 @@ public:
 
     virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const = 0;
 
+    virtual void addLightNode(const InstanceNodeSP& lightNode) = 0;
+
+    virtual void addCameraNode(const InstanceNodeSP& cameraNode) = 0;
+
 };
 
 #endif /* NODEOWNER_H_ */

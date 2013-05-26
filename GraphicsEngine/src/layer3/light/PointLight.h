@@ -23,7 +23,7 @@ protected:
 	float quadraticAttenuation;
 
 public:
-	PointLight(const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	PointLight(float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~PointLight();
 
@@ -34,9 +34,9 @@ public:
 	float getQuadraticAttenuation() const;
 	void setQuadraticAttenuation(float quadraticAttenuation);
 
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
-	virtual void debugDraw() const;
+	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
 

@@ -13,11 +13,10 @@ using namespace boost;
 
 using namespace std;
 
-PointLight::PointLight(const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+PointLight::PointLight(float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 		const Color& specular) :
 		Light(ambient, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
 {
-	setPosition(position);
 }
 
 PointLight::~PointLight()
@@ -54,7 +53,7 @@ void PointLight::setQuadraticAttenuation(float quadraticAttenuation)
 	this->quadraticAttenuation = quadraticAttenuation;
 }
 
-void PointLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program) const
+void PointLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 1);
 
@@ -69,8 +68,8 @@ void PointLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progr
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightQuadraticAttenuation), quadraticAttenuation);
 }
 
-void PointLight::debugDraw() const
+void PointLight::debugDraw(const Point4& position, const Quaternion& rotation) const
 {
-	DebugDraw::drawer.drawSphere(getPosition(), Vector3(0.0f, 0.0f, 0.0f), 0.5f, Color::YELLOW);
+	DebugDraw::drawer.drawSphere(position, Vector3(0.0f, 0.0f, 0.0f), 0.5f, Color::YELLOW);
 }
 

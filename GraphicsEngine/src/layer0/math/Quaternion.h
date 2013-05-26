@@ -33,11 +33,16 @@ public:
 	Quaternion(const Matrix3x3& matrix);
 	~Quaternion();
 
+	bool operator ==(const Quaternion& other) const;
+	bool operator !=(const Quaternion& other) const;
+
 	Quaternion& operator =(const Quaternion& other);
 
 	Quaternion operator *(const Quaternion& other) const;
 
 	Vector3 operator *(const Vector3& vector) const;
+
+	Point4 operator *(const Point4& point) const;
 
 	Quaternion conjugate() const;
 

@@ -78,23 +78,6 @@ NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentN
 	float geoRotate[3] = {0.0f, 0.0f, 0.0f};
 	float geoScale[3] = {1.0f, 1.0f, 1.0f};
 
-	if (camera.get())
-	{
-		translate[0] = camera->getEye().getX();
-		translate[1] = camera->getEye().getY();
-		translate[2] = camera->getEye().getZ();
-
-		glusMatrix3x3GetEulerRzRyRxf(rotate, camera->getRotation().getRotationMatrix3x3().getM());
-	}
-	else if (light.get())
-	{
-		translate[0] = light->getPosition().getX();
-		translate[1] = light->getPosition().getY();
-		translate[2] = light->getPosition().getZ();
-
-		glusMatrix3x3GetEulerRzRyRxf(rotate, light->getRotation().getRotationMatrix3x3().getM());
-	}
-
 	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks, joint);
 }
 

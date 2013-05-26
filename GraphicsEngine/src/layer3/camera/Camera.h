@@ -42,6 +42,11 @@ protected:
 
 	ViewFrustum viewFrustum;
 
+	Point4 lastPosition;
+	Quaternion lastRotation;
+
+	Matrix4x4 transitionMatrix;
+
 	void updateViewFrustum();
 
 public:
@@ -49,11 +54,6 @@ public:
 	Camera();
 	Camera(const Camera& other);
 	virtual ~Camera();
-
-    void setPosition(const Point4& position);
-    void setRotation(float angleZ, float angleY, float angleX);
-    void setRotation(const Quaternion& rotation);
-    void setPositionRotation(const Point4& position, const Quaternion& rotation);
 
 	void lookAt(const Point4& eye, const Point4& center, const Vector3& up);
 
@@ -94,11 +94,9 @@ public:
 
 	float distanceToCamera(const BoundingSphere& boundingSphere) const;
 
-	void setCameraProperties(const ProgramSP& program) const;
+	void setCameraProperties(const ProgramSP& program, const Point4& position, const Quaternion& rotation, bool useLocation = false);
 
-	Quaternion getRotation() const;
-
-	virtual void debugDraw() const;
+	virtual void debugDraw(const Point4& position, const Quaternion& rotation, bool useLocation = false) const;
 
 };
 

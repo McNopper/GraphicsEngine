@@ -10,7 +10,11 @@ static vector<GeneralEntitySP> wireframeEntities;
 
 static vector<GeneralEntitySP> debugEntities;
 
-static vector<LightSP> lights;
+static vector<ModelEntitySP> lightEntities;
+
+static vector<ModelEntitySP> cameraEntities;
+
+static bool drawDebug = true;
 
 GLUSboolean initGame(GLUSvoid)
 {
@@ -67,7 +71,6 @@ GLUSboolean initGame(GLUSvoid)
 	modelEntity->setRotation(0.0f, 90.0f, 0.0f);
 
 	modelEntity->setUsePositionAsBoundingSphereCenter(true);
-	//modelEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
@@ -90,8 +93,6 @@ GLUSboolean initGame(GLUSvoid)
 	// Tessellate depending on screen space
 	groundEntity->setScreenDistance(8.0f);
 
-	//groundEntity->setDebug(true);
-
 	GeneralEntityManager::getInstance()->updateEntity(groundEntity);
 
 	wireframeEntities.push_back(groundEntity);
@@ -102,35 +103,42 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Lights
 
-	LightSP directionalLight = LightSP(new DirectionalLight(Vector3(0.0f, 1.0f, -1.0f), Color::BLACK, Color::GREY, Color::BLACK));
+	LightSP directionalLight = LightSP(new DirectionalLight(Color::BLACK, Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
-	LightSP spotLight = LightSP(new SpotLight(Vector3(0.0f, -0.1f, -1.0f), 0.9f, 0.75f, 2.0f, Point4(0.0f, 1.0f, -5.0f), 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
+	LightSP spotLight = LightSP(new SpotLight(0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
 	// The lights are treated as node entities
 
-	directionalLight->setPosition(Point4(0.0f, 10.0f, -20.0f));		// Position is just for debugging
 	modelEntity = lightEntityFactory.createLightEntity("DirectionalLight", directionalLight);
+	modelEntity->setPosition(Point4(0.0f, 10.0f, -20.0f));
+	modelEntity->setRotation(Quaternion(-45.0f, Vector3(1.0f, 0.0f, 0.0f)));
 	modelEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
 	debugEntities.push_back(modelEntity);
 
+	lightEntities.push_back(modelEntity);
+
+	//
+	// The later spor light will be animated
 	//
 
 	animationLayer = AnimationLayerSP(new AnimationLayer());
-	animationLayer->addRotationValue(AnimationLayer::Y, 0.0f, 0.0f, LinearInterpolator::interpolator);
-	animationLayer->addRotationValue(AnimationLayer::Y, 1.0f, 45.0f, LinearInterpolator::interpolator);
-	animationLayer->addRotationValue(AnimationLayer::Y, 3.0f, -45.0f, LinearInterpolator::interpolator);
-	animationLayer->addRotationValue(AnimationLayer::Y, 4.0f, 0.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Z, 0.0f, 0.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Z, 1.0f, 45.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Z, 3.0f, -45.0f, LinearInterpolator::interpolator);
+	animationLayer->addRotationValue(AnimationLayer::Z, 4.0f, 0.0f, LinearInterpolator::interpolator);
 	allAnimStacks.push_back(AnimationStackSP(new AnimationStack(0.0f, 4.0f)));
 	allAnimStacks[0]->addAnimationLayer(animationLayer);
 
 	//
 
 	modelEntity = lightEntityFactory.createLightEntity("SpotLight", spotLight, allAnimStacks);
+	modelEntity->setPosition(Point4(0.0f, 1.0f, -5.0f));
+	modelEntity->setRotation(Quaternion(80.0f, Vector3(1.0f, 0.0f, 0.0f)));
 	modelEntity->setAnimation(0, 0);
 	modelEntity->setDebug(true);
 
@@ -138,31 +146,29 @@ GLUSboolean initGame(GLUSvoid)
 
 	debugEntities.push_back(modelEntity);
 
-	// Update the programs with the current light properties
-
-
-	lights.push_back(directionalLight);
-	lights.push_back(spotLight);
-
-	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
+	lightEntities.push_back(modelEntity);
 
 	//
 	//
 	//
 
 	PerspectiveCameraSP camera = PerspectiveCameraSP(new PerspectiveCamera());
-	camera->lookAt(Point4(0.0f, 10.0f, 0.0f), Point4(0.0f, 0.0f, -10.0f), Vector3(0.0f, 1.0f, 0.0f));
+	//camera->lookAt(Point4(0.0f, 10.0f, 0.0f), Point4(0.0f, 0.0f, -10.0f), Vector3(0.0f, 1.0f, 0.0f));
 
 	CameraManager::getInstance()->setCamera("RenderCamera", camera, true);
 
 	// The render camera is treated as a node entity
 
 	modelEntity = cameraEntityFactory.createCameraEntity("RenderCamera", camera);
+	modelEntity->setPosition(Point4(0.0f, 10.0f, 0.0f));
+	modelEntity->setRotation(Quaternion(-45.0f, Vector3(1.0f, 0.0f, 0.0f)));
 	modelEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
 	debugEntities.push_back(modelEntity);
+
+	cameraEntities.push_back(modelEntity);
 
 	//
 
@@ -201,10 +207,30 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	GeneralEntityManager::getInstance()->update();
 
-	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera);
-	ProgramManagerProxy::setLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, lights);
-
 	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, deltaTime, false);
+
+	// Lights are updated by model itself
+
+	if (User::defaultUser.getUserCamera().get())
+	{
+		ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, Point4(), Quaternion());
+	}
+	else
+	{
+		cameraEntities[0]->setCamera("RenderCamera");
+	}
+
+	int32_t numberLights = 0;
+	auto walkerLights = lightEntities.begin();
+	while(walkerLights != lightEntities.end())
+	{
+		numberLights = (*walkerLights)->setLights(numberLights);
+
+		walkerLights++;
+	}
+	ProgramManagerProxy::setNumberLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, numberLights);
+
+	//
 
 	GeneralEntityManager::getInstance()->sort();
 
@@ -222,6 +248,11 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	// All the primitves
 
 	GeneralEntityManager::getInstance()->render();
+
+	if (drawDebug)
+	{
+		CameraManager::getInstance()->getDefaultPerspectiveCamera()->debugDraw(Point4(), Quaternion());
+	}
 
 	//
 
@@ -243,7 +274,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 GLUSvoid terminateGame(GLUSvoid)
 {
-	lights.clear();
+	cameraEntities.clear();
+	lightEntities.clear();
 	debugEntities.clear();
 	wireframeEntities.clear();
 
@@ -314,6 +346,8 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 
 				walker++;
 			}
+
+			drawDebug = !drawDebug;
 
 			return;
 		}

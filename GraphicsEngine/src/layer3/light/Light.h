@@ -25,9 +25,6 @@ protected:
 	Color diffuse;
 	Color specular;
 
-	Point4 position;
-	Quaternion rotation;
-
 public:
 
 	Light(const Color& ambient, const Color& diffuse, const Color& specular);
@@ -40,17 +37,9 @@ public:
 	const Color& getSpecular() const;
 	void setSpecular(const Color& specular);
 
-	virtual const Point4& getPosition() const;
-	virtual void setPosition(const Point4& position);
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const = 0;
 
-	virtual const Quaternion& getRotation() const;
-	virtual void setRotation(const Quaternion& rotation);
-
-	virtual void setPositionRotation(const Point4& position, const Quaternion& rotation);
-
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const = 0;
-
-	virtual void debugDraw() const = 0;
+	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const = 0;
 
 };
 

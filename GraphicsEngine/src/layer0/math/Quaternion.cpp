@@ -64,6 +64,24 @@ Quaternion::~Quaternion()
 {
 }
 
+bool Quaternion::operator ==(const Quaternion& other) const
+{
+	for (int32_t i = 0; i < 4; i++)
+	{
+		if (q[i] != other.q[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Quaternion::operator !=(const Quaternion& other) const
+{
+	return !(*this == other);
+}
+
 Quaternion& Quaternion::operator =(const Quaternion& other)
 {
 	q[0] = other.q[0];
@@ -92,6 +110,13 @@ Vector3 Quaternion::operator *(const Vector3& vector) const
 	Quaternion result = (*this) * Quaternion(vector.getX(), vector.getY(), vector.getZ(), 0.0f) * conjugate();
 
 	return Vector3(result.q[0], result.q[1], result.q[2]);
+}
+
+Point4 Quaternion::operator *(const Point4& point) const
+{
+	Quaternion result = (*this) * Quaternion(point.getX(), point.getY(), point.getZ(), 0.0f) * conjugate();
+
+	return Point4(result.q[0], result.q[1], result.q[2]);
 }
 
 Quaternion Quaternion::conjugate() const

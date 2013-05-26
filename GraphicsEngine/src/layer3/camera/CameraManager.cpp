@@ -25,6 +25,8 @@ CameraManager::CameraManager() :
 	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = CameraSP(new OrthographicCamera());
 	allWindowCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY];
 	allWindowCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY];
+
+	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY]->lookAt(Point4(0.0f, 0.0f, 5.0f), Point4(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 }
 
 CameraManager::~CameraManager()

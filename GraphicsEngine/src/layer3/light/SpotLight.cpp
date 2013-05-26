@@ -13,10 +13,10 @@ using namespace boost;
 
 using namespace std;
 
-SpotLight::SpotLight(const Vector3& spotDirection, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, const Point4& position, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse, const Color& specular) :
-		PointLight(position, constantAttenuation, linearAttenuation, quadraticAttenuation, ambient, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
+SpotLight::SpotLight(float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse, const Color& specular) :
+		PointLight(constantAttenuation, linearAttenuation, quadraticAttenuation, ambient, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
 {
-	setSpotDirection(spotDirection);
+	this->spotDirection = Vector3(0.0f, -1.0f, 0.0f);
 }
 
 SpotLight::~SpotLight()
@@ -43,18 +43,6 @@ void SpotLight::setSpotCosCutOffOuter(float spotCosCutOffOuter)
 	this->spotCosCutOffOuter = spotCosCutOffOuter;
 }
 
-const Vector3& SpotLight::getSpotDirection() const
-{
-	return spotDirection;
-}
-
-void SpotLight::setSpotDirection(const Vector3& spotDirection)
-{
-	this->spotDirectionOriginal = spotDirection.normalize();
-
-	this->spotDirection = rotation * this->spotDirectionOriginal;
-}
-
 float SpotLight::getSpotExponent() const
 {
 	return spotExponent;
@@ -65,7 +53,7 @@ void SpotLight::setSpotExponent(float spotExponent)
 	this->spotExponent = spotExponent;
 }
 
-void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program) const
+void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 2);
 
@@ -79,38 +67,16 @@ void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progra
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightLinearAttenuation), linearAttenuation);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightQuadraticAttenuation), quadraticAttenuation);
 
-	glUniform3fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotDirection), 1, spotDirection.getV());
+	glUniform3fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotDirection), 1, (rotation * spotDirection).getV());
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotCosCutOff), spotCosCutOff);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotCosCutOffOuter), spotCosCutOffOuter);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotExponent), spotExponent);
 }
 
-void SpotLight::setRotation(const Quaternion& rotation)
+void SpotLight::debugDraw(const Point4& position, const Quaternion& rotation) const
 {
-	Light::setRotation(rotation);
-
-	this->spotDirection = rotation * this->spotDirectionOriginal;
-}
-
-void SpotLight::setPositionRotation(const Point4& position, const Quaternion& rotation)
-{
-	Light::setPositionRotation(position, rotation);
-
-	this->spotDirection = rotation * this->spotDirectionOriginal;
-}
-
-void SpotLight::debugDraw() const
-{
-	Quaternion baseRotation(-90.0f, Vector3(1.0f, 0.0f, 0.0f));
-	Quaternion localRotation;
-
-	float dotAlpha = Vector3(-1.0f, 0.0f, 0.0f).dot(spotDirectionOriginal);
-	float dotBeta = Vector3(0.0f, 1.0f, 0.0f).dot(spotDirectionOriginal);
-
-	localRotation.rotateRzRyRxf(0.0f, 180.0f - 180.0f * dotAlpha, -180.0f * dotBeta);
-
 	float halfExtend = 0.5f;
 
-	DebugDraw::drawer.drawCone(getPosition(), Vector3(0.0f, -halfExtend, 0.0f), getRotation() * localRotation * baseRotation, halfExtend, 0.4f, Color::YELLOW);
+	DebugDraw::drawer.drawCone(position, Vector3(0.0f, -halfExtend, 0.0f), rotation, halfExtend, 0.4f, Color::YELLOW);
 }
 

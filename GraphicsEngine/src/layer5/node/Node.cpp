@@ -611,7 +611,7 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 	}
 }
 
-void Node::updateRenderMatrix(InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
+void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
 {
 	if (joint || (instanceNode.isVisibleActive() && !instanceNode.isVisible()) || (!instanceNode.isVisibleActive() && !visible))
 	{
@@ -674,18 +674,8 @@ void Node::updateRenderMatrix(InstanceNode& instanceNode, const Matrix4x4& paren
 
 	//
 
-	Point4 position(instanceNode.modelMatrix * Point4());
-	Quaternion rotation(instanceNode.modelMatrix.extractMatrix3x3());
-
-	if (camera.get())
-	{
-		camera->setPositionRotation(position, rotation);
-	}
-
-	if (light.get())
-	{
-		light->setPositionRotation(position, rotation);
-	}
+	instanceNode.position = instanceNode.modelMatrix * Point4();
+	instanceNode.rotation = instanceNode.modelMatrix.extractMatrix3x3();
 
 	//
 
@@ -694,7 +684,7 @@ void Node::updateRenderMatrix(InstanceNode& instanceNode, const Matrix4x4& paren
 	int32_t i = 0;
 	while (walker != allChilds.end())
 	{
-		(*walker)->updateRenderMatrix(*instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
+		(*walker)->updateRenderMatrix(nodeOwner, *instanceNode.getChild(i), newParentMatrix, time, animStackIndex, animLayerIndex);
 
 		walker++;
 		i++;
@@ -744,19 +734,29 @@ float Node::getStopTime(int32_t animStackIndex, int32_t animLayerIndex) const
 	return 0.0f;
 }
 
-void Node::updateInstanceNode(const InstanceNodeSP& instanceNode) const
+void Node::updateInstanceNode(NodeOwner& nodeOwner, const InstanceNodeSP& instanceNode) const
 {
+	if (light.get())
+	{
+		nodeOwner.addLightNode(instanceNode);
+	}
+
+	if (camera.get())
+	{
+		nodeOwner.addCameraNode(instanceNode);
+	}
+
 	auto walker = allChilds.begin();
 
 	while (walker != allChilds.end())
 	{
 		NodeSP childNode = *walker;
 
-		InstanceNodeSP childInstanceNode = InstanceNodeSP(new InstanceNode(childNode->getName()));
+		InstanceNodeSP childInstanceNode = InstanceNodeSP(new InstanceNode(childNode.get()));
 
 		instanceNode->addChild(childInstanceNode);
 
-		childNode->updateInstanceNode(childInstanceNode);
+		childNode->updateInstanceNode(nodeOwner, childInstanceNode);
 
 		walker++;
 	}

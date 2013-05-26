@@ -9,6 +9,7 @@
 #include "../../layer2/debug/DebugDraw.h"
 #include "../../layer2/environment/SkyManager.h"
 #include "../../layer2/material/RefractiveIndices.h"
+#include "../../layer4/shader/ProgramManagerProxy.h"
 
 #include "ModelEntity.h"
 
@@ -43,8 +44,8 @@ ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX,
 		model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices);
 		model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), 0.0f, animStackIndex, animLayerIndex);
 	}
-	rootInstanceNode = InstanceNodeSP(new InstanceNode(model->getRootNode()->getName()));
-	model->getRootNode()->updateInstanceNode(rootInstanceNode);
+	rootInstanceNode = InstanceNodeSP(new InstanceNode(model->getRootNode().get()));
+	model->getRootNode()->updateInstanceNode(*this, rootInstanceNode);
 
 	updateBoundingSphereCenter(true);
 }
@@ -107,7 +108,7 @@ void ModelEntity::update()
 
 	if (dirty)
 	{
-		model->getRootNode()->updateRenderMatrix(*rootInstanceNode, getModelMatrix(), time, animStackIndex, animLayerIndex);
+		model->getRootNode()->updateRenderMatrix(*this, *rootInstanceNode, getModelMatrix(), time, animStackIndex, animLayerIndex);
 
 		dirty = false;
 	}
@@ -153,12 +154,12 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 	{
 		if (node.getCamera().get())
 		{
-			node.getCamera()->debugDraw();
+			node.getCamera()->debugDraw(instanceNode.getPosition(), instanceNode.getRotation(), true);
 		}
 
 		if (node.getLight().get())
 		{
-			node.getLight()->debugDraw();
+			node.getLight()->debugDraw(instanceNode.getPosition(), instanceNode.getRotation());
 		}
 	}
 
@@ -470,3 +471,54 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 	}
 }
 
+void ModelEntity::addLightNode(const InstanceNodeSP& lightNode)
+{
+	allLights.push_back(lightNode);
+}
+
+void ModelEntity::addCameraNode(const InstanceNodeSP& cameraNode)
+{
+	allCameras.push_back(cameraNode);
+}
+
+int32_t ModelEntity::setLights(int32_t lightNumber) const
+{
+	auto walker = allLights.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while(walker != allLights.end())
+	{
+		instanceNode = *walker;
+
+		ProgramManagerProxy::setLightByType(GeneralEntity::currentProgramType, lightNumber, instanceNode->getNode()->getLight(), instanceNode->getPosition(), instanceNode->getRotation());
+
+		lightNumber++;
+		walker++;
+	}
+
+	return lightNumber;
+}
+
+bool ModelEntity::setCamera(const string& name) const
+{
+	auto walker = allCameras.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while(walker != allCameras.end())
+	{
+		instanceNode = *walker;
+
+		if (instanceNode->getNode()->getName().compare(name) == 0)
+		{
+			ProgramManagerProxy::setCameraByType(GeneralEntity::currentProgramType, instanceNode->getNode()->getCamera(), instanceNode->getPosition(), instanceNode->getRotation(), true);
+
+			return true;
+		}
+
+		walker++;
+	}
+
+	return false;
+}

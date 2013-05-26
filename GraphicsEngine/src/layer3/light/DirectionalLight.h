@@ -17,24 +17,16 @@ class DirectionalLight: public Light
 
 protected:
 
-	Vector3 directionOrignal;
 	Vector3 direction;
 
 public:
-	DirectionalLight(const Vector3& direction, const Color& ambient, const Color& diffuse,
+	DirectionalLight(const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~DirectionalLight();
 
-	const Vector3& getDirection() const;
-	void setDirection(const Vector3& direction);
+	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
-	virtual void setRotation(const Quaternion& rotation);
-
-	virtual void setPositionRotation(const Point4& position, const Quaternion& rotation);
-
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program) const;
-
-	virtual void debugDraw() const;
+	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
 

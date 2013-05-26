@@ -20,7 +20,7 @@ LightManager::LightManager() : allLights()
 	Color ambient(0.1f, 0.1f, 0.1f, 1.0f);
 	Color specular(0.1f, 0.1f, 0.1f, 1.0f);
 
-	allLights[DEFAULT_DIRECTIONAL_LIGHT_KEY] = LightSP(new DirectionalLight(Vector3(0.0f, 0.0f, 1.0f), ambient, Color::WHITE, specular));
+	allLights[DEFAULT_DIRECTIONAL_LIGHT_KEY] = LightSP(new DirectionalLight(ambient, Color::WHITE, specular));
 }
 
 LightManager::~LightManager()

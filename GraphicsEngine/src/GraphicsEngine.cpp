@@ -70,7 +70,7 @@ GLUSvoid reshapeEngine(GLUSint width, GLUSint height)
 
 	CameraManager::getInstance()->updateWindowViewport(*defaultViewport);
 
-	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera());
+	ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, CameraManager::getInstance()->getDefaultPerspectiveCamera(), Point4(), Quaternion());
 
 	FrameBuffer2DManager::getInstance()->updateWidthHeight(width, height);
 	FrameBuffer2DMultisampleManager::getInstance()->updateWidthHeight(width, height);

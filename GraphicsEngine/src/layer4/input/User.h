@@ -56,6 +56,8 @@ public:
 
 	void setUserCamera(const CameraSP& userCamera);
 
+	const CameraSP& getUserCamera() const;
+
 	void mouseButton(bool pressed, boost::int32_t button, boost::int32_t xPos, boost::int32_t yPos);
 
 	void mouseWheel(boost::int32_t buttons, boost::int32_t ticks, boost::int32_t xPos, boost::int32_t yPos);

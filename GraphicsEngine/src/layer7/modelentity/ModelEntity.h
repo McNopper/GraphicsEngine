@@ -40,6 +40,10 @@ private:
 
 	bool dirty;
 
+	std::vector<InstanceNodeSP> allLights;
+
+	std::vector<InstanceNodeSP> allCameras;
+
 public:
 
     virtual const std::string& getCurrentProgramType() const;
@@ -57,15 +61,25 @@ public:
 
     const ModelSP& getModel() const;
 
-    const boost::shared_ptr<InstanceNode>& getRootInstanceNode() const;
+    const InstanceNodeSP& getRootInstanceNode() const;
 
-    boost::shared_ptr<InstanceNode> findInstanceNodeRecursive(const std::string& name) const;
+    InstanceNodeSP findInstanceNodeRecursive(const std::string& name) const;
 
     boost::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
 
     //
 
     virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+
+    virtual void addLightNode(const InstanceNodeSP& lightNode);
+
+    virtual void addCameraNode(const InstanceNodeSP& cameraNode);
+
+    //
+
+    boost::int32_t setLights(boost::int32_t lightNumber) const;
+
+    bool setCamera(const std::string& name) const;
 
 };
 

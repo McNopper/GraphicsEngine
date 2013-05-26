@@ -12,6 +12,10 @@
 
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer0/math/Matrix4x4.h"
+#include "../../layer0/math/Point4.h"
+#include "../../layer0/math/Quaternion.h"
+
+class Node;
 
 class InstanceNode
 {
@@ -20,7 +24,7 @@ class InstanceNode
 
 private:
 
-	std::string name;
+	const Node* node;
 
 	bool visible;
 	bool visibleActive;
@@ -32,13 +36,19 @@ private:
 
 	Matrix3x3 normalModelMatrix;
 
+	Point4 position;
+
+	Quaternion rotation;
+
 	std::vector<boost::shared_ptr<InstanceNode> > allChilds;
+
+	std::string name;
 
 	void addChild(const boost::shared_ptr<InstanceNode>& instanceNode);
 
 public:
 
-	InstanceNode(const std::string& name);
+	InstanceNode(const Node* node);
 	virtual ~InstanceNode();
 
 	const boost::shared_ptr<InstanceNode>& getChild(boost::int32_t i) const;
@@ -61,6 +71,12 @@ public:
 
 	const Matrix4x4& getModelMatrix() const;
 	const Matrix3x3& getNormalModelMatrix() const;
+
+	const Point4& getPosition() const;
+	const Quaternion& getRotation() const;
+
+	const Node* getNode() const;
+
 };
 
 typedef boost::shared_ptr<InstanceNode> InstanceNodeSP;

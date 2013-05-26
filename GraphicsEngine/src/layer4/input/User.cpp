@@ -53,10 +53,15 @@ void User::setUserCamera(const CameraSP& userCamera)
 		this->up = userCamera->getUp();
 		this->left = up.cross(direction);
 
-		this->rotation = userCamera->getRotation();
+		this->rotation = Quaternion(Matrix3x3(-left, up, -direction));
 	}
 
 	dirtyFlag = true;
+}
+
+const CameraSP& User::getUserCamera() const
+{
+	return userCamera;
 }
 
 void User::mouseButton(bool pressed, int32_t button, int32_t xPos, int32_t yPos)
