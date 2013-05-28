@@ -14,6 +14,8 @@
 
 using namespace boost;
 
+using namespace std;
+
 MeshFactory::MeshFactory()
 {
 }
@@ -22,7 +24,7 @@ MeshFactory::~MeshFactory()
 {
 }
 
-MeshSP MeshFactory::createMesh(const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial) const
+MeshSP MeshFactory::createMesh(const string& name, const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	SurfaceMaterialFactory surfaceMaterialFactory;
 
@@ -32,7 +34,7 @@ MeshSP MeshFactory::createMesh(const GLUSshape& shape, const SurfaceMaterialSP& 
 	std::map<int32_t, SurfaceMaterialSP> surfaceMaterials;
 	surfaceMaterials[0] = surfaceMaterial;
 
-	MeshSP mesh = MeshSP(new Mesh(shape.numberVertices, shape.vertices, shape.normals, shape.bitangents, shape.tangents, shape.texCoords, shape.numberIndices, shape.indices, subMeshes, surfaceMaterials));
+	MeshSP mesh = MeshSP(new Mesh(name, shape.numberVertices, shape.vertices, shape.normals, shape.bitangents, shape.tangents, shape.texCoords, shape.numberIndices, shape.indices, subMeshes, surfaceMaterials));
 
 	return mesh;
 }

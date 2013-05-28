@@ -10,8 +10,10 @@
 
 #include "Camera.h"
 
-Camera::Camera() :
-	dirty(true), eye(0.0f, 0.0f, 0.0f), center(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), direction(0.0f, 0.0f, -1.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix()
+using namespace std;
+
+Camera::Camera(const string& name) :
+	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), direction(0.0f, 0.0f, -1.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix()
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
@@ -20,7 +22,7 @@ Camera::Camera() :
 }
 
 Camera::Camera(const Camera& other) :
-	dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), transitionMatrix(transitionMatrix)
+	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), transitionMatrix(transitionMatrix)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
@@ -30,6 +32,11 @@ Camera::Camera(const Camera& other) :
 
 Camera::~Camera()
 {
+}
+
+const string& Camera::getName() const
+{
+	return name;
 }
 
 void Camera::updateViewFrustum()

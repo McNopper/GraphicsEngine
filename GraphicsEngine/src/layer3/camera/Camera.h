@@ -23,6 +23,8 @@ class Camera
 
 private:
 
+	std::string name;
+
 	bool dirty;
 
 protected:
@@ -51,9 +53,11 @@ protected:
 
 public:
 
-	Camera();
+	Camera(const std::string& name);
 	Camera(const Camera& other);
 	virtual ~Camera();
+
+	const std::string& getName() const;
 
 	void lookAt(const Point4& eye, const Point4& center, const Vector3& up);
 

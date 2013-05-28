@@ -23,7 +23,7 @@ public:
 	MeshFactory();
 	virtual ~MeshFactory();
 
-	MeshSP createMesh(const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial) const;
+	MeshSP createMesh(const std::string& name, const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial) const;
 
 };
 

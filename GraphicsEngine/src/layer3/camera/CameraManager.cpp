@@ -21,8 +21,8 @@ const string CameraManager::DEFAULT_ORTHOGRAPHIC_CAMERA_KEY = "default_orthograp
 CameraManager::CameraManager() :
 	allCameras(), allWindowCameras()
 {
-	allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = CameraSP(new PerspectiveCamera());
-	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = CameraSP(new OrthographicCamera());
+	allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = CameraSP(new PerspectiveCamera(DEFAULT_PERSPECTIVE_CAMERA_KEY));
+	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = CameraSP(new OrthographicCamera(DEFAULT_ORTHOGRAPHIC_CAMERA_KEY));
 	allWindowCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY];
 	allWindowCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY];
 

@@ -19,6 +19,10 @@
 class Light
 {
 
+private:
+
+	std::string name;
+
 protected:
 
 	Color ambient;
@@ -27,8 +31,10 @@ protected:
 
 public:
 
-	Light(const Color& ambient, const Color& diffuse, const Color& specular);
+	Light(const std::string& name, const Color& ambient, const Color& diffuse, const Color& specular);
 	virtual ~Light();
+
+	const std::string& getName() const;
 
 	const Color& getAmbient() const;
 	void setAmbient(const Color& ambient);

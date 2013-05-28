@@ -103,10 +103,10 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Lights
 
-	LightSP directionalLight = LightSP(new DirectionalLight(Color::BLACK, Color::GREY, Color::BLACK));
+	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", Color::BLACK, Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
-	LightSP spotLight = LightSP(new SpotLight(0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
+	LightSP spotLight = LightSP(new SpotLight("SpotLight", 0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
 	// The lights are treated as node entities
@@ -131,7 +131,7 @@ GLUSboolean initGame(GLUSvoid)
 	animationLayer->addRotationValue(AnimationLayer::Z, 1.0f, 45.0f, LinearInterpolator::interpolator);
 	animationLayer->addRotationValue(AnimationLayer::Z, 3.0f, -45.0f, LinearInterpolator::interpolator);
 	animationLayer->addRotationValue(AnimationLayer::Z, 4.0f, 0.0f, LinearInterpolator::interpolator);
-	allAnimStacks.push_back(AnimationStackSP(new AnimationStack(0.0f, 4.0f)));
+	allAnimStacks.push_back(AnimationStackSP(new AnimationStack("Alternate", 0.0f, 4.0f)));
 	allAnimStacks[0]->addAnimationLayer(animationLayer);
 
 	//
@@ -152,7 +152,7 @@ GLUSboolean initGame(GLUSvoid)
 	//
 	//
 
-	PerspectiveCameraSP camera = PerspectiveCameraSP(new PerspectiveCamera());
+	PerspectiveCameraSP camera = PerspectiveCameraSP(new PerspectiveCamera("RenderCamera"));
 	//camera->lookAt(Point4(0.0f, 10.0f, 0.0f), Point4(0.0f, 0.0f, -10.0f), Vector3(0.0f, 1.0f, 0.0f));
 
 	CameraManager::getInstance()->setCamera("RenderCamera", camera, true);

@@ -23,7 +23,7 @@ using namespace boost;
 const char* FbxEntityFactory::CHANNELS[] = {"X", "Y", "Z"};
 
 FbxEntityFactory::FbxEntityFactory() :
-	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), allSurfaceMaterials(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
+	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), allSurfaceMaterials(), allAnimationStacks(), allMeshes(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
 {
 	// Create the FBX SDK manager
 	manager = FbxManager::Create();
@@ -40,6 +40,8 @@ FbxEntityFactory::~FbxEntityFactory()
 {
 	currentSurfaceMaterials.clear();
 	allSurfaceMaterials.clear();
+	allAnimationStacks.clear();
+	allMeshes.clear();
 
 	delete geometryConverter;
 	ioSettings->Destroy();
@@ -84,6 +86,8 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 	currentNumberAnimationStacks = importer->GetAnimStackCount();
 	currentSurfaceMaterials.clear();
 	allSurfaceMaterials.clear();
+	allAnimationStacks.clear();
+	allMeshes.clear();
 	nodeTreeFactory.reset();
 	currentNumberJoints = 0;
 	currentEntityAnimated = false;
@@ -190,6 +194,24 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 					walkerAll++;
 				}
 				allSurfaceMaterials.clear();
+
+				auto walkerAnimationStack = allAnimationStacks.begin();
+				while (walkerAnimationStack != allAnimationStacks.end())
+				{
+					walkerAnimationStack->reset();
+
+					walkerAnimationStack++;
+				}
+				allAnimationStacks.clear();
+
+				auto walkerMesh = allMeshes.begin();
+				while (walkerMesh != allMeshes.end())
+				{
+					walkerMesh->reset();
+
+					walkerMesh++;
+				}
+				allMeshes.clear();
 
 				traverseDeleteUserPointer(node);
 
@@ -444,7 +466,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 				}
 			}
 
-			newMesh = MeshSP(processMesh(node->GetMesh()));
+			newMesh = processMesh(node->GetMesh());
 
 			glusLogPrint(GLUS_LOG_INFO, "Created mesh in node: %s", node->GetName());
 
@@ -558,9 +580,15 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 
 		// Animation
 		vector<AnimationStackSP> allAnimationStacks;
+		AnimationStackSP currentAnimationStack;
 		for (int32_t i = 0; i < currentNumberAnimationStacks; i++)
 		{
-			allAnimationStacks.push_back(AnimationStackSP(processAnimation(node, i)));
+			currentAnimationStack = processAnimation(node, i);
+
+			if (currentAnimationStack.get())
+			{
+				allAnimationStacks.push_back(currentAnimationStack);
+			}
 		}
 
 		string parentNodeName = parentNode.get() ? parentNode->getName() : "[NULL]";
@@ -632,12 +660,31 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 	}
 }
 
-AnimationStack* FbxEntityFactory::processAnimation(FbxNode* node, int32_t animStackIndex)
+AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animStackIndex)
 {
 	FbxAnimStack* animStack = node->GetScene()->FindMember<FbxAnimStack>(animStackNameArray[animStackIndex]->Buffer());
 
 	if (animStack)
 	{
+		string animStackName(animStack->GetName());
+
+		//
+
+		auto walker = allAnimationStacks.begin();
+		while (walker != allAnimationStacks.end())
+		{
+			if ((*walker)->getName().compare(animStackName) == 0)
+			{
+				glusLogPrint(GLUS_LOG_INFO, "Reused animation stack: %s", animStack->GetName());
+
+				return *walker;
+			}
+
+			walker++;
+		}
+
+		//
+
 		node->GetScene()->GetEvaluator()->SetContext(animStack);
 
 		float currentStartTime = static_cast<float>(animStack->ReferenceStart.Get().GetSecondDouble());
@@ -645,7 +692,7 @@ AnimationStack* FbxEntityFactory::processAnimation(FbxNode* node, int32_t animSt
 
 		currentEntityAnimated = true;
 
-		AnimationStack* newAnimStack = new AnimationStack(currentStartTime, currentStopTime);
+		AnimationStack* newAnimStack = new AnimationStack(animStackName, currentStartTime, currentStopTime);
 
 		int32_t numberAnimationLayers = animStack->GetMemberCount();
 
@@ -758,15 +805,36 @@ AnimationStack* FbxEntityFactory::processAnimation(FbxNode* node, int32_t animSt
 			newAnimStack->addAnimationLayer(newAnimLayer);
 		}
 
-		return newAnimStack;
+		return AnimationStackSP(newAnimStack);
 	}
 
-	return 0;
+	return AnimationStackSP();
 }
 
 // See example in SceneCache.cxx
-Mesh* FbxEntityFactory::processMesh(FbxMesh* mesh)
+MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 {
+	//
+
+	string meshName(mesh->GetName());
+
+	//
+
+	auto walkerMesh = allMeshes.begin();
+	while (walkerMesh != allMeshes.end())
+	{
+		if ((*walkerMesh)->getName().compare(meshName) == 0)
+		{
+			glusLogPrint(GLUS_LOG_INFO, "Reused mesh: %s", mesh->GetName());
+
+			return *walkerMesh;
+		}
+
+		walkerMesh++;
+	}
+
+	//
+
 	map<int32_t, FbxSubMeshSP> currentFbxSubMeshes;
 
 	// Sub meshes
@@ -1110,7 +1178,7 @@ Mesh* FbxEntityFactory::processMesh(FbxMesh* mesh)
 		tangents = meshShape.tangents;
 	}
 
-	return new Mesh(numberVertices, vertices, normals, binormals, tangents, texCoords, numberIndices, indices, currentSubMeshes, currentSurfaceMaterials);
+	return MeshSP(new Mesh(meshName, numberVertices, vertices, normals, binormals, tangents, texCoords, numberIndices, indices, currentSubMeshes, currentSurfaceMaterials));
 }
 
 void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nodeGE)

@@ -38,6 +38,8 @@ private:
 
 	std::map<boost::int32_t, SurfaceMaterialSP> currentSurfaceMaterials;
 	std::vector<SurfaceMaterialSP> allSurfaceMaterials;
+	std::vector<AnimationStackSP> allAnimationStacks;
+	std::vector<MeshSP> allMeshes;
 	boost::int32_t currentNumberJoints;
 	boost::int32_t currentNumberAnimationStacks;
 	bool currentEntityAnimated;
@@ -63,9 +65,9 @@ private:
 
 	void traverseNode(FbxNode* node, const NodeSP& parentNode);
 
-	AnimationStack* processAnimation(FbxNode* node, boost::int32_t animStackIndex);
+	AnimationStackSP processAnimation(FbxNode* node, boost::int32_t animStackIndex);
 
-	Mesh* processMesh(FbxMesh* mesh);
+	MeshSP processMesh(FbxMesh* mesh);
 
 	void preTraverseIndexCreation(FbxNode* node, const NodeSP& nodeGE);
 

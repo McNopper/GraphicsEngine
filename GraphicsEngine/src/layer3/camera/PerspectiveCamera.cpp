@@ -9,7 +9,9 @@
 
 #include "PerspectiveCamera.h"
 
-PerspectiveCamera::PerspectiveCamera() : Camera(), fovy(40.0f)
+using namespace std;
+
+PerspectiveCamera::PerspectiveCamera(const string& name) : Camera(name), fovy(40.0f)
 {
 }
 

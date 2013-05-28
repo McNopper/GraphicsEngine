@@ -76,7 +76,7 @@ ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boun
 
 	MeshFactory meshFactory;
 
-	MeshSP mesh = meshFactory.createMesh(shape, surfaceMaterial);
+	MeshSP mesh = meshFactory.createMesh(name, shape, surfaceMaterial);
 
 	NodeTreeFactory nodeTreeFactory;
 
@@ -91,7 +91,7 @@ ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boun
 
 	MeshFactory meshFactory;
 
-	MeshSP mesh = meshFactory.createMesh(shape, surfaceMaterial);
+	MeshSP mesh = meshFactory.createMesh(name, shape, surfaceMaterial);
 
 	NodeTreeFactory nodeTreeFactory;
 

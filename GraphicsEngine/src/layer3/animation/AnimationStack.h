@@ -17,13 +17,15 @@ class AnimationStack
 
 private:
 
+	std::string name;
+
 	float startTime;
 	float stopTime;
 
 	std::vector<AnimationLayerSP> allAnimationLayers;
 
 public:
-	AnimationStack(float startTime, float stopTime);
+	AnimationStack(const std::string& name, float startTime, float stopTime);
 	virtual ~AnimationStack();
 
 	void addAnimationLayer(const AnimationLayerSP& animationLayer);
@@ -31,6 +33,8 @@ public:
 	boost::int32_t getAnimationLayersCount() const;
 
 	const AnimationLayerSP& getAnimationLayer(boost::int32_t index) const;
+
+	const std::string& getName() const;
 
 	float getStartTime() const;
 

@@ -26,7 +26,7 @@ DynamicEnvironment::DynamicEnvironment(const Point4& position, const FrameBuffer
 
 	for (int32_t face = 0; face < 6; face++)
 	{
-		camera[face] = PerspectiveCameraSP(new PerspectiveCamera());
+		camera[face] = PerspectiveCameraSP(new PerspectiveCamera("DynamicEnvironment" + to_string(face)));
 	}
 
 	init(position);

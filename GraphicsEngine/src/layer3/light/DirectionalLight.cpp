@@ -13,9 +13,9 @@ using namespace boost;
 
 using namespace std;
 
-DirectionalLight::DirectionalLight(const Color& ambient, const Color& diffuse,
+DirectionalLight::DirectionalLight(const string& name, const Color& ambient, const Color& diffuse,
 		const Color& specular) :
-		Light(ambient, diffuse, specular)
+		Light(name, ambient, diffuse, specular)
 {
 	this->direction = Vector3(0.0f, 1.0f, 0.0f);
 }

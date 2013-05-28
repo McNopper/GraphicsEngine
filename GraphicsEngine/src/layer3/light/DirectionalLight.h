@@ -20,7 +20,7 @@ protected:
 	Vector3 direction;
 
 public:
-	DirectionalLight(const Color& ambient, const Color& diffuse,
+	DirectionalLight(const std::string& name, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~DirectionalLight();
 

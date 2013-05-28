@@ -158,7 +158,7 @@ GLUSboolean initGame(GLUSvoid)
 	Color ambient(0.25f, 0.25f, 0.25f, 1.0f);
 	Color specular(0.5f, 0.5f, 0.5f, 1.0f);
 
-	LightSP directionalLight = LightSP(new DirectionalLight(ambient, Color::WHITE, specular));
+	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", ambient, Color::WHITE, specular));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
 	ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, 0, directionalLight, Point4(0.0f, 0.0f, 10.0f), Quaternion(45, Vector3(1.0f, 0.0f, -1.0f)));

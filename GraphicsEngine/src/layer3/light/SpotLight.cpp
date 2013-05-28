@@ -13,8 +13,8 @@ using namespace boost;
 
 using namespace std;
 
-SpotLight::SpotLight(float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse, const Color& specular) :
-		PointLight(constantAttenuation, linearAttenuation, quadraticAttenuation, ambient, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
+SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse, const Color& specular) :
+		PointLight(name, constantAttenuation, linearAttenuation, quadraticAttenuation, ambient, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
 {
 	this->spotDirection = Vector3(0.0f, -1.0f, 0.0f);
 }

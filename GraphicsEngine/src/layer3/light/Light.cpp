@@ -7,13 +7,20 @@
 
 #include "Light.h"
 
-Light::Light(const Color& ambient, const Color& diffuse, const Color& specular) :
-		ambient(ambient), diffuse(diffuse), specular(specular)
+using namespace std;
+
+Light::Light(const string& name, const Color& ambient, const Color& diffuse, const Color& specular) :
+		name(name), ambient(ambient), diffuse(diffuse), specular(specular)
 {
 }
 
 Light::~Light()
 {
+}
+
+const string& Light::getName() const
+{
+	return name;
 }
 
 const Color& Light::getAmbient() const

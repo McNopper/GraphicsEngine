@@ -18,7 +18,7 @@ private:
 	float fovy;
 
 public:
-	PerspectiveCamera();
+	PerspectiveCamera(const std::string& name);
 	PerspectiveCamera(const PerspectiveCamera& other);
 	virtual ~PerspectiveCamera();
 

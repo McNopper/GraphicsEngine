@@ -20,6 +20,8 @@ class Mesh
 
 private:
 
+	std::string name;
+
 	boost::uint32_t numberVertices;
 
 	float* vertices;
@@ -58,10 +60,12 @@ private:
 
 public:
 
-	Mesh(boost::uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, boost::uint32_t numberIndices, boost::uint32_t* indices, const std::map<boost::int32_t, SubMeshSP>& subMeshes, const std::map<boost::int32_t, SurfaceMaterialSP>& surfaceMaterials);
+	Mesh(const std::string& name, boost::uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, boost::uint32_t numberIndices, boost::uint32_t* indices, const std::map<boost::int32_t, SubMeshSP>& subMeshes, const std::map<boost::int32_t, SurfaceMaterialSP>& surfaceMaterials);
 	virtual ~Mesh();
 
 	void cleanCpuData();
+
+	const std::string& getName() const;
 
 	boost::uint32_t getNumberVertices() const;
     GLuint getVboVertices() const;

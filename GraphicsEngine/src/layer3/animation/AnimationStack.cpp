@@ -10,8 +10,8 @@
 using namespace std;
 using namespace boost;
 
-AnimationStack::AnimationStack(float startTime, float stopTime) :
-		startTime(startTime), stopTime(stopTime), allAnimationLayers()
+AnimationStack::AnimationStack(const string& name, float startTime, float stopTime) :
+		name(name), startTime(startTime), stopTime(stopTime), allAnimationLayers()
 {
 }
 
@@ -37,6 +37,11 @@ void AnimationStack::addAnimationLayer(const AnimationLayerSP& animationLayer)
 int32_t AnimationStack::getAnimationLayersCount() const
 {
 	return allAnimationLayers.size();
+}
+
+const string& AnimationStack::getName() const
+{
+	return name;
 }
 
 float AnimationStack::getStartTime() const

@@ -9,7 +9,9 @@
 
 #include "OrthographicCamera.h"
 
-OrthographicCamera::OrthographicCamera() : Camera()
+using namespace std;
+
+OrthographicCamera::OrthographicCamera(const string& name) : Camera(name)
 {
 }
 

@@ -13,7 +13,7 @@
 class OrthographicCamera : public Camera
 {
 public:
-	OrthographicCamera();
+	OrthographicCamera(const std::string& name);
 	OrthographicCamera(const OrthographicCamera& other);
 	virtual ~OrthographicCamera();
 

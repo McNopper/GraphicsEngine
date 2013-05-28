@@ -56,7 +56,7 @@ GLUSboolean initGame(GLUSvoid)
 	animationLayer->addRotationValue(AnimationLayer::Y, 0.0f, 0.0f, LinearInterpolator::interpolator);
 	animationLayer->addRotationValue(AnimationLayer::Y, 5.0f, 360.0f, LinearInterpolator::interpolator);
 	allAnimStacks.clear();
-	allAnimStacks.push_back(AnimationStackSP(new AnimationStack(0.0f, 5.0f)));
+	allAnimStacks.push_back(AnimationStackSP(new AnimationStack("Rotation", 0.0f, 5.0f)));
 	allAnimStacks[0]->addAnimationLayer(animationLayer);
 
 	entity = primitiveEntityFactory.createCubePrimitiveEntity("GlassCube", 2.0f, 2.0f, 2.0f, surfaceMaterial, allAnimStacks);
@@ -194,7 +194,7 @@ GLUSboolean initGame(GLUSvoid)
 	Color ambient(0.25f, 0.25f, 0.25f, 1.0f);
 	Color specular(0.5f, 0.5f, 0.5f, 1.0f);
 
-	LightSP directionalLight = LightSP(new DirectionalLight(ambient, Color::WHITE, specular));
+	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", ambient, Color::WHITE, specular));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
 	ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, 0, directionalLight, Point4(0.0f, 0.0f, 10.0f), Quaternion(45, Vector3(1.0f, 0.0f, -1.0f)));

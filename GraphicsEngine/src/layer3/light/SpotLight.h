@@ -23,7 +23,7 @@ private:
 	float spotExponent;
 
 public:
-	SpotLight(float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	SpotLight(const std::string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~SpotLight();
 

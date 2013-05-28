@@ -13,9 +13,9 @@ using namespace boost;
 
 using namespace std;
 
-PointLight::PointLight(float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+PointLight::PointLight(const string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 		const Color& specular) :
-		Light(ambient, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
+		Light(name, ambient, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
 {
 }
 

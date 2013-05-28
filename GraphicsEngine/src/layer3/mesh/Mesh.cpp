@@ -14,8 +14,8 @@ using namespace std;
 
 using namespace boost;
 
-Mesh::Mesh(uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, uint32_t numberIndices, uint32_t* indices, const map<int32_t, SubMeshSP>& subMeshes, const map<int32_t, SurfaceMaterialSP>& surfaceMaterials) :
-	numberVertices(numberVertices), vertices(vertices), normals(normals), bitangents(bitangents), tangents(tangents), texCoords(texCoords), numberIndices(numberIndices), indices(indices), vboVertices(0),
+Mesh::Mesh(const string& name, uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, uint32_t numberIndices, uint32_t* indices, const map<int32_t, SubMeshSP>& subMeshes, const map<int32_t, SurfaceMaterialSP>& surfaceMaterials) :
+	name(name), numberVertices(numberVertices), vertices(vertices), normals(normals), bitangents(bitangents), tangents(tangents), texCoords(texCoords), numberIndices(numberIndices), indices(indices), vboVertices(0),
 			vboNormals(0), vboTexCoords(0), vboIndices(0), boneIndices0(0), boneIndices1(0), boneWeights0(0), boneWeights1(0), boneCounters(0), subMeshes(subMeshes), surfaceMaterials(surfaceMaterials)
 {
 	vboBoneIndices[0] = 0;
@@ -184,6 +184,11 @@ void Mesh::cleanCpuData()
 		delete[] boneCounters;
 		boneCounters = 0;
 	}
+}
+
+const string& Mesh::getName() const
+{
+	return name;
 }
 
 uint32_t Mesh::getNumberVertices() const

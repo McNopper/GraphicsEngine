@@ -23,7 +23,7 @@ protected:
 	float quadraticAttenuation;
 
 public:
-	PointLight(float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	PointLight(const std::string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
 			const Color& specular);
 	virtual ~PointLight();
 
