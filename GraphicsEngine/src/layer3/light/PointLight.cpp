@@ -13,9 +13,9 @@ using namespace boost;
 
 using namespace std;
 
-PointLight::PointLight(const string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+PointLight::PointLight(const string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,
 		const Color& specular) :
-		Light(name, ambient, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
+		Light(name, diffuse, specular), constantAttenuation(constantAttenuation), linearAttenuation(linearAttenuation), quadraticAttenuation(quadraticAttenuation)
 {
 }
 
@@ -57,7 +57,6 @@ void PointLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progr
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 1);
 
-	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_ambientLightColor), 1, ambient.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_diffuseLightColor), 1, diffuse.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_specularLightColor), 1, specular.getRGBA());
 

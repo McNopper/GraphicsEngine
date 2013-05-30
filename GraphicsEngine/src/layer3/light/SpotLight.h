@@ -23,7 +23,7 @@ private:
 	float spotExponent;
 
 public:
-	SpotLight(const std::string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	SpotLight(const std::string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,
 			const Color& specular);
 	virtual ~SpotLight();
 
@@ -39,5 +39,7 @@ public:
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
+
+typedef boost::shared_ptr<SpotLight> SpotLightSP;
 
 #endif /* SPOTLIGHT_H_ */

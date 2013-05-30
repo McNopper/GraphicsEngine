@@ -8,6 +8,7 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer1/shader/ProgramManager.h"
+#include "../../layer3/light/LightManager.h"
 
 #include "ProgramManagerProxy.h"
 
@@ -35,6 +36,22 @@ void ProgramManagerProxy::setLightByType(const string& programType, int32_t inde
 		currentProgram = walker->second;
 		currentProgram->use();
 		light->setLightProperties(index, currentProgram, position, rotation);
+		walker++;
+	}
+}
+
+void ProgramManagerProxy::setAmbientLightColorByType(const string& programType)
+{
+	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
+
+	multimap<string, ProgramSP>::const_iterator walker = allPrograms.find(programType);
+
+	ProgramSP currentProgram;
+	while (walker != allPrograms.end())
+	{
+		currentProgram = walker->second;
+		currentProgram->use();
+		glUniform4fv(currentProgram->getUniformLocation(u_ambientLightColor), 1, LightManager::getInstance()->getAmbientLightColor().getRGBA());
 		walker++;
 	}
 }

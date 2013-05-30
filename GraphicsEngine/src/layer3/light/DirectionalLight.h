@@ -20,7 +20,7 @@ protected:
 	Vector3 direction;
 
 public:
-	DirectionalLight(const std::string& name, const Color& ambient, const Color& diffuse,
+	DirectionalLight(const std::string& name, const Color& diffuse,
 			const Color& specular);
 	virtual ~DirectionalLight();
 
@@ -29,5 +29,7 @@ public:
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
+
+typedef boost::shared_ptr<DirectionalLight> DirectionalLightSP;
 
 #endif /* DIRECTIONALLIGHT_H_ */

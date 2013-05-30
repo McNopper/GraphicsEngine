@@ -26,6 +26,8 @@ public:
 
 	static void setLightByType(const std::string& programType, boost::int32_t index, const LightSP& light, const Point4& position, const Quaternion& rotation);
 
+	static void setAmbientLightColorByType(const std::string& programType);
+
 	static void setNumberLightsByType(const std::string& programType, boost::int32_t numberLights);
 
 	static void setCameraByType(const std::string& programType, const CameraSP& camera, const Point4& position, const Quaternion& rotation, bool useLocation = false);

@@ -23,7 +23,7 @@ protected:
 	float quadraticAttenuation;
 
 public:
-	PointLight(const std::string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse,
+	PointLight(const std::string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,
 			const Color& specular);
 	virtual ~PointLight();
 
@@ -39,5 +39,7 @@ public:
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
 };
+
+typedef boost::shared_ptr<PointLight> PointLightSP;
 
 #endif /* POINTLIGHT_H_ */

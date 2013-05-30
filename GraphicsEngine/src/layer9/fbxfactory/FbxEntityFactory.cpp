@@ -13,6 +13,9 @@
 #include "../../layer3/animation/AnimationLayer.h"
 #include "../../layer3/camera/OrthographicCamera.h"
 #include "../../layer3/camera/PerspectiveCamera.h"
+#include "../../layer3/light/DirectionalLight.h"
+#include "../../layer3/light/PointLight.h"
+#include "../../layer3/light/SpotLight.h"
 #include "../../layer6/model/ModelManager.h"
 #include "FbxSubMesh.h"
 
@@ -127,11 +130,34 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 	model = ModelSP(new Model(boundingSphere, nodeTreeFactory.getRootNode(), currentNumberJoints, currentEntityAnimated, currentEntitySkinned));
 	ModelManager::getInstance()->setModel(filename, model);
 
+	//
+
+	Color ambientLightColor;
+
+	FbxColor globalAmbientColor = scene->GetGlobalSettings().GetAmbientColor();
+
+	if (loadLight && globalAmbientColor.IsValid())
+	{
+		ambientLightColor.setR(static_cast<float>(globalAmbientColor.mRed));
+		ambientLightColor.setG(static_cast<float>(globalAmbientColor.mGreen));
+		ambientLightColor.setB(static_cast<float>(globalAmbientColor.mBlue));
+		ambientLightColor.setA(static_cast<float>(globalAmbientColor.mAlpha));
+	}
+
+	//
+
 	scene->Destroy(true);
+
+	ModelEntitySP result = ModelEntitySP(new ModelEntity(name, model, scale, scale, scale));
+
+	if (loadLight)
+	{
+		result->setAmbientLightColor(ambientLightColor);
+	}
 
 	glusLogPrint(GLUS_LOG_INFO, "Entity created: %s", filename.c_str());
 
-	return ModelEntitySP(new ModelEntity(name, model, scale, scale, scale));
+	return result;
 }
 
 ModelEntitySP FbxEntityFactory::loadFbxModelFile(const string& name, const string& filename, float scale, bool globalAnisotropic, const SurfaceMaterialSP& overwriteSurfaceMaterial)
@@ -902,7 +928,7 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 	{
 		if ((*walkerMesh)->getName().compare(meshName) == 0)
 		{
-			glusLogPrint(GLUS_LOG_INFO, "Reused mesh: %s", mesh->GetName());
+			glusLogPrint(GLUS_LOG_INFO, "Reused mesh: %s", meshName.c_str());
 
 			return *walkerMesh;
 		}
@@ -1278,7 +1304,7 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 	{
 		if ((*walkerLight)->getName().compare(lightName) == 0)
 		{
-			glusLogPrint(GLUS_LOG_INFO, "Reused light: %s", light->GetName());
+			glusLogPrint(GLUS_LOG_INFO, "Reused light: %s", lightName.c_str());
 
 			return *walkerLight;
 		}
@@ -1288,11 +1314,51 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 
 	//
 
-	// TODO
+	FbxLight::EType lightType = light->LightType.Get();
+
+	LightSP currentLight;
+
+	Color ambient;
+	Color specular;
+
+	ambient.setR(static_cast<float>(light->Color.Get()[0]));
+	ambient.setG(static_cast<float>(light->Color.Get()[1]));
+	ambient.setB(static_cast<float>(light->Color.Get()[2]));
+
+	specular = ambient;
+
+	if (lightType == FbxLight::eDirectional)
+	{
+		DirectionalLightSP directionalLight = DirectionalLightSP(new DirectionalLight(lightName, ambient, specular));
+
+		currentLight = directionalLight;
+	}
+	else if (lightType == FbxLight::ePoint)
+	{
+		PointLightSP pointLight;
+
+		// TODO Create point light
+
+		currentLight = pointLight;
+	}
+	else if (lightType == FbxLight::eSpot)
+	{
+		SpotLightSP spotLight;
+
+		// TODO Create spot light
+
+		currentLight = spotLight;
+	}
+	else
+	{
+		return LightSP();
+	}
+
+	allLights.push_back(currentLight);
 
 	glusLogPrint(GLUS_LOG_INFO, "Created light: %s", lightName.c_str());
 
-	return LightSP();
+	return currentLight;
 }
 
 CameraSP FbxEntityFactory::processCamera(FbxCamera* camera)
@@ -1313,7 +1379,7 @@ CameraSP FbxEntityFactory::processCamera(FbxCamera* camera)
 	{
 		if ((*walkerCamera)->getName().compare(cameraName) == 0)
 		{
-			glusLogPrint(GLUS_LOG_INFO, "Reused camera: %s", camera->GetName());
+			glusLogPrint(GLUS_LOG_INFO, "Reused camera: %s", cameraName.c_str());
 
 			return *walkerCamera;
 		}

@@ -30,7 +30,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1), dirty(true)
+	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1), dirty(true), ambientLightColor()
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -555,4 +555,16 @@ void ModelEntity::passLightsToManager() const
 
 		walker++;
 	}
+
+	LightManager::getInstance()->setAmbientLightColor(ambientLightColor);
+}
+
+const Color& ModelEntity::getAmbientLightColor() const
+{
+	return ambientLightColor;
+}
+
+void ModelEntity::setAmbientLightColor(const Color& ambientLightColor)
+{
+	this->ambientLightColor = ambientLightColor;
 }

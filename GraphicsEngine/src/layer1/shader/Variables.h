@@ -19,10 +19,11 @@
 
 #define u_eyePosition "u_eyePosition"
 
+#define u_ambientLightColor "u_ambientLightColor"
+
 #define u_numberLights "u_numberLights"
 #define u_lightType "u_lightType["
 #define u_light "u_light["
-#define u_ambientLightColor "].ambientColor"
 #define u_diffuseLightColor "].diffuseColor"
 #define u_specularLightColor "].specularColor"
 #define u_lightDirection "].direction"

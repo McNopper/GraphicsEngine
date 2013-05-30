@@ -103,10 +103,10 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Lights
 
-	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", Color::BLACK, Color::GREY, Color::BLACK));
+	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
-	LightSP spotLight = LightSP(new SpotLight("SpotLight", 0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::BLACK, Color::WHITE, Color::WHITE));
+	LightSP spotLight = LightSP(new SpotLight("SpotLight", 0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
 	// The lights are treated as node entities
@@ -229,6 +229,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 		walkerLights++;
 	}
 	ProgramManagerProxy::setNumberLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, numberLights);
+	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
 
 	//
 

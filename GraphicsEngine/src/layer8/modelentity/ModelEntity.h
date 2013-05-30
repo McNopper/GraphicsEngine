@@ -44,6 +44,8 @@ private:
 
 	std::vector<InstanceNodeSP> allCameras;
 
+	Color ambientLightColor;
+
 public:
 
     virtual const std::string& getCurrentProgramType() const;
@@ -86,6 +88,10 @@ public:
     void passCamerasToManager() const;
 
     void passLightsToManager() const;
+
+	const Color& getAmbientLightColor() const;
+
+	void setAmbientLightColor(const Color& ambientLightColor);
 
 };
 

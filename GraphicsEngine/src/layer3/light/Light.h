@@ -25,21 +25,18 @@ private:
 
 protected:
 
-	Color ambient;
 	Color diffuse;
 	Color specular;
 
 public:
 
-	Light(const std::string& name, const Color& ambient, const Color& diffuse, const Color& specular);
+	Light(const std::string& name, const Color& diffuse, const Color& specular);
 	virtual ~Light();
 
 	static const float getDebugRadius();
 
 	const std::string& getName() const;
 
-	const Color& getAmbient() const;
-	void setAmbient(const Color& ambient);
 	const Color& getDiffuse() const;
 	void setDiffuse(const Color& diffuse);
 	const Color& getSpecular() const;

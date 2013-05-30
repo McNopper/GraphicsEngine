@@ -13,9 +13,9 @@ using namespace boost;
 
 using namespace std;
 
-DirectionalLight::DirectionalLight(const string& name, const Color& ambient, const Color& diffuse,
+DirectionalLight::DirectionalLight(const string& name, const Color& diffuse,
 		const Color& specular) :
-		Light(name, ambient, diffuse, specular)
+		Light(name, diffuse, specular)
 {
 	this->direction = Vector3(0.0f, 1.0f, 0.0f);
 }
@@ -28,7 +28,6 @@ void DirectionalLight::setLightProperties(uint32_t lightNumber, const ProgramSP&
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 0);
 
-	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_ambientLightColor), 1, ambient.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_diffuseLightColor), 1, diffuse.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_specularLightColor), 1, specular.getRGBA());
 

@@ -6,7 +6,6 @@
 
 struct LightProperties
 {
-	vec4 ambientColor;
 	vec4 diffuseColor;
 	vec4 specularColor;
 		
@@ -42,6 +41,9 @@ struct MaterialProperties
 	
 	samplerCube dynamicCubeMapTexture;
 };
+
+uniform	vec4 u_ambientLightColor;
+
 
 uniform	LightProperties u_light[MAX_LIGHTS];
 
@@ -115,7 +117,7 @@ void main(void)
 		}
 	}
 		
-	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+	vec4 color = u_ambientLightColor * u_material.ambientColor * diffuseTexture;
 	
 	vec3 eyeDirection = normalize(u_eyePosition.xyz - v_vertex.xyz);
 	
@@ -171,7 +173,7 @@ void main(void)
 			specularIntensity = pow(eDotR, u_material.shininess);
 		}
 		
-		color += u_material.emissiveColor*diffuseTexture + u_light[indexLight].ambientColor*u_material.ambientColor*diffuseTexture + falloff*attenuation*u_light[indexLight].diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + falloff*attenuation*u_light[indexLight].specularColor*u_material.specularColor*specularTexture * specularIntensity;
+		color += u_material.emissiveColor*diffuseTexture + falloff*attenuation*u_light[indexLight].diffuseColor*u_material.diffuseColor*diffuseTexture * diffuseIntensity + falloff*attenuation*u_light[indexLight].specularColor*u_material.specularColor*specularTexture * specularIntensity;
 	}
 	
 	if (u_hasCubeMapTexture != 0 && (dot(vec3(1.0), u_material.reflectionColor.rgb) > 0.0 || dot(vec3(1.0), u_material.refractionColor.rgb) > 0.0))

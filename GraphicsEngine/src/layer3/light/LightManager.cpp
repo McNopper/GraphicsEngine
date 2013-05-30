@@ -15,12 +15,11 @@ const string LightManager::DEFAULT_DIRECTIONAL_LIGHT_KEY = "default_directional"
 
 LightManager* LightManager::instance;
 
-LightManager::LightManager() : allLights()
+LightManager::LightManager() : allLights(), ambientLightColor(Color::BLACK)
 {
-	Color ambient(0.1f, 0.1f, 0.1f, 1.0f);
 	Color specular(0.1f, 0.1f, 0.1f, 1.0f);
 
-	allLights[DEFAULT_DIRECTIONAL_LIGHT_KEY] = LightSP(new DirectionalLight(DEFAULT_DIRECTIONAL_LIGHT_KEY, ambient, Color::WHITE, specular));
+	allLights[DEFAULT_DIRECTIONAL_LIGHT_KEY] = LightSP(new DirectionalLight(DEFAULT_DIRECTIONAL_LIGHT_KEY, Color::WHITE, specular));
 }
 
 LightManager::~LightManager()
@@ -75,6 +74,12 @@ void LightManager::setLight(const string& key, const LightSP& light)
 	glusLogPrint(GLUS_LOG_INFO, "Adding light to manager: %s", light->getName().c_str());
 }
 
+const Color& LightManager::getAmbientLightColor() const
+{
+	return ambientLightColor;
+}
 
-
-
+void LightManager::setAmbientLightColor(const Color& ambientLightColor)
+{
+	this->ambientLightColor = ambientLightColor;
+}

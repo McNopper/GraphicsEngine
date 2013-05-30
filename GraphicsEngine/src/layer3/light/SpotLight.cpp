@@ -13,8 +13,8 @@ using namespace boost;
 
 using namespace std;
 
-SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& ambient, const Color& diffuse, const Color& specular) :
-		PointLight(name, constantAttenuation, linearAttenuation, quadraticAttenuation, ambient, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
+SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse, const Color& specular) :
+		PointLight(name, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
 {
 	this->spotDirection = Vector3(0.0f, -1.0f, 0.0f);
 }
@@ -57,7 +57,6 @@ void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progra
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 2);
 
-	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_ambientLightColor), 1, ambient.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_diffuseLightColor), 1, diffuse.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_specularLightColor), 1, specular.getRGBA());
 

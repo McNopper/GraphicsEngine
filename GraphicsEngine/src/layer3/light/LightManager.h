@@ -21,6 +21,8 @@ private:
 
 	std::map<std::string, LightSP> allLights;
 
+	Color ambientLightColor;
+
 	LightManager();
 	virtual ~LightManager();
 
@@ -39,6 +41,10 @@ public:
 	const LightSP& getDefaultDirectionalLight() const;
 
 	void setLight(const std::string& key, const LightSP& light);
+
+	const Color& getAmbientLightColor() const;
+
+	void setAmbientLightColor(const Color& ambientLightColor);
 
 };
 

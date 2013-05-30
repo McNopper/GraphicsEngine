@@ -14,8 +14,8 @@ const float Light::getDebugRadius()
 	return 2.0f;
 }
 
-Light::Light(const string& name, const Color& ambient, const Color& diffuse, const Color& specular) :
-		name(name), ambient(ambient), diffuse(diffuse), specular(specular)
+Light::Light(const string& name, const Color& diffuse, const Color& specular) :
+		name(name), diffuse(diffuse), specular(specular)
 {
 }
 
@@ -26,16 +26,6 @@ Light::~Light()
 const string& Light::getName() const
 {
 	return name;
-}
-
-const Color& Light::getAmbient() const
-{
-	return ambient;
-}
-
-void Light::setAmbient(const Color& ambient)
-{
-	this->ambient = ambient;
 }
 
 const Color& Light::getDiffuse() const
