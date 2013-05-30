@@ -25,7 +25,7 @@ ModelEntitySP CameraEntityFactory::createCameraEntity(const string& name, const 
 
 	ModelFactory modelFactory;
 
-	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), 2.0f), camera);
+	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), Camera::getDebugRadius()), camera);
 
 	ModelEntitySP modelEntity = ModelEntitySP(new ModelEntity(name, model, 1.0f, 1.0f, 1.0f));
 
@@ -36,7 +36,7 @@ ModelEntitySP CameraEntityFactory::createCameraEntity(const string& name, const 
 {
 	ModelFactory modelFactory;
 
-	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), 2.0f), camera, allAnimStacks);
+	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), Camera::getDebugRadius()), camera, allAnimStacks);
 
 	ModelEntitySP modelEntity = ModelEntitySP(new ModelEntity(name, model, 1.0f, 1.0f, 1.0f));
 

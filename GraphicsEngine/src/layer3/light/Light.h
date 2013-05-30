@@ -34,6 +34,8 @@ public:
 	Light(const std::string& name, const Color& ambient, const Color& diffuse, const Color& specular);
 	virtual ~Light();
 
+	static const float getDebugRadius();
+
 	const std::string& getName() const;
 
 	const Color& getAmbient() const;

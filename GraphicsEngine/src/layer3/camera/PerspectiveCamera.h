@@ -15,7 +15,13 @@ class PerspectiveCamera : public Camera
 
 private:
 
+	float fovx;
+
 	float fovy;
+
+	bool fovxDirty;
+
+	bool fovyDirty;
 
 public:
 	PerspectiveCamera(const std::string& name);
@@ -33,6 +39,10 @@ public:
 	virtual float getFarHeight() const;
 
 	void perspective(float fovy, const Viewport& viewport, float zNear, float zFar);
+
+	void setFovx(float fovx);
+
+	void setFovy(float fovy);
 };
 
 typedef boost::shared_ptr<PerspectiveCamera> PerspectiveCameraSP;

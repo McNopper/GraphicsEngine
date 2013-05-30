@@ -19,7 +19,7 @@ UpdateCommand::~UpdateCommand()
 
 bool UpdateCommand::execute()
 {
-	BOOST_ASSERT(taskCounter.get() != nullptr);
+	BOOST_ASSERT(this->taskCounter.get() != nullptr);
 	BOOST_ASSERT(this->entity != nullptr);
 
 	entity->update();
@@ -37,7 +37,7 @@ void UpdateCommand::recycle()
 
 void UpdateCommand::init(Entity* entity)
 {
-	BOOST_ASSERT(taskCounter.get() != nullptr);
+	BOOST_ASSERT(this->taskCounter.get() != nullptr);
 	BOOST_ASSERT(this->entity == nullptr);
 
 	taskCounter->increment();

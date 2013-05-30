@@ -67,7 +67,7 @@ GLUSboolean initGame(GLUSvoid)
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Reflective", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::BLACK, 0.0f, 0.0f);
 
 	filename = "teapot.fbx";
-	entity = entityFactory.loadFbxFile("Teapot", filename, 1.0f, false, surfaceMaterial);
+	entity = entityFactory.loadFbxModelFile("Teapot", filename, 1.0f, false, surfaceMaterial);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());

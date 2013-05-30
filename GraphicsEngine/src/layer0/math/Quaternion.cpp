@@ -82,6 +82,13 @@ bool Quaternion::operator !=(const Quaternion& other) const
 	return !(*this == other);
 }
 
+Quaternion& Quaternion::operator*=(const Quaternion& other)
+{
+	glusQuaternionMultiplyQuaternionf(q, q, other.q);
+
+	return *this;
+}
+
 Quaternion& Quaternion::operator =(const Quaternion& other)
 {
 	q[0] = other.q[0];

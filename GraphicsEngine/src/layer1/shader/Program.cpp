@@ -124,8 +124,6 @@ bool Program::operator ==(const Program& other) const
 
 void Program::use()
 {
-	BOOST_ASSERT(shaderprogram.program != 0);
-
 	if (lastUsedProgram != this)
 	{
 		glUseProgram(shaderprogram.program);
@@ -136,8 +134,6 @@ void Program::use()
 
 int32_t Program::getUniformLocation(const string& name)
 {
-	BOOST_ASSERT(shaderprogram.program != 0);
-
 	map<string, int32_t>::iterator found = allUniforms.find(name);
 
 	if (found != allUniforms.end())
@@ -152,8 +148,6 @@ int32_t Program::getUniformLocation(const string& name)
 
 int32_t Program::getAttribLocation(const string& name)
 {
-	BOOST_ASSERT(shaderprogram.program != 0);
-
 	map<string, int32_t>::iterator found = allAtribbs.find(name);
 
 	if (found != allAtribbs.end())

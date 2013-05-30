@@ -219,7 +219,7 @@ void Octant::updateDistanceToCamera()
 
 void Octant::createChilds()
 {
-	BOOST_ASSERT(octree != 0);
+	BOOST_ASSERT(octree != nullptr);
 	BOOST_ASSERT(allChilds.size() == 0);
 
 	if (level + 1 < maxLevels)
@@ -254,7 +254,7 @@ void Octant::createChilds()
 
 bool Octant::releaseChilds()
 {
-	BOOST_ASSERT(octree != 0);
+	BOOST_ASSERT(octree != nullptr);
 
 	// Check if empty
 	vector<Octant*>::iterator walker = allChilds.begin();
@@ -287,7 +287,7 @@ bool Octant::releaseChilds()
 
 bool Octant::updateEntity(const OctreeEntitySP& octreeEntity)
 {
-	BOOST_ASSERT(octreeEntity != 0);
+	BOOST_ASSERT(octreeEntity.get() != nullptr);
 
 	// Immediately return, if the bounding sphere does not fit
 	if (!encloses(octreeEntity->getBoundingSphere()))
@@ -338,7 +338,7 @@ bool Octant::updateEntity(const OctreeEntitySP& octreeEntity)
 
 void Octant::removeEntity(const OctreeEntitySP& octreeEntity)
 {
-	BOOST_ASSERT(octreeEntity != 0);
+	BOOST_ASSERT(octreeEntity.get() != nullptr);
 
 	if (octreeEntity->getVisitingOctant() == this)
 	{

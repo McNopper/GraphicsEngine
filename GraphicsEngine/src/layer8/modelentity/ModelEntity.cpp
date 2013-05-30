@@ -9,6 +9,8 @@
 #include "../../layer2/debug/DebugDraw.h"
 #include "../../layer2/environment/SkyManager.h"
 #include "../../layer2/material/RefractiveIndices.h"
+#include "../../layer3/camera/CameraManager.h"
+#include "../../layer3/light/LightManager.h"
 #include "../../layer4/shader/ProgramManagerProxy.h"
 
 #include "ModelEntity.h"
@@ -521,4 +523,36 @@ bool ModelEntity::setCamera(const string& name) const
 	}
 
 	return false;
+}
+
+void ModelEntity::passCamerasToManager() const
+{
+	auto walker = allCameras.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while(walker != allCameras.end())
+	{
+		instanceNode = *walker;
+
+		CameraManager::getInstance()->setCamera(instanceNode->getNode()->getCamera()->getName(), instanceNode->getNode()->getCamera(), true);
+
+		walker++;
+	}
+}
+
+void ModelEntity::passLightsToManager() const
+{
+	auto walker = allLights.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while(walker != allLights.end())
+	{
+		instanceNode = *walker;
+
+		LightManager::getInstance()->setLight(instanceNode->getNode()->getLight()->getName(), instanceNode->getNode()->getLight());
+
+		walker++;
+	}
 }

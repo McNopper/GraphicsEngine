@@ -11,6 +11,8 @@
 #include "../../layer2/interpolation/CubicInterpolator.h"
 #include "../../layer2/interpolation/LinearInterpolator.h"
 #include "../../layer3/animation/AnimationLayer.h"
+#include "../../layer3/camera/OrthographicCamera.h"
+#include "../../layer3/camera/PerspectiveCamera.h"
 #include "../../layer6/model/ModelManager.h"
 #include "FbxSubMesh.h"
 
@@ -20,10 +22,10 @@ using namespace std;
 
 using namespace boost;
 
-const char* FbxEntityFactory::CHANNELS[] = {"X", "Y", "Z"};
+const char* FbxEntityFactory::CHANNELS[] = { "X", "Y", "Z" };
 
 FbxEntityFactory::FbxEntityFactory() :
-	manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), allSurfaceMaterials(), allAnimationStacks(), allMeshes(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial()
+		manager(0), ioSettings(0), geometryConverter(0), currentSurfaceMaterials(), allSurfaceMaterials(), allAnimationStacks(), allMeshes(), allCameras(), allLights(), currentNumberJoints(0), currentNumberAnimationStacks(0), currentEntityAnimated(false), currentEntitySkinned(false), anisotropic(false), doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), currentSurfaceMaterial(), loadCamera(false), loadLight(false), loadMesh(true)
 {
 	// Create the FBX SDK manager
 	manager = FbxManager::Create();
@@ -42,6 +44,8 @@ FbxEntityFactory::~FbxEntityFactory()
 	allSurfaceMaterials.clear();
 	allAnimationStacks.clear();
 	allMeshes.clear();
+	allCameras.clear();
+	allLights.clear();
 
 	delete geometryConverter;
 	ioSettings->Destroy();
@@ -88,6 +92,8 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 	allSurfaceMaterials.clear();
 	allAnimationStacks.clear();
 	allMeshes.clear();
+	allCameras.clear();
+	allLights.clear();
 	nodeTreeFactory.reset();
 	currentNumberJoints = 0;
 	currentEntityAnimated = false;
@@ -126,6 +132,35 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 	glusLogPrint(GLUS_LOG_INFO, "Entity created: %s", filename.c_str());
 
 	return ModelEntitySP(new ModelEntity(name, model, scale, scale, scale));
+}
+
+ModelEntitySP FbxEntityFactory::loadFbxModelFile(const string& name, const string& filename, float scale, bool globalAnisotropic, const SurfaceMaterialSP& overwriteSurfaceMaterial)
+{
+	loadCamera = false;
+	loadLight = false;
+	loadMesh = true;
+
+	glusLogPrint(GLUS_LOG_INFO, "Loading mesh only");
+
+	return loadFbxFile(name, filename, scale, globalAnisotropic, overwriteSurfaceMaterial);
+}
+
+ModelEntitySP FbxEntityFactory::loadFbxSceneFile(const string& name, const string& filename, float scale, bool globalAnisotropic)
+{
+	loadCamera = true;
+	loadLight = true;
+	loadMesh = true;
+
+	glusLogPrint(GLUS_LOG_INFO, "Loading camera, light and mesh");
+
+	ModelEntitySP result = loadFbxFile(name, filename, scale, globalAnisotropic, SurfaceMaterialSP());
+
+	if (result.get())
+	{
+		result->setUsePositionAsBoundingSphereCenter(true);
+	}
+
+	return result;
 }
 
 bool FbxEntityFactory::traverseScene(FbxScene* scene)
@@ -213,6 +248,24 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 				}
 				allMeshes.clear();
 
+				auto walkerCamera = allCameras.begin();
+				while (walkerCamera != allCameras.end())
+				{
+					walkerCamera->reset();
+
+					walkerCamera++;
+				}
+				allCameras.clear();
+
+				auto walkerLight = allLights.begin();
+				while (walkerLight != allLights.end())
+				{
+					walkerLight->reset();
+
+					walkerLight++;
+				}
+				allLights.clear();
+
 				traverseDeleteUserPointer(node);
 
 				return false;
@@ -231,7 +284,7 @@ bool FbxEntityFactory::traverseScene(FbxScene* scene)
 
 void FbxEntityFactory::processTexture(FbxTexture* texture)
 {
-	FbxFileTexture* fileTexture = FbxCast<FbxFileTexture> (texture);
+	FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
 	if (fileTexture && !fileTexture->GetUserDataPtr())
 	{
 		TextureFactory textureFactory;
@@ -289,25 +342,25 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 
 	texture2D.reset();
 	const FbxDouble3 emissive = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sEmissive, FbxSurfaceMaterial::sEmissiveFactor, defaultEmissive, texture2D);
-	color.setRGBA(static_cast<GLfloat> (emissive[0]), static_cast<GLfloat> (emissive[1]), static_cast<GLfloat> (emissive[2]), 1.0f);
+	color.setRGBA(static_cast<GLfloat>(emissive[0]), static_cast<GLfloat>(emissive[1]), static_cast<GLfloat>(emissive[2]), 1.0f);
 	currentSurfaceMaterial->setEmissive(color);
 	currentSurfaceMaterial->setEmissiveTexture(texture2D);
 
 	texture2D.reset();
 	const FbxDouble3 ambient = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sAmbient, FbxSurfaceMaterial::sAmbientFactor, defaultAmbient, texture2D);
-	color.setRGBA(static_cast<GLfloat> (ambient[0]), static_cast<GLfloat> (ambient[1]), static_cast<GLfloat> (ambient[2]), 1.0f);
+	color.setRGBA(static_cast<GLfloat>(ambient[0]), static_cast<GLfloat>(ambient[1]), static_cast<GLfloat>(ambient[2]), 1.0f);
 	currentSurfaceMaterial->setAmbient(color);
 	currentSurfaceMaterial->setAmbientTexture(texture2D);
 
 	texture2D.reset();
 	const FbxDouble3 diffuse = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sDiffuse, FbxSurfaceMaterial::sDiffuseFactor, defaultDiffuse, texture2D);
-	color.setRGBA(static_cast<GLfloat> (diffuse[0]), static_cast<GLfloat> (diffuse[1]), static_cast<GLfloat> (diffuse[2]), 1.0f);
+	color.setRGBA(static_cast<GLfloat>(diffuse[0]), static_cast<GLfloat>(diffuse[1]), static_cast<GLfloat>(diffuse[2]), 1.0f);
 	currentSurfaceMaterial->setDiffuse(color);
 	currentSurfaceMaterial->setDiffuseTexture(texture2D);
 
 	texture2D.reset();
 	const FbxDouble3 specular = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sSpecular, FbxSurfaceMaterial::sSpecularFactor, defaultSpecular, texture2D);
-	color.setRGBA(static_cast<GLfloat> (specular[0]), static_cast<GLfloat> (specular[1]), static_cast<GLfloat> (specular[2]), 1.0f);
+	color.setRGBA(static_cast<GLfloat>(specular[0]), static_cast<GLfloat>(specular[1]), static_cast<GLfloat>(specular[2]), 1.0f);
 	currentSurfaceMaterial->setSpecular(color);
 	currentSurfaceMaterial->setSpecularTexture(texture2D);
 
@@ -316,12 +369,12 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	{
 		double shininess = 0.0;
 		shininess = shininessProperty.Get<double>();
-		currentSurfaceMaterial->setShininess(static_cast<GLfloat> (shininess));
+		currentSurfaceMaterial->setShininess(static_cast<GLfloat>(shininess));
 	}
 
 	texture2D.reset();
 	const FbxDouble3 reflection = processMaterialProperty(surfaceMaterial, FbxSurfaceMaterial::sReflection, FbxSurfaceMaterial::sReflectionFactor, defaultReflection, texture2D);
-	color.setRGBA(static_cast<GLfloat> (reflection[0]), static_cast<GLfloat> (reflection[1]), static_cast<GLfloat> (reflection[2]), 1.0f);
+	color.setRGBA(static_cast<GLfloat>(reflection[0]), static_cast<GLfloat>(reflection[1]), static_cast<GLfloat>(reflection[2]), 1.0f);
 	currentSurfaceMaterial->setReflection(color);
 	currentSurfaceMaterial->setReflectionTexture(texture2D);
 
@@ -362,7 +415,7 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 	currentSurfaceMaterials[materialIndex] = currentSurfaceMaterial;
 	allSurfaceMaterials.push_back(currentSurfaceMaterial);
 
-	glusLogPrint(GLUS_LOG_INFO, "Created material: %s", surfaceMaterial->GetName());
+	glusLogPrint(GLUS_LOG_INFO, "Created material: %s", materialName.c_str());
 }
 
 FbxDouble3 FbxEntityFactory::processMaterialProperty(const FbxSurfaceMaterial * surfaceMaterial, const char * propertyName, const char * factorPropertyName, const FbxDouble3& defaultColor, Texture2DSP& texture2D) const
@@ -450,39 +503,58 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 			createNode = true;
 		break;
 		case FbxNodeAttribute::eMesh:
-			geometryConverter->TriangulateInPlace(node);
-
-			currentSurfaceMaterials.clear();
-
-			for (int32_t i = 0; i < node->GetMaterialCount(); i++)
+			if (loadMesh)
 			{
-				if (!currentSurfaceMaterial.get())
+				geometryConverter->TriangulateInPlace(node);
+
+				currentSurfaceMaterials.clear();
+
+				for (int32_t i = 0; i < node->GetMaterialCount(); i++)
 				{
-					processSurfaceMaterial(i, node->GetMaterial(i));
+					if (!currentSurfaceMaterial.get())
+					{
+						processSurfaceMaterial(i, node->GetMaterial(i));
+					}
+					else
+					{
+						currentSurfaceMaterials[i] = currentSurfaceMaterial;
+					}
 				}
-				else
-				{
-					currentSurfaceMaterials[i] = currentSurfaceMaterial;
-				}
+
+				newMesh = processMesh(node->GetMesh());
+
+				glusLogPrint(GLUS_LOG_INFO, "Created mesh in node: %s", node->GetName());
+
+				createNode = true;
 			}
-
-			newMesh = processMesh(node->GetMesh());
-
-			glusLogPrint(GLUS_LOG_INFO, "Created mesh in node: %s", node->GetName());
-
-			createNode = true;
 		break;
 		case FbxNodeAttribute::eNurbs:
 		break;
 		case FbxNodeAttribute::ePatch:
 		break;
 		case FbxNodeAttribute::eCamera:
+			if (loadCamera)
+			{
+				newCamera = processCamera(node->GetCamera());
+
+				glusLogPrint(GLUS_LOG_INFO, "Created camera in node: %s", node->GetName());
+
+				createNode = true;
+			}
 		break;
 		case FbxNodeAttribute::eCameraStereo:
 		break;
 		case FbxNodeAttribute::eCameraSwitcher:
 		break;
 		case FbxNodeAttribute::eLight:
+			if (loadLight)
+			{
+				newLight = processLight(node->GetLight());
+
+				glusLogPrint(GLUS_LOG_INFO, "Created light in node: %s", node->GetName());
+
+				createNode = true;
+			}
 		break;
 		case FbxNodeAttribute::eOpticalReference:
 		break;
@@ -510,19 +582,19 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 
 	if (createNode)
 	{
-		float translate[3] = {0.0f, 0.0f, 0.0f};
-		float postRotate[3] = {0.0f, 0.0f, 0.0f};
-		float rotate[3] = {0.0f, 0.0f, 0.0f};
-		float preRotate[3] = {0.0f, 0.0f, 0.0f};
-		float rotatePivot[3] = {0.0f, 0.0f, 0.0f};
-		float rotateOffset[3] = {0.0f, 0.0f, 0.0f};
-		float scale[3] = {1.0f, 1.0f, 1.0f};
-		float scalePivot[3] = {0.0f, 0.0f, 0.0f};
-		float scaleOffset[3] = {0.0f, 0.0f, 0.0f};
+		float translate[3] = { 0.0f, 0.0f, 0.0f };
+		float postRotate[3] = { 0.0f, 0.0f, 0.0f };
+		float rotate[3] = { 0.0f, 0.0f, 0.0f };
+		float preRotate[3] = { 0.0f, 0.0f, 0.0f };
+		float rotatePivot[3] = { 0.0f, 0.0f, 0.0f };
+		float rotateOffset[3] = { 0.0f, 0.0f, 0.0f };
+		float scale[3] = { 1.0f, 1.0f, 1.0f };
+		float scalePivot[3] = { 0.0f, 0.0f, 0.0f };
+		float scaleOffset[3] = { 0.0f, 0.0f, 0.0f };
 
-		float geoTranslate[3] = {0.0f, 0.0f, 0.0f};
-		float geoRotate[3] = {0.0f, 0.0f, 0.0f};
-		float geoScale[3] = {1.0f, 1.0f, 1.0f};
+		float geoTranslate[3] = { 0.0f, 0.0f, 0.0f };
+		float geoRotate[3] = { 0.0f, 0.0f, 0.0f };
+		float geoScale[3] = { 1.0f, 1.0f, 1.0f };
 
 		translate[0] = static_cast<float>(node->LclTranslation.Get()[0]);
 		translate[1] = static_cast<float>(node->LclTranslation.Get()[1]);
@@ -738,13 +810,13 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 						{
 							case FbxAnimCurveDef::eInterpolationConstant:
 								newAnimLayer->addTranslationValue(currentChannel, time, value, ConstantInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationLinear:
 								newAnimLayer->addTranslationValue(currentChannel, time, value, LinearInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationCubic:
 								newAnimLayer->addTranslationValue(currentChannel, time, value, CubicInterpolator::interpolator);
-								break;
+							break;
 						}
 					}
 				}
@@ -764,13 +836,13 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 						{
 							case FbxAnimCurveDef::eInterpolationConstant:
 								newAnimLayer->addRotationValue(currentChannel, time, value, ConstantInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationLinear:
 								newAnimLayer->addRotationValue(currentChannel, time, value, LinearInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationCubic:
 								newAnimLayer->addRotationValue(currentChannel, time, value, CubicInterpolator::interpolator);
-								break;
+							break;
 						}
 					}
 				}
@@ -790,13 +862,13 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 						{
 							case FbxAnimCurveDef::eInterpolationConstant:
 								newAnimLayer->addScalingValue(currentChannel, time, value, ConstantInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationLinear:
 								newAnimLayer->addScalingValue(currentChannel, time, value, LinearInterpolator::interpolator);
-								break;
+							break;
 							case FbxAnimCurveDef::eInterpolationCubic:
 								newAnimLayer->addScalingValue(currentChannel, time, value, CubicInterpolator::interpolator);
-								break;
+							break;
 						}
 					}
 				}
@@ -817,6 +889,11 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 	//
 
 	string meshName(mesh->GetName());
+
+	if (meshName.compare("") == 0)
+	{
+		meshName = mesh->GetNode()->GetName();
+	}
 
 	//
 
@@ -971,18 +1048,18 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 	{
 		binormals = new float[numberVertices * 3];
 	}
-    FbxStringList uvNames;
-    mesh->GetUVSetNames(uvNames);
-    const char * uvName = 0;
-    if (hasUV && uvNames.GetCount())
+	FbxStringList uvNames;
+	mesh->GetUVSetNames(uvNames);
+	const char * uvName = 0;
+	if (hasUV && uvNames.GetCount())
 	{
 		texCoords = new float[numberVertices * 2];
 		uvName = uvNames[0];
 	}
-    else
-    {
-    	hasUV = false;
-    }
+	else
+	{
+		hasUV = false;
+	}
 
 	numberIndices = polygonCount * 3;
 	indices = new uint32_t[numberIndices];
@@ -1020,9 +1097,9 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 		{
 			// Save the vertex position.
 			currentVertex = controlPoints[index];
-			vertices[index * 4 + 0] = static_cast<float> (currentVertex[0]);
-			vertices[index * 4 + 1] = static_cast<float> (currentVertex[1]);
-			vertices[index * 4 + 2] = static_cast<float> (currentVertex[2]);
+			vertices[index * 4 + 0] = static_cast<float>(currentVertex[0]);
+			vertices[index * 4 + 1] = static_cast<float>(currentVertex[1]);
+			vertices[index * 4 + 2] = static_cast<float>(currentVertex[2]);
 			vertices[index * 4 + 3] = 1;
 
 			// Save the normal.
@@ -1034,9 +1111,9 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 					normalIndex = normalElement->GetIndexArray().GetAt(index);
 				}
 				currentNormal = normalElement->GetDirectArray().GetAt(normalIndex);
-				normals[index * 3 + 0] = static_cast<float> (currentNormal[0]);
-				normals[index * 3 + 1] = static_cast<float> (currentNormal[1]);
-				normals[index * 3 + 2] = static_cast<float> (currentNormal[2]);
+				normals[index * 3 + 0] = static_cast<float>(currentNormal[0]);
+				normals[index * 3 + 1] = static_cast<float>(currentNormal[1]);
+				normals[index * 3 + 2] = static_cast<float>(currentNormal[2]);
 			}
 
 			// Save the tangent.
@@ -1048,9 +1125,9 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 					tangentIndex = tangentElement->GetIndexArray().GetAt(index);
 				}
 				currentTangent = tangentElement->GetDirectArray().GetAt(tangentIndex);
-				tangents[index * 3 + 0] = static_cast<float> (currentTangent[0]);
-				tangents[index * 3 + 1] = static_cast<float> (currentTangent[1]);
-				tangents[index * 3 + 2] = static_cast<float> (currentTangent[2]);
+				tangents[index * 3 + 0] = static_cast<float>(currentTangent[0]);
+				tangents[index * 3 + 1] = static_cast<float>(currentTangent[1]);
+				tangents[index * 3 + 2] = static_cast<float>(currentTangent[2]);
 			}
 
 			// Save the binormal.
@@ -1062,9 +1139,9 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 					binormalIndex = binormalElement->GetIndexArray().GetAt(index);
 				}
 				currentBinormal = binormalElement->GetDirectArray().GetAt(binormalIndex);
-				binormals[index * 3 + 0] = static_cast<float> (currentBinormal[0]);
-				binormals[index * 3 + 1] = static_cast<float> (currentBinormal[1]);
-				binormals[index * 3 + 2] = static_cast<float> (currentBinormal[2]);
+				binormals[index * 3 + 0] = static_cast<float>(currentBinormal[0]);
+				binormals[index * 3 + 1] = static_cast<float>(currentBinormal[1]);
+				binormals[index * 3 + 2] = static_cast<float>(currentBinormal[2]);
 			}
 
 			// Save the UV.
@@ -1076,8 +1153,8 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 					uvIndex = uvElement->GetIndexArray().GetAt(index);
 				}
 				currentUV = uvElement->GetDirectArray().GetAt(uvIndex);
-				texCoords[index * 2 + 0] = static_cast<float> (currentUV[0]);
-				texCoords[index * 2 + 1] = static_cast<float> (currentUV[1]);
+				texCoords[index * 2 + 0] = static_cast<float>(currentUV[0]);
+				texCoords[index * 2 + 1] = static_cast<float>(currentUV[1]);
 			}
 		}
 	}
@@ -1094,7 +1171,7 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 	}
 
 	// Populate the array with indices
-    uint32_t vertexCount = 0;
+	uint32_t vertexCount = 0;
 	for (int32_t polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex)
 	{
 		int32_t materialIndex = 0;
@@ -1112,7 +1189,7 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 
 			if (allByControlPoint)
 			{
-				indices[indexOffset + verticeIndex] = static_cast<uint32_t> (controlPointIndex);
+				indices[indexOffset + verticeIndex] = static_cast<uint32_t>(controlPointIndex);
 			}
 			else
 			{
@@ -1120,24 +1197,24 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 				indicesToOrgIndices[indexOffset + verticeIndex] = static_cast<uint32_t>(controlPointIndex);
 
 				currentVertex = controlPoints[controlPointIndex];
-				vertices[vertexCount * 4 + 0] = static_cast<float> (currentVertex[0]);
-				vertices[vertexCount * 4 + 1] = static_cast<float> (currentVertex[1]);
-				vertices[vertexCount * 4 + 2] = static_cast<float> (currentVertex[2]);
+				vertices[vertexCount * 4 + 0] = static_cast<float>(currentVertex[0]);
+				vertices[vertexCount * 4 + 1] = static_cast<float>(currentVertex[1]);
+				vertices[vertexCount * 4 + 2] = static_cast<float>(currentVertex[2]);
 				vertices[vertexCount * 4 + 3] = 1.0f;
 
 				if (hasNormal)
 				{
 					mesh->GetPolygonVertexNormal(polygonIndex, verticeIndex, currentNormal);
-					normals[vertexCount * 3 + 0] = static_cast<float> (currentNormal[0]);
-					normals[vertexCount * 3 + 1] = static_cast<float> (currentNormal[1]);
-					normals[vertexCount * 3 + 2] = static_cast<float> (currentNormal[2]);
+					normals[vertexCount * 3 + 0] = static_cast<float>(currentNormal[0]);
+					normals[vertexCount * 3 + 1] = static_cast<float>(currentNormal[1]);
+					normals[vertexCount * 3 + 2] = static_cast<float>(currentNormal[2]);
 				}
 
 				if (hasUV)
 				{
 					mesh->GetPolygonVertexUV(polygonIndex, verticeIndex, uvName, currentUV);
-					texCoords[vertexCount * 2 + 0] = static_cast<float> (currentUV[0]);
-					texCoords[vertexCount * 2 + 1] = static_cast<float> (currentUV[1]);
+					texCoords[vertexCount * 2 + 0] = static_cast<float>(currentUV[0]);
+					texCoords[vertexCount * 2 + 1] = static_cast<float>(currentUV[1]);
 				}
 			}
 			vertexCount++;
@@ -1178,7 +1255,107 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 		tangents = meshShape.tangents;
 	}
 
+	glusLogPrint(GLUS_LOG_INFO, "Created mesh: %s", meshName.c_str());
+
 	return MeshSP(new Mesh(meshName, numberVertices, vertices, normals, binormals, tangents, texCoords, numberIndices, indices, currentSubMeshes, currentSurfaceMaterials));
+}
+
+LightSP FbxEntityFactory::processLight(FbxLight* light)
+{
+	//
+
+	string lightName(light->GetName());
+
+	if (lightName.compare("") == 0)
+	{
+		lightName = light->GetNode()->GetName();
+	}
+
+	//
+
+	auto walkerLight = allLights.begin();
+	while (walkerLight != allLights.end())
+	{
+		if ((*walkerLight)->getName().compare(lightName) == 0)
+		{
+			glusLogPrint(GLUS_LOG_INFO, "Reused light: %s", light->GetName());
+
+			return *walkerLight;
+		}
+
+		walkerLight++;
+	}
+
+	//
+
+	// TODO
+
+	glusLogPrint(GLUS_LOG_INFO, "Created light: %s", lightName.c_str());
+
+	return LightSP();
+}
+
+CameraSP FbxEntityFactory::processCamera(FbxCamera* camera)
+{
+	//
+
+	string cameraName(camera->GetName());
+
+	if (cameraName.compare("") == 0)
+	{
+		cameraName = camera->GetNode()->GetName();
+	}
+
+	//
+
+	auto walkerCamera = allCameras.begin();
+	while (walkerCamera != allCameras.end())
+	{
+		if ((*walkerCamera)->getName().compare(cameraName) == 0)
+		{
+			glusLogPrint(GLUS_LOG_INFO, "Reused camera: %s", camera->GetName());
+
+			return *walkerCamera;
+		}
+
+		walkerCamera++;
+	}
+
+	//
+
+	FbxCamera::EProjectionType projectionType = camera->ProjectionType.Get();
+
+	CameraSP currentCamera;
+
+	if (projectionType == FbxCamera::ePerspective)
+	{
+		PerspectiveCameraSP perspectiveCamera = PerspectiveCameraSP(new PerspectiveCamera(cameraName));
+
+		FbxDouble fovx = camera->ComputeFieldOfView(camera->FocalLength.Get());
+
+		perspectiveCamera->setFovx(fovx);
+
+		currentCamera = perspectiveCamera;
+	}
+	else if (projectionType == FbxCamera::eOrthogonal)
+	{
+		OrthographicCameraSP orthographicCamera = OrthographicCameraSP(new OrthographicCamera(cameraName));
+
+		currentCamera = orthographicCamera;
+	}
+	else
+	{
+		return CameraSP();
+	}
+
+	currentCamera->setNearZ(static_cast<float>(camera->NearPlane.Get()));
+	currentCamera->setFarZ(static_cast<float>(camera->FarPlane.Get()));
+
+	allCameras.push_back(currentCamera);
+
+	glusLogPrint(GLUS_LOG_INFO, "Created camera: %s", cameraName.c_str());
+
+	return currentCamera;
 }
 
 void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nodeGE)
@@ -1197,32 +1374,32 @@ void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nod
 	switch (attributeType)
 	{
 		case FbxNodeAttribute::eMesh:
+		{
+			int32_t numberDeformers = node->GetMesh()->GetDeformerCount(FbxDeformer::eSkin);
+
+			for (int32_t deformerIndex = 0; deformerIndex < numberDeformers; deformerIndex++)
 			{
-				int32_t numberDeformers = node->GetMesh()->GetDeformerCount(FbxDeformer::eSkin);
+				FbxSkin* skinDeformer = (FbxSkin*)node->GetMesh()->GetDeformer(deformerIndex, FbxDeformer::eSkin);
 
-				for (int32_t deformerIndex = 0; deformerIndex < numberDeformers; deformerIndex++)
+				int32_t numberClusters = skinDeformer->GetClusterCount();
+
+				for (int32_t clusterIndex = 0; clusterIndex < numberClusters; clusterIndex++)
 				{
-					FbxSkin* skinDeformer = (FbxSkin*)node->GetMesh()->GetDeformer(deformerIndex, FbxDeformer::eSkin);
+					FbxCluster* cluster = skinDeformer->GetCluster(clusterIndex);
 
-					int32_t numberClusters = skinDeformer->GetClusterCount();
+					FbxNode* linkNode = cluster->GetLink();
 
-					for (int32_t clusterIndex = 0; clusterIndex < numberClusters; clusterIndex++)
+					if (!linkNode)
 					{
-						FbxCluster* cluster = skinDeformer->GetCluster(clusterIndex);
+						glusLogPrint(GLUS_LOG_WARNING, "No link node");
 
-						FbxNode* linkNode = cluster->GetLink();
-
-						if (!linkNode)
-						{
-							glusLogPrint(GLUS_LOG_WARNING, "No link node");
-
-							continue;
-						}
-
-						nodeTreeFactory.setUsedJoint(linkNode->GetName());
+						continue;
 					}
+
+					nodeTreeFactory.setUsedJoint(linkNode->GetName());
 				}
 			}
+		}
 
 		break;
 
@@ -1237,8 +1414,7 @@ void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nod
 		{
 			NodeSP currentChild = nodeGE->getChild(node->GetChild(i)->GetName());
 			preTraverseIndexCreation(node->GetChild(i), currentChild);
-		}
-		catch (...)
+		} catch (...)
 		{
 		}
 	}
@@ -1246,6 +1422,8 @@ void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nod
 
 void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, const Matrix4x4& parentMatrix)
 {
+	static float vertices[2 * 4];
+
 	Matrix4x4 newParentMatrix(parentMatrix);
 
 	FbxNodeAttribute::EType attributeType;
@@ -1262,6 +1440,7 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 	switch (attributeType)
 	{
 		case FbxNodeAttribute::eMesh:
+			if (loadMesh)
 			{
 				Matrix4x4 matrix;
 
@@ -1276,6 +1455,50 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 			}
 		break;
 
+		case FbxNodeAttribute::eLight:
+			if (loadLight)
+			{
+				Matrix4x4 matrix;
+
+				newParentMatrix = newParentMatrix * nodeGE->getLocalFinalMatrix();
+
+				matrix = newParentMatrix * nodeGE->getGeometricTransform();
+
+				for (int32_t i = 0; i < 2; i++)
+				{
+					vertices[4 * i + 0] = (i == 0) ? -Light::getDebugRadius() : Light::getDebugRadius();
+					vertices[4 * i + 1] = (i == 0) ? -Light::getDebugRadius() : Light::getDebugRadius();
+					vertices[4 * i + 2] = (i == 0) ? -Light::getDebugRadius() : Light::getDebugRadius();
+					vertices[4 * i + 3] = 1.0f;
+				}
+
+				// Update the min max for the final bounding sphere
+				processMinMax(vertices, 2, matrix);
+			}
+		break;
+
+		case FbxNodeAttribute::eCamera:
+			if (loadCamera)
+			{
+				Matrix4x4 matrix;
+
+				newParentMatrix = newParentMatrix * nodeGE->getLocalFinalMatrix();
+
+				matrix = newParentMatrix * nodeGE->getGeometricTransform();
+
+				for (int32_t i = 0; i < 2; i++)
+				{
+					vertices[4 * i + 0] = (i == 0) ? -Camera::getDebugRadius() : Camera::getDebugRadius();
+					vertices[4 * i + 1] = (i == 0) ? -Camera::getDebugRadius() : Camera::getDebugRadius();
+					vertices[4 * i + 2] = (i == 0) ? -Camera::getDebugRadius() : Camera::getDebugRadius();
+					vertices[4 * i + 3] = 1.0f;
+				}
+
+				// Update the min max for the final bounding sphere
+				processMinMax(vertices, 2, matrix);
+			}
+		break;
+
 		default:
 			// Do nothing
 		break;
@@ -1287,8 +1510,7 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 		{
 			NodeSP currentChild = nodeGE->getChild(node->GetChild(i)->GetName());
 			postTraverseNode(node->GetChild(i), currentChild, newParentMatrix);
-		}
-		catch (...)
+		} catch (...)
 		{
 		}
 	}
@@ -1580,10 +1802,7 @@ void FbxEntityFactory::postProcessMesh(FbxMesh* mesh, const MeshSP& currentMesh)
 
 			cluster->GetTransformMatrix(matrix);
 
-			float tm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)),
-							static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)),
-							static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)),
-							static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
+			float tm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)), static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)), static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)), static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
 
 			Matrix4x4 transformMatrix(tm);
 
@@ -1591,10 +1810,7 @@ void FbxEntityFactory::postProcessMesh(FbxMesh* mesh, const MeshSP& currentMesh)
 
 			cluster->GetTransformLinkMatrix(matrix);
 
-			float tlm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)),
-							static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)),
-							static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)),
-							static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
+			float tlm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)), static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)), static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)), static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
 
 			Matrix4x4 transformLinkMatrix(tlm);
 
@@ -1621,18 +1837,18 @@ void FbxEntityFactory::traverseDeleteUserPointer(FbxNode* node)
 	switch (attributeType)
 	{
 		case FbxNodeAttribute::eMesh:
+		{
+			FbxMesh* mesh = node->GetMesh();
+
+			if (mesh && mesh->GetUserDataPtr())
 			{
-				FbxMesh* mesh = node->GetMesh();
+				uint32_t* indicesToOrgIndices = static_cast<uint32_t*>(mesh->GetUserDataPtr());
 
-				if (mesh && mesh->GetUserDataPtr())
-				{
-					uint32_t* indicesToOrgIndices = static_cast<uint32_t*>(mesh->GetUserDataPtr());
+				delete[] indicesToOrgIndices;
 
-					delete[] indicesToOrgIndices;
-
-					mesh->SetUserDataPtr(0);
-				}
+				mesh->SetUserDataPtr(0);
 			}
+		}
 		break;
 
 		default:

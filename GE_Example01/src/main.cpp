@@ -125,7 +125,7 @@ GLUSboolean initGame(GLUSvoid)
 	position = Point4(-10.0f, 10.0f, -16.0f);
 
 	filename = "humanoid.fbx";
-	entity = entityFactory.loadFbxFile("Humanoid0", filename, 0.01f);
+	entity = entityFactory.loadFbxModelFile("Humanoid0", filename, 0.01f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());

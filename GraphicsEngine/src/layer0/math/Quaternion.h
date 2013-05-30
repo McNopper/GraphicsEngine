@@ -36,6 +36,8 @@ public:
 	bool operator ==(const Quaternion& other) const;
 	bool operator !=(const Quaternion& other) const;
 
+	Quaternion& operator*=(const Quaternion& other);
+
 	Quaternion& operator =(const Quaternion& other);
 
 	Quaternion operator *(const Quaternion& other) const;

@@ -81,7 +81,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Astro Boy
 
 	filename = "astroBoy_walk.fbx";
-	entity = entityFactory.loadFbxFile("AstroBoy", filename, 0.2f);
+	entity = entityFactory.loadFbxModelFile("AstroBoy", filename, 0.2f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
@@ -111,7 +111,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Air plane
 
 	filename = "seymourplane_triangulate.fbx";
-	entity = entityFactory.loadFbxFile("Plane0", filename, 0.1f);
+	entity = entityFactory.loadFbxModelFile("Plane0", filename, 0.1f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());

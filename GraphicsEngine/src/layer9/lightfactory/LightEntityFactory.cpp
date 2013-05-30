@@ -25,7 +25,7 @@ ModelEntitySP LightEntityFactory::createLightEntity(const string& name, const Li
 
 	ModelFactory modelFactory;
 
-	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), 2.0f), light);
+	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), Light::getDebugRadius()), light);
 
 	ModelEntitySP modelEntity = ModelEntitySP(new ModelEntity(name, model, 1.0f, 1.0f, 1.0f));
 
@@ -36,7 +36,7 @@ ModelEntitySP LightEntityFactory::createLightEntity(const string& name, const Li
 {
 	ModelFactory modelFactory;
 
-	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), 2.0f), light, allAnimStacks);
+	ModelSP model = modelFactory.createModel(name, BoundingSphere(Point4(), Light::getDebugRadius()), light, allAnimStacks);
 
 	ModelEntitySP modelEntity = ModelEntitySP(new ModelEntity(name, model, 1.0f, 1.0f, 1.0f));
 

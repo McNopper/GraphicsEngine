@@ -59,7 +59,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Building
 
 	filename = "Medieval_building.FBX";
-	modelEntity = entityFactory.loadFbxFile("Medieval_building", filename, 1.0f);
+	modelEntity = entityFactory.loadFbxModelFile("Medieval_building", filename, 1.0f);
 	if (!modelEntity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
@@ -161,7 +161,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	modelEntity = cameraEntityFactory.createCameraEntity("RenderCamera", camera);
 	modelEntity->setPosition(Point4(0.0f, 10.0f, 0.0f));
-	modelEntity->setRotation(Quaternion(-45.0f, Vector3(1.0f, 0.0f, 0.0f)));
+	modelEntity->setRotation(Quaternion(-45.0f, Vector3(1.0f, 0.0f, 0.0f)) * Quaternion(90.0f, Vector3(0.0f, 1.0f, 0.0f)));
 	modelEntity->setDebug(true);
 
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);

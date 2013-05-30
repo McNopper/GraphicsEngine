@@ -12,8 +12,13 @@
 
 using namespace std;
 
+const float Camera::getDebugRadius()
+{
+	return 2.0f;
+}
+
 Camera::Camera(const string& name) :
-	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), direction(0.0f, 0.0f, -1.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix()
+	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(1.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(1.0f, 0.0f, 0.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix()
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
@@ -88,9 +93,19 @@ const Vector3& Camera::getUp() const
 	return up;
 }
 
+void Camera::setNearZ(float zNear)
+{
+	this->zNear = zNear;
+}
+
 float Camera::getNearZ() const
 {
 	return zNear;
+}
+
+void Camera::setFarZ(float zFar)
+{
+	this->zFar = zFar;
 }
 
 float Camera::getFarZ() const
@@ -139,7 +154,7 @@ void Camera::setCameraProperties(const ProgramSP& program, const Point4& positio
 		transitionMatrix *= rotation.getRotationMatrix4x4();
 
 		Point4 eye = transitionMatrix * Point4();
-		Point4 center = transitionMatrix * Point4(0.0f, 0.0f, -1.0f);
+		Point4 center = transitionMatrix * Point4(1.0f, 0.0f, 0.0f);
 		Vector3 up = transitionMatrix * Vector3(0.0f, 1.0f, 0.0f);
 
 		lookAt(eye, center, up);
@@ -159,7 +174,9 @@ void Camera::setCameraProperties(const ProgramSP& program, const Point4& positio
 
 void Camera::debugDraw(const Point4& position, const Quaternion& rotation, bool useLocation) const
 {
-	Quaternion baseRotation(90.0f, Vector3(1.0f, 0.0f, 0.0f));
+	Quaternion baseRotation(-90.0f, Vector3(0.0f, 1.0f, 0.0f));
+
+	baseRotation *= Quaternion(90.0f, Vector3(1.0f, 0.0f, 0.0f));
 
 	if (useLocation)
 	{

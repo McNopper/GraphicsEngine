@@ -71,6 +71,8 @@ const LightSP& LightManager::getDefaultDirectionalLight() const
 void LightManager::setLight(const string& key, const LightSP& light)
 {
 	allLights[key] = light;
+
+	glusLogPrint(GLUS_LOG_INFO, "Adding light to manager: %s", light->getName().c_str());
 }
 
 

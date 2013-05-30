@@ -11,11 +11,11 @@
 
 using namespace std;
 
-PerspectiveCamera::PerspectiveCamera(const string& name) : Camera(name), fovy(40.0f)
+PerspectiveCamera::PerspectiveCamera(const string& name) : Camera(name), fovx(40.0f), fovy(40.0f), fovxDirty(false), fovyDirty(false)
 {
 }
 
-PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera& other) : Camera(other), fovy(other.fovy)
+PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera& other) : Camera(other), fovx(other.fovx), fovy(other.fovy), fovxDirty(other.fovxDirty), fovyDirty(other.fovyDirty)
 {
 }
 
@@ -25,6 +25,23 @@ PerspectiveCamera::~PerspectiveCamera()
 
 void PerspectiveCamera::updateProjectionMatrix()
 {
+	if (fovxDirty)
+	{
+		float d = static_cast<float>(viewport.getHeight()) / tanf(glusDegToRadf(fovy / 2.0f));
+
+		fovx = glusRadToDegf(atanf(static_cast<float>(viewport.getWidth()) / d)) * 2.0f;
+
+		fovxDirty = false;
+	}
+	else if (fovyDirty)
+	{
+		float d = static_cast<float>(viewport.getWidth()) / tanf(glusDegToRadf(fovx / 2.0f));
+
+		fovy = glusRadToDegf(atanf(static_cast<float>(viewport.getHeight()) / d)) * 2.0f;
+
+		fovyDirty = false;
+	}
+
 	perspective(fovy, viewport, zNear, zFar);
 }
 
@@ -35,7 +52,7 @@ float PerspectiveCamera::getNearWidth() const
 
 float PerspectiveCamera::getNearHeight() const
 {
-	return tanf(2.0f * fovy * GLUS_PI / 360.0f) * zNear;
+	return 2.0f * tanf(fovy * GLUS_PI / 360.0f) * zNear;
 }
 
 float PerspectiveCamera::getFarWidth() const
@@ -45,7 +62,7 @@ float PerspectiveCamera::getFarWidth() const
 
 float PerspectiveCamera::getFarHeight() const
 {
-	return tanf(2.0f * fovy * GLUS_PI / 360.0f) * zFar;
+	return 2.0f * tanf(fovy * GLUS_PI / 360.0f) * zFar;
 }
 
 void PerspectiveCamera::perspective(float fovy, const Viewport& viewport, float zNear, float zFar)
@@ -66,3 +83,18 @@ void PerspectiveCamera::perspective(float fovy, const Viewport& viewport, float 
 	updateViewFrustum();
 }
 
+void PerspectiveCamera::setFovx(float fovx)
+{
+	this->fovx = fovx;
+
+	fovxDirty = false;
+	fovyDirty = true;
+}
+
+void PerspectiveCamera::setFovy(float fovy)
+{
+	this->fovy = fovy;
+
+	fovxDirty = true;
+	fovyDirty = false;
+}

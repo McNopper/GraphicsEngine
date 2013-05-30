@@ -81,6 +81,12 @@ public:
 
     bool setCamera(const std::string& name) const;
 
+    //
+
+    void passCamerasToManager() const;
+
+    void passLightsToManager() const;
+
 };
 
 typedef boost::shared_ptr<ModelEntity> ModelEntitySP;

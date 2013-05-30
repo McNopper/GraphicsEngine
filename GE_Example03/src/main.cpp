@@ -78,7 +78,7 @@ GLUSboolean initGame(GLUSvoid)
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Diamond", Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK, 0.0f, Color::WHITE, Color::WHITE, RI_DIAMOND, 0.0f);
 
 	filename = "monkey.fbx";
-	entity = entityFactory.loadFbxFile("Monkey", filename, 1.0f, false, surfaceMaterial);
+	entity = entityFactory.loadFbxModelFile("Monkey", filename, 1.0f, false, surfaceMaterial);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
@@ -93,7 +93,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Plane
 
 	filename = "seymourplane_triangulate.fbx";
-	entity = entityFactory.loadFbxFile("Plane0", filename, 0.1f);
+	entity = entityFactory.loadFbxModelFile("Plane0", filename, 0.1f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());
@@ -135,7 +135,7 @@ GLUSboolean initGame(GLUSvoid)
 	// Duck
 
 	filename = "duck_triangulate.fbx";
-	entity = entityFactory.loadFbxFile("Duck", filename, 0.01f);
+	entity = entityFactory.loadFbxModelFile("Duck", filename, 0.01f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());

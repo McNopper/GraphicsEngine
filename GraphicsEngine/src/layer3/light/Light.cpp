@@ -9,6 +9,11 @@
 
 using namespace std;
 
+const float Light::getDebugRadius()
+{
+	return 2.0f;
+}
+
 Light::Light(const string& name, const Color& ambient, const Color& diffuse, const Color& specular) :
 		name(name), ambient(ambient), diffuse(diffuse), specular(specular)
 {

@@ -40,6 +40,8 @@ private:
 	std::vector<SurfaceMaterialSP> allSurfaceMaterials;
 	std::vector<AnimationStackSP> allAnimationStacks;
 	std::vector<MeshSP> allMeshes;
+	std::vector<CameraSP> allCameras;
+	std::vector<LightSP> allLights;
 	boost::int32_t currentNumberJoints;
 	boost::int32_t currentNumberAnimationStacks;
 	bool currentEntityAnimated;
@@ -52,6 +54,12 @@ private:
 	float minX, maxX, minY, maxY, minZ, maxZ;
 
 	SurfaceMaterialSP currentSurfaceMaterial;
+
+	bool loadCamera;
+
+	bool loadLight;
+
+	bool loadMesh;
 
 private:
 
@@ -69,6 +77,10 @@ private:
 
 	MeshSP processMesh(FbxMesh* mesh);
 
+	LightSP processLight(FbxLight* light);
+
+	CameraSP processCamera(FbxCamera* camera);
+
 	void preTraverseIndexCreation(FbxNode* node, const NodeSP& nodeGE);
 
 	void postTraverseNode(FbxNode* node, const NodeSP& nodeGE, const Matrix4x4& parentMatrix);
@@ -79,12 +91,16 @@ private:
 
 	void traverseDeleteUserPointer(FbxNode* node);
 
+	ModelEntitySP loadFbxFile(const std::string& name, const std::string& filename, float scale, bool globalAnisotropic, const SurfaceMaterialSP& overwriteSurfaceMaterial);
+
 public:
 
 	FbxEntityFactory();
 	virtual ~FbxEntityFactory();
 
-	ModelEntitySP loadFbxFile(const std::string& name, const std::string& filename, float scale, bool globalAnisotropic = false, const SurfaceMaterialSP& overwriteSurfaceMaterial = SurfaceMaterialSP());
+	ModelEntitySP loadFbxModelFile(const std::string& name, const std::string& filename, float scale, bool globalAnisotropic = false, const SurfaceMaterialSP& overwriteSurfaceMaterial = SurfaceMaterialSP());
+
+	ModelEntitySP loadFbxSceneFile(const std::string& name, const std::string& filename, float scale, bool globalAnisotropic = false);
 
 };
 

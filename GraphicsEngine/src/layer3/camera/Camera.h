@@ -57,6 +57,8 @@ public:
 	Camera(const Camera& other);
 	virtual ~Camera();
 
+	static const float getDebugRadius();
+
 	const std::string& getName() const;
 
 	void lookAt(const Point4& eye, const Point4& center, const Vector3& up);
@@ -71,8 +73,10 @@ public:
 
 	const Vector3& getUp() const;
 
+	void setNearZ(float zNear);
 	float getNearZ() const;
 
+	void setFarZ(float zFar);
 	float getFarZ() const;
 
 	const Viewport& getViewport() const;

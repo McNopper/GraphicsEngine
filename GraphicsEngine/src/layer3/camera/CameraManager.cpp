@@ -26,6 +26,7 @@ CameraManager::CameraManager() :
 	allWindowCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY];
 	allWindowCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY];
 
+	allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY]->lookAt(Point4(0.0f, 0.0f, 5.0f), Point4(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY]->lookAt(Point4(0.0f, 0.0f, 5.0f), Point4(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 }
 
@@ -83,6 +84,8 @@ const CameraSP& CameraManager::getCamera(const string& key) const
 void CameraManager::setCamera(const string& key, const CameraSP& camera, bool windowCamera)
 {
 	BOOST_ASSERT(DEFAULT_PERSPECTIVE_CAMERA_KEY.compare(key) != 0);
+
+	glusLogPrint(GLUS_LOG_INFO, "Adding camera to manager: %s", camera->getName().c_str());
 
 	allCameras[key] = camera;
 
