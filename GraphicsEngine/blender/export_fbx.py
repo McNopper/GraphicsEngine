@@ -1395,10 +1395,6 @@ def save_single(operator, scene, filepath="",
         me_edges = me.edges[:] if use_mesh_edges else ()
         me_faces = me.tessfaces[:]
 
-		# NN Start
-        doSmooth = me_faces[0].use_smooth
-		# NN End
-		
         poseMatrix = write_object_props(my_mesh.blenObject, None, my_mesh.parRelMatrix())[3]
 
         # Calculate the global transform for the mesh in the bind pose the same way we do
@@ -1487,51 +1483,61 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\tGeometryVersion: 124')
 
 		# NN Start
-        if doSmooth:
-		# NN End
-            fw('''
-            LayerElementNormal: 0 {
-                Version: 101
-                Name: ""
-                MappingInformationType: "ByVertice"
-                ReferenceInformationType: "Direct"
-                Normals: ''')
+        #fw('''
+        #LayerElementNormal: 0 {
+        #    Version: 101
+        #    Name: ""
+        #    MappingInformationType: "ByVertice"
+        #    ReferenceInformationType: "Direct"
+        #    Normals: ''')
 
-            i = -1
-            for v in me_vertices:
-                if i == -1:
-                    fw('%.15f,%.15f,%.15f' % v.normal[:])
-                    i = 0
+        #i = -1
+        #for v in me_vertices:
+        #    if i == -1:
+        #        fw('%.15f,%.15f,%.15f' % v.normal[:])
+        #        i = 0
+        #    else:
+        #        if i == 2:
+        #            fw('\n\t\t\t ')
+        #            i = 0
+        #        fw(',%.15f,%.15f,%.15f' % v.normal[:])
+        #    i += 1
+        #fw('\n\t\t}')
+        fw('''
+        LayerElementNormal: 0 {
+            Version: 101
+            Name: ""
+            MappingInformationType: "ByPolygonVertex"
+            ReferenceInformationType: "Direct"
+            Normals: ''')
+
+        i = -1
+        for f in me_faces:
+            if i == -1:
+                if f.use_smooth:
+                    fw('%.6f,%.6f,%.6f' % me_vertices[f.vertices[0]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[1]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[2]].normal[:])
+                    if len(f.vertices) == 4:
+                        fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[3]].normal[:])
                 else:
-                    if i == 2:
-                        fw('\n\t\t\t ')
-                        i = 0
-                    fw(',%.15f,%.15f,%.15f' % v.normal[:])
-                i += 1
-            fw('\n\t\t}')
-		#NN Start
-        else:
-            fw('''
-            LayerElementNormal: 0 {
-                Version: 101
-                Name: ""
-                MappingInformationType: "ByPolygonVertex"
-                ReferenceInformationType: "Direct"
-                Normals: ''')
-
-            i = -1
-            for f in me_faces:
-                if i == -1:
                     fw('%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
-                    i = 0
+                i = 0
+            else:
+                if f.use_smooth:
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[0]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[1]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[2]].normal[:])
+                    if len(f.vertices) == 4:
+                        fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[3]].normal[:])
                 else:
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
-                i += 1
-            fw('\n\t\t}')
+            i += 1
+        fw('\n\t\t}')
 		#NN End	
 
         # Write Face Smoothing
