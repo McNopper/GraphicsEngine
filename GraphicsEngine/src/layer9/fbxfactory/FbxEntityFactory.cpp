@@ -1361,8 +1361,8 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 	}
 	else if (lightType == FbxLight::eSpot)
 	{
-		float spotCosCutOff = static_cast<float>(light->InnerAngle.Get());
-		float spotCosCutOffOuter = static_cast<float>(light->OuterAngle.Get());
+		float spotCosCutOff = cosf(glusDegToRadf(static_cast<float>(light->InnerAngle.Get())));
+		float spotCosCutOffOuter = cosf(glusDegToRadf(static_cast<float>(light->OuterAngle.Get())));
 
 		SpotLightSP spotLight = SpotLightSP(new SpotLight(lightName, spotCosCutOff, spotCosCutOffOuter, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular));
 

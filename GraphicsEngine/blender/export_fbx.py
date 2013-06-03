@@ -1045,8 +1045,8 @@ def save_single(operator, scene, filepath="",
         if light.type == 'SPOT':
             # NN Start
             #fw('\n\t\t\tProperty: "Cone angle", "Cone angle", "A+",%.2f' % math.degrees(light.spot_size))
-            fw('\n\t\t\tProperty: "Cone angle", "Number", "A+",%.2f' % math.degrees(light.spot_size))
-            fw('\n\t\t\tProperty: "HotSpot", "Number", "A+",%.2f' % (math.degrees(light.spot_size) - math.degrees(light.spot_size)*light.spot_blend))
+            fw('\n\t\t\tProperty: "OuterAngle", "Number", "A+",%.2f' % math.degrees(light.spot_size))
+            fw('\n\t\t\tProperty: "InnerAngle", "Number", "A+",%.2f' % (math.degrees(light.spot_size) - math.degrees(light.spot_size)*light.spot_blend))
             # NN End
         fw('\n\t\t\tProperty: "Fog", "Fog", "A+",50')
         fw('\n\t\t\tProperty: "Color", "Color", "A",%.2f,%.2f,%.2f' % tuple(light.color))
