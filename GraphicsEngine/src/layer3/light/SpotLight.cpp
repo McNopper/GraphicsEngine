@@ -13,8 +13,8 @@ using namespace boost;
 
 using namespace std;
 
-SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse, const Color& specular) :
-		PointLight(name, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter), spotExponent(spotExponent)
+SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse, const Color& specular) :
+		PointLight(name, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular), spotCosCutOff(spotCosCutOff), spotCosCutOffOuter(spotCosCutOffOuter)
 {
 	this->spotDirection = Vector3(0.0f, -1.0f, 0.0f);
 }
@@ -43,16 +43,6 @@ void SpotLight::setSpotCosCutOffOuter(float spotCosCutOffOuter)
 	this->spotCosCutOffOuter = spotCosCutOffOuter;
 }
 
-float SpotLight::getSpotExponent() const
-{
-	return spotExponent;
-}
-
-void SpotLight::setSpotExponent(float spotExponent)
-{
-	this->spotExponent = spotExponent;
-}
-
 void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const
 {
 	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 2);
@@ -69,7 +59,6 @@ void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& progra
 	glUniform3fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotDirection), 1, (rotation * spotDirection).getV());
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotCosCutOff), spotCosCutOff);
 	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotCosCutOffOuter), spotCosCutOffOuter);
-	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightSpotExponent), spotExponent);
 }
 
 void SpotLight::debugDraw(const Point4& position, const Quaternion& rotation) const

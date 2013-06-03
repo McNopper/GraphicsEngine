@@ -106,7 +106,7 @@ GLUSboolean initGame(GLUSvoid)
 	LightSP directionalLight = LightSP(new DirectionalLight("DirectionalLight", Color::GREY, Color::BLACK));
 	LightManager::getInstance()->setLight("DirectionalLight", directionalLight);
 
-	LightSP spotLight = LightSP(new SpotLight("SpotLight", 0.9f, 0.75f, 2.0f, 1.0f, 0.0f, 0.0f, Color::WHITE, Color::WHITE));
+	LightSP spotLight = LightSP(new SpotLight("SpotLight", 0.9f, 0.75f, 1.0f, 0.0f, 0.0f, Color::WHITE, Color::WHITE));
 	LightManager::getInstance()->setLight("SpotLight", spotLight);
 
 	// The lights are treated as node entities

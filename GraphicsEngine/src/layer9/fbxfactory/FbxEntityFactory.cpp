@@ -1318,34 +1318,53 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 
 	LightSP currentLight;
 
-	Color ambient;
+	Color diffuse;
 	Color specular;
 
-	ambient.setR(static_cast<float>(light->Color.Get()[0]));
-	ambient.setG(static_cast<float>(light->Color.Get()[1]));
-	ambient.setB(static_cast<float>(light->Color.Get()[2]));
+	diffuse.setR(static_cast<float>(light->Color.Get()[0]));
+	diffuse.setG(static_cast<float>(light->Color.Get()[1]));
+	diffuse.setB(static_cast<float>(light->Color.Get()[2]));
 
-	specular = ambient;
+	specular = diffuse;
+
+	float constantAttenuation = 0.0f;
+	float linearAttenuation = 0.0f;
+	float quadraticAttenuation = 0.0f;
+
+	switch(light->DecayType)
+	{
+		case FbxLight::eNone:
+			constantAttenuation = 1.0f;
+		break;
+		case FbxLight::eLinear:
+			linearAttenuation = 1.0f;
+		break;
+		case FbxLight::eQuadratic:
+			quadraticAttenuation = 1.0f;
+		break;
+		case FbxLight::eCubic:
+			glusLogPrint(GLUS_LOG_WARNING, "Cubic attenuation not supported.");
+		break;
+	}
 
 	if (lightType == FbxLight::eDirectional)
 	{
-		DirectionalLightSP directionalLight = DirectionalLightSP(new DirectionalLight(lightName, ambient, specular));
+		DirectionalLightSP directionalLight = DirectionalLightSP(new DirectionalLight(lightName, diffuse, specular));
 
 		currentLight = directionalLight;
 	}
 	else if (lightType == FbxLight::ePoint)
 	{
-		PointLightSP pointLight;
-
-		// TODO Create point light
+		PointLightSP pointLight = PointLightSP(new PointLight(lightName, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular));
 
 		currentLight = pointLight;
 	}
 	else if (lightType == FbxLight::eSpot)
 	{
-		SpotLightSP spotLight;
+		float spotCosCutOff = static_cast<float>(light->InnerAngle.Get());
+		float spotCosCutOffOuter = static_cast<float>(light->OuterAngle.Get());
 
-		// TODO Create spot light
+		SpotLightSP spotLight = SpotLightSP(new SpotLight(lightName, spotCosCutOff, spotCosCutOffOuter, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular));
 
 		currentLight = spotLight;
 	}
@@ -1397,9 +1416,34 @@ CameraSP FbxEntityFactory::processCamera(FbxCamera* camera)
 	{
 		PerspectiveCameraSP perspectiveCamera = PerspectiveCameraSP(new PerspectiveCamera(cameraName));
 
-		FbxDouble fovx = camera->ComputeFieldOfView(camera->FocalLength.Get());
+		FbxDouble fovx = -1.0f;
+		FbxDouble fovy = -1.0f;
+		
+		switch (camera->GetApertureMode())
+		{
+			case FbxCamera::eHorizAndVert:
+				fovx = camera->FieldOfViewX.Get();
+				fovy = camera->FieldOfViewY.Get();
+			break;
+			case FbxCamera::eHorizontal:
+				fovx = camera->FieldOfView.Get();
+			break;
+			case FbxCamera::eVertical:
+				fovy = camera->FieldOfView.Get();
+			break;
+			case FbxCamera::eFocalLength:
+				fovx = camera->ComputeFieldOfView(camera->FocalLength.Get());
+			break;
+		}
 
-		perspectiveCamera->setFovx(fovx);
+		if (fovx > 0.0f)
+		{
+			perspectiveCamera->setFovx(static_cast<float>(fovx));
+		}
+		else if (fovy > 0.0f)
+		{
+			perspectiveCamera->setFovy(static_cast<float>(fovy));
+		}
 
 		currentCamera = perspectiveCamera;
 	}

@@ -34,7 +34,6 @@
 #define u_lightSpotDirection "].spotDirection"
 #define u_lightSpotCosCutOff "].spotCosCutOff"
 #define u_lightSpotCosCutOffOuter "].spotCosCutOffOuter"
-#define u_lightSpotExponent "].spotExponent"
 
 #define u_emissiveColor "u_material.emissiveColor"
 #define u_ambientColor "u_material.ambientColor"

@@ -20,6 +20,10 @@
 
 # Script copyright (C) Campbell Barton
 
+# Script modified by Norbert Nopper. Changed entries to the original script are marked with
+# NN Start
+# NN End 
+
 
 import os
 import time
@@ -884,11 +888,15 @@ def save_single(operator, scene, filepath="",
         loc, rot, scale, matrix, matrix_rot = write_object_props(my_cam.blenObject, None, my_cam.parRelMatrix())
 
         fw('\n\t\t\tProperty: "Roll", "Roll", "A+",0')
-        fw('\n\t\t\tProperty: "FieldOfView", "FieldOfView", "A+",%.6f' % math.degrees(data.angle_y))
-
-        fw('\n\t\t\tProperty: "FieldOfViewX", "FieldOfView", "A+",1'
-           '\n\t\t\tProperty: "FieldOfViewY", "FieldOfView", "A+",1'
-           )
+        # NN Start
+        #fw('\n\t\t\tProperty: "FieldOfView", "FieldOfView", "A+",%.6f' % math.degrees(data.angle_y))
+        fw('\n\t\t\tProperty: "FieldOfView", "FieldOfView", "A+",%.6f' % math.degrees(data.angle_x))
+        #fw('\n\t\t\tProperty: "FieldOfViewX", "FieldOfView", "A+",1'
+        #   '\n\t\t\tProperty: "FieldOfViewY", "FieldOfView", "A+",1'
+        fw('\n\t\t\tProperty: "FieldOfViewX", "FieldOfView", "A+",%.6f' % math.degrees(data.angle_x))
+        fw('\n\t\t\tProperty: "FieldOfViewY", "FieldOfView", "A+",%.6f' % math.degrees(data.angle_y))
+        #   )
+        # NN End
 
         fw('\n\t\t\tProperty: "FocalLength", "Number", "A+",%.6f' % data.lens)
         fw('\n\t\t\tProperty: "FilmOffsetX", "Number", "A+",%.6f' % offsetx)
@@ -901,7 +909,7 @@ def save_single(operator, scene, filepath="",
            '\n\t\t\tProperty: "UseMotionBlur", "bool", "",0'
            '\n\t\t\tProperty: "UseRealTimeMotionBlur", "bool", "",1'
            '\n\t\t\tProperty: "ResolutionMode", "enum", "",0'
-           '\n\t\t\tProperty: "ApertureMode", "enum", "",3'  # horizontal - Houdini compatible
+           '\n\t\t\tProperty: "ApertureMode", "enum", "",3'  # horizontal - Houdini compatible   NN Did not change this value but please note that aperture mode 3 is focal length and not horizontal
            '\n\t\t\tProperty: "GateFit", "enum", "",2'
            '\n\t\t\tProperty: "CameraFormat", "enum", "",0'
            )
@@ -1035,7 +1043,11 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\t\tProperty: "Color", "Color", "A+",1,1,1')
         fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (min(light.energy * 100.0, 200.0)))  # clamp below 200
         if light.type == 'SPOT':
-            fw('\n\t\t\tProperty: "Cone angle", "Cone angle", "A+",%.2f' % math.degrees(light.spot_size))
+            # NN Start
+            #fw('\n\t\t\tProperty: "Cone angle", "Cone angle", "A+",%.2f' % math.degrees(light.spot_size))
+            fw('\n\t\t\tProperty: "Cone angle", "Number", "A+",%.2f' % math.degrees(light.spot_size))
+            fw('\n\t\t\tProperty: "HotSpot", "Number", "A+",%.2f' % (math.degrees(light.spot_size) - math.degrees(light.spot_size)*light.spot_blend))
+            # NN End
         fw('\n\t\t\tProperty: "Fog", "Fog", "A+",50')
         fw('\n\t\t\tProperty: "Color", "Color", "A",%.2f,%.2f,%.2f' % tuple(light.color))
 
@@ -1048,16 +1060,25 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\t\tProperty: "DrawFrontFacingVolumetricLight", "bool", "",0')
         fw('\n\t\t\tProperty: "DrawVolumetricLight", "bool", "",1')
         fw('\n\t\t\tProperty: "GoboProperty", "object", ""')
-        fw('\n\t\t\tProperty: "DecayType", "enum", "",0')
-        fw('\n\t\t\tProperty: "DecayStart", "double", "",%.2f' % light.distance)
+        # NN Start
+        #fw('\n\t\t\tProperty: "DecayType", "enum", "",0')
+        #fw('\n\t\t\tProperty: "DecayStart", "double", "",%.2f' % light.distance)
 
-        fw('\n\t\t\tProperty: "EnableNearAttenuation", "bool", "",0'
-           '\n\t\t\tProperty: "NearAttenuationStart", "double", "",0'
-           '\n\t\t\tProperty: "NearAttenuationEnd", "double", "",0'
-           '\n\t\t\tProperty: "EnableFarAttenuation", "bool", "",0'
-           '\n\t\t\tProperty: "FarAttenuationStart", "double", "",0'
-           '\n\t\t\tProperty: "FarAttenuationEnd", "double", "",0'
-           )
+        #fw('\n\t\t\tProperty: "EnableNearAttenuation", "bool", "",0'
+        #   '\n\t\t\tProperty: "NearAttenuationStart", "double", "",0'
+        #   '\n\t\t\tProperty: "NearAttenuationEnd", "double", "",0'
+        #   '\n\t\t\tProperty: "EnableFarAttenuation", "bool", "",0'
+        #   '\n\t\t\tProperty: "FarAttenuationStart", "double", "",0'
+        #   '\n\t\t\tProperty: "FarAttenuationEnd", "double", "",0'
+        #   )
+        if light.type == 'SPOT' or light.type == 'POINT':
+            if light.falloff_type == 'CONSTANT':
+                fw('\n\t\t\tProperty: "DecayType", "enum", "",0')
+            if light.falloff_type == 'INVERSE_LINEAR':
+                fw('\n\t\t\tProperty: "DecayType", "enum", "",1')
+            if light.falloff_type == 'INVERSE_SQUARE':
+                fw('\n\t\t\tProperty: "DecayType", "enum", "",2')
+        # NN End
 
         fw('\n\t\t\tProperty: "CastShadows", "bool", "",%i' % do_shadow)
         fw('\n\t\t\tProperty: "ShadowColor", "ColorRGBA", "",0,0,0,1')
@@ -1112,7 +1133,10 @@ def save_single(operator, scene, filepath="",
             mat_cold = tuple(mat.diffuse_color)
             mat_cols = tuple(mat.specular_color)
             #mat_colm = tuple(mat.mirCol) # we wont use the mirror color
-            mat_colamb = world_amb
+			# NN Start			
+            #mat_colamb = world_amb
+            mat_colamb = 1.0, 1.0, 1.0
+            # NN End			
 
             mat_dif = mat.diffuse_intensity
             mat_amb = mat.ambient
@@ -1133,13 +1157,22 @@ def save_single(operator, scene, filepath="",
                 else:
                     mat_shader = 'Phong'
         else:
-            mat_cols = mat_cold = 0.8, 0.8, 0.8
-            mat_colamb = 0.0, 0.0, 0.0
+            # NN Start			
+            #mat_cols = mat_cold = 0.8, 0.8, 0.8
+            mat_cold = 0.8, 0.8, 0.8
+            mat_cols = 1.0, 1.0, 1.0
+            #mat_colamb = 0.0, 0.0, 0.0
+            mat_colamb = 1.0, 1.0, 1.0
             # mat_colm
-            mat_dif = 1.0
-            mat_amb = 0.5
-            mat_hard = 20.0
-            mat_spec = 0.2
+            #mat_dif = 1.0
+            mat_dif = 0.8
+            #mat_amb = 0.5
+            mat_amb = 1.0
+            #mat_hard = 20.0
+            mat_hard = 12.3
+            #mat_spec = 0.2
+            mat_spec = 0.5
+            # NN End			
             mat_alpha = 1.0
             mat_emit = 0.0
             mat_shadeless = False
@@ -1155,10 +1188,7 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\t\tProperty: "EmissiveColor", "ColorRGB", "",%.4f,%.4f,%.4f' % mat_cold)  # emit and diffuse color are he same in blender
         fw('\n\t\t\tProperty: "EmissiveFactor", "double", "",%.4f' % mat_emit)
 
-		# NN Start
-        #fw('\n\t\t\tProperty: "AmbientColor", "ColorRGB", "",%.4f,%.4f,%.4f' % mat_colamb)
-        fw('\n\t\t\tProperty: "AmbientColor", "ColorRGB", "",%.4f,%.4f,%.4f' % mat_cold)
-		# NN End
+        fw('\n\t\t\tProperty: "AmbientColor", "ColorRGB", "",%.4f,%.4f,%.4f' % mat_colamb)
         fw('\n\t\t\tProperty: "AmbientFactor", "double", "",%.4f' % mat_amb)
         fw('\n\t\t\tProperty: "DiffuseColor", "ColorRGB", "",%.4f,%.4f,%.4f' % mat_cold)
         fw('\n\t\t\tProperty: "DiffuseFactor", "double", "",%.4f' % mat_dif)
@@ -1175,10 +1205,7 @@ def save_single(operator, scene, filepath="",
             fw('\n\t\t\tProperty: "ReflectionColor", "ColorRGB", "",0,0,0')
             fw('\n\t\t\tProperty: "ReflectionFactor", "double", "",1')
         fw('\n\t\t\tProperty: "Emissive", "ColorRGB", "",0,0,0')
-		# NN Start
-        #fw('\n\t\t\tProperty: "Ambient", "ColorRGB", "",%.1f,%.1f,%.1f' % mat_colamb)
-        fw('\n\t\t\tProperty: "Ambient", "ColorRGB", "",%.1f,%.1f,%.1f' % mat_cold)
-		# NN End
+        fw('\n\t\t\tProperty: "Ambient", "ColorRGB", "",%.1f,%.1f,%.1f' % mat_colamb)
         fw('\n\t\t\tProperty: "Diffuse", "ColorRGB", "",%.1f,%.1f,%.1f' % mat_cold)
         if not mat_shadeless:
             fw('\n\t\t\tProperty: "Specular", "ColorRGB", "",%.1f,%.1f,%.1f' % mat_cols)
@@ -1513,29 +1540,33 @@ def save_single(operator, scene, filepath="",
 
         i = -1
         for f in me_faces:
+            fi = f.vertices[:]
             if i == -1:
                 if f.use_smooth:
-                    fw('%.6f,%.6f,%.6f' % me_vertices[f.vertices[0]].normal[:])
-                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[1]].normal[:])
-                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[2]].normal[:])
-                    if len(f.vertices) == 4:
-                        fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[3]].normal[:])
+                    fw('%.6f,%.6f,%.6f' % me_vertices[fi[0]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[fi[1]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[fi[2]].normal[:])
+                    if len(fi) == 4:
+                        fw(',%.6f,%.6f,%.6f' % me_vertices[fi[3]].normal[:])
                 else:
                     fw('%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
-                i = 0
+                    if len(fi) == 4:
+                        fw(',%.6f,%.6f,%.6f' % f.normal[:])
             else:
                 if f.use_smooth:
-                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[0]].normal[:])
-                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[1]].normal[:])
-                    fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[2]].normal[:])
-                    if len(f.vertices) == 4:
-                        fw(',%.6f,%.6f,%.6f' % me_vertices[f.vertices[3]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[fi[0]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[fi[1]].normal[:])
+                    fw(',%.6f,%.6f,%.6f' % me_vertices[fi[2]].normal[:])
+                    if len(fi) == 4:
+                        fw(',%.6f,%.6f,%.6f' % me_vertices[fi[3]].normal[:])
                 else:
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
                     fw(',%.6f,%.6f,%.6f' % f.normal[:])
+                    if len(fi) == 4:
+                        fw(',%.6f,%.6f,%.6f' % f.normal[:])
             i += 1
         fw('\n\t\t}')
 		#NN End	

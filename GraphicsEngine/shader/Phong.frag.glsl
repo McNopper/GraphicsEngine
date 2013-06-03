@@ -19,7 +19,6 @@ struct LightProperties
 	vec3 spotDirection;
 	float spotCosCutOff;
 	float spotCosCutOffOuter;
-	float spotExponent;	
 };
 
 struct MaterialProperties
@@ -153,7 +152,7 @@ void main(void)
 				{
 					float penumbra = clamp((spotDot - u_light[indexLight].spotCosCutOffOuter) / (u_light[indexLight].spotCosCutOff - u_light[indexLight].spotCosCutOffOuter), 0.0, 1.0);
 				
-					attenuation *= pow(spotDot, u_light[indexLight].spotExponent) * penumbra;
+					attenuation *= spotDot * penumbra;
 				}
 				else
 				{

@@ -20,10 +20,9 @@ private:
 	Vector3 spotDirection;
 	float spotCosCutOff;
 	float spotCosCutOffOuter;
-	float spotExponent;
 
 public:
-	SpotLight(const std::string& name, float spotCosCutOff, float spotCosCutOffOuter, float spotExponent, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,
+	SpotLight(const std::string& name, float spotCosCutOff, float spotCosCutOffOuter, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,
 			const Color& specular);
 	virtual ~SpotLight();
 
@@ -31,8 +30,6 @@ public:
 	void setSpotCosCutOff(float spotCosCutOff);
 	float getSpotCosCutOffOuter() const;
 	void setSpotCosCutOffOuter(float spotCosCutOffOuter);
-	float getSpotExponent() const;
-	void setSpotExponent(float spotExponent);
 
 	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
