@@ -122,7 +122,7 @@ void main(void)
 	
 	for (int indexLight = 0; indexLight < u_numberLights; indexLight++)
 	{ 
-		vec3 lightDirection;
+		vec3 lightDirection;		
 		float attenuation = 1.0;
 		float falloff = 1.0;
 		
@@ -132,11 +132,13 @@ void main(void)
 		}
 		else
 		{
-			lightDirection = normalize(u_light[indexLight].position.xyz - v_vertex.xyz);
+			vec3 lightVector = u_light[indexLight].position.xyz - v_vertex.xyz;
+			
+			lightDirection = normalize(lightVector);
 			
 			if (u_light[indexLight].constantAttenuation != 1.0 || u_light[indexLight].linearAttenuation != 0.0 || u_light[indexLight].quadraticAttenuation != 0.0)
 			{
-				float d = length(lightDirection);
+				float d = length(lightVector);
 				
 				if (d != 0.0 || u_light[indexLight].constantAttenuation != 0.0)
 				{
