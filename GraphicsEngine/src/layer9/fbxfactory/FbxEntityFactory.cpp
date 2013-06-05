@@ -77,7 +77,7 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 
 	if (!importStatus)
 	{
-		glusLogPrint(GLUS_LOG_ERROR, "Call to FbxImporter::Initialize() failed: %s", importer->GetLastErrorString());
+		glusLogPrint(GLUS_LOG_ERROR, "Call to FbxImporter::Initialize() failed");
 
 		return ModelEntitySP();
 	}
@@ -191,6 +191,10 @@ ModelEntitySP FbxEntityFactory::loadFbxSceneFile(const string& name, const strin
 
 bool FbxEntityFactory::traverseScene(FbxScene* scene)
 {
+	geometryConverter->Triangulate(scene, true);
+
+	//
+
 	scene->FillAnimStackNameArray(animStackNameArray);
 
 	//
@@ -531,8 +535,6 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 		case FbxNodeAttribute::eMesh:
 			if (loadMesh)
 			{
-				geometryConverter->TriangulateInPlace(node);
-
 				currentSurfaceMaterials.clear();
 
 				for (int32_t i = 0; i < node->GetMaterialCount(); i++)
@@ -1238,7 +1240,9 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 
 				if (hasUV)
 				{
-					mesh->GetPolygonVertexUV(polygonIndex, verticeIndex, uvName, currentUV);
+					bool unmapped;
+
+					mesh->GetPolygonVertexUV(polygonIndex, verticeIndex, uvName, currentUV, unmapped);
 					texCoords[vertexCount * 2 + 0] = static_cast<float>(currentUV[0]);
 					texCoords[vertexCount * 2 + 1] = static_cast<float>(currentUV[1]);
 				}
@@ -1321,26 +1325,34 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 	Color diffuse;
 	Color specular;
 
-	diffuse.setR(static_cast<float>(light->Color.Get()[0]));
-	diffuse.setG(static_cast<float>(light->Color.Get()[1]));
-	diffuse.setB(static_cast<float>(light->Color.Get()[2]));
+	float intensity = static_cast<float>(light->Intensity.Get() / 100.0f);
+
+	diffuse.setR(static_cast<float>(light->Color.Get()[0]) * intensity);
+	diffuse.setG(static_cast<float>(light->Color.Get()[1]) * intensity);
+	diffuse.setB(static_cast<float>(light->Color.Get()[2]) * intensity);
 
 	specular = diffuse;
 
-	float constantAttenuation = 0.0f;
+	float constantAttenuation = 1.0f;
 	float linearAttenuation = 0.0f;
 	float quadraticAttenuation = 0.0f;
 
-	switch(light->DecayType)
+	float farAttenuation = 2.0f;
+
+	if (light->EnableFarAttenuation.Get() && light->FarAttenuationEnd.IsValid() && light->FarAttenuationEnd.Get() > 0.0f)
+	{
+		farAttenuation = static_cast<float>(light->FarAttenuationEnd.Get());
+	}
+
+	switch (light->DecayType)
 	{
 		case FbxLight::eNone:
-			constantAttenuation = 1.0f;
 		break;
 		case FbxLight::eLinear:
-			linearAttenuation = 1.0f;
+			linearAttenuation = 1.0f / (farAttenuation * 0.5f);
 		break;
 		case FbxLight::eQuadratic:
-			quadraticAttenuation = 1.0f;
+			quadraticAttenuation = 1.0f / (farAttenuation * farAttenuation * 0.25f);
 		break;
 		case FbxLight::eCubic:
 			glusLogPrint(GLUS_LOG_WARNING, "Cubic attenuation not supported.");
@@ -1418,7 +1430,7 @@ CameraSP FbxEntityFactory::processCamera(FbxCamera* camera)
 
 		FbxDouble fovx = -1.0f;
 		FbxDouble fovy = -1.0f;
-		
+
 		switch (camera->GetApertureMode())
 		{
 			case FbxCamera::eHorizAndVert:

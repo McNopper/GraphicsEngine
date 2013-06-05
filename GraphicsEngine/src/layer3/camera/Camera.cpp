@@ -27,12 +27,13 @@ Camera::Camera(const string& name) :
 }
 
 Camera::Camera(const Camera& other) :
-	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), biasMatrix(), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), transitionMatrix(transitionMatrix)
+	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), direction(other.direction), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
 	biasedProjectionMatrix = other.projectionMatrix;
 	biasMatrix = other.biasMatrix;
+	transitionMatrix = other.transitionMatrix;
 }
 
 Camera::~Camera()
@@ -174,12 +175,12 @@ void Camera::setCameraProperties(const ProgramSP& program, const Point4& positio
 
 void Camera::debugDraw(const Point4& position, const Quaternion& rotation, bool useLocation) const
 {
-	Quaternion baseRotation(-90.0f, Vector3(0.0f, 1.0f, 0.0f));
-
-	baseRotation *= Quaternion(90.0f, Vector3(1.0f, 0.0f, 0.0f));
-
 	if (useLocation)
 	{
+		Quaternion baseRotation(-90.0f, Vector3(0.0f, 1.0f, 0.0f));
+
+		baseRotation *= Quaternion(90.0f, Vector3(1.0f, 0.0f, 0.0f));
+
 		DebugDraw::drawer.drawPyramid(position, Vector3(0.0f, -0.5f, 0.0f), rotation * baseRotation, getNearWidth() / zNear * 0.5f, getNearHeight() / zNear * 0.5f, 0.5f, Color::BLUE);
 	}
 	else
@@ -187,6 +188,8 @@ void Camera::debugDraw(const Point4& position, const Quaternion& rotation, bool 
 		Vector3 right = direction.cross(up);
 		Matrix3x3 rotationMatrix(right, up, -direction);
 		Quaternion cameraRotation(rotationMatrix);
+
+		Quaternion baseRotation(90.0f, Vector3(1.0f, 0.0f, 0.0f));
 
 		DebugDraw::drawer.drawPyramid(eye, Vector3(0.0f, -0.5f, 0.0f), cameraRotation * baseRotation, getNearWidth() / zNear * 0.5f, getNearHeight() / zNear * 0.5f, 0.5f, Color::BLUE);
 	}

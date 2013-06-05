@@ -27,7 +27,7 @@ PostProcessor2DMultisampleManager::~PostProcessor2DMultisampleManager()
 
 bool PostProcessor2DMultisampleManager::containsPostProcessor(const string& key) const
 {
-	return allPostProcessors.at(key);
+	return allPostProcessors.find(key) != allPostProcessors.end();
 }
 
 const PostProcessor2DMultisampleSP& PostProcessor2DMultisampleManager::getPostProcessor(const string& key) const

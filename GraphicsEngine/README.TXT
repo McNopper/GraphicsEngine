@@ -21,8 +21,8 @@ If you get build errors:
 
 Libraries/SDKs used:
 
-- Autodesk FBX SDK 2013.3 http://usa.autodesk.com/fbx/
-- Boost 1.51.0 http://www.boost.org/ http://www.boostpro.com/
+- Autodesk FBX SDK 2014.1 http://usa.autodesk.com/fbx/
+- Boost 1.53.0 http://www.boost.org/ http://boost.teeks99.com/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.9.0 http://glew.sourceforge.net/
 - GLFW 2.7.8 http://www.glfw.org/
@@ -70,10 +70,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-29.04.2013 Norbert Nopper (norbert@nopper.tv)
+06.06.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Using latest FBX SDK and Boost libraries
 - Added dynamic environment mapping
 - Added latest GLFW (2.7.8)
 - Added entity exclude list

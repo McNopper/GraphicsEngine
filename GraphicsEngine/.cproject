@@ -32,8 +32,8 @@
 								<option id="org.eclipse.cdt.msvc.cl.option.includes.1235506152" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2014.1\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\include&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.cl.option.macros.799203157" name="Defines (/D)" superClass="org.eclipse.cdt.msvc.cl.option.macros" valueType="definedSymbols">
@@ -107,7 +107,7 @@
 						<toolChain id="org.eclipse.cdt.msvc.toolchain.dll.debug.1607226366" name="Microsoft Visual C++" superClass="org.eclipse.cdt.msvc.toolchain.dll.debug">
 							<targetPlatform id="org.eclipse.cdt.msvc.targetPlatform.dll.debug.1021007186" superClass="org.eclipse.cdt.msvc.targetPlatform.dll.debug"/>
 							<builder buildPath="${workspace_loc:/GraphicsEngine/Release}" id="org.eclipse.cdt.msvc.builder.1378216347" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.msvc.builder"/>
-							<tool id="org.eclipse.cdt.msvc.cl.c.dll.debug.1733869762" name="C Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.c.dll.debug">
+							<tool command="cl /c" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="org.eclipse.cdt.msvc.cl.c.dll.debug.1733869762" name="C Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.c.dll.debug">
 								<option id="org.eclipse.cdt.msvc.cl.option.optimization.536258234" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization"/>
 								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.939441668" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat"/>
 								<inputType id="org.eclipse.cdt.msvc.cl.inputType.c.1106207055" superClass="org.eclipse.cdt.msvc.cl.inputType.c"/>
@@ -116,8 +116,8 @@
 								<option id="org.eclipse.cdt.msvc.cl.option.includes.1813079362" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2014.1\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\include&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.cl.option.macros.59559898" name="Defines (/D)" superClass="org.eclipse.cdt.msvc.cl.option.macros" valueType="definedSymbols">
@@ -201,8 +201,10 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.660378567" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>
+									<listOptionValue builtIn="false" value="FBXSDK_SHARED"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.980918796" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.undef.990615351" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.484981559" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.132865180" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
@@ -302,6 +304,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.744608458" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>
+									<listOptionValue builtIn="false" value="FBXSDK_SHARED"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1536248567" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1129411982" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -404,14 +407,15 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Darwin/GCC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2013.3/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.1/include&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.938706327" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>
+									<listOptionValue builtIn="false" value="FBXSDK_SHARED"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.optimization.level.1434405321" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.2139079851" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.673168391" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x -Wno-overloaded-virtual -Wno-unused-variable -Wno-reserved-user-defined-literal -Wno-unused-private-field" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.673168391" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x -Wno-overloaded-virtual -Wno-unused-variable -Wno-reserved-user-defined-literal -Wno-unused-private-field -Wno-unused-value -Wno-comment" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1333225626" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="clang" id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.1278895775" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">

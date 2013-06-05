@@ -1041,7 +1041,9 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\t\tProperty: "DrawFrontFacingVolumetricLight", "bool", "",0')
         fw('\n\t\t\tProperty: "GoboProperty", "object", ""')
         fw('\n\t\t\tProperty: "Color", "Color", "A+",1,1,1')
-        fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (min(light.energy * 100.0, 200.0)))  # clamp below 200
+        # NN Start
+        #fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (min(light.energy * 100.0, 200.0)))  # clamp below 200
+        # NN End
         if light.type == 'SPOT':
             # NN Start
             #fw('\n\t\t\tProperty: "Cone angle", "Cone angle", "A+",%.2f' % math.degrees(light.spot_size))
@@ -1051,7 +1053,10 @@ def save_single(operator, scene, filepath="",
         fw('\n\t\t\tProperty: "Fog", "Fog", "A+",50')
         fw('\n\t\t\tProperty: "Color", "Color", "A",%.2f,%.2f,%.2f' % tuple(light.color))
 
-        fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (min(light.energy * 100.0, 200.0)))  # clamp below 200
+        # NN Start
+        #fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (min(light.energy * 100.0, 200.0)))  # clamp below 200
+        fw('\n\t\t\tProperty: "Intensity", "Intensity", "A+",%.2f' % (light.energy * 100.0))
+        # NN End
 
         fw('\n\t\t\tProperty: "Fog", "Fog", "A+",50')
         fw('\n\t\t\tProperty: "LightType", "enum", "",%i' % light_type)
@@ -1076,8 +1081,12 @@ def save_single(operator, scene, filepath="",
                 fw('\n\t\t\tProperty: "DecayType", "enum", "",0')
             if light.falloff_type == 'INVERSE_LINEAR':
                 fw('\n\t\t\tProperty: "DecayType", "enum", "",1')
+                fw('\n\t\t\tProperty: "EnableFarAttenuation", "bool", "",1')
+                fw('\n\t\t\tProperty: "FarAttenuationEnd", "double", "",%.2f' % (light.distance*2.0))
             if light.falloff_type == 'INVERSE_SQUARE':
                 fw('\n\t\t\tProperty: "DecayType", "enum", "",2')
+                fw('\n\t\t\tProperty: "EnableFarAttenuation", "bool", "",1')
+                fw('\n\t\t\tProperty: "FarAttenuationEnd", "double", "",%.2f' % (light.distance*2.0))
         # NN End
 
         fw('\n\t\t\tProperty: "CastShadows", "bool", "",%i' % do_shadow)

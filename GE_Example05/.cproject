@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?>
-
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.894771756.2029126395.129905382.550489944.1473350173.2045432523">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.894771756.2029126395.129905382.550489944.1473350173.2045432523" moduleId="org.eclipse.cdt.core.settings" name="x64__Darwin__GCC_Debug">
@@ -29,7 +27,7 @@
 									<listOptionValue builtIn="false" value="boost_system-mt"/>
 									<listOptionValue builtIn="false" value="IL"/>
 									<listOptionValue builtIn="false" value="ILU"/>
-									<listOptionValue builtIn="false" value="fbxsdk-2013.3-staticd"/>
+									<listOptionValue builtIn="false" value="fbxsdk"/>
 									<listOptionValue builtIn="false" value="glfw"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="glew"/>
@@ -40,7 +38,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x64__Darwin__GCC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x64__Darwin__GCC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.1/lib/gcc4/ub/debug&quot;"/>
 								</option>
 								<option id="macosx.cpp.link.option.flags.1858072586" name="Linker flags" superClass="macosx.cpp.link.option.flags" value="-framework CoreFoundation -framework OpenGL -framework Cocoa -framework IOKit" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1030241321" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -59,14 +57,14 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Darwin/GCC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2013.3/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.1/include&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.373152212" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.optimization.level.1533573433" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.436734270" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.941633348" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x -Wno-overloaded-virtual -Wno-unused-variable -Wno-reserved-user-defined-literal" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.941633348" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x -Wno-overloaded-virtual -Wno-unused-variable -Wno-reserved-user-defined-literal -Wno-comment -Wno-unused-value" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1333541991" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="clang" id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.344497419" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
@@ -148,14 +146,14 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Linux/GCC/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x64__Linux__GCC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x64__Linux__GCC_Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="/usr/lib/gcc4/x64"/>
+									<listOptionValue builtIn="false" value="/usr/lib/gcc4/x64/debug"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.776360545" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GraphicsEngined"/>
 									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="IL"/>
 									<listOptionValue builtIn="false" value="ILU"/>
-									<listOptionValue builtIn="false" value="fbxsdk-2013.3-staticd"/>
+									<listOptionValue builtIn="false" value="fbxsdk"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
@@ -247,14 +245,14 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Linux/GCC/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x64__Linux__GCC_Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x64__Linux__GCC_Release}&quot;"/>
-									<listOptionValue builtIn="false" value="/usr/lib/gcc4/x64"/>
+									<listOptionValue builtIn="false" value="/usr/lib/gcc4/x64/release"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1123012514" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GraphicsEngine"/>
 									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="IL"/>
 									<listOptionValue builtIn="false" value="ILU"/>
-									<listOptionValue builtIn="false" value="fbxsdk-2013.3-static"/>
+									<listOptionValue builtIn="false" value="fbxsdk"/>
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
@@ -304,8 +302,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2014.1\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\include&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.cl.option.macros.110371731" name="Defines (/D)" superClass="org.eclipse.cdt.msvc.cl.option.macros" valueType="definedSymbols">
@@ -332,17 +330,17 @@
 									<listOptionValue builtIn="false" value="wininet.lib"/>
 									<listOptionValue builtIn="false" value="DevIL.lib"/>
 									<listOptionValue builtIn="false" value="ILU.lib"/>
-									<listOptionValue builtIn="false" value="fbxsdk-2013.3-md.lib"/>
+									<listOptionValue builtIn="false" value="libfbxsdk-md.lib"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.link.option.debug.1994071401" name="Generate Debug Info (/debug)" superClass="org.eclipse.cdt.msvc.link.option.debug" value="true" valueType="boolean"/>
 								<option id="org.eclipse.cdt.msvc.link.option.libpath.2035080058" name="Additional Libpath (/libpath)" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x86__Windows__MSVC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x86__Windows__MSVC_Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51\lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0\lib32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\lib\vs2010\x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\FBX SDK\2014.1\lib\vs2010\x86\debug&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.link.option.others.1785573485" name="Other Options" superClass="org.eclipse.cdt.msvc.link.option.others" valueType="stringList">
 									<listOptionValue builtIn="false" value="/NODEFAULTLIB:LIBCMT"/>
@@ -385,8 +383,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2014.1\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\include&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.cl.option.macros.1339376366" name="Defines (/D)" superClass="org.eclipse.cdt.msvc.cl.option.macros" valueType="definedSymbols">
@@ -412,16 +410,16 @@
 									<listOptionValue builtIn="false" value="wininet.lib"/>
 									<listOptionValue builtIn="false" value="DevIL.lib"/>
 									<listOptionValue builtIn="false" value="ILU.lib"/>
-									<listOptionValue builtIn="false" value="fbxsdk-2013.3-md.lib"/>
+									<listOptionValue builtIn="false" value="libfbxsdk-md.lib"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.link.option.libpath.1540985618" name="Additional Libpath (/libpath)" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x86/Windows/MSVC/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x86__Windows__MSVC_Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x86__Windows__MSVC_Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_51\lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\boost_1_53_0\lib32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Development\Libraries\cpp\devil_1_7_8\lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\Fbx Sdk\2013.3\lib\vs2010\x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Autodesk\FBX\FBX SDK\2014.1\lib\vs2010\x86\release&quot;"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.link.option.others.875307233" name="Other Options" superClass="org.eclipse.cdt.msvc.link.option.others" valueType="stringList">
 									<listOptionValue builtIn="false" value="/NODEFAULTLIB:LIBCMT"/>

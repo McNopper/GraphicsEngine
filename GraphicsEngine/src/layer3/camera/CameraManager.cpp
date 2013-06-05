@@ -73,7 +73,7 @@ const CameraSP& CameraManager::getDefaultOrthographicCamera() const
 
 bool CameraManager::containsCamera(const string& key) const
 {
-	return allCameras.at(key);
+	return allCameras.find(key) != allCameras.end();
 }
 
 const CameraSP& CameraManager::getCamera(const string& key) const

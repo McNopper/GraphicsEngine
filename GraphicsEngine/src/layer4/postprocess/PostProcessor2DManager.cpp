@@ -27,7 +27,7 @@ PostProcessor2DManager::~PostProcessor2DManager()
 
 bool PostProcessor2DManager::containsPostProcessor(const string& key) const
 {
-	return allPostProcessors.at(key);
+	return allPostProcessors.find(key) != allPostProcessors.end();
 }
 
 const PostProcessor2DSP& PostProcessor2DManager::getPostProcessor(const string& key) const
