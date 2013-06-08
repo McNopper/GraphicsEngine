@@ -101,7 +101,7 @@ void CameraManager::updateWindowViewport(const Viewport& viewport)
 
 	while (walker != allWindowCameras.end())
 	{
-		walker->second->updateViewport(viewport);
+		walker->second->updateWindowViewport(viewport);
 
 		walker++;
 	}

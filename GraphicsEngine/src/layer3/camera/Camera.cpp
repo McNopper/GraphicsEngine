@@ -18,7 +18,7 @@ const float Camera::getDebugRadius()
 }
 
 Camera::Camera(const string& name) :
-	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(1.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(1.0f, 0.0f, 0.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix()
+	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(1.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(1.0f, 0.0f, 0.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix(), width(1.0f), height(1.0f)
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
@@ -27,7 +27,7 @@ Camera::Camera(const string& name) :
 }
 
 Camera::Camera(const Camera& other) :
-	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), direction(other.direction), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation)
+	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), direction(other.direction), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), width(other.width), height(other.height)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
@@ -70,13 +70,18 @@ void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
 	updateViewFrustum();
 }
 
-void Camera::updateViewport(const Viewport& viewport)
+void Camera::updateWindowViewport(const Viewport& viewport)
 {
 	this->viewport = viewport;
 
 	lookAt(this->eye, this->center, this->up);
 
 	updateProjectionMatrix();
+}
+
+void Camera::setViewport(const Viewport& viewport)
+{
+	this->viewport = viewport;
 }
 
 const Point4& Camera::getEye() const
@@ -163,7 +168,7 @@ void Camera::setCameraProperties(const ProgramSP& program, const Point4& positio
 		lastPosition = position;
 		lastRotation = rotation;
 
-		dirty = true;
+		dirty = false;
 	}
 
 	glUniformMatrix4fv(program->getUniformLocation(u_projectionMatrix), 1, GL_FALSE, projectionMatrix.getM());

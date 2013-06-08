@@ -88,3 +88,30 @@ void ProgramManagerProxy::setCameraByType(const string& programType, const Camer
 	}
 }
 
+void ProgramManagerProxy::setNoShadowByType(const string& programType)
+{
+	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
+
+	multimap<string, ProgramSP>::const_iterator walker = allPrograms.find(programType);
+
+	ProgramSP currentProgram;
+	while (walker != allPrograms.end())
+	{
+		currentProgram = walker->second;
+		currentProgram->use();
+
+		for (int32_t i = 0; i < 8; i++)
+		{
+			glActiveTexture(GL_TEXTURE5 + i);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			glUniform1i(currentProgram->getUniformLocation(string(u_shadowType) + to_string(i) + "]"), -1);
+			glUniform1i(currentProgram->getUniformLocation(string(u_shadowTexture) + to_string(i) + "]"), 5 + i);
+
+			glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(i) + "]"), 1, GL_FALSE, Matrix4x4().getM());
+		}
+
+		walker++;
+	}
+}
+

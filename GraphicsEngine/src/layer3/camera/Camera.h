@@ -49,6 +49,10 @@ protected:
 
 	Matrix4x4 transitionMatrix;
 
+	float width;
+
+	float height;
+
 	void updateViewFrustum();
 
 public:
@@ -65,7 +69,9 @@ public:
 
 	virtual void updateProjectionMatrix() = 0;
 
-	void updateViewport(const Viewport& viewport);
+	void updateWindowViewport(const Viewport& viewport);
+
+	void setViewport(const Viewport& viewport);
 
 	const Point4& getEye() const;
 

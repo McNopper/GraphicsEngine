@@ -25,7 +25,7 @@ Libraries/SDKs used:
 - Boost 1.53.0 http://www.boost.org/ http://boost.teeks99.com/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.9.0 http://glew.sourceforge.net/
-- GLFW 2.7.8 http://www.glfw.org/
+- GLFW 2.7.9 http://www.glfw.org/
 
 Please note: On Ubuntu 12.04, just use the libraries provided with the OS, even if they are older versions.
 
@@ -74,6 +74,7 @@ e.g. x86__Windows__MSVC_Debug
 
 Changelog:
 
+- Added latest GLFW (2.7.9)
 - Using latest FBX SDK and Boost libraries
 - Added dynamic environment mapping
 - Added latest GLFW (2.7.8)

@@ -111,6 +111,10 @@
 
 #define u_cubemap "u_cubemap"
 
+#define u_shadowType "u_shadowType["
+#define u_shadowTexture "u_shadowTexture["
+#define u_shadowMatrix "u_shadowMatrix["
+
 #define u_eta "u_eta"
 #define u_reflectanceNormalIncidence "u_reflectanceNormalIncidence"
 

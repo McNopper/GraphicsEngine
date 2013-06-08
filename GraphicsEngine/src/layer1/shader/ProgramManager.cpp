@@ -15,6 +15,7 @@ ProgramManager* ProgramManager::instance;
 
 const string ProgramManager::DEFAULT_PROGRAM_TYPE = "default";
 const string ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE = "renderToCubeMap";
+const string ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE = "renderToShadowMap";
 
 ProgramManager::ProgramManager() :
 	allPrograms()

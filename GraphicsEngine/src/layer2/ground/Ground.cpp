@@ -54,6 +54,11 @@ Ground::Ground(const BoundingSphere& boundingSphere, const GridPlaneShape& gridP
 
 	vao = GroundVAOSP(new GroundVAO(shaderprogram, *this));
 	addVAO(vao);
+
+	shaderprogram = programFactory.createGroundRenderToShadowMapProgram();
+
+	vao = GroundVAOSP(new GroundVAO(shaderprogram, *this));
+	addVAO(vao);
 }
 
 Ground::~Ground()

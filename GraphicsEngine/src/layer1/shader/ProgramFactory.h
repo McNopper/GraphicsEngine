@@ -31,6 +31,8 @@ public:
 
 	ProgramSP createPhongRenderToCubeMapProgram() const;
 
+	ProgramSP createPhongRenderToShadowMapProgram() const;
+
 	ProgramSP createFontProgram() const;
 
 	ProgramSP createPostProcess2DProgram() const;
@@ -44,6 +46,8 @@ public:
 	ProgramSP createGroundProgram() const;
 
 	ProgramSP createGroundRenderToCubeMapProgram() const;
+
+	ProgramSP createGroundRenderToShadowMapProgram() const;
 
 };
 

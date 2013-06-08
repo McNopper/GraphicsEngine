@@ -24,6 +24,7 @@ public:
 
 	static const std::string DEFAULT_PROGRAM_TYPE;
 	static const std::string RENDER_TO_CUBEMAP_PROGRAM_TYPE;
+	static const std::string RENDER_TO_SHADOWMAP_PROGRAM_TYPE;
 
 private:
 

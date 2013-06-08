@@ -978,6 +978,10 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 			}
 		}
 	}
+	else
+	{
+		glusLogPrint(GLUS_LOG_WARNING, "Mesh '%s' has no material.", meshName.c_str());
+	}
 
 	bool allByControlPoint = true;
 	bool hasNormal = mesh->GetElementNormalCount() > 0;

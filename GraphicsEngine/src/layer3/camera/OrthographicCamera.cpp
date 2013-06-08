@@ -11,11 +11,13 @@
 
 using namespace std;
 
-OrthographicCamera::OrthographicCamera(const string& name) : Camera(name)
+OrthographicCamera::OrthographicCamera(const string& name) :
+		Camera(name)
 {
 }
 
-OrthographicCamera::OrthographicCamera(const OrthographicCamera& other) : Camera(other)
+OrthographicCamera::OrthographicCamera(const OrthographicCamera& other) :
+		Camera(other)
 {
 }
 
@@ -30,36 +32,53 @@ void OrthographicCamera::updateProjectionMatrix()
 
 float OrthographicCamera::getNearWidth() const
 {
-	return static_cast<float>(viewport.getWidth());
+	return width;
 }
 
 float OrthographicCamera::getNearHeight() const
 {
-	return static_cast<float>(viewport.getHeight());
+	return height;
 }
 
 float OrthographicCamera::getFarWidth() const
 {
-	return static_cast<float>(viewport.getWidth());
+	return width;
 }
 
 float OrthographicCamera::getFarHeight() const
 {
-	return static_cast<float>(viewport.getHeight());
+	return height;
 }
 
-void OrthographicCamera::orthographic(const Viewport& viewport, float nearVal, float farVal)
+void OrthographicCamera::orthographic(const Viewport& viewport, float zNear, float zFar)
 {
 	float result[16];
 
 	this->viewport = viewport;
 	this->zNear = zNear;
 	this->zFar = zFar;
+	this->width = static_cast<float>(viewport.getWidth());
+	this->height = static_cast<float>(viewport.getHeight());
 
-	float horizontal = static_cast<float>(viewport.getWidth()) / 2.0f;
-	float vertical = static_cast<float>(viewport.getHeight()) / 2.0f;
+	glusOrthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
 
-	glusOrthof(result, -horizontal, horizontal, -vertical, vertical, nearVal, farVal);
+	projectionMatrix.setM(result);
+
+	biasedProjectionMatrix = biasMatrix * projectionMatrix;
+
+	updateViewFrustum();
+}
+
+void OrthographicCamera::orthographic(float width, float height, float zNear, float zFar)
+{
+	float result[16];
+
+	this->zNear = zNear;
+	this->zFar = zFar;
+	this->width = width;
+	this->height = height;
+
+	glusOrthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
 
 	projectionMatrix.setM(result);
 

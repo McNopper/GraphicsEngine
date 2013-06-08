@@ -230,6 +230,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	}
 	ProgramManagerProxy::setNumberLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, numberLights);
 	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
+	ProgramManagerProxy::setNoShadowByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
 
 	//
 

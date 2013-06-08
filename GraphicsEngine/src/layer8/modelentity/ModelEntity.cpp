@@ -183,6 +183,11 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 		{
 			currentSubMesh = node.getMesh()->getSubMeshAt(subMeshIndex);
 
+			if (subMeshIndex >= node.getMesh()->getSurfaceMaterialsCount())
+			{
+				break;
+			}
+
 			currentSurfaceMaterial = node.getMesh()->getSurfaceMaterialAt(subMeshIndex);
 
 			float currentEmissive[4] = {0.0f, 0.0f, 0.0f, 1.0f};

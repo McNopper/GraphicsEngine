@@ -1,5 +1,7 @@
 #version 420 core
 
+#define MAX_LIGHTS 8
+
 layout(vertices = 3) out;
 
 uniform mat4 u_projectionMatrix;
@@ -13,17 +15,29 @@ uniform float u_screenDistance;
 
 uniform int u_doTessellate;
 
+uniform	int u_numberLights;
+
 in vec4 v_c_vertex[];
 in vec3 v_c_tangent[];
 in vec3 v_c_bitangent[];
 in vec3 v_c_normal[];
 in vec2 v_c_texCoord[];
 
+in ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_inData[];
+
 out vec4 v_e_vertex[];
 out vec3 v_e_tangent[];
 out vec3 v_e_bitangent[];
 out vec3 v_e_normal[];
 out vec2 v_e_texCoord[];
+
+out ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_outData[];
 
 void main(void)
 {
@@ -69,6 +83,11 @@ void main(void)
 	v_e_bitangent[gl_InvocationID] = v_c_bitangent[gl_InvocationID];
 	v_e_normal[gl_InvocationID] = v_c_normal[gl_InvocationID];
 	v_e_texCoord[gl_InvocationID] = v_c_texCoord[gl_InvocationID];
+	
+	for (int i = 0; i < u_numberLights; i++)
+	{
+		v_outData[gl_InvocationID].projCoord[i] = v_inData[gl_InvocationID].projCoord[i];
+	}
 
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 }

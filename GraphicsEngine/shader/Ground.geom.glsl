@@ -1,5 +1,7 @@
 #version 420 core
 
+#define MAX_LIGHTS 8
+
 layout(triangle_strip, max_vertices = 3) out;
 
 struct MaterialProperties
@@ -32,17 +34,29 @@ uniform mat3 u_normalModelMatrix;
 
 uniform float u_displacementScale;
 
+uniform	int u_numberLights;
+
+uniform	int u_shadowType[MAX_LIGHTS];
+uniform mat4 u_shadowMatrix[MAX_LIGHTS];
+
 in vec4 v_g_vertex[];
 in vec3 v_g_tangent[];
 in vec3 v_g_bitangent[];
 in vec3 v_g_normal[];
 in vec2 v_g_texCoord[];
 
+in ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_inData[];
+
 out vec4 v_vertex;
 out vec3 v_tangent;
 out vec3 v_bitangent;
 out vec3 v_normal;
 out vec2 v_texCoord;
+
+out vec4 v_projCoord[MAX_LIGHTS];
 
 void main(void)
 {
@@ -58,6 +72,16 @@ void main(void)
 
 		v_vertex = u_modelMatrix * (gl_in[i].gl_Position + displacement);
 
+		// NVIDIA driver cannot handle a loop
+		v_projCoord[0] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[1] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[2] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[3] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[4] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[5] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[6] = u_shadowMatrix[0] * v_vertex;
+		v_projCoord[7] = u_shadowMatrix[0] * v_vertex;
+	
 		gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
 
 		EmitVertex();

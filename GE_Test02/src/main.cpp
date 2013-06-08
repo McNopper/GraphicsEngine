@@ -48,8 +48,8 @@ GLUSboolean initGame(GLUSvoid)
 	//
 	//
 
-	filename = "simplescene.fbx";
-	modelEntity = entityFactory.loadFbxSceneFile("Simple Scene", filename, 1.0f);
+	filename = "shadowscene.fbx";
+	modelEntity = entityFactory.loadFbxSceneFile("Shadow Scene", filename, 1.0f);
 
 	if (!modelEntity.get())
 	{
@@ -94,6 +94,9 @@ GLUSvoid reshapeGame(GLUSint width, GLUSint height)
 
 GLUSboolean updateGame(GLUSfloat deltaTime)
 {
+	//string currentProgramType = ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE;
+	string currentProgramType = ProgramManager::DEFAULT_PROGRAM_TYPE;
+
 	if (!updateEngine(deltaTime))
 	{
 		return GLUS_FALSE;
@@ -103,13 +106,50 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	GeneralEntityManager::getInstance()->update();
 
-	GeneralEntity::setCurrentValues(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, deltaTime, false);
+	//
+	// Shadow part
+	//
+/*
+	GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, currentCamera, deltaTime, false);
+
+	// Camera
+
+	// TODO Use camera from the light source
+	ProgramManagerProxy::setCameraByType(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, currentCamera, Point4(), Quaternion());
+
+	// Lights, not used, so set to zero lights.
+
+	ProgramManagerProxy::setNumberLightsByType(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, 0);
+	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE);
+	ProgramManagerProxy::setNoShadowByType(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE);
+
+	//
+
+	GeneralEntityManager::getInstance()->sort();
+
+	//
+
+	// TODO Enable framebuffer
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// All the primitves
+
+	GeneralEntityManager::getInstance()->render();
+
+	// TODO Disable framebuffer
+*/
+	//
+	// Color rendering
+	//
+
+	GeneralEntity::setCurrentValues(currentProgramType, currentCamera, deltaTime, false);
 
 	// Camera
 
 	if (User::defaultUser.getUserCamera().get())
 	{
-		ProgramManagerProxy::setCameraByType(ProgramManager::DEFAULT_PROGRAM_TYPE, currentCamera, Point4(), Quaternion());
+		ProgramManagerProxy::setCameraByType(currentProgramType, currentCamera, Point4(), Quaternion());
 	}
 	else
 	{
@@ -120,9 +160,9 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	int32_t numberLights = 0;
 	numberLights = modelEntity->setLights(numberLights);
-	ProgramManagerProxy::setNumberLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, numberLights);
-	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
-	ProgramManagerProxy::setNoShadowByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
+	ProgramManagerProxy::setNumberLightsByType(currentProgramType, numberLights);
+	ProgramManagerProxy::setAmbientLightColorByType(currentProgramType);
+	ProgramManagerProxy::setNoShadowByType(currentProgramType);
 
 	//
 
@@ -136,6 +176,10 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	// All the primitves
 
 	GeneralEntityManager::getInstance()->render();
+
+	//
+	// Debug
+	//
 
 	if (drawDebug)
 	{

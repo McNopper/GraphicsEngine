@@ -4,10 +4,14 @@ layout(triangles, invocations = 6) in;
 
 layout(triangle_strip, max_vertices = 3) out;
 
+#define MAX_LIGHTS 8
+
 #define NUMBER_FACES 6
 
 uniform mat4 u_cubeMapProjectionMatrix;
 uniform mat4 u_cubeMapViewMatrix[NUMBER_FACES];
+
+uniform	int u_numberLights;
 
 in vec4 v_g_vertex[];
 in vec3 v_g_normal[];
@@ -15,11 +19,18 @@ in vec3 v_g_bitangent[];
 in vec3 v_g_tangent[];
 in vec2 v_g_texCoord[];
 
+in ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_inData[];
+
 out vec4 v_vertex;
 out vec3 v_normal;
 out vec3 v_bitangent;
 out vec3 v_tangent;
 out vec2 v_texCoord;
+
+out vec4 v_projCoord[MAX_LIGHTS];
 
 void main(void)
 {
@@ -96,6 +107,15 @@ void main(void)
 		v_bitangent = v_g_bitangent[i];
 		v_tangent = v_g_tangent[i];
 		v_texCoord = v_g_texCoord[i];
+		
+		v_projCoord[0] = v_inData[i].projCoord[0];
+		v_projCoord[1] = v_inData[i].projCoord[1];
+		v_projCoord[2] = v_inData[i].projCoord[2];
+		v_projCoord[3] = v_inData[i].projCoord[3];
+		v_projCoord[4] = v_inData[i].projCoord[4];
+		v_projCoord[5] = v_inData[i].projCoord[5];
+		v_projCoord[6] = v_inData[i].projCoord[6];
+		v_projCoord[7] = v_inData[i].projCoord[7];
 
 		gl_Position = finalPosition[i]; 
 		EmitVertex();

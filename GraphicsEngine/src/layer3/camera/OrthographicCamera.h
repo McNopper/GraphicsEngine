@@ -27,7 +27,10 @@ public:
 
 	virtual float getFarHeight() const;
 
-	void orthographic(const Viewport& viewport, float nearVal, float farVal);
+	void orthographic(const Viewport& viewport, float zNear, float zFar);
+
+	void orthographic(float width, float height, float zNear, float zFar);
+
 };
 
 typedef boost::shared_ptr<OrthographicCamera> OrthographicCameraSP;

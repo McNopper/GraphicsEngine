@@ -40,6 +40,8 @@ public:
 
 	void perspective(float fovy, const Viewport& viewport, float zNear, float zFar);
 
+	void perspective(float fovy, float width, float height, float zNear, float zFar);
+
 	void setFovx(float fovx);
 
 	void setFovy(float fovy);

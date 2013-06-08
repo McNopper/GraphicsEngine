@@ -118,6 +118,11 @@ void Mesh::updateVAO()
 
 		vao = SubMeshVAOSP(new SubMeshVAO(shaderprogram, *this));
 		currentSubMesh->addVAO(vao);
+
+		shaderprogram = programFactory.createPhongRenderToShadowMapProgram();
+
+		vao = SubMeshVAOSP(new SubMeshVAO(shaderprogram, *this));
+		currentSubMesh->addVAO(vao);
 	}
 }
 

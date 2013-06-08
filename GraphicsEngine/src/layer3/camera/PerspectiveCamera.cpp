@@ -47,7 +47,7 @@ void PerspectiveCamera::updateProjectionMatrix()
 
 float PerspectiveCamera::getNearWidth() const
 {
-	return (float)viewport.getWidth() / (float)viewport.getHeight() * getNearHeight();
+	return width / height * getNearHeight();
 }
 
 float PerspectiveCamera::getNearHeight() const
@@ -57,7 +57,7 @@ float PerspectiveCamera::getNearHeight() const
 
 float PerspectiveCamera::getFarWidth() const
 {
-	return (float)viewport.getWidth() / (float)viewport.getHeight() * getFarHeight();
+	return width / height * getFarHeight();
 }
 
 float PerspectiveCamera::getFarHeight() const
@@ -73,8 +73,29 @@ void PerspectiveCamera::perspective(float fovy, const Viewport& viewport, float 
 	this->viewport = viewport;
 	this->zNear = zNear;
 	this->zFar = zFar;
+	this->width = static_cast<float>(viewport.getWidth());
+	this->height = static_cast<float>(viewport.getHeight());
 
-	glusPerspectivef(result, fovy, (float)viewport.getWidth() / (float)viewport.getHeight(), zNear, zFar);
+	glusPerspectivef(result, fovy, width / height, zNear, zFar);
+
+	projectionMatrix.setM(result);
+
+	biasedProjectionMatrix = biasMatrix * projectionMatrix;
+
+	updateViewFrustum();
+}
+
+void PerspectiveCamera::perspective(float fovy, float width, float height, float zNear, float zFar)
+{
+	float result[16];
+
+	this->fovy = fovy;
+	this->zNear = zNear;
+	this->zFar = zFar;
+	this->width = width;
+	this->height = height;
+
+	glusPerspectivef(result, fovy, width / height, zNear, zFar);
 
 	projectionMatrix.setM(result);
 

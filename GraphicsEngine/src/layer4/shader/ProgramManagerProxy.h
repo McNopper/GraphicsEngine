@@ -32,6 +32,8 @@ public:
 
 	static void setCameraByType(const std::string& programType, const CameraSP& camera, const Point4& position, const Quaternion& rotation, bool useLocation = false);
 
+	static void setNoShadowByType(const std::string& programType);
+
 };
 
 #endif /* PROGRAMMANAGERPROXY_H_ */

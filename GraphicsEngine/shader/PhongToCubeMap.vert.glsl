@@ -1,5 +1,7 @@
 #version 420 core
 
+#define MAX_LIGHTS 8
+
 #define MAX_SKIN_INDICES 8
 #define MAX_MATRICES 64
 
@@ -15,7 +17,12 @@ uniform int u_hasSkinning;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
 
+uniform	int u_shadowType[MAX_LIGHTS];
+uniform mat4 u_shadowMatrix[MAX_LIGHTS];
+
 uniform	int u_modelTransformOnly;
+
+uniform	int u_numberLights;
 
 in vec4 a_vertex;
 in vec3 a_normal;
@@ -34,6 +41,11 @@ out vec3 v_g_normal;
 out vec3 v_g_bitangent;
 out vec3 v_g_tangent;
 out vec2 v_g_texCoord;
+
+out ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_outData;
 
 void main(void)
 {
@@ -114,6 +126,14 @@ void main(void)
 	if (u_hasDiffuseTexture != 0 || u_hasNormalMapTexture != 0)
 	{
 		v_g_texCoord = a_texCoord;
+	}
+
+	for (int i = 0; i < u_numberLights; i++)
+	{
+		if (u_shadowType[i] >= 0)
+		{
+			v_outData.projCoord[i] = u_shadowMatrix[i] * v_g_vertex;
+		}
 	}
 
 	gl_Position = v_g_vertex;

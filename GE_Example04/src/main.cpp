@@ -203,9 +203,11 @@ GLUSboolean initGame(GLUSvoid)
 	ProgramManagerProxy::setLightByType(ProgramManager::DEFAULT_PROGRAM_TYPE, 0, directionalLight, Point4(0.0f, 0.0f, 10.0f), Quaternion(45, Vector3(1.0f, 0.0f, -1.0f)));
 	ProgramManagerProxy::setNumberLightsByType(ProgramManager::DEFAULT_PROGRAM_TYPE, 1);
 	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
+	ProgramManagerProxy::setNoShadowByType(ProgramManager::DEFAULT_PROGRAM_TYPE);
 	ProgramManagerProxy::setLightByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, 0, directionalLight, Point4(0.0f, 0.0f, 10.0f), Quaternion(45, Vector3(1.0f, 0.0f, -1.0f)));
 	ProgramManagerProxy::setNumberLightsByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE, 1);
 	ProgramManagerProxy::setAmbientLightColorByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE);
+	ProgramManagerProxy::setNoShadowByType(ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE);
 
 	// Basic OpenGL settings
 
