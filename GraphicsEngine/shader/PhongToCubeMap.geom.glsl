@@ -30,7 +30,10 @@ out vec3 v_bitangent;
 out vec3 v_tangent;
 out vec2 v_texCoord;
 
-out vec4 v_projCoord[MAX_LIGHTS];
+out ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_outData;
 
 void main(void)
 {
@@ -108,14 +111,16 @@ void main(void)
 		v_tangent = v_g_tangent[i];
 		v_texCoord = v_g_texCoord[i];
 		
-		v_projCoord[0] = v_inData[i].projCoord[0];
-		v_projCoord[1] = v_inData[i].projCoord[1];
-		v_projCoord[2] = v_inData[i].projCoord[2];
-		v_projCoord[3] = v_inData[i].projCoord[3];
-		v_projCoord[4] = v_inData[i].projCoord[4];
-		v_projCoord[5] = v_inData[i].projCoord[5];
-		v_projCoord[6] = v_inData[i].projCoord[6];
-		v_projCoord[7] = v_inData[i].projCoord[7];
+		#pragma optionNV(unroll all)
+		for (int k = 0; k < MAX_LIGHTS; k++)
+		{
+			if (k >= u_numberLights)
+			{
+				break;
+			}
+		
+			v_outData.projCoord[k] = v_inData[i].projCoord[k];
+		} 
 
 		gl_Position = finalPosition[i]; 
 		EmitVertex();

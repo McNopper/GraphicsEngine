@@ -77,7 +77,10 @@ in vec3 v_bitangent;
 in vec3 v_tangent;
 in vec2 v_texCoord;
 
-in vec4 v_projCoord[MAX_LIGHTS];
+in ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_inData;
 
 layout(location = 0, index = 0) out vec4 fragColor;
 layout(location = 1, index = 0) out vec4 brightColor;

@@ -51,15 +51,16 @@ void main(void)
 	v_g_normal = interpolateVec3(v_e_normal[0], v_e_normal[1], v_e_normal[2]);
 	v_g_texCoord = interpolateVec2(v_e_texCoord[0], v_e_texCoord[1], v_e_texCoord[2]);
 
-	// NVIDIA driver cannot handle a loop
-	v_outData.projCoord[0] = interpolateVec4(v_inData[0].projCoord[0], v_inData[1].projCoord[0], v_inData[2].projCoord[0]);
-	v_outData.projCoord[1] = interpolateVec4(v_inData[0].projCoord[1], v_inData[1].projCoord[1], v_inData[2].projCoord[1]);
-	v_outData.projCoord[2] = interpolateVec4(v_inData[0].projCoord[2], v_inData[1].projCoord[2], v_inData[2].projCoord[2]);
-	v_outData.projCoord[3] = interpolateVec4(v_inData[0].projCoord[3], v_inData[1].projCoord[3], v_inData[2].projCoord[3]);
-	v_outData.projCoord[4] = interpolateVec4(v_inData[0].projCoord[4], v_inData[1].projCoord[4], v_inData[2].projCoord[4]);
-	v_outData.projCoord[5] = interpolateVec4(v_inData[0].projCoord[5], v_inData[1].projCoord[5], v_inData[2].projCoord[5]);
-	v_outData.projCoord[6] = interpolateVec4(v_inData[0].projCoord[6], v_inData[1].projCoord[6], v_inData[2].projCoord[6]);
-	v_outData.projCoord[7] = interpolateVec4(v_inData[0].projCoord[7], v_inData[1].projCoord[7], v_inData[2].projCoord[7]);
+	#pragma optionNV(unroll all)
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		if (i >= u_numberLights)
+		{
+			break;
+		}
+
+		v_outData.projCoord[i] = interpolateVec4(v_inData[0].projCoord[i], v_inData[1].projCoord[i], v_inData[2].projCoord[i]);
+	}
 
 	gl_Position = interpolateVec4(gl_in[0].gl_Position, gl_in[1].gl_Position, gl_in[2].gl_Position);
 }

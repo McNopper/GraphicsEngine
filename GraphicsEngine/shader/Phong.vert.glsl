@@ -42,7 +42,10 @@ out vec3 v_bitangent;
 out vec3 v_tangent;
 out vec2 v_texCoord;
 
-out vec4 v_projCoord[MAX_LIGHTS];
+out ArrayData
+{
+	vec4 projCoord[MAX_LIGHTS];
+} v_outData;
 
 void main(void)
 {
@@ -125,15 +128,21 @@ void main(void)
 		v_texCoord = a_texCoord;
 	}
 
-	// NVIDIA, I just say NVIDIA - even a constant does not work
-	v_projCoord[0] = u_shadowMatrix[0] * v_vertex;
-	v_projCoord[1] = u_shadowMatrix[1] * v_vertex;
-	v_projCoord[2] = u_shadowMatrix[2] * v_vertex;
-	v_projCoord[3] = u_shadowMatrix[3] * v_vertex;
-	v_projCoord[4] = u_shadowMatrix[4] * v_vertex;
-	v_projCoord[5] = u_shadowMatrix[5] * v_vertex;
-	v_projCoord[6] = u_shadowMatrix[6] * v_vertex;
-	v_projCoord[7] = u_shadowMatrix[7] * v_vertex;
+	#pragma optionNV(unroll all)
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		if (i >= u_numberLights)
+		{
+			break;
+		}
+		
+		if (u_shadowType[i] < 0)
+		{
+			continue;
+		}
+	
+		v_outData.projCoord[i] = u_shadowMatrix[i] * v_vertex;
+	}
 
 	gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
 }

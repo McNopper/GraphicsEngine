@@ -128,12 +128,20 @@ void main(void)
 		v_g_texCoord = a_texCoord;
 	}
 
-	for (int i = 0; i < u_numberLights; i++)
+	#pragma optionNV(unroll all)
+	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
-		if (u_shadowType[i] >= 0)
+		if (i >= u_numberLights)
 		{
-			v_outData.projCoord[i] = u_shadowMatrix[i] * v_g_vertex;
+			break;
 		}
+		
+		if (u_shadowType[i] < 0)
+		{
+			continue;
+		}
+	
+		v_outData.projCoord[i] = u_shadowMatrix[i] * v_g_vertex;
 	}
 
 	gl_Position = v_g_vertex;
