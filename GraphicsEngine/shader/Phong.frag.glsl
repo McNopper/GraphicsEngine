@@ -1,4 +1,4 @@
-#version 420 core
+#version 410 core
 
 #define MAX_LIGHTS 8
 

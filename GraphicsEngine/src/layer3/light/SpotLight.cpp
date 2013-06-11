@@ -68,3 +68,8 @@ void SpotLight::debugDraw(const Point4& position, const Quaternion& rotation) co
 	DebugDraw::drawer.drawCone(position, Vector3(0.0f, -halfExtend, 0.0f), rotation, halfExtend, 0.4f, Color::YELLOW);
 }
 
+int32_t SpotLight::getShadowType() const
+{
+	return 2;
+}
+

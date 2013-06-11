@@ -1,4 +1,4 @@
-#version 420 core
+#version 410 core
 
 uniform sampler2D u_screenTexture;
 uniform sampler2DMS u_screenTextureMS;

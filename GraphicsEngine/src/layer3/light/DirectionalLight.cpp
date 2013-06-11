@@ -40,3 +40,8 @@ void DirectionalLight::debugDraw(const Point4& position, const Quaternion& rotat
 
 	DebugDraw::drawer.drawArrow(position, Vector3(0.0f, 0.0f, 0.0f), rotation * baseRotation, 1.0f, 0.1f, 0.5f, 0.3f, Color::YELLOW);
 }
+
+int32_t DirectionalLight::getShadowType() const
+{
+	return 0;
+}

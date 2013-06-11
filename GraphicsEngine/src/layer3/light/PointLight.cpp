@@ -72,3 +72,7 @@ void PointLight::debugDraw(const Point4& position, const Quaternion& rotation) c
 	DebugDraw::drawer.drawSphere(position, Vector3(0.0f, 0.0f, 0.0f), 0.5f, Color::YELLOW);
 }
 
+int32_t PointLight::getShadowType() const
+{
+	return 1;
+}

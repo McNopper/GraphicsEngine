@@ -17,6 +17,8 @@ class ShadowMap2D
 
 private:
 
+	boost::int32_t size;
+
 	std::vector<FrameBuffer2DSP> allShadowMaps;
 
 public:
@@ -28,6 +30,8 @@ public:
 	bool use(bool enable, boost::int32_t element) const;
 
 	GLuint getDepthTextureName(boost::int32_t element) const;
+
+	boost::int32_t getSize() const;
 
 };
 

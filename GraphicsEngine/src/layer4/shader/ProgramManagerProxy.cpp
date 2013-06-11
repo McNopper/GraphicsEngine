@@ -115,3 +115,26 @@ void ProgramManagerProxy::setNoShadowByType(const string& programType)
 	}
 }
 
+void ProgramManagerProxy::setShadowByType(const string& programType, int32_t index, const ShadowMap2DSP& shadowMap, int32_t shadowType, const Matrix4x4& shadowMatrix)
+{
+	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
+
+	multimap<string, ProgramSP>::const_iterator walker = allPrograms.find(programType);
+
+	ProgramSP currentProgram;
+	while (walker != allPrograms.end())
+	{
+		currentProgram = walker->second;
+		currentProgram->use();
+
+		glActiveTexture(GL_TEXTURE5 + index);
+		glBindTexture(GL_TEXTURE_2D, shadowMap->getDepthTextureName(0));
+
+		glUniform1i(currentProgram->getUniformLocation(string(u_shadowType) + to_string(index) + "]"), shadowType);
+		glUniform1i(currentProgram->getUniformLocation(string(u_shadowTexture) + to_string(index) + "]"), 5 + index);
+
+		glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(index) + "]"), 1, GL_FALSE, shadowMatrix.getM());
+
+		walker++;
+	}
+}

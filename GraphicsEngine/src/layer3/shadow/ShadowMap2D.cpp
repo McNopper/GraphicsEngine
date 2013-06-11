@@ -14,7 +14,8 @@ using namespace boost;
 
 using namespace std;
 
-ShadowMap2D::ShadowMap2D(int32_t size, int32_t number)
+ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
+	size(size)
 {
 	char buffer[256];
 	sprintf(buffer, "%p", this);
@@ -76,4 +77,9 @@ GLuint ShadowMap2D::getDepthTextureName(int32_t element) const
 	}
 
 	return allShadowMaps[element]->getDepthTexture()->getTextureName();
+}
+
+int32_t ShadowMap2D::getSize() const
+{
+	return size;
 }

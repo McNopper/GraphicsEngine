@@ -1,4 +1,4 @@
-#version 420 core
+#version 410 core
 
 // Depth of Field
 // http://en.wikipedia.org/wiki/Circle_of_confusion#Determining_a_circle_of_confusion_diameter_from_the_object_field

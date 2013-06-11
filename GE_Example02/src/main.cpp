@@ -284,7 +284,7 @@ int main(int argc, char* argv[])
 	glusMouseMoveFunc(::mouseMoveGame);
 	glusKeyFunc(::keyGame);
 
-	glusPrepareContext(4, 2, GLUS_FORWARD_COMPATIBLE_BIT);
+	glusPrepareContext(4, 1, GLUS_FORWARD_COMPATIBLE_BIT);
 	glusPrepareMSAA(8);
 	glusPrepareNoResize(GLUS_TRUE);
 	if (!glusCreateWindow("OpenGL Graphics Engine", 1024, 768, 24, 8, GLUS_FALSE))

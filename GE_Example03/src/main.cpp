@@ -396,7 +396,7 @@ int main(int argc, char* argv[])
 	glusMouseMoveFunc(::mouseMoveGame);
 	glusKeyFunc(::keyGame);
 
-	glusPrepareContext(4, 2, GLUS_FORWARD_COMPATIBLE_BIT);
+	glusPrepareContext(4, 1, GLUS_FORWARD_COMPATIBLE_BIT);
 	// Use MSAA frame buffer for MSAA - can be toggled
 	//glusPrepareMSAA(8);
 	glusPrepareNoResize(GLUS_TRUE);

@@ -38,6 +38,8 @@ public:
 
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
+	virtual boost::int32_t getShadowType() const;
+
 };
 
 typedef boost::shared_ptr<PointLight> PointLightSP;

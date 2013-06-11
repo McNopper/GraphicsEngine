@@ -1,4 +1,4 @@
-#version 420 core
+#version 410 core
 
 uniform sampler2D u_fontTexture;
 uniform vec4 u_fontColor;
