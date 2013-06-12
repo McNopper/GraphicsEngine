@@ -10,6 +10,8 @@ static ModelEntitySP modelEntity;
 
 static bool drawDebug = true;
 
+static OrthographicCameraShadowMap2DSP orthographicCameraShadowMap2D;
+
 GLUSboolean initGame(GLUSvoid)
 {
 	if (!initEngine(GLUS_LOG_INFO, 7))
@@ -65,6 +67,10 @@ GLUSboolean initGame(GLUSvoid)
 	GeneralEntityManager::getInstance()->updateEntity(modelEntity);
 
 	//
+
+	orthographicCameraShadowMap2D = OrthographicCameraShadowMap2DSP(new OrthographicCameraShadowMap2D(4096, 10.0f));
+
+	//
 	//
 	//
 
@@ -83,6 +89,9 @@ GLUSboolean initGame(GLUSvoid)
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glClearDepth(1.0f);
+
+    // Needed when rendering the shadow map. This will avoid artifacts.
+    glPolygonOffset(1.0f, 0.0f);
 
 	return GLUS_TRUE;
 }
@@ -109,13 +118,14 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	//
 	// Shadow part
 	//
-/*
-	GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, currentCamera, deltaTime, false);
+
+	GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, orthographicCameraShadowMap2D->getOrthographicCamera(), deltaTime, false);
 
 	// Camera
 
-	// TODO Use camera from the light source
-	ProgramManagerProxy::setCameraByType(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, currentCamera, Point4(), Quaternion());
+	modelEntity->setOrthographicShadowCamera("Lamp", orthographicCameraShadowMap2D);
+
+	orthographicCameraShadowMap2D->updateShadowMatrix();
 
 	// Lights, not used, so set to zero lights.
 
@@ -129,19 +139,28 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	//
 
-	// TODO Enable framebuffer
+	orthographicCameraShadowMap2D->use(true);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	// All the primitves
 
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glFrontFace(GL_CW);
+
 	GeneralEntityManager::getInstance()->render();
 
-	// TODO Disable framebuffer
-*/
+    glDisable(GL_POLYGON_OFFSET_FILL);
+    glFrontFace(GL_CCW);
+
+	orthographicCameraShadowMap2D->use(false);
+
 	//
 	// Color rendering
 	//
+
+	ViewportSP defaultViewport = ViewportManager::getInstance()->getDefaultViewport();
+	defaultViewport->use();
 
 	GeneralEntity::setCurrentValues(currentProgramType, currentCamera, deltaTime, false);
 
@@ -163,6 +182,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	ProgramManagerProxy::setNumberLightsByType(currentProgramType, numberLights);
 	ProgramManagerProxy::setAmbientLightColorByType(currentProgramType);
 	ProgramManagerProxy::setNoShadowByType(currentProgramType);
+
+	ProgramManagerProxy::setShadowByType(currentProgramType, 0, orthographicCameraShadowMap2D->getShadowMap2D(), orthographicCameraShadowMap2D->getShadowMatrix(), 0);
 
 	//
 
@@ -208,6 +229,8 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 GLUSvoid terminateGame(GLUSvoid)
 {
+	orthographicCameraShadowMap2D.reset();
+
 	terminateEngine();
 }
 

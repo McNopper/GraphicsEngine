@@ -115,7 +115,7 @@ void ProgramManagerProxy::setNoShadowByType(const string& programType)
 	}
 }
 
-void ProgramManagerProxy::setShadowByType(const string& programType, int32_t index, const ShadowMap2DSP& shadowMap, int32_t shadowType, const Matrix4x4& shadowMatrix)
+void ProgramManagerProxy::setShadowByType(const string& programType, int32_t index, const ShadowMap2DSP& shadowMap, const Matrix4x4& shadowMatrix, int32_t shadowType)
 {
 	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
 

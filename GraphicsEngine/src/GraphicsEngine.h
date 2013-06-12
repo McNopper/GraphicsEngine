@@ -70,6 +70,7 @@
 #include "layer4/postprocess/PostProcessor2DMultisample.h"
 #include "layer4/postprocess/PostProcessor2DMultisampleManager.h"
 #include "layer4/shader/ProgramManagerProxy.h"
+#include "layer4/shadow/OrthographicCameraShadowMap2D.h"
 #include "layer5/command/EntityCommandManager.h"
 #include "layer5/debug/FpsPrinter.h"
 #include "layer5/environment/DynamicEnvironmentManager.h"

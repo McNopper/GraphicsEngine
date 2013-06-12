@@ -35,7 +35,7 @@ public:
 
 	static void setNoShadowByType(const std::string& programType);
 
-	static void setShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, boost::int32_t shadowType, const Matrix4x4& shadowMatrix);
+	static void setShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, const Matrix4x4& shadowMatrix, boost::int32_t shadowType);
 
 };
 

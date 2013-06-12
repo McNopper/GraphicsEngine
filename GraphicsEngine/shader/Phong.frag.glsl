@@ -188,7 +188,7 @@ void main(void)
 			{
 				if (textureProj(u_shadowTexture[indexLight], v_inData.projCoord[indexLight]) < 1.0)
 				{
-					diffuseIntensity *= 0.5;
+					diffuseIntensity = 0.0;
 					specularIntensity = 0.0;
 				}
 			}

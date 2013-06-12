@@ -530,6 +530,33 @@ bool ModelEntity::setCamera(const string& name) const
 	return false;
 }
 
+bool ModelEntity::setOrthographicShadowCamera(const string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const
+{
+	Quaternion baseRotation(-90.0f, Vector3(1.0f, 0.0f, 0.0f));
+
+	baseRotation *= Quaternion(90.0f, Vector3(0.0f, 1.0f, 0.0f));
+
+	auto walker = allLights.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while(walker != allLights.end())
+	{
+		instanceNode = *walker;
+
+		if (instanceNode->getNode()->getName().compare(lightName) == 0)
+		{
+			ProgramManagerProxy::setCameraByType(GeneralEntity::currentProgramType, orthographicCameraShadowMap2D->getOrthographicCamera(), instanceNode->getPosition(), instanceNode->getRotation() * baseRotation, true);
+
+			return true;
+		}
+
+		walker++;
+	}
+
+	return false;
+}
+
 void ModelEntity::passCamerasToManager() const
 {
 	auto walker = allCameras.begin();

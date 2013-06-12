@@ -21,6 +21,8 @@ private:
 
 	boost::int32_t size;
 
+	float orthographicScale;
+
 	OrthographicCameraSP orthographicCamera;
 
 	ShadowMap2DSP shadowMap;
@@ -31,19 +33,23 @@ private:
 
 public:
 
-	OrthographicCameraShadowMap2D(boost::int32_t size);
+	OrthographicCameraShadowMap2D(boost::int32_t size, float orthographicScale);
 	virtual ~OrthographicCameraShadowMap2D();
 
 	void use(bool enable) const;
 
-	void setCameraProperties(const ProgramSP& program, const Point4& position, const Quaternion& rotation);
+	void updateShadowMatrix();
+
+	const OrthographicCameraSP& getOrthographicCamera() const;
 
 	const Matrix4x4& getShadowMatrix() const;
 
-	GLuint getDepthTextureName() const;
+	const ShadowMap2DSP& getShadowMap2D() const;
 
 	boost::int32_t getSize() const;
 
 };
+
+typedef boost::shared_ptr<OrthographicCameraShadowMap2D> OrthographicCameraShadowMap2DSP;
 
 #endif /* ORTHOGRAPHICCAMERASHADOWMAP2D_H_ */
