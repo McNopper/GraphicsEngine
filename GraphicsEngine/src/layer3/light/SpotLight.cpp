@@ -45,7 +45,7 @@ void SpotLight::setSpotCosCutOffOuter(float spotCosCutOffOuter)
 
 void SpotLight::setLightProperties(uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const
 {
-	glUniform1i(program->getUniformLocation(string(u_lightType) + to_string(lightNumber) + "]"), 2);
+	glUniform1f(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_lightType), 2.0f);
 
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_diffuseLightColor), 1, diffuse.getRGBA());
 	glUniform4fv(program->getUniformLocation(string(u_light) + to_string(lightNumber) + u_specularLightColor), 1, specular.getRGBA());

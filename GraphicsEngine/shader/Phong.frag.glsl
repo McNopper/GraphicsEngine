@@ -6,6 +6,9 @@
 
 struct LightProperties
 {
+	// Workaround: Using float, as int causes problem in the loop. 
+	float lightType;
+
 	vec4 diffuseColor;
 	vec4 specularColor;
 		
@@ -52,7 +55,6 @@ uniform	float u_eta;
 uniform	float u_reflectanceNormalIncidence;
 
 uniform	int u_numberLights;
-uniform	int u_lightType[MAX_LIGHTS];
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasSpecularTexture;
 uniform	int u_hasNormalMapTexture;
@@ -134,7 +136,7 @@ void main(void)
 		float attenuation = 1.0;
 		float falloff = 1.0;
 		
-		if (u_lightType[indexLight] == 0)
+		if (u_light[indexLight].lightType == 0.0)
 		{
 			lightDirection = normalize(u_light[indexLight].direction);
 		}
@@ -154,7 +156,7 @@ void main(void)
 				}
 			}
 			
-			if (u_lightType[indexLight] == 2)
+			if (u_light[indexLight].lightType == 2.0)
 			{
 				float spotDot = dot(-lightDirection, u_light[indexLight].spotDirection);
 				
