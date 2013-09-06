@@ -319,7 +319,19 @@ void FbxEntityFactory::processTexture(FbxTexture* texture)
 	{
 		TextureFactory textureFactory;
 
-		Texture2DSP texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName());
+		GLint wrapModeS = GL_REPEAT;
+		GLint wrapModeT = GL_REPEAT;
+
+		if (texture->WrapModeU.Get() == FbxTexture::eClamp)
+		{
+			wrapModeS = GL_CLAMP;
+		}
+		if (texture->WrapModeV.Get() == FbxTexture::eClamp)
+		{
+			wrapModeT = GL_CLAMP;
+		}
+
+		Texture2DSP texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName(), true, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, wrapModeS, wrapModeT, 1.0f);
 
 		if (texture2D.get() == nullptr)
 		{
