@@ -5,8 +5,6 @@
  *      Author: Norbert Nopper
  */
 
-#include "../../UsedLibs.h"
-
 #include "Matrix3x3.h"
 
 #include "Matrix4x4.h"
@@ -45,22 +43,6 @@ Matrix4x4& Matrix4x4::operator=(const Matrix4x4& other)
 	glusMatrix4x4Copyf(m, other.m, GLUS_FALSE);
 
 	return *this;
-}
-
-Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& other)
-{
-	glusMatrix4x4Multiplyf(m, m, other.m);
-
-	return *this;
-}
-
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) const
-{
-	Matrix4x4 result;
-
-	glusMatrix4x4Multiplyf(result.m, m, other.m);
-
-	return result;
 }
 
 Matrix3x3 Matrix4x4::extractMatrix3x3() const

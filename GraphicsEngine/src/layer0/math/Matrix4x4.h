@@ -8,6 +8,8 @@
 #ifndef MATRIX4X4_H_
 #define MATRIX4X4_H_
 
+#include "../../UsedLibs.h"
+
 #include "Plane.h"
 #include "Point4.h"
 #include "Vector3.h"
@@ -35,9 +37,21 @@ public:
 
 	Matrix4x4& operator=(const Matrix4x4& other);
 
-	Matrix4x4& operator*=(const Matrix4x4& other);
+	Matrix4x4& operator*=(const Matrix4x4& other)
+	{
+		glusMatrix4x4Multiplyf(m, m, other.m);
 
-	Matrix4x4 operator*(const Matrix4x4& other) const;
+		return *this;
+	}
+
+	Matrix4x4 operator*(const Matrix4x4& other) const
+	{
+		Matrix4x4 result;
+
+		glusMatrix4x4Multiplyf(result.m, m, other.m);
+
+		return result;
+	}
 
 	Matrix3x3 extractMatrix3x3() const;
 

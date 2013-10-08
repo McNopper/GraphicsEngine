@@ -8,6 +8,8 @@
 #ifndef MATRIX3X3_H_
 #define MATRIX3X3_H_
 
+#include "../../UsedLibs.h"
+
 #include "Vector3.h"
 
 class Matrix4x4;
@@ -34,9 +36,21 @@ public:
 
 	Matrix3x3& operator=(const Matrix3x3& other);
 
-	Matrix3x3& operator*=(const Matrix3x3& other);
+	Matrix3x3& operator*=(const Matrix3x3& other)
+	{
+		glusMatrix3x3Multiplyf(m, m, other.m);
 
-	Matrix3x3 operator*(const Matrix3x3& other) const;
+		return *this;
+	}
+
+	Matrix3x3 operator*(const Matrix3x3& other) const
+	{
+		Matrix3x3 result;
+
+		glusMatrix3x3Multiplyf(result.m, m, other.m);
+
+		return result;
+	}
 
 	Matrix4x4 createMatrix4x4() const;
 
