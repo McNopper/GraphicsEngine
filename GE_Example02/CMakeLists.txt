@@ -44,7 +44,7 @@ add_executable(GE_Example02 ${CPP_FILES} ${H_FILES})
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	# Windows
 	
-	target_link_libraries(GE_Example02 GLUS GraphicsEngine glfw glew32s opengl32 gdi32 user32 Advapi32 wininet DevIL ILU)
+	target_link_libraries(GE_Example02 GLUS GraphicsEngine glfw3 glew32s opengl32 gdi32 user32 Advapi32 wininet DevIL ILU)
 	target_link_libraries(GE_Example02 debug fbxsdk-2013.3-mdd.lib)
 	target_link_libraries(GE_Example02 optimized fbxsdk-2013.3-md.lib)
 			

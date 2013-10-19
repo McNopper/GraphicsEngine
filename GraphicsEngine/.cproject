@@ -219,9 +219,11 @@
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="glfw"/>
+									<listOptionValue builtIn="false" value="glfw3"/>
 									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xxf86vm"/>
+									<listOptionValue builtIn="false" value="Xrandr"/>
+									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
 								</option>
@@ -249,9 +251,11 @@
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="glfw"/>
+									<listOptionValue builtIn="false" value="glfw3"/>
 									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xxf86vm"/>
+									<listOptionValue builtIn="false" value="Xrandr"/>
+									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
 								</option>
@@ -321,9 +325,11 @@
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="glfw"/>
+									<listOptionValue builtIn="false" value="glfw3"/>
 									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xxf86vm"/>
+									<listOptionValue builtIn="false" value="Xrandr"/>
+									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
 								</option>
@@ -351,9 +357,11 @@
 									<listOptionValue builtIn="false" value="GL"/>
 									<listOptionValue builtIn="false" value="GLUS"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="glfw"/>
+									<listOptionValue builtIn="false" value="glfw3"/>
 									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xxf86vm"/>
+									<listOptionValue builtIn="false" value="Xrandr"/>
+									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
 								</option>
