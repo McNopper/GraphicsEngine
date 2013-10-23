@@ -17,17 +17,17 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	add_definitions(-wd4396)
 
 	SET(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG -D_ITERATOR_DEBUG_LEVEL=2")
-    SET(CMAKE_CXX_FLAGS_RELEASE "-D_RELEASE")	
-	
+	SET(CMAKE_CXX_FLAGS_RELEASE "-D_RELEASE -D_ITERATOR_DEBUG_LEVEL=0")
+
 	SET(Processor "x86")
 	SET(OperatingSystem "Windows")
 	SET(Compiler "MSVC")
 	
 	set(ENV_DIR ${Processor}/${OperatingSystem}/${Compiler})
 	
-	include_directories(${GE_Test01_SOURCE_DIR}/../External/${ENV_DIR}/include ${GE_Test01_SOURCE_DIR}/../GLUS/src ${GE_Test01_SOURCE_DIR}/../GraphicsEngine/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2013.3/include" "C:/Development/Libraries/cpp/boost_1_51" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
+	include_directories(${GE_Test01_SOURCE_DIR}/../External/${ENV_DIR}/include ${GE_Test01_SOURCE_DIR}/../GLUS/src ${GE_Test01_SOURCE_DIR}/../GraphicsEngine/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2014.1/include" "C:/Development/Libraries/cpp/boost_1_53_0" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
 	
-	link_directories(${GE_Test01_SOURCE_DIR}/../GLUS ${GE_Test01_SOURCE_DIR}/../GraphicsEngine ${GE_Test01_SOURCE_DIR}/../External/${ENV_DIR}/lib "C:/Development/Libraries/cpp/boost_1_51/lib" "C:/Development/Libraries/cpp/devil_1_7_8/lib" "C:/Program Files/Autodesk/FBX/Fbx Sdk/2013.3/lib/vs2010/x86")
+	link_directories(${GE_Test01_SOURCE_DIR}/../GLUS ${GE_Test01_SOURCE_DIR}/../GraphicsEngine ${GE_Test01_SOURCE_DIR}/../External/${ENV_DIR}/lib "C:/Development/Libraries/cpp/boost_1_53_0/lib32" "C:/Development/Libraries/cpp/devil_1_7_8/lib" "C:/Program Files/Autodesk/FBX/FBX SDK/2014.1/lib/vs2010/x86/")
 	
 ENDIF()
 
@@ -44,9 +44,7 @@ add_executable(GE_Test01 ${CPP_FILES} ${H_FILES})
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	# Windows
 	
-	target_link_libraries(GE_Test01 GLUS GraphicsEngine glfw3 glew32s opengl32 gdi32 user32 Advapi32 wininet DevIL ILU)
-	target_link_libraries(GE_Test01 debug fbxsdk-2013.3-mdd.lib)
-	target_link_libraries(GE_Test01 optimized fbxsdk-2013.3-md.lib)
+	target_link_libraries(GE_Test01 GLUS GraphicsEngine glfw3 glew32s opengl32 gdi32 user32 Advapi32 wininet DevIL ILU libfbxsdk-md.lib)
 			
 	message("Executable is deployed either to GE_Binaries/Release or GE_Binaries/Debug.")
 	message("Copy the executable to the GE_Binaries folder.")

@@ -101,7 +101,7 @@ bool ViewFrustum::isVisible(const BoundingSphere& boundingSphere) const
 
 int32_t ViewFrustum::getNumberFractions() const
 {
-	return static_cast<float>(fractions.size());
+	return static_cast<int32_t>(fractions.size());
 }
 
 const vector<Point4>& ViewFrustum::getFrustumPoints() const
