@@ -7,10 +7,6 @@
 
 #include "EventManager.h"
 
-using namespace std;
-
-using namespace boost;
-
 EventManager* EventManager::instance = nullptr;
 
 EventManager::EventManager() : eventMutex(), allEvents(), allEventReceivers()
@@ -19,7 +15,7 @@ EventManager::EventManager() : eventMutex(), allEvents(), allEventReceivers()
 
 EventManager::~EventManager()
 {
-	lock_guard<mutex> eventLock(eventMutex);
+	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
 	EventSP currentEvent;
 
@@ -52,12 +48,12 @@ void EventManager::terminate()
 
 void EventManager::processEvents()
 {
-	lock_guard<mutex> eventLock(eventMutex);
+	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
 	int32_t currentSize = allEvents.size();
 
 	EventSP currentEvent;
-	vector<EventReceiverSP>::const_iterator eventReceiver;
+	std::vector<EventReceiverSP>::const_iterator eventReceiver;
 	for (int32_t i = 0; i < currentSize; i++)
 	{
 		if (allEvents.take(currentEvent))
@@ -84,14 +80,14 @@ void EventManager::processEvents()
 
 void EventManager::addEventReceiver(const EventReceiverSP& receiver)
 {
-	lock_guard<mutex> eventLock(eventMutex);
+	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
 	allEventReceivers.push_back(receiver);
 }
 
 void EventManager::removeEventReceiver(const EventReceiverSP& receiver)
 {
-	lock_guard<mutex> eventLock(eventMutex);
+	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
 	auto element = find(allEventReceivers.begin(), allEventReceivers.end(), receiver);
 
@@ -109,9 +105,9 @@ void EventManager::sendEvent(const EventSP& event)
 	allEvents.add(event);
 }
 
-const vector<EventReceiverSP>& EventManager::getEventReceivers() const
+const std::vector<EventReceiverSP>& EventManager::getEventReceivers() const
 {
-	lock_guard<mutex> eventLock(eventMutex);
+	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
 	return allEventReceivers;
 }

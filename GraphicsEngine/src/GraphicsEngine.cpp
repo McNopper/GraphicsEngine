@@ -119,6 +119,7 @@ GLUSvoid terminateEngine(GLUSvoid)
 	Texture1DManager::terminate();
 	Texture1DArrayManager::terminate();
 	Texture2DManager::terminate();
+	Texture2DArrayManager::terminate();
 	Texture2DMultisampleManager::terminate();
 	TextureCubeMapManager::terminate();
 	ProgramManager::terminate();

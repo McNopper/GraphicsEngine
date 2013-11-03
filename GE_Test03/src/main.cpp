@@ -118,6 +118,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	//
 	// Shadow part
 	//
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
 	GeneralEntity::setCurrentValues(ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE, orthographicCameraShadowMap2D->getOrthographicCamera(), deltaTime, false);
 
@@ -158,6 +159,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	//
 	// Color rendering
 	//
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
 	ViewportSP defaultViewport = ViewportManager::getInstance()->getDefaultViewport();
 	defaultViewport->use();

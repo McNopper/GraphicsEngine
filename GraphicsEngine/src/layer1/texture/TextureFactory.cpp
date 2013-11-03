@@ -246,6 +246,16 @@ Texture2DSP TextureFactory::createTexture2D(GLint internalFormat, int32_t width,
 	return Texture2DSP(new Texture2D(internalFormat, width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
+Texture2DArraySP TextureFactory::createTexture2DArray(int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+{
+	return Texture2DArraySP(new Texture2DArray(gatherInternalFormat(format, type), width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+}
+
+Texture2DArraySP TextureFactory::createTexture2DArray(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+{
+	return Texture2DArraySP(new Texture2DArray(internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+}
+
 Texture2DMultisampleSP TextureFactory::createTexture2DMultisample(int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) const
 {
 	return Texture2DMultisampleSP(new Texture2DMultisample(samples, internalFormat, width, height, fixedsamplelocations));

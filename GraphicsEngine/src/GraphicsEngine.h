@@ -28,6 +28,7 @@
 #include "layer1/texture/Texture1DManager.h"
 #include "layer1/texture/Texture1DArrayManager.h"
 #include "layer1/texture/Texture2DManager.h"
+#include "layer1/texture/Texture2DArrayManager.h"
 #include "layer1/texture/Texture2DMultisampleManager.h"
 #include "layer1/texture/TextureCubeMapManager.h"
 #include "layer2/debug/DebugDraw.h"

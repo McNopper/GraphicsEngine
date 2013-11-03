@@ -2,6 +2,8 @@
 
 #define MAX_LIGHTS 8
 
+layout(triangles) in;
+
 layout(triangle_strip, max_vertices = 3) out;
 
 struct MaterialProperties
@@ -39,11 +41,11 @@ uniform	int u_numberLights;
 uniform	int u_shadowType[MAX_LIGHTS];
 uniform mat4 u_shadowMatrix[MAX_LIGHTS];
 
-in vec4 v_g_vertex[];
-in vec3 v_g_tangent[];
-in vec3 v_g_bitangent[];
-in vec3 v_g_normal[];
-in vec2 v_g_texCoord[];
+in vec4 v_g_vertex[3];
+in vec3 v_g_tangent[3];
+in vec3 v_g_bitangent[3];
+in vec3 v_g_normal[3];
+in vec2 v_g_texCoord[3];
 
 in ArrayData
 {

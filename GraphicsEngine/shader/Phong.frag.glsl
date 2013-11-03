@@ -93,14 +93,14 @@ void main(void)
 
 	if (u_hasDiffuseTexture != 0)
 	{
- 		diffuseTexture = texture2D(u_material.diffuseTexture, v_texCoord);
+ 		diffuseTexture = texture(u_material.diffuseTexture, v_texCoord);
  	}
 
 	vec4 specularTexture = vec4(1.0, 1.0, 1.0, 1.0);
 
 	if (u_hasSpecularTexture != 0)
 	{
- 		specularTexture = texture2D(u_material.specularTexture, v_texCoord);
+ 		specularTexture = texture(u_material.specularTexture, v_texCoord);
  	}
 
 	vec3 normal;
@@ -110,7 +110,7 @@ void main(void)
 	}
 	else
 	{
-		vec3 normalTextureSpace = normalize(texture2D(u_material.normalMapTexture, v_texCoord).xyz * 2.0 - 1.0);
+		vec3 normalTextureSpace = normalize(texture(u_material.normalMapTexture, v_texCoord).xyz * 2.0 - 1.0);
 		mat3 textureToWorldSpace = mat3(normalize(v_tangent), normalize(v_bitangent), normalize(v_normal));	
 		vec3 normalDX = textureToWorldSpace * normalTextureSpace;
 		if (u_convertDirectX != 0)
