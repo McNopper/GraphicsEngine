@@ -24,8 +24,6 @@ struct MaterialProperties
 	samplerCube dynamicCubeMapTexture;
 };
 
-#define MAX_LIGHTS 8
-
 #define NUMBER_FACES 6
 
 uniform mat4 u_cubeMapProjectionMatrix;
@@ -34,9 +32,6 @@ uniform mat4 u_cubeMapViewMatrix[NUMBER_FACES];
 uniform	MaterialProperties u_material;
 
 uniform	int u_numberLights;
-
-uniform	int u_shadowType[MAX_LIGHTS];
-uniform mat4 u_shadowMatrix[MAX_LIGHTS];
 
 uniform mat4 u_modelMatrix;
 
@@ -50,21 +45,11 @@ in vec3 v_g_bitangent[];
 in vec3 v_g_normal[];
 in vec2 v_g_texCoord[];
 
-in ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_inData[];
-
 out vec4 v_vertex;
 out vec3 v_tangent;
 out vec3 v_bitangent;
 out vec3 v_normal;
 out vec2 v_texCoord;
-
-out ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_outData;
 
 void main(void)
 {
@@ -146,22 +131,6 @@ void main(void)
 
 		v_vertex = u_modelMatrix * (gl_in[i].gl_Position + displacement);
 
-		#pragma optionNV(unroll all)
-		for (int k = 0; k < MAX_LIGHTS; k++)
-		{
-			if (k >= u_numberLights)
-			{
-				break;
-			}
-		
-			if (u_shadowType[k] < 0)
-			{
-				continue;
-			}
-		
-			v_outData.projCoord[k] = u_shadowMatrix[k] * v_vertex;
-		}
-	
 		gl_Position = faceMatrix * v_vertex;
 
 		EmitVertex();

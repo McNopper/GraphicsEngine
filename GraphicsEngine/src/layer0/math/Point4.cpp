@@ -66,6 +66,16 @@ Point4::~Point4()
 {
 }
 
+float& Point4::operator [](int32_t i)
+{
+	if (i == 3)
+	{
+		throw "Accessing w by operator[] not allowed";
+	}
+
+	return p[i];
+}
+
 bool Point4::operator ==(const Point4& other) const
 {
 	for (int32_t i = 0; i < 4; i++)

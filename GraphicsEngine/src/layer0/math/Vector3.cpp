@@ -43,6 +43,11 @@ Vector3::~Vector3()
 {
 }
 
+float& Vector3::operator [](int32_t i)
+{
+	return v[i];
+}
+
 Vector3 Vector3::operator -() const
 {
 	return Vector3(-v[0], -v[1], -v[2]);
@@ -100,7 +105,8 @@ Vector3& Vector3::operator -=(const Vector3& vector)
 {
 	glusVector3SubtractVector3f(v, v, vector.v);
 
-	return *this;}
+	return *this;
+}
 
 float Vector3::getX() const
 {

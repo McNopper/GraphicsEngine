@@ -100,15 +100,19 @@ void ProgramManagerProxy::setNoShadowByType(const string& programType)
 		currentProgram = walker->second;
 		currentProgram->use();
 
-		for (int32_t i = 0; i < 8; i++)
+		for (int32_t i = 0; i < 4; i++)
 		{
 			glActiveTexture(GL_TEXTURE5 + i);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 			glUniform1i(currentProgram->getUniformLocation(string(u_shadowType) + to_string(i) + "]"), -1);
 			glUniform1i(currentProgram->getUniformLocation(string(u_shadowTexture) + to_string(i) + "]"), 5 + i);
+			glUniform1f(currentProgram->getUniformLocation(string(u_shadowSections) + to_string(i) + "]"), 1.0f);
 
-			glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(i) + "]"), 1, GL_FALSE, Matrix4x4().getM());
+			for (int32_t k = 0; k < 3; k++)
+			{
+				glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string((i * 4 + k)) + "]"), 1, GL_FALSE, Matrix4x4().getM());
+			}
 		}
 
 		walker++;
@@ -128,12 +132,51 @@ void ProgramManagerProxy::setShadowByType(const string& programType, int32_t ind
 		currentProgram->use();
 
 		glActiveTexture(GL_TEXTURE5 + index);
-		glBindTexture(GL_TEXTURE_2D, shadowMap->getDepthTextureName(0));
+		glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMap->getDepthTextureName());
 
 		glUniform1i(currentProgram->getUniformLocation(string(u_shadowType) + to_string(index) + "]"), shadowType);
 		glUniform1i(currentProgram->getUniformLocation(string(u_shadowTexture) + to_string(index) + "]"), 5 + index);
+		glUniform1f(currentProgram->getUniformLocation(string(u_shadowSections) + to_string(index) + "]"), 1.0f);
 
-		glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(index) + "]"), 1, GL_FALSE, shadowMatrix.getM());
+		for (int32_t k = 0; k < 3; k++)
+		{
+			glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(index * 4 + k) + "]"), 1, GL_FALSE, shadowMatrix.getM());
+		}
+
+		walker++;
+	}
+}
+
+void ProgramManagerProxy::setCascadedShadowByType(const string& programType, int32_t index, const ShadowMap2DSP& shadowMap, const vector<Matrix4x4>& shadowMatrices, int32_t shadowType)
+{
+	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
+
+	multimap<string, ProgramSP>::const_iterator walker = allPrograms.find(programType);
+
+	ProgramSP currentProgram;
+	while (walker != allPrograms.end())
+	{
+		currentProgram = walker->second;
+		currentProgram->use();
+
+		glActiveTexture(GL_TEXTURE5 + index);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMap->getDepthTextureName());
+
+		glUniform1i(currentProgram->getUniformLocation(string(u_shadowType) + to_string(index) + "]"), shadowType);
+		glUniform1i(currentProgram->getUniformLocation(string(u_shadowTexture) + to_string(index) + "]"), 5 + index);
+		glUniform1f(currentProgram->getUniformLocation(string(u_shadowSections) + to_string(index) + "]"), static_cast<float>(shadowMatrices.size()));
+
+		for (int32_t k = 0; k < 3; k++)
+		{
+			if (k < static_cast<int32_t>(shadowMatrices.size()))
+			{
+				glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(index * 4 + k) + "]"), 1, GL_FALSE, shadowMatrices[k].getM());
+			}
+			else
+			{
+				glUniformMatrix4fv(currentProgram->getUniformLocation(string(u_shadowMatrix) + to_string(index * 4 + k) + "]"), 1, GL_FALSE, shadowMatrices[shadowMatrices.size()-1].getM());
+			}
+		}
 
 		walker++;
 	}

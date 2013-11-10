@@ -39,7 +39,7 @@ private:
 
 	std::vector<Point4> frustumPoints;
 
-	std::vector<float> fractions;
+	boost::int32_t sections;
 
 public:
 
@@ -51,13 +51,11 @@ public:
 
 	bool isVisible(const BoundingSphere& boundingSphere) const;
 
-	boost::int32_t getNumberFractions() const;
+	void setNumberSections(boost::int32_t sections);
+
+	boost::int32_t getNumberSections() const;
 
 	const std::vector<Point4>& getFrustumPoints() const;
-
-	const std::vector<float>& getFractions() const;
-
-	void setFractions(const std::vector<float>& fractions);
 
 };
 

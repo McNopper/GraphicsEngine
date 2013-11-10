@@ -8,6 +8,8 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include "../../UsedLibs.h"
+
 class Point4;
 
 class Vector3
@@ -29,6 +31,8 @@ public:
 	Vector3(const float other[3]);
 	Vector3(const Vector3 & other);
 	~Vector3();
+
+	float& operator [](boost::int32_t i);
 
 	Vector3 operator -() const;
 

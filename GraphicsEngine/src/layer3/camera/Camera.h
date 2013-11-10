@@ -53,6 +53,11 @@ protected:
 
 	float height;
 
+	/*
+	 * Stored as NDC.
+	 */
+	std::vector<float> frustumZs;
+
 	void updateViewFrustum();
 
 public:
@@ -105,6 +110,10 @@ public:
 	 * View Frustum is in world space.
 	 */
 	const ViewFrustum& getViewFrustum() const;
+
+	const std::vector<float>& getFrustumZs() const;
+
+	void setNumberSections(boost::int32_t sections);
 
 	float distanceToCamera(const BoundingSphere& boundingSphere) const;
 

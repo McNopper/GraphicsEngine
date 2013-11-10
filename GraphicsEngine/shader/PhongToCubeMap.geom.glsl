@@ -4,8 +4,6 @@ layout(triangles, invocations = 6) in;
 
 layout(triangle_strip, max_vertices = 3) out;
 
-#define MAX_LIGHTS 8
-
 #define NUMBER_FACES 6
 
 uniform mat4 u_cubeMapProjectionMatrix;
@@ -19,21 +17,11 @@ in vec3 v_g_bitangent[];
 in vec3 v_g_tangent[];
 in vec2 v_g_texCoord[];
 
-in ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_inData[];
-
 out vec4 v_vertex;
 out vec3 v_normal;
 out vec3 v_bitangent;
 out vec3 v_tangent;
 out vec2 v_texCoord;
-
-out ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_outData;
 
 void main(void)
 {
@@ -111,17 +99,6 @@ void main(void)
 		v_tangent = v_g_tangent[i];
 		v_texCoord = v_g_texCoord[i];
 		
-		#pragma optionNV(unroll all)
-		for (int k = 0; k < MAX_LIGHTS; k++)
-		{
-			if (k >= u_numberLights)
-			{
-				break;
-			}
-		
-			v_outData.projCoord[k] = v_inData[i].projCoord[k];
-		} 
-
 		gl_Position = finalPosition[i]; 
 		EmitVertex();
 	}

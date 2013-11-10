@@ -8,6 +8,8 @@
 #ifndef VARIABLES_H_
 #define VARIABLES_H_
 
+#define MAX_LIGHT_SECTIONS 3
+
 #define u_projectionMatrix "u_projectionMatrix"
 #define u_viewMatrix "u_viewMatrix"
 #define u_modelMatrix "u_modelMatrix"
@@ -113,7 +115,9 @@
 
 #define u_shadowType "u_shadowType["
 #define u_shadowTexture "u_shadowTexture["
+#define u_shadowSections "u_shadowSections["
 #define u_shadowMatrix "u_shadowMatrix["
+#define u_frustumZs "u_frustumZs"
 
 #define u_eta "u_eta"
 #define u_reflectanceNormalIncidence "u_reflectanceNormalIncidence"

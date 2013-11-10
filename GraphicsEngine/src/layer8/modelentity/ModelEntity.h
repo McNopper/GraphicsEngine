@@ -12,6 +12,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer4/shadow/OrthographicCameraCascadedShadowMap2D.h"
 #include "../../layer4/shadow/OrthographicCameraShadowMap2D.h"
 #include "../../layer5/environment/DynamicEnvironment.h"
 #include "../../layer5/node/InstanceNode.h"
@@ -82,9 +83,13 @@ public:
 
     boost::int32_t setLights(boost::int32_t lightNumber) const;
 
+    CameraSP getCamera(const std::string& name) const;
+
     bool setCamera(const std::string& name) const;
 
-    bool setOrthographicShadowCamera(const std::string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const;
+    bool setOrthographicCameraShadowMap(const std::string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const;
+
+    bool setOrthographicCameraCascadedShadowMap(const std::string& lightName, const CameraSP& camera, const OrthographicCameraCascadedShadowMap2DSP& orthographicCameraCascadedShadowMap2D, boost::int32_t section) const;
 
     //
 

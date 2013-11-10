@@ -8,6 +8,8 @@
 #ifndef POINT4_H_
 #define POINT4_H_
 
+#include "../../UsedLibs.h"
+
 class Line;
 class Plane;
 class Sphere;
@@ -30,6 +32,8 @@ public:
 	Point4(const float other[4]);
 	Point4(const Point4& other);
 	~Point4();
+
+	float& operator [](boost::int32_t i);
 
 	bool operator ==(const Point4& other) const;
 	bool operator !=(const Point4& other) const;

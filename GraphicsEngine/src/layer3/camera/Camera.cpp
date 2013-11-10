@@ -18,7 +18,7 @@ const float Camera::getDebugRadius()
 }
 
 Camera::Camera(const string& name) :
-	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(1.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(1.0f, 0.0f, 0.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix(), width(1.0f), height(1.0f)
+	name(name), dirty(true), eye(0.0f, 0.0f, 0.0f), center(1.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(1.0f, 0.0f, 0.0f), viewport(), zNear(0.1f), zFar(1000.0f), biasMatrix(), viewFrustum(), lastPosition(), lastRotation(), transitionMatrix(), width(1.0f), height(1.0f), frustumZs()
 {
 	// Needed to range values between 0 and 1
 	biasMatrix.identity();
@@ -27,7 +27,7 @@ Camera::Camera(const string& name) :
 }
 
 Camera::Camera(const Camera& other) :
-	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), direction(other.direction), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), width(other.width), height(other.height)
+	name(other.name), dirty(other.dirty), eye(other.eye), center(other.center), up(other.up), direction(other.direction), viewport(other.viewport), zNear(other.zNear), zFar(other.zFar), viewFrustum(other.viewFrustum), lastPosition(other.lastPosition), lastRotation(other.lastRotation), width(other.width), height(other.height), frustumZs(other.frustumZs)
 {
 	viewMatrix = other.viewMatrix;
 	projectionMatrix = other.projectionMatrix;
@@ -38,6 +38,7 @@ Camera::Camera(const Camera& other) :
 
 Camera::~Camera()
 {
+	frustumZs.clear();
 }
 
 const string& Camera::getName() const
@@ -48,6 +49,19 @@ const string& Camera::getName() const
 void Camera::updateViewFrustum()
 {
 	viewFrustum.transformToWorldSpace(*this);
+
+	frustumZs.clear();
+
+	float zNDC, zCurrent;
+	for (int32_t i = 0; i <= viewFrustum.getNumberSections(); i++)
+	{
+		zCurrent = -(zNear + (zFar - zNear) * static_cast<float>(i) / static_cast<float>(viewFrustum.getNumberSections()));
+
+		// see http://www.songho.ca/opengl/gl_projectionmatrix.html
+		zNDC = (-(zFar + zNear) / (zFar - zNear) * zCurrent + (-2.0f * zFar * zNear) / (zFar - zNear)) / -zCurrent;
+
+		frustumZs.push_back(glusClampf(zNDC, -1.0f, 1.0f));
+	}
 }
 
 void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
@@ -144,6 +158,16 @@ const ViewFrustum& Camera::getViewFrustum() const
 	return viewFrustum;
 }
 
+const vector<float>& Camera::getFrustumZs() const
+{
+	return frustumZs;
+}
+
+void Camera::setNumberSections(int32_t sections)
+{
+	viewFrustum.setNumberSections(sections);
+}
+
 float Camera::distanceToCamera(const BoundingSphere& boundingSphere) const
 {
 	return (boundingSphere.getCenter() - eye).length();
@@ -176,6 +200,10 @@ void Camera::setCameraProperties(const ProgramSP& program, const Point4& positio
 	glUniformMatrix4fv(program->getUniformLocation(u_viewMatrix), 1, GL_FALSE, viewMatrix.getM());
 
 	glUniform4fv(program->getUniformLocation(u_eyePosition), 1, eye.getP());
+
+	//
+
+	glUniform4fv(program->getUniformLocation(u_frustumZs), 1, &frustumZs[0]);
 }
 
 void Camera::debugDraw(const Point4& position, const Quaternion& rotation, bool useLocation) const

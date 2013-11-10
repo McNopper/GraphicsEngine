@@ -5,6 +5,8 @@
  *      Author: Norbert Nopper
  */
 
+
+#include "../../layer1/shader/ProgramManager.h"
 #include "../../layer1/event/EventManager.h"
 #include "../../layer2/debug/DebugDraw.h"
 #include "../../layer2/environment/SkyManager.h"
@@ -30,7 +32,7 @@ int32_t ModelEntity::getNumberJoints() const
 }
 
 ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ) :
-	GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1), dirty(true), ambientLightColor()
+		GeneralEntity(name, scaleX, scaleY, scaleZ), NodeOwner(), model(model), time(0.0f), animStackIndex(-1), animLayerIndex(-1), rootInstanceNode(), jointIndex(-1), dirty(true), ambientLightColor()
 {
 	float maxScale = glusMaxf(scaleX, scaleY);
 	maxScale = glusMaxf(maxScale, scaleZ);
@@ -56,7 +58,8 @@ ModelEntity::~ModelEntity()
 {
 }
 
-void ModelEntity::setAnimation(int32_t animStackIndex, int32_t animLayerIndex) {
+void ModelEntity::setAnimation(int32_t animStackIndex, int32_t animLayerIndex)
+{
 	this->animStackIndex = animStackIndex;
 	this->animLayerIndex = animLayerIndex;
 }
@@ -190,12 +193,12 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 
 			currentSurfaceMaterial = node.getMesh()->getSurfaceMaterialAt(subMeshIndex);
 
-			float currentEmissive[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentAmbient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentDiffuse[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentSpecular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentReflection[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-			float currentRefraction[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+			float currentEmissive[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			float currentAmbient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			float currentDiffuse[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			float currentSpecular[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			float currentReflection[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			float currentRefraction[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 			float currentShininess = 0.0f;
 			float currentTransparency = 0.0f;
 
@@ -216,7 +219,8 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 				// Animate values depending on time
 				const AnimationLayerSP& animLayer = allAnimStacks[animStackIndex]->getAnimationLayer(animLayerIndex);
 
-				for (enum AnimationLayer::eCHANNELS_RGBA i = AnimationLayer::R; i <= AnimationLayer::A; i = static_cast<enum AnimationLayer::eCHANNELS_RGBA>(i + 1))
+				for (enum AnimationLayer::eCHANNELS_RGBA i = AnimationLayer::R; i <= AnimationLayer::A;
+						i = static_cast<enum AnimationLayer::eCHANNELS_RGBA>(i + 1))
 				{
 					if (animLayer->hasEmissiveColorValue(i))
 					{
@@ -429,7 +433,7 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
 
-			glDrawElements(GL_TRIANGLES, currentSubMesh->getTriangleCount() * 3, GL_UNSIGNED_INT, reinterpret_cast<const GLvoid *>(currentSubMesh->getIndicesOffset()*sizeof(uint32_t)));
+			glDrawElements(GL_TRIANGLES, currentSubMesh->getTriangleCount() * 3, GL_UNSIGNED_INT, reinterpret_cast<const GLvoid *>(currentSubMesh->getIndicesOffset() * sizeof(uint32_t)));
 
 			if (finalTransparent)
 			{
@@ -494,7 +498,7 @@ int32_t ModelEntity::setLights(int32_t lightNumber) const
 
 	InstanceNodeSP instanceNode;
 
-	while(walker != allLights.end())
+	while (walker != allLights.end())
 	{
 		instanceNode = *walker;
 
@@ -507,13 +511,34 @@ int32_t ModelEntity::setLights(int32_t lightNumber) const
 	return lightNumber;
 }
 
+CameraSP ModelEntity::getCamera(const std::string& name) const
+{
+	auto walker = allCameras.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while (walker != allCameras.end())
+	{
+		instanceNode = *walker;
+
+		if (instanceNode->getNode()->getName().compare(name) == 0)
+		{
+			return instanceNode->getNode()->getCamera();
+		}
+
+		walker++;
+	}
+
+	return CameraSP();
+}
+
 bool ModelEntity::setCamera(const string& name) const
 {
 	auto walker = allCameras.begin();
 
 	InstanceNodeSP instanceNode;
 
-	while(walker != allCameras.end())
+	while (walker != allCameras.end())
 	{
 		instanceNode = *walker;
 
@@ -530,7 +555,7 @@ bool ModelEntity::setCamera(const string& name) const
 	return false;
 }
 
-bool ModelEntity::setOrthographicShadowCamera(const string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const
+bool ModelEntity::setOrthographicCameraShadowMap(const string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const
 {
 	Quaternion baseRotation(-90.0f, Vector3(1.0f, 0.0f, 0.0f));
 
@@ -540,7 +565,7 @@ bool ModelEntity::setOrthographicShadowCamera(const string& lightName, const Ort
 
 	InstanceNodeSP instanceNode;
 
-	while(walker != allLights.end())
+	while (walker != allLights.end())
 	{
 		instanceNode = *walker;
 
@@ -557,13 +582,42 @@ bool ModelEntity::setOrthographicShadowCamera(const string& lightName, const Ort
 	return false;
 }
 
+bool ModelEntity::setOrthographicCameraCascadedShadowMap(const string& lightName, const CameraSP& camera, const OrthographicCameraCascadedShadowMap2DSP& orthographicCameraCascadedShadowMap2D, int32_t section) const
+{
+	Quaternion baseRotation(-90.0f, Vector3(1.0f, 0.0f, 0.0f));
+
+	baseRotation *= Quaternion(90.0f, Vector3(0.0f, 1.0f, 0.0f));
+
+	auto walker = allLights.begin();
+
+	InstanceNodeSP instanceNode;
+
+	while (walker != allLights.end())
+	{
+		instanceNode = *walker;
+
+		if (instanceNode->getNode()->getName().compare(lightName) == 0)
+		{
+			orthographicCameraCascadedShadowMap2D->getOrthographicCamera(section)->adjustToFrustum(camera->getViewFrustum(), section, instanceNode->getPosition(), instanceNode->getRotation() * baseRotation);
+
+			ProgramManagerProxy::setCameraByType(GeneralEntity::currentProgramType, orthographicCameraCascadedShadowMap2D->getOrthographicCamera(section), Point4(), Quaternion(), false);
+
+			return true;
+		}
+
+		walker++;
+	}
+
+	return false;
+}
+
 void ModelEntity::passCamerasToManager() const
 {
 	auto walker = allCameras.begin();
 
 	InstanceNodeSP instanceNode;
 
-	while(walker != allCameras.end())
+	while (walker != allCameras.end())
 	{
 		instanceNode = *walker;
 
@@ -579,7 +633,7 @@ void ModelEntity::passLightsToManager() const
 
 	InstanceNodeSP instanceNode;
 
-	while(walker != allLights.end())
+	while (walker != allLights.end())
 	{
 		instanceNode = *walker;
 

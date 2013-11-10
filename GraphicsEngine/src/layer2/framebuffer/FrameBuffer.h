@@ -18,6 +18,8 @@ class FrameBuffer : public FrameBufferBase
 
 private:
 
+	boost::int32_t layer;
+
 	TextureSP color0Texture;
 	RenderBufferSP color0RenderBuffer;
 
@@ -48,6 +50,7 @@ public:
 	virtual void setColorAttachment1(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthAttachment(const TextureSP& texture);
+	virtual void setDepthAttachment(const TextureSP& texture, boost::int32_t layer);
 	virtual void setDepthAttachment(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthStencilAttachment(const TextureSP& texture);

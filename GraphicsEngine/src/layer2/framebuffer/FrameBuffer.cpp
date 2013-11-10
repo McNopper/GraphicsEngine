@@ -10,7 +10,7 @@
 using namespace boost;
 
 FrameBuffer::FrameBuffer(int32_t width, int32_t height) : FrameBufferBase(width, height),
-	color0Texture(), color0RenderBuffer(), color1Texture(), color1RenderBuffer(), depthTexture(), depthRenderBuffer(), depthStencilTexture(), depthStencilRenderBuffer()
+	layer(-1), color0Texture(), color0RenderBuffer(), color1Texture(), color1RenderBuffer(), depthTexture(), depthRenderBuffer(), depthStencilTexture(), depthStencilRenderBuffer()
 {
 	init();
 }
@@ -72,7 +72,14 @@ bool FrameBuffer::init()
 	{
 		depthTexture->setWidthHeight(width, height);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTarget(), depthTexture->getTextureName(), 0);
+		if (layer == -1)
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTarget(), depthTexture->getTextureName(), 0);
+		}
+		else
+		{
+			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->getTextureName(), 0, layer);
+		}
 	}
 	else if (depthRenderBuffer.get())
 	{
@@ -202,6 +209,18 @@ void FrameBuffer::setColorAttachment1(const RenderBufferSP& renderBuffer)
 
 void FrameBuffer::setDepthAttachment(const TextureSP& texture)
 {
+	this->layer = -1;
+	depthTexture = texture;
+	depthRenderBuffer.reset();
+	depthStencilTexture.reset();
+	depthStencilRenderBuffer.reset();
+
+	init();
+}
+
+void FrameBuffer::setDepthAttachment(const TextureSP& texture, int32_t layer)
+{
+	this->layer = layer;
 	depthTexture = texture;
 	depthRenderBuffer.reset();
 	depthStencilTexture.reset();
@@ -212,6 +231,7 @@ void FrameBuffer::setDepthAttachment(const TextureSP& texture)
 
 void FrameBuffer::setDepthAttachment(const RenderBufferSP& renderBuffer)
 {
+	this->layer = -1;
 	depthTexture.reset();
 	depthRenderBuffer = renderBuffer;
 	depthStencilTexture.reset();

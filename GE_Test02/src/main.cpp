@@ -82,7 +82,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Position the user
 
-	User::defaultUser.setPosition(Point4(0.0f, 0.0f, 10.0f));
+	User::defaultUser.setPosition(Point4(0.0f, 1.0f, 10.0f));
 
 	// Basic OpenGL settings
 
@@ -124,7 +124,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 
 	// Camera
 
-	modelEntity->setOrthographicShadowCamera("Lamp", orthographicCameraShadowMap2D);
+	modelEntity->setOrthographicCameraShadowMap("Lamp", orthographicCameraShadowMap2D);
 
 	orthographicCameraShadowMap2D->updateShadowMatrix();
 

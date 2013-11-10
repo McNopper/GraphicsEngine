@@ -5,7 +5,7 @@
  *      Author: nopper
  */
 
-#include "../../layer1/texture/Texture2DManager.h"
+#include "../../layer1/texture/Texture2DArrayManager.h"
 #include "../../layer2/framebuffer/FrameBuffer2DManager.h"
 
 #include "ShadowMap2D.h"
@@ -15,7 +15,7 @@ using namespace boost;
 using namespace std;
 
 ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
-	size(size)
+		size(size)
 {
 	char buffer[256];
 	sprintf(buffer, "%p", this);
@@ -26,23 +26,30 @@ ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
 		return;
 	}
 
+	depthTexture2D = Texture2DArrayManager::getInstance()->createTexture("ShadowMap" + uniqueID, GL_DEPTH_COMPONENT, size, size, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+
 	for (int32_t i = 0; i < number; i++)
 	{
-		Texture2DSP depthTexture2D = Texture2DManager::getInstance()->createTexture("ShadowMap" + uniqueID + "-" + to_string(i), GL_DEPTH_COMPONENT, size, size, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, false, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+		depthTexture2D->addPixelData(PixelDataSP(new PixelData(size, size, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0, 0)));
+	}
 
-		glBindTexture(GL_TEXTURE_2D, depthTexture2D->getTextureName());
+	depthTexture2D->init();
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, depthTexture2D->getTextureName());
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
 
+	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+
+	for (int32_t i = 0; i < number; i++)
+	{
 		FrameBuffer2DSP depthFramebuffer2D = FrameBuffer2DManager::getInstance()->createFrameBuffer("ShadowMap" + uniqueID + "-" + to_string(i), size, size, false);
 
 		depthFramebuffer2D->setDrawBufferMode(GL_NONE);
 		depthFramebuffer2D->setReadBufferMode(GL_NONE);
 
-		depthFramebuffer2D->setDepthAttachment(depthTexture2D);
+		depthFramebuffer2D->setDepthAttachment(depthTexture2D, i);
 
 		depthFramebuffer2D->init();
 
@@ -54,6 +61,7 @@ ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
 
 ShadowMap2D::~ShadowMap2D()
 {
+	depthTexture2D.reset();
 	allShadowMaps.clear();
 }
 
@@ -69,14 +77,9 @@ bool ShadowMap2D::use(bool enable, int32_t element) const
 	return true;
 }
 
-GLuint ShadowMap2D::getDepthTextureName(int32_t element) const
+GLuint ShadowMap2D::getDepthTextureName() const
 {
-	if (element < 0 || element >= static_cast<int32_t>(allShadowMaps.size()))
-	{
-		return 0;
-	}
-
-	return allShadowMaps[element]->getDepthTexture()->getTextureName();
+	return depthTexture2D->getTextureName();
 }
 
 int32_t ShadowMap2D::getSize() const

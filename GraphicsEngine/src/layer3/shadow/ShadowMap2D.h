@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer1/texture/Texture2DArray.h"
 #include "../../layer2/framebuffer/FrameBuffer2D.h"
 
 class ShadowMap2D
@@ -18,6 +19,8 @@ class ShadowMap2D
 private:
 
 	boost::int32_t size;
+
+	Texture2DArraySP depthTexture2D;
 
 	std::vector<FrameBuffer2DSP> allShadowMaps;
 
@@ -29,7 +32,7 @@ public:
 
 	bool use(bool enable, boost::int32_t element) const;
 
-	GLuint getDepthTextureName(boost::int32_t element) const;
+	GLuint getDepthTextureName() const;
 
 	boost::int32_t getSize() const;
 

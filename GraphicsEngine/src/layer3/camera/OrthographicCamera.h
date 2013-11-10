@@ -31,6 +31,8 @@ public:
 
 	void orthographic(float width, float height, float zNear, float zFar);
 
+	void adjustToFrustum(const ViewFrustum& viewFrustum, boost::int32_t section, const Point4& lightPosition, const Quaternion& lightRotation);
+
 };
 
 typedef boost::shared_ptr<OrthographicCamera> OrthographicCameraSP;

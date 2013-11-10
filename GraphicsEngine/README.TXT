@@ -3,7 +3,7 @@ OpenGL Graphics Engine:
 
 How to build the engine / examples:
 
-1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux or the Windows SDK for Windows.
+1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux, the Windows SDK for Windows or the command line tools from Xcode for Mac OS X
 2. Extract this ZIP file and set the workspace-cpp folder as your Eclipse workspace.
 3. Import each folder as a separate, existing project.
 4. Set the build configurations in Eclipse to your operating system.
@@ -22,7 +22,7 @@ If you get build errors:
 Libraries/SDKs used:
 
 - Autodesk FBX SDK 2014.1 http://usa.autodesk.com/fbx/
-- Boost 1.53.0 http://www.boost.org/ http://boost.teeks99.com/
+- Boost 1.53.0 http://www.boost.org/ http://boost.teeks99.com/ http://www.macports.org/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.9.0 http://glew.sourceforge.net/
 - GLFW 3.0.3 http://www.glfw.org/
@@ -56,6 +56,8 @@ Features:
 - Post processing with MSAA, gamma correction, tone mapping (HDR), blur, bloom and depth of field (DOF)
 - Render filter, that only transparent, opaque or all nodes should be rendered
 - Animated paths (line, circle) for lights, cameras and entities
+- Shadow and cascaded shadow mapping
+- Ground rendering with displacement mapping
 
 Build configuration naming:
 
@@ -70,10 +72,12 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-19.10.2013 Norbert Nopper (norbert@nopper.tv)
+10.11.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Added shadow and cascaded shadow mapping
+- Removed FBX python script for blender, as now integrated in Blender 2.69
 - Added latest GLFW (3.0.3)
 - Added latest GLFW (2.7.9)
 - Using latest FBX SDK and Boost libraries

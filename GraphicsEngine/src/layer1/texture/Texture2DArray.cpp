@@ -50,7 +50,10 @@ bool Texture2DArray::init()
 	int32_t index = 0;
 	while (walker != allPixelData.end())
 	{
-		glTexSubImage3D(target, 0, 0, 0, index, (*walker)->getWidth(), (*walker)->getHeight(), 1, format, type, (*walker)->getPixels());
+		if ((*walker)->getPixels())
+		{
+			glTexSubImage3D(target, 0, 0, 0, index, (*walker)->getWidth(), (*walker)->getHeight(), 1, format, type, (*walker)->getPixels());
+		}
 
 		walker++;
 		index++;

@@ -1,7 +1,5 @@
 #version 410 core
 
-#define MAX_LIGHTS 8
-
 #define MAX_SKIN_INDICES 8
 #define MAX_MATRICES 64
 
@@ -18,9 +16,6 @@ uniform mat3 u_jointNormalMatrix[MAX_MATRICES];
 uniform int u_hasSkinning;
 uniform	int u_hasDiffuseTexture;
 uniform	int u_hasNormalMapTexture;
-
-uniform	int u_shadowType[MAX_LIGHTS];
-uniform mat4 u_shadowMatrix[MAX_LIGHTS];
 
 uniform	int u_numberLights;
 
@@ -41,11 +36,6 @@ out vec3 v_normal;
 out vec3 v_bitangent;
 out vec3 v_tangent;
 out vec2 v_texCoord;
-
-out ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_outData;
 
 void main(void)
 {
@@ -127,22 +117,6 @@ void main(void)
 	{
 		v_texCoord = a_texCoord;
 	}
-
-	#pragma optionNV(unroll all)
-	for (int i = 0; i < MAX_LIGHTS; i++)
-	{
-		if (i >= u_numberLights)
-		{
-			break;
-		}
-		
-		if (u_shadowType[i] < 0)
-		{
-			continue;
-		}
 	
-		v_outData.projCoord[i] = u_shadowMatrix[i] * v_vertex;
-	}
-
-	gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;
+	gl_Position = u_projectionMatrix * u_viewMatrix * v_vertex;	
 }

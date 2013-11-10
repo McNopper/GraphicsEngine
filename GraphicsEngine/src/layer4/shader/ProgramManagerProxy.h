@@ -37,6 +37,8 @@ public:
 
 	static void setShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, const Matrix4x4& shadowMatrix, boost::int32_t shadowType);
 
+	static void setCascadedShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, const std::vector<Matrix4x4>& shadowMatrices, boost::int32_t shadowType);
+
 };
 
 #endif /* PROGRAMMANAGERPROXY_H_ */

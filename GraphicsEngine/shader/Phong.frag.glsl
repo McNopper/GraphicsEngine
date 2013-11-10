@@ -1,6 +1,7 @@
 #version 410 core
 
-#define MAX_LIGHTS 8
+#define MAX_LIGHT_SECTIONS 3
+#define MAX_LIGHTS 4
 
 #define ALPHA_FACTOR 2.0
 
@@ -44,8 +45,10 @@ struct MaterialProperties
 	samplerCube dynamicCubeMapTexture;
 };
 
-uniform	vec4 u_ambientLightColor;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
 
+uniform	vec4 u_ambientLightColor;
 
 uniform	LightProperties u_light[MAX_LIGHTS];
 
@@ -71,18 +74,18 @@ uniform vec4 u_eyePosition;
 uniform samplerCube u_cubemap;
 
 uniform	int u_shadowType[MAX_LIGHTS];
-uniform sampler2DShadow u_shadowTexture[MAX_LIGHTS];
+uniform mat4 u_shadowMatrix[MAX_LIGHTS * MAX_LIGHT_SECTIONS];
+uniform sampler2DArrayShadow u_shadowTexture[MAX_LIGHTS];
+uniform float u_shadowSections[MAX_LIGHTS];
+// vec4 because of MAX_LIGHT_SECTIONS = 3 
+uniform vec4 u_frustumZs;
 
 in vec4 v_vertex;
+in vec4 v_proj_vertex;
 in vec3 v_normal;
 in vec3 v_bitangent;
 in vec3 v_tangent;
 in vec2 v_texCoord;
-
-in ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_inData;
 
 layout(location = 0, index = 0) out vec4 fragColor;
 layout(location = 1, index = 0) out vec4 brightColor;
@@ -188,10 +191,44 @@ void main(void)
 		{
 			if (u_shadowType[indexLight] == 0)
 			{
-				if (textureProj(u_shadowTexture[indexLight], v_inData.projCoord[indexLight]) < 1.0)
+				int section = 0;
+				
+				if (u_shadowSections[indexLight] > 1.0)
 				{
-					diffuseIntensity = 0.0;
-					specularIntensity = 0.0;
+					// TODO Optimize by moving to vertex shader.
+					vec4 projVertex = u_projectionMatrix * u_viewMatrix * v_vertex;
+					projVertex /= projVertex.w; 
+					 					
+					if (projVertex.z >= u_frustumZs.x && projVertex.z <= u_frustumZs.y)
+					{
+						section = 0;
+					}
+					else if (u_shadowSections[indexLight] >= 2.0 && projVertex.z >= u_frustumZs.y && projVertex.z <= u_frustumZs.z)
+					{
+						section = 1;
+					}
+					else if (u_shadowSections[indexLight] >= 3.0 && projVertex.z >= u_frustumZs.z && projVertex.z <= u_frustumZs.w)
+					{
+						section = 2;
+					}
+					else
+					{
+						section = -1;
+					}
+				}
+				
+				if (section >= 0)
+				{
+					vec4 lookup = u_shadowMatrix[indexLight * MAX_LIGHT_SECTIONS + section] * v_vertex;
+					lookup /= lookup.w;	// No textureProj used, so do it manually. 
+					lookup.w = lookup.z;	// Compared value has to be in w.
+					lookup.z = floor(float(section)); // z component is layer.
+															
+					if (texture(u_shadowTexture[indexLight], lookup) < 1.0)
+					{
+						diffuseIntensity = 0.0;
+						specularIntensity = 0.0;
+					}
 				}
 			}
 		}			

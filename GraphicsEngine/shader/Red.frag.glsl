@@ -1,6 +1,7 @@
 #version 410 core
 
-#define MAX_LIGHTS 8
+#define MAX_LIGHT_SECTIONS 3
+#define MAX_LIGHTS 4
 
 #define ALPHA_FACTOR 2.0
 
@@ -69,18 +70,16 @@ uniform vec4 u_eyePosition;
 uniform samplerCube u_cubemap;
 
 uniform	int u_shadowType[MAX_LIGHTS];
-uniform sampler2DShadow u_shadow[MAX_LIGHTS];
+uniform mat4 u_shadowMatrix[MAX_LIGHTS * MAX_LIGHT_SECTIONS];
+uniform sampler2DArrayShadow u_shadowTexture[MAX_LIGHTS];
+uniform float u_shadowSections[MAX_LIGHTS];
+uniform vec4 u_frustumZs;
 
 in vec4 v_vertex;
 in vec3 v_normal;
 in vec3 v_bitangent;
 in vec3 v_tangent;
 in vec2 v_texCoord;
-
-in ArrayData
-{
-	vec4 projCoord[MAX_LIGHTS];
-} v_inData;
 
 layout(location = 0, index = 0) out vec4 fragColor;
 layout(location = 1, index = 0) out vec4 brightColor;

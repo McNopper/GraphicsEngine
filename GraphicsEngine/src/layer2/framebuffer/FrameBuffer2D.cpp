@@ -43,6 +43,11 @@ void FrameBuffer2D::setDepthAttachment(const TextureSP& texture)
 	FrameBuffer::setDepthAttachment(texture);
 }
 
+void FrameBuffer2D::setDepthAttachment(const TextureSP& texture, int32_t layer)
+{
+	FrameBuffer::setDepthAttachment(texture, layer);
+}
+
 void FrameBuffer2D::setDepthAttachment(const RenderBufferSP& renderBuffer)
 {
 	FrameBuffer::setDepthAttachment(renderBuffer);
