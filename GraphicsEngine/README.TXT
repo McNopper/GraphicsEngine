@@ -21,10 +21,10 @@ If you get build errors:
 
 Libraries/SDKs used:
 
-- Autodesk FBX SDK 2014.1 http://usa.autodesk.com/fbx/
-- Boost 1.53.0 http://www.boost.org/ http://boost.teeks99.com/ http://www.macports.org/
+- Autodesk FBX SDK 2014.2 http://usa.autodesk.com/fbx/
+- Boost 1.55.0 http://www.boost.org/ http://boost.teeks99.com/ http://www.macports.org/
 - DevIL 1.7.8 http://openil.sourceforge.net/
-- GLEW 1.9.0 http://glew.sourceforge.net/
+- GLEW 1.10.0 http://glew.sourceforge.net/
 - GLFW 3.0.3 http://www.glfw.org/
 
 Please note: On Ubuntu 12.04, just use the libraries provided with the OS, even if they are older versions.
@@ -63,8 +63,8 @@ Build configuration naming:
 
 [CPU]_[GPU]_[OS]_[OpenGL]_[Compiler]_[Configuration]
 
-CPU:						ARMv6, x64, x86
-GPU (Optional):				VC4
+CPU:						ARMv6, ARMv7, x64, x86
+GPU/Emulator (Optional):	AMD, ANGLE, Mali, PowerVR, VC4, Vivante 
 OS: 						Darwin, Linux, Windows
 OpenGL (Optional):			GLES2, GLES3
 Compiler:					GCC, MinGW, MSVC
@@ -72,10 +72,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-10.11.2013 Norbert Nopper (norbert@nopper.tv)
+10.12.2013 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Updated to latest Boost (1.55.0) and FBX SDK (2014.2)
 - Added shadow and cascaded shadow mapping
 - Removed FBX python script for blender, as now integrated in Blender 2.69
 - Added latest GLFW (3.0.3)

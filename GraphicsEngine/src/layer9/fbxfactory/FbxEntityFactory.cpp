@@ -797,7 +797,7 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 
 		//
 
-		node->GetScene()->GetEvaluator()->SetContext(animStack);
+		manager->GetAnimationEvaluator()->SetContext(animStack);
 
 		float currentStartTime = static_cast<float>(animStack->ReferenceStart.Get().GetSecondDouble());
 		float currentStopTime = static_cast<float>(animStack->ReferenceStop.Get().GetSecondDouble());
