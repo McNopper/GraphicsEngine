@@ -25,8 +25,10 @@ CubicInterpolator::~CubicInterpolator()
 {
 }
 
-float CubicInterpolator::interpolate(const map<float, float>& table,
-		float time) const
+/**
+ * see http://en.wikipedia.org/wiki/Cubic_Hermite_spline
+ */
+float CubicInterpolator::interpolate(const map<float, float>& table, float time) const
 {
 	if (table.size() < 4)
 	{
@@ -87,15 +89,15 @@ float CubicInterpolator::interpolate(const map<float, float>& table,
 
 	float p0 = startValue;
 	float p1 = stopValue;
-	float m0 = (stopValue - startValue) / (2.0f * stopTime - startTime);
+	float m0 = (stopValue - startValue) / (stopTime - startTime);
 	if (startTime - prevStartTime != 0.0f)
 	{
-		m0 += (startValue - prevStartValue) / (2.0f * startTime - prevStartTime);
+		m0 = m0 / 2.0f + (startValue - prevStartValue) / (2.0f * (startTime - prevStartTime));
 	}
-	float m1 = (stopValue - startValue) / (2.0f * stopTime - startTime);
+	float m1 = (stopValue - startValue) / (stopTime - startTime);
 	if (postStopTime - stopTime != 0.0f)
 	{
-		m1 += (postStopValue - stopValue) / (2.0f * postStopTime - stopTime);
+		m1 = m1 / 2.0f + (postStopValue - stopValue) / (2.0f * (postStopTime - stopTime));
 	}
 
 	return h00 * p0 + h10 * delta * m0 + h01 * p1 + h11 * delta * m1;
