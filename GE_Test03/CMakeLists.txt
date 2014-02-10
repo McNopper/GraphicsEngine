@@ -25,9 +25,9 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	
 	set(ENV_DIR ${Processor}/${OperatingSystem}/${Compiler})
 	
-	include_directories(${GE_Test03_SOURCE_DIR}/../External/${ENV_DIR}/include ${GE_Test03_SOURCE_DIR}/../GLUS/src ${GE_Test03_SOURCE_DIR}/../GraphicsEngine/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2014.2/include" "C:/Development/Libraries/cpp/boost_1_55_0" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
+	include_directories(${GE_Test03_SOURCE_DIR}/../External/${ENV_DIR}/include ${GE_Test03_SOURCE_DIR}/../GLUS/src ${GE_Test03_SOURCE_DIR}/../GraphicsEngine/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2014.2.1/include" "C:/Development/Libraries/cpp/boost_1_55_0" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
 	
-	link_directories(${GE_Test03_SOURCE_DIR}/../GLUS ${GE_Test03_SOURCE_DIR}/../GraphicsEngine ${GE_Test03_SOURCE_DIR}/../External/${ENV_DIR}/lib "C:/Development/Libraries/cpp/boost_1_55_0/lib32-msvc-10.0" "C:/Development/Libraries/cpp/devil_1_7_8/lib" "C:/Program Files/Autodesk/FBX/FBX SDK/2014.2/lib/vs2010/x86/")
+	link_directories(${GE_Test03_SOURCE_DIR}/../GLUS ${GE_Test03_SOURCE_DIR}/../GraphicsEngine ${GE_Test03_SOURCE_DIR}/../External/${ENV_DIR}/lib "C:/Development/Libraries/cpp/boost_1_55_0/lib32-msvc-10.0" "C:/Development/Libraries/cpp/devil_1_7_8/lib" "C:/Program Files/Autodesk/FBX/FBX SDK/2014.2.1/lib/vs2010/x86/")
 	
 ENDIF()
 
