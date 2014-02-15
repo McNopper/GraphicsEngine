@@ -41,10 +41,10 @@ FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& en
 
 	TextureFactory textureFactory;
 
-	TextureCubeMapSP color = textureFactory.createTextureCubeMap(length, length, GL_RGBA, GL_UNSIGNED_BYTE);
+	TextureCubeMapSP color = textureFactory.createTextureCubeMap("DynamicEnvironmentColor" + uniqueID, length, length, GL_RGBA, GL_UNSIGNED_BYTE);
 	result->setCubeMapAttachment(color);
 
-	TextureCubeMapSP depth = textureFactory.createTextureCubeMap(length, length, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
+	TextureCubeMapSP depth = textureFactory.createTextureCubeMap("DynamicEnvironmentDepth" + uniqueID, length, length, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
 	result->setDepthAttachment(depth);
 
 	dynamicEnvironment = DynamicEnvironmentSP(new DynamicEnvironment(entity->getBoundingSphere().getCenter(), result));

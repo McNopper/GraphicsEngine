@@ -36,7 +36,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Sky sphere
 
-	SkySP sky = SkySP(new SkySphere(100.0f, 100.0f, 100.0f, "SwedishRoyalCastle_posx.jpg", "SwedishRoyalCastle_negx.jpg", "SwedishRoyalCastle_posy.jpg", "SwedishRoyalCastle_negy.jpg", "SwedishRoyalCastle_posz.jpg", "SwedishRoyalCastle_negz.jpg"));
+	SkySP sky = SkySP(new SkySphere(100.0f, 100.0f, 100.0f, "SwedishRoyalCastle", "SwedishRoyalCastle_posx.jpg", "SwedishRoyalCastle_negx.jpg", "SwedishRoyalCastle_posy.jpg", "SwedishRoyalCastle_negy.jpg", "SwedishRoyalCastle_posz.jpg", "SwedishRoyalCastle_negz.jpg"));
 	SkyManager::getInstance()->setSky("SwedishRoyalCastle", sky);
 
 	SkyManager::getInstance()->setActiveSky("SwedishRoyalCastle");

@@ -63,7 +63,7 @@ Texture2DSP Texture2DManager::createTexture(const string& filename, bool mipMap,
 
 	if (walker == allTextures.end())
 	{
-		allTextures[filename] = textureFactory.createTexture2D(filename, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[filename] = textureFactory.loadTexture2D(filename, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[filename];
 	}
@@ -79,7 +79,7 @@ Texture2DSP Texture2DManager::createTexture(const string& key, int32_t width, in
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture2D(width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[key] = textureFactory.createTexture2D(key, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}
@@ -95,7 +95,7 @@ Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFor
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture2D(internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[key] = textureFactory.createTexture2D(key, internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}

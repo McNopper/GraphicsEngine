@@ -15,6 +15,8 @@ class Texture
 
 protected:
 
+	std::string identifier;
+
 	GLenum target;
 
 	GLint internalFormat;
@@ -27,11 +29,13 @@ protected:
 	virtual void changingSize() = 0;
 
 public:
-	Texture(GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height);
+	Texture(const std::string& identifier, GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height);
 	virtual ~Texture();
 
 	virtual bool init() = 0;
 	void destroy();
+
+	const std::string& getIdentifier() const;
 
 	GLenum getTarget() const;
 

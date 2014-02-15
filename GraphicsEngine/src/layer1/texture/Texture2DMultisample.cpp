@@ -9,8 +9,10 @@
 
 using namespace boost;
 
-Texture2DMultisample::Texture2DMultisample(int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) :
-		Texture(GL_TEXTURE_2D_MULTISAMPLE, internalFormat, width, height), samples(samples), fixedsamplelocations(fixedsamplelocations)
+using namespace std;
+
+Texture2DMultisample::Texture2DMultisample(const string& identifier, int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) :
+		Texture(identifier, GL_TEXTURE_2D_MULTISAMPLE, internalFormat, width, height), samples(samples), fixedsamplelocations(fixedsamplelocations)
 {
 	init();
 }

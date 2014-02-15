@@ -49,7 +49,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Sky sphere
 
-	SkySP sky = SkySP(new SkySphere(100.0f, 100.0f, 100.0f, "hills_positive_x.png", "hills_negative_x.png", "hills_positive_y.png", "hills_negative_y.png", "hills_positive_z.png", "hills_negative_z.png"));
+	SkySP sky = SkySP(new SkySphere(100.0f, 100.0f, 100.0f, "hills", "hills_positive_x.png", "hills_negative_x.png", "hills_positive_y.png", "hills_negative_y.png", "hills_positive_z.png", "hills_negative_z.png"));
 	SkyManager::getInstance()->setSky("Hills", sky);
 
 	sky = SkySP(new SkySphere(100.0f, 100.0f, 100.0f, "LobbyCube.dds"));

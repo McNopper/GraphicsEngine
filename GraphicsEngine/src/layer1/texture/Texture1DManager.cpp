@@ -63,7 +63,7 @@ Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GL
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1D(width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[key] = textureFactory.createTexture1D(key, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}
@@ -79,7 +79,7 @@ Texture1DSP Texture1DManager::createTexture(const string& key, GLint internalFor
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1D(internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[key] = textureFactory.createTexture1D(key, internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[key];
 	}

@@ -63,7 +63,7 @@ Texture1DArraySP Texture1DArrayManager::createTexture(const string& key, int32_t
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1DArray(width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture1DArray(key, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
 
 		return allTextures[key];
 	}
@@ -79,7 +79,7 @@ Texture1DArraySP Texture1DArrayManager::createTexture(const string& key, GLint i
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture1DArray(internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
+		allTextures[key] = textureFactory.createTexture1DArray(key, internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
 
 		return allTextures[key];
 	}

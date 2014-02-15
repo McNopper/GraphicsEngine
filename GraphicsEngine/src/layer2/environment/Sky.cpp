@@ -13,7 +13,7 @@
 
 using namespace std;
 
-Sky::Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ) : vboVertices(0), vboIndices(0), writeBrightColor(false), brightColorLimit(1.0f)
+Sky::Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ) : vboVertices(0), vboIndices(0), writeBrightColor(false), brightColorLimit(1.0f)
 {
 	ProgramFactory programFactory;
 	program = programFactory.createSkyProgram();
@@ -40,7 +40,7 @@ Sky::Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const 
 
 	//
 
-	skyTexture = TextureCubeMapManager::getInstance()->createTexture(posX, negX, posY, negY, posZ, negZ);
+	skyTexture = TextureCubeMapManager::getInstance()->createTexture(identifier, posX, negX, posY, negY, posZ, negZ);
 }
 
 Sky::Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const string& filename) : vboVertices(0), vboIndices(0), writeBrightColor(false), brightColorLimit(1.0f)

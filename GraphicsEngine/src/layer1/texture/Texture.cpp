@@ -9,8 +9,10 @@
 
 using namespace boost;
 
-Texture::Texture(GLenum target, GLint internalFormat, int32_t width, int32_t height) :
-		target(target), internalFormat(internalFormat), width(width), height(height), textureName(0)
+using namespace std;
+
+Texture::Texture(const string& identifier, GLenum target, GLint internalFormat, int32_t width, int32_t height) :
+		identifier(identifier), target(target), internalFormat(internalFormat), width(width), height(height), textureName(0)
 {
 
 }
@@ -83,6 +85,11 @@ void Texture::setWidthHeight(int32_t width, int32_t height)
 
 		init();
 	}
+}
+
+const string& Texture::getIdentifier() const
+{
+	return identifier;
 }
 
 GLenum Texture::getTarget() const

@@ -9,8 +9,10 @@
 
 using namespace boost;
 
-Texture1DArray::Texture1DArray(GLint internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
-	TextureStandard(GL_TEXTURE_1D_ARRAY, internalFormat, width, 1, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic)
+using namespace std;
+
+Texture1DArray::Texture1DArray(const string& identifier, GLint internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
+	TextureStandard(identifier, GL_TEXTURE_1D_ARRAY, internalFormat, width, 1, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic)
 {
 	init();
 }

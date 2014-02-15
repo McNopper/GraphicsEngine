@@ -28,11 +28,13 @@ TextureFactory::~TextureFactory()
 {
 }
 
-GLuint TextureFactory::loadImage(const string& filename) const
+GLuint TextureFactory::loadImage(const string& filename, string& identifier) const
 {
 	ILuint imageName = 0;
 
 	string strippedFilename = filename;
+
+	ILint found;
 
 	ilGenImages(1, &imageName);
 	ilBindImage(imageName);
@@ -41,7 +43,7 @@ GLuint TextureFactory::loadImage(const string& filename) const
 
 	if (!success)
 	{
-		ILint found = strippedFilename.find_last_of("/");
+		found = strippedFilename.find_last_of("/");
 
 		if (found != -1)
 		{
@@ -75,6 +77,17 @@ GLuint TextureFactory::loadImage(const string& filename) const
 		else if (imageInfo.Format == IL_BGRA)
 		{
 			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		}
+
+		found = strippedFilename.find_last_of(".");
+
+		if (found != -1)
+		{
+			identifier = strippedFilename.substr(0, found);
+		}
+		else
+		{
+			identifier = strippedFilename;
 		}
 
 		return imageName;
@@ -194,31 +207,33 @@ GLenum TextureFactory::gatherInternalFormat(GLenum format, GLenum type) const
 	return format;
 }
 
-Texture1DSP TextureFactory::createTexture1D(int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture1DSP TextureFactory::createTexture1D(const string& identifier, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture1DSP(new Texture1D(gatherInternalFormat(format, type), width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture1DSP(new Texture1D(identifier, gatherInternalFormat(format, type), width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture1DSP TextureFactory::createTexture1D(GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture1DSP TextureFactory::createTexture1D(const string& identifier, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture1DSP(new Texture1D(internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture1DSP(new Texture1D(identifier, internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture1DArraySP TextureFactory::createTexture1DArray(int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture1DArraySP TextureFactory::createTexture1DArray(const string& identifier, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture1DArraySP(new Texture1DArray(gatherInternalFormat(format, type), width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture1DArraySP(new Texture1DArray(identifier, gatherInternalFormat(format, type), width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture1DArraySP TextureFactory::createTexture1DArray(GLint internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture1DArraySP TextureFactory::createTexture1DArray(const string& identifier, int internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture1DArraySP(new Texture1DArray(internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture1DArraySP(new Texture1DArray(identifier, internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture2DSP TextureFactory::createTexture2D(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture2DSP TextureFactory::loadTexture2D(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	Texture2DSP texture2D;
 
-	ILuint imageName = loadImage(filename);
+	string identifier;
+
+	ILuint imageName = loadImage(filename, identifier);
 
 	if (imageName)
 	{
@@ -228,7 +243,7 @@ Texture2DSP TextureFactory::createTexture2D(const string& filename, bool mipMap,
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Creating texture: %s", filename.c_str());
 
-		texture2D = Texture2DSP(new Texture2D(gatherInternalFormat(imageInfo.Format, imageInfo.Type), imageInfo.Width, imageInfo.Height, imageInfo.Format, imageInfo.Type, imageInfo.Data, imageInfo.SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+		texture2D = Texture2DSP(new Texture2D(identifier, gatherInternalFormat(imageInfo.Format, imageInfo.Type), imageInfo.Width, imageInfo.Height, imageInfo.Format, imageInfo.Type, imageInfo.Data, imageInfo.SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
 		ilBindImage(0);
 		ilDeleteImages(1, &imageName);
@@ -237,37 +252,39 @@ Texture2DSP TextureFactory::createTexture2D(const string& filename, bool mipMap,
 	return texture2D;
 }
 
-Texture2DSP TextureFactory::createTexture2D(int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture2DSP TextureFactory::createTexture2D(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture2DSP(new Texture2D(gatherInternalFormat(format, type), width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture2DSP(new Texture2D(identifier, gatherInternalFormat(format, type), width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture2DSP TextureFactory::createTexture2D(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture2DSP TextureFactory::createTexture2D(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture2DSP(new Texture2D(internalFormat, width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture2DSP(new Texture2D(identifier, internalFormat, width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture2DArraySP TextureFactory::createTexture2DArray(int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture2DArraySP TextureFactory::createTexture2DArray(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture2DArraySP(new Texture2DArray(gatherInternalFormat(format, type), width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture2DArraySP(new Texture2DArray(identifier, gatherInternalFormat(format, type), width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture2DArraySP TextureFactory::createTexture2DArray(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+Texture2DArraySP TextureFactory::createTexture2DArray(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return Texture2DArraySP(new Texture2DArray(internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return Texture2DArraySP(new Texture2DArray(identifier, internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-Texture2DMultisampleSP TextureFactory::createTexture2DMultisample(int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) const
+Texture2DMultisampleSP TextureFactory::createTexture2DMultisample(const string& identifier, int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) const
 {
-	return Texture2DMultisampleSP(new Texture2DMultisample(samples, internalFormat, width, height, fixedsamplelocations));
+	return Texture2DMultisampleSP(new Texture2DMultisample(identifier, samples, internalFormat, width, height, fixedsamplelocations));
 }
 
-TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	TextureCubeMapSP textureCubeMap;
 
 	ILuint imageName[6];
 	ILinfo imageInfo[6];
+
+	string dummy;
 
 	for (GLenum cubeMapSide = GL_TEXTURE_CUBE_MAP_POSITIVE_X; cubeMapSide <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; cubeMapSide++)
 	{
@@ -295,7 +312,7 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& posX, const 
 			break;
 		}
 
-		imageName[cubeMapSide - GL_TEXTURE_CUBE_MAP_POSITIVE_X] = loadImage(filename);
+		imageName[cubeMapSide - GL_TEXTURE_CUBE_MAP_POSITIVE_X] = loadImage(filename, dummy);
 
 		if (imageName[cubeMapSide - GL_TEXTURE_CUBE_MAP_POSITIVE_X])
 		{
@@ -326,7 +343,7 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& posX, const 
 
 	glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", posX.c_str());
 
-	textureCubeMap = TextureCubeMapSP(new TextureCubeMap(gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	textureCubeMap = TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
 	ilBindImage(0);
 	ilDeleteImages(6, imageName);
@@ -334,13 +351,15 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& posX, const 
 	return textureCubeMap;
 }
 
-TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	TextureCubeMapSP textureCubeMap;
 
 	ILinfo imageInfo[6];
 
-	ILuint imageName = loadImage(filename);
+	string identifier;
+
+	ILuint imageName = loadImage(filename, identifier);
 
 	if (imageName)
 	{
@@ -391,7 +410,7 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& filename, bo
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", filename.c_str());
 
-		textureCubeMap = TextureCubeMapSP(new TextureCubeMap(gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+		textureCubeMap = TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
 		ilBindImage(0);
 		ilDeleteImages(1, &imageName);
@@ -400,14 +419,14 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& filename, bo
 	return textureCubeMap;
 }
 
-TextureCubeMapSP TextureFactory::createTextureCubeMap(int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return TextureCubeMapSP(new TextureCubeMap(gatherInternalFormat(format, type), width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(format, type), width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-TextureCubeMapSP TextureFactory::createTextureCubeMap(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
-	return TextureCubeMapSP(new TextureCubeMap(internalFormat, width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+	return TextureCubeMapSP(new TextureCubeMap(identifier, internalFormat, width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
 bool TextureFactory::isAutoInternalFloat() const
@@ -498,12 +517,12 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 	return static_cast<bool>(result);
 }
 
-bool TextureFactory::saveTexture2D(const string& identifier, const Texture2DSP texture2D) const
+bool TextureFactory::saveTexture2D(const Texture2DSP texture2D) const
 {
-	return saveImage(identifier, texture2D->getPixelData());
+	return saveImage(texture2D->getIdentifier(), texture2D->getPixelData());
 }
 
-bool TextureFactory::saveTextureCubeMap(const string& identifier, const TextureCubeMapSP textureCubeMap) const
+bool TextureFactory::saveTextureCubeMap(const TextureCubeMapSP textureCubeMap) const
 {
 	string postFix;
 
@@ -531,7 +550,7 @@ bool TextureFactory::saveTextureCubeMap(const string& identifier, const TextureC
 			break;
 		}
 
-		saveImage(identifier + postFix, textureCubeMap->getPixelData(i));
+		saveImage(textureCubeMap->getIdentifier() + postFix, textureCubeMap->getPixelData(i));
 	}
 
 	return true;

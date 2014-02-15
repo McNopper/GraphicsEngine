@@ -22,7 +22,7 @@ protected:
 	virtual void changingSize();
 
 public:
-	Texture2DMultisample(boost::int32_t samples, GLint internalFormat, boost::int32_t width, boost::int32_t height, bool fixedsamplelocations = false);
+	Texture2DMultisample(const std::string& identifier, boost::int32_t samples, GLint internalFormat, boost::int32_t width, boost::int32_t height, bool fixedsamplelocations = false);
 	virtual ~Texture2DMultisample();
 
 	virtual bool init();

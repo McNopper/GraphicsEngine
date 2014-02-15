@@ -38,7 +38,7 @@ private:
 
 public:
 
-	Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ);
+	Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const std::string& identifier, const std::string& posX, const std::string& negX, const std::string& posY, const std::string& negY, const std::string& posZ, const std::string& negZ);
 	Sky(const Shape& shape, float radiusX, float radiusY, float radiusZ, const std::string& filename);
 	virtual ~Sky();
 

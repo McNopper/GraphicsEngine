@@ -65,7 +65,7 @@ Texture2DMultisampleSP Texture2DMultisampleManager::createTexture(const string& 
 
 	if (walker == allTextures.end())
 	{
-		allTextures[key] = textureFactory.createTexture2DMultisample(samples, internalFormat, width, height, fixedsamplelocations);
+		allTextures[key] = textureFactory.createTexture2DMultisample(key, samples, internalFormat, width, height, fixedsamplelocations);
 
 		return allTextures[key];
 	}
