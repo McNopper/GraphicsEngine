@@ -32,6 +32,8 @@ public:
 
 	virtual void freePixels();
 
+	const PixelData& getPixelData(boost::int32_t index) const;
+
 };
 
 typedef boost::shared_ptr<TextureCubeMap> TextureCubeMapSP;

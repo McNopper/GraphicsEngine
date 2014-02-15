@@ -27,6 +27,8 @@ public:
 
 	virtual void freePixels();
 
+	const PixelData& getPixelData() const;
+
 };
 
 typedef boost::shared_ptr<Texture2D> Texture2DSP;

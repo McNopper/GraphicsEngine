@@ -62,3 +62,8 @@ void Texture2D::freePixels()
 	pixelData.freePixels();
 }
 
+const PixelData& Texture2D::getPixelData() const
+{
+	return pixelData;
+}
+

@@ -9,16 +9,8 @@
 
 using namespace boost;
 
-TextureCubeMap::TextureCubeMap(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type,
-		const uint8_t* pixelsPosX, const uint8_t* pixelsNegX, const uint8_t* pixelsPosY, const uint8_t* pixelsNegY, const uint8_t* pixelsPosZ, const uint8_t* pixelsNegZ,
-		uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
-		TextureStandard(GL_TEXTURE_CUBE_MAP, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic),
-		pixelDataPosX(width, height, format, type, pixelsPosX, sizeOfData),
-		pixelDataNegX(width, height, format, type, pixelsNegX, sizeOfData),
-		pixelDataPosY(width, height, format, type, pixelsPosY, sizeOfData),
-		pixelDataNegY(width, height, format, type, pixelsNegY, sizeOfData),
-		pixelDataPosZ(width, height, format, type, pixelsPosZ, sizeOfData),
-		pixelDataNegZ(width, height, format, type, pixelsNegZ, sizeOfData)
+TextureCubeMap::TextureCubeMap(GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixelsPosX, const uint8_t* pixelsNegX, const uint8_t* pixelsPosY, const uint8_t* pixelsNegY, const uint8_t* pixelsPosZ, const uint8_t* pixelsNegZ, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
+		TextureStandard(GL_TEXTURE_CUBE_MAP, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic), pixelDataPosX(width, height, format, type, pixelsPosX, sizeOfData), pixelDataNegX(width, height, format, type, pixelsNegX, sizeOfData), pixelDataPosY(width, height, format, type, pixelsPosY, sizeOfData), pixelDataNegY(width, height, format, type, pixelsNegY, sizeOfData), pixelDataPosZ(width, height, format, type, pixelsPosZ, sizeOfData), pixelDataNegZ(width, height, format, type, pixelsNegZ, sizeOfData)
 {
 	init();
 }
@@ -27,7 +19,6 @@ TextureCubeMap::~TextureCubeMap()
 {
 	freePixels();
 }
-
 
 bool TextureCubeMap::init()
 {
@@ -79,4 +70,34 @@ void TextureCubeMap::freePixels()
 	pixelDataNegY.freePixels();
 	pixelDataPosZ.freePixels();
 	pixelDataNegZ.freePixels();
+}
+
+const PixelData& TextureCubeMap::getPixelData(boost::int32_t index) const
+{
+	switch (index)
+	{
+		case 0:
+			// Do later
+		break;
+		case 1:
+			return pixelDataNegX;
+		break;
+		case 2:
+			return pixelDataPosY;
+		break;
+		case 3:
+			return pixelDataNegY;
+		break;
+		case 4:
+			return pixelDataPosZ;
+		break;
+		case 5:
+			return pixelDataNegZ;
+		break;
+		default:
+			throw "Index out of bounds";
+		break;
+	}
+
+	return pixelDataPosX;
 }

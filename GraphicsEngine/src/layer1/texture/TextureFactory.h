@@ -34,6 +34,8 @@ private:
 
 	GLenum gatherInternalFormat(GLenum format, GLenum type) const;
 
+	bool saveImage(const std::string& identifier, const PixelData& pixelData) const;
+
 public:
 
 	TextureFactory();
@@ -98,6 +100,15 @@ public:
 	void setFloatBitsPerPixel(enum FormatDepth floatBitsPerPixel);
 	enum FormatDepth getIntegerBitsPerPixel() const;
 	void setIntegerBitsPerPixel(enum FormatDepth integerBitsPerPixel);
+
+	//
+	// Saving
+	//
+
+	bool saveTexture2D(const std::string& identifier, const Texture2DSP texture2D) const;
+
+	bool saveTextureCubeMap(const std::string& identifier, const TextureCubeMapSP textureCubeMap) const;
+
 };
 
 #endif /* TEXTUREFACTORY_H_ */

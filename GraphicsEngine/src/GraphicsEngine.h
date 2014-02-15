@@ -31,6 +31,7 @@
 #include "layer1/texture/Texture2DArrayManager.h"
 #include "layer1/texture/Texture2DMultisampleManager.h"
 #include "layer1/texture/TextureCubeMapManager.h"
+#include "layer1/texture/TextureFactory.h"
 #include "layer2/debug/DebugDraw.h"
 #include "layer2/debug/DebugDrawFactory.h"
 #include "layer2/debug/GroundPlane.h"

@@ -13,7 +13,8 @@
 using namespace std;
 using namespace boost;
 
-TextureFactory::TextureFactory() : autoInternalFloat(false), autoInternalInteger(true), floatBitsPerPixel(BitsPerPixel16), integerBitsPerPixel(BitsPerPixel8)
+TextureFactory::TextureFactory() :
+		autoInternalFloat(false), autoInternalInteger(true), floatBitsPerPixel(BitsPerPixel16), integerBitsPerPixel(BitsPerPixel8)
 {
 	ilInit();
 	iluInit();
@@ -217,7 +218,7 @@ Texture2DSP TextureFactory::createTexture2D(const string& filename, bool mipMap,
 {
 	Texture2DSP texture2D;
 
-	ILuint imageName  = loadImage(filename);
+	ILuint imageName = loadImage(filename);
 
 	if (imageName)
 	{
@@ -409,7 +410,6 @@ TextureCubeMapSP TextureFactory::createTextureCubeMap(GLint internalFormat, int3
 	return TextureCubeMapSP(new TextureCubeMap(internalFormat, width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
-
 bool TextureFactory::isAutoInternalFloat() const
 {
 	return autoInternalFloat;
@@ -448,4 +448,91 @@ enum FormatDepth TextureFactory::getIntegerBitsPerPixel() const
 void TextureFactory::setIntegerBitsPerPixel(enum FormatDepth integerBitsPerPixel)
 {
 	this->integerBitsPerPixel = integerBitsPerPixel;
+}
+
+//
+// Saving
+//
+
+bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelData) const
+{
+	ILuint imageName = 0;
+	ILboolean result;
+	ILubyte numChannels = 3;
+
+	if (pixelData.getFormat() == GL_RGBA)
+	{
+		numChannels = 4;
+	}
+
+	// If HDR format, force to three channels.
+	if (pixelData.getType() == GL_FLOAT || pixelData.getType() == GL_HALF_FLOAT)
+	{
+		numChannels = 3;
+	}
+
+	ilGenImages(1, &imageName);
+	ilBindImage(imageName);
+
+	// Format and type should match OpenGL
+	ilTexImage(pixelData.getWidth(), pixelData.getHeight(), 0, numChannels, pixelData.getFormat(), pixelData.getType(), pixelData.getPixels());
+
+	ilEnable(IL_FILE_OVERWRITE);
+
+	if (pixelData.getType() == GL_FLOAT || pixelData.getType() == GL_HALF_FLOAT)
+	{
+		glusLogPrint(GLUS_LOG_DEBUG, "Saving HDR texture: %s", identifier.c_str());
+
+		result = ilSave(IL_HDR, (identifier + ".hdr").c_str());
+	}
+	else
+	{
+		glusLogPrint(GLUS_LOG_DEBUG, "Saving TGA texture: %s", identifier.c_str());
+
+		result = ilSave(IL_TGA, (identifier + ".tga").c_str());
+	}
+
+	ilBindImage(0);
+	ilDeleteImages(1, &imageName);
+
+	return static_cast<bool>(result);
+}
+
+bool TextureFactory::saveTexture2D(const string& identifier, const Texture2DSP texture2D) const
+{
+	return saveImage(identifier, texture2D->getPixelData());
+}
+
+bool TextureFactory::saveTextureCubeMap(const string& identifier, const TextureCubeMapSP textureCubeMap) const
+{
+	string postFix;
+
+	for (int32_t i = 0; i < 6; i++)
+	{
+		switch (i)
+		{
+			case 0:
+				postFix = "_posX";
+			break;
+			case 1:
+				postFix = "_negX";
+			break;
+			case 2:
+				postFix = "_posY";
+			break;
+			case 3:
+				postFix = "_negY";
+			break;
+			case 4:
+				postFix = "_posZ";
+			break;
+			case 5:
+				postFix = "_negZ";
+			break;
+		}
+
+		saveImage(identifier + postFix, textureCubeMap->getPixelData(i));
+	}
+
+	return true;
 }
