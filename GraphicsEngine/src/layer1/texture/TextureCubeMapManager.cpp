@@ -62,7 +62,7 @@ TextureCubeMapSP TextureCubeMapManager::createTexture(const string& identifier, 
 
 	if (walker == allTextures.end())
 	{
-		allTextures[posX] = textureFactory.createTextureCubeMap(identifier, posX, negX, posY, negY, posZ, negZ, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+		allTextures[posX] = textureFactory.loadTextureCubeMap(identifier, posX, negX, posY, negY, posZ, negZ, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
 		return allTextures[posX];
 	}
