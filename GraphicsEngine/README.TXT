@@ -3,15 +3,16 @@ OpenGL Graphics Engine:
 
 How to build the engine / examples:
 
-1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux, the Windows SDK for Windows or the command line tools from Xcode for Mac OS X
-2. Extract this ZIP file and set the workspace-cpp folder as your Eclipse workspace.
-3. Import each folder as a separate, existing project.
-4. Set the build configurations in Eclipse to your operating system.
-5. Build GLUS.
-6. Build the Graphics Engine.
-7. Build any of the examples.
-8. Please read the README.txt in the GE_Binaries folder. 
-9. The executables are located in the GE_Binaries folder. Execute them directly or create a run configuration in Eclipse.
+1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux,
+   or the command line tools from XCode for Mac OS X.
+   For building with Visual C++ 2010, CMake and the Windows SDK 8.1 are needed.
+2. Extract this ZIP file and set GraphicsEngine-master folder as your Eclipse workspace.
+3. Set the build configurations in Eclipse to your operating system.
+4. Build GLUS.
+5. Build the Graphics Engine.
+6. Build any of the examples.
+7. Please read the README.txt in the GE_Binaries folder. 
+8. The executables are located in the GE_Binaries folder. Execute them directly or create a run configuration in Eclipse.
 
 If you get build errors:
 
@@ -72,10 +73,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-09.02.2014 Norbert Nopper (norbert@nopper.tv)
+16.02.2014 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Updated README
 - Removed MSVC build profile. Use CMakeLists.txt to create Visual C++ project
 - Updated to latest Boost (1.55.0) and FBX SDK (2014.2)
 - Added shadow and cascaded shadow mapping
