@@ -114,3 +114,22 @@ SurfaceMaterialSP Model::getSurfaceMaterialAt(int32_t index) const
 
 	return SurfaceMaterialSP();
 }
+
+bool Model::saveModel(FILE* f) const
+{
+	if (!f)
+	{
+		return false;
+	}
+
+	if (fprintf(f, "# Model\n") < 0)
+	{
+		return false;
+	}
+
+	// TODO Write model data
+
+	rootNode->saveNodeRecursive(f);
+
+	return true;
+}

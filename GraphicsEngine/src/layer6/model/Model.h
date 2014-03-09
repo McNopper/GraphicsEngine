@@ -55,6 +55,10 @@ public:
 
 	SurfaceMaterialSP getSurfaceMaterialAt(boost::int32_t index) const;
 
+	//
+
+	bool saveModel(FILE* f) const;
+
 };
 
 typedef boost::shared_ptr<Model> ModelSP;

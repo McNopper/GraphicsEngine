@@ -164,6 +164,11 @@ public:
 	void setVisibleRecursive(bool transparent);
 
 	const std::vector<boost::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
+
+	//
+
+	bool saveNodeRecursive(FILE* f) const;
+
 };
 
 typedef boost::shared_ptr<Node> NodeSP;

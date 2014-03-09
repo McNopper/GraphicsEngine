@@ -815,3 +815,31 @@ const std::vector<boost::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() 
 	return allAnimStacks;
 }
 
+bool Node::saveNodeRecursive(FILE* f) const
+{
+	if (!f)
+	{
+		return false;
+	}
+
+	if (fprintf(f, "# Node\n") < 0)
+	{
+		return false;
+	}
+
+	// TODO Save Node data
+
+	auto walker = allChilds.begin();
+
+	while (walker != allChilds.end())
+	{
+		if (!(*walker)->saveNodeRecursive(f))
+		{
+			return false;
+		}
+
+		walker++;
+	}
+
+	return true;
+}
