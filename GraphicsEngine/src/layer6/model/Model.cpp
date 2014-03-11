@@ -115,7 +115,7 @@ SurfaceMaterialSP Model::getSurfaceMaterialAt(int32_t index) const
 	return SurfaceMaterialSP();
 }
 
-bool Model::saveModel(FILE* f) const
+bool Model::save(FILE* f) const
 {
 	if (!f)
 	{
@@ -129,7 +129,22 @@ bool Model::saveModel(FILE* f) const
 
 	// TODO Write model data
 
-	rootNode->saveNodeRecursive(f);
+	// BoundingSphere boundingSphere;
+	// boost::int32_t numberJoints;
+	// bool animated;
+	// bool skinned;
+
+	// Save surface material
+	auto walker = allSurfaceMaterialsByName.begin();
+	while (walker != allSurfaceMaterialsByName.end())
+	{
+		walker->second->save(f);
+
+		walker++;
+	}
+
+	// Save nodes
+	rootNode->save(f);
 
 	return true;
 }

@@ -57,7 +57,7 @@ public:
 
 	//
 
-	bool saveModel(FILE* f) const;
+	bool save(FILE* f) const;
 
 };
 

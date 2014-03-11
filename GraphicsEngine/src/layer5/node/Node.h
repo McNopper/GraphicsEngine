@@ -167,7 +167,7 @@ public:
 
 	//
 
-	bool saveNodeRecursive(FILE* f) const;
+	bool save(FILE* f) const;
 
 };
 

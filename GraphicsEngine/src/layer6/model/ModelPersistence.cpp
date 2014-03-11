@@ -38,7 +38,7 @@ bool ModelPersistence::saveModel(const string& filename, const ModelSP& model) c
 		return false;
 	}
 
-	bool result = model->saveModel(f);
+	bool result = model->save(f);
 
 	fclose(f);
 

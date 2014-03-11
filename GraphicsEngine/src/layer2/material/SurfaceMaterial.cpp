@@ -302,3 +302,45 @@ void SurfaceMaterial::setConvertDirectX(bool convertDirectX)
 {
 	this->convertDirectX = convertDirectX;
 }
+
+bool SurfaceMaterial::save(FILE* f) const
+{
+	// TODO Write surface material data
+
+	// std::string name;
+
+	// Color emissive;
+	// Texture2DSP emissiveTexture;
+
+	// Color ambient;
+	// Texture2DSP ambientTexture;
+
+	// Color diffuse;
+	// Texture2DSP diffuseTexture;
+
+	// Color specular;
+	// Texture2DSP specularTexture;
+
+	// float shininess;
+
+	// Color reflection;
+	// Texture2DSP reflectionTexture;
+
+	// Color refraction;
+	// Texture2DSP refractionTexture;
+
+	// float refractiveIndex;
+
+	// float transparency;
+	// Texture2DSP transparencyTexture;
+
+	// Texture2DSP normalMapTexture;
+
+	// Texture2DSP displacementMapTexture;
+
+	// TextureCubeMapSP dynamicCubeMapTexture;
+
+	// bool convertDirectX;
+
+	return true;
+}

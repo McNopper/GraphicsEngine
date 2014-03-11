@@ -133,6 +133,11 @@ public:
 	bool isConvertDirectX() const;
 
 	void setConvertDirectX(bool convertDirectX);
+
+	//
+
+	bool save(FILE* f) const;
+
 };
 
 typedef boost::shared_ptr<SurfaceMaterial> SurfaceMaterialSP;

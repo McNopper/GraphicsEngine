@@ -815,7 +815,7 @@ const std::vector<boost::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() 
 	return allAnimStacks;
 }
 
-bool Node::saveNodeRecursive(FILE* f) const
+bool Node::save(FILE* f) const
 {
 	if (!f)
 	{
@@ -827,13 +827,32 @@ bool Node::saveNodeRecursive(FILE* f) const
 		return false;
 	}
 
-	// TODO Save Node data
+	// TODO Save node data
+
+	// const std::string& name
+	// const boost::shared_ptr<Node>& parent
+	// float translate[3]
+	// float rotateOffset[3]
+	// float rotatePivot[3]
+	// float preRotate[3]
+	// float rotate[3]
+	// float postRotate[3]
+	// float scaleOffset[3]
+	// float scalePivot[3]
+	// float scale[3]
+	// float geoTranslate[3]
+	// float geoRotate[3]
+	// float geoScale[3]
+	// const MeshSP& mesh
+	// const CameraSP& camera
+	// const LightSP& light
+	// const std::vector<AnimationStackSP>& allAnimStacks
+	// bool joint
 
 	auto walker = allChilds.begin();
-
 	while (walker != allChilds.end())
 	{
-		if (!(*walker)->saveNodeRecursive(f))
+		if (!(*walker)->save(f))
 		{
 			return false;
 		}
