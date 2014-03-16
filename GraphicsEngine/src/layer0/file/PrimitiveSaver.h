@@ -13,6 +13,8 @@
 class PrimitiveSaver
 {
 
+public:
+
 	static bool saveBool(FILE* f, bool value);
 
 	static bool saveFloat(FILE* f, float value);

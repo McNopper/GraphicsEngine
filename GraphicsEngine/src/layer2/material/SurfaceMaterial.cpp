@@ -5,6 +5,8 @@
  *      Author: Norbert Nopper
  */
 
+#include "../../layer0/file/PrimitiveSaver.h"
+
 #include "SurfaceMaterial.h"
 
 using namespace std;
@@ -305,9 +307,26 @@ void SurfaceMaterial::setConvertDirectX(bool convertDirectX)
 
 bool SurfaceMaterial::save(FILE* f) const
 {
-	// TODO Write surface material data
+	if (!f)
+	{
+		return false;
+	}
 
-	// std::string name;
+	if (fprintf(f, "SurfaceMaterial\n\n") < 0)
+	{
+		return false;
+	}
+
+	if (fprintf(f, "name\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveString(f, name.c_str()))
+	{
+		return false;
+	}
+
+	// TODO Save Color, Texture2D and TextureCubeMapSP
 
 	// Color emissive;
 	// Texture2DSP emissiveTexture;
@@ -321,7 +340,14 @@ bool SurfaceMaterial::save(FILE* f) const
 	// Color specular;
 	// Texture2DSP specularTexture;
 
-	// float shininess;
+	if (fprintf(f, "shininess\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveFloat(f, shininess))
+	{
+		return false;
+	}
 
 	// Color reflection;
 	// Texture2DSP reflectionTexture;
@@ -329,9 +355,23 @@ bool SurfaceMaterial::save(FILE* f) const
 	// Color refraction;
 	// Texture2DSP refractionTexture;
 
-	// float refractiveIndex;
+	if (fprintf(f, "refractiveIndex\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveFloat(f, refractiveIndex))
+	{
+		return false;
+	}
 
-	// float transparency;
+	if (fprintf(f, "transparency\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveFloat(f, transparency))
+	{
+		return false;
+	}
 	// Texture2DSP transparencyTexture;
 
 	// Texture2DSP normalMapTexture;
@@ -340,7 +380,14 @@ bool SurfaceMaterial::save(FILE* f) const
 
 	// TextureCubeMapSP dynamicCubeMapTexture;
 
-	// bool convertDirectX;
+	if (fprintf(f, "convertDirectX\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveBool(f, convertDirectX))
+	{
+		return false;
+	}
 
 	return true;
 }

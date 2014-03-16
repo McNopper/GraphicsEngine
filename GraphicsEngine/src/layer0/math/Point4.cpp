@@ -218,3 +218,23 @@ Point4 Point4::lerp(const Point4& other, float t) const
 
 	return result;
 }
+
+bool Point4::save(FILE* f) const
+{
+	if (!f)
+	{
+		return false;
+	}
+
+	if (fprintf(f, "Point4\n") < 0)
+	{
+		return false;
+	}
+
+	if (!fprintf(f, "%f %f %f %f\n\n", p[0], p[1], p[2], p[3]))
+	{
+		return false;
+	}
+
+	return true;
+}

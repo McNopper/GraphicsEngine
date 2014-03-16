@@ -5,6 +5,8 @@
  *      Author: Norbert Nopper
  */
 
+#include "../../layer0/file/PrimitiveSaver.h"
+
 #include "Model.h"
 
 using namespace std;
@@ -122,17 +124,42 @@ bool Model::save(FILE* f) const
 		return false;
 	}
 
-	if (fprintf(f, "# Model\n") < 0)
+	if (fprintf(f, "Model\n\n") < 0)
 	{
 		return false;
 	}
 
-	// TODO Write model data
+	if (!boundingSphere.save(f))
+	{
+		return false;
+	}
 
-	// BoundingSphere boundingSphere;
-	// boost::int32_t numberJoints;
-	// bool animated;
-	// bool skinned;
+	if (fprintf(f, "numberJoints\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveInt(f, numberJoints))
+	{
+		return false;
+	}
+
+	if (fprintf(f, "animated\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveBool(f, animated))
+	{
+		return false;
+	}
+
+	if (fprintf(f, "skinned\n") < 0)
+	{
+		return false;
+	}
+	if (!PrimitiveSaver::saveBool(f, skinned))
+	{
+		return false;
+	}
 
 	// Save surface material
 	auto walker = allSurfaceMaterialsByName.begin();

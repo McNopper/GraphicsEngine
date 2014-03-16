@@ -16,7 +16,7 @@ bool PrimitiveSaver::saveBool(FILE* f, bool value)
 		return false;
 	}
 
-	if (fprintf(f, "%s\n", (value ? "true" : "false")) < 0)
+	if (fprintf(f, "%s\n\n", (value ? "true" : "false")) < 0)
 	{
 		return false;
 	}
@@ -31,7 +31,7 @@ bool PrimitiveSaver::saveFloat(FILE* f, float value)
 		return false;
 	}
 
-	if (fprintf(f, "%f\n", value) < 0)
+	if (fprintf(f, "%f\n\n", value) < 0)
 	{
 		return false;
 	}
@@ -46,7 +46,7 @@ bool PrimitiveSaver::saveInt(FILE* f, int32_t value)
 		return false;
 	}
 
-	if (fprintf(f, "%d\n", value) < 0)
+	if (fprintf(f, "%d\n\n", value) < 0)
 	{
 		return false;
 	}
@@ -61,7 +61,7 @@ bool PrimitiveSaver::saveUInt(FILE* f, uint32_t value)
 		return false;
 	}
 
-	if (fprintf(f, "%u\n", value) < 0)
+	if (fprintf(f, "%u\n\n", value) < 0)
 	{
 		return false;
 	}
@@ -76,7 +76,7 @@ bool PrimitiveSaver::saveChar(FILE* f, char value)
 		return false;
 	}
 
-	if (fprintf(f, "%c\n", value) < 0)
+	if (fprintf(f, "%c\n\n", value) < 0)
 	{
 		return false;
 	}
@@ -91,7 +91,7 @@ bool PrimitiveSaver::saveString(FILE* f, const char* value)
 		return false;
 	}
 
-	if (fprintf(f, "%s\n", value) < 0)
+	if (fprintf(f, "%s\n\n", value) < 0)
 	{
 		return false;
 	}
