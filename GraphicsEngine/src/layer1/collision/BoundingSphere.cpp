@@ -53,23 +53,3 @@ bool BoundingSphere::inside(const AxisAlignedBoundingBox& axisAlignedBox) const
 {
 	return axisAlignedBox.encloses(*this);
 }
-
-bool BoundingSphere::save(FILE* f) const
-{
-	if (!f)
-	{
-		return false;
-	}
-
-	if (fprintf(f, "BoubdingSphere\n\n") < 0)
-	{
-		return false;
-	}
-
-	if (!Sphere::save(f))
-	{
-		return false;
-	}
-
-	return true;
-}

@@ -37,8 +37,6 @@ public:
 
 	float distance(const Plane& other) const;
 
-	bool save(FILE* f) const;
-
 };
 
 #endif /* SPHERE_H_ */

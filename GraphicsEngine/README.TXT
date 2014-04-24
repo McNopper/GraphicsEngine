@@ -5,7 +5,7 @@ How to build the engine / examples:
 
 1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux,
    or the command line tools from XCode for Mac OS X.
-   For building with Visual C++ 2010, CMake and the Windows SDK 8.1 are needed.
+   For building with Visual C++ 2012, CMake and the Windows SDK 8.1 are needed.
 2. Extract this ZIP file and set GraphicsEngine-master folder as your Eclipse workspace.
 3. Set the build configurations in Eclipse to your operating system.
 4. Build GLUS.
@@ -28,7 +28,7 @@ Libraries/SDKs used:
 - GLEW 1.10.0 http://glew.sourceforge.net/
 - GLFW 3.0.4 http://www.glfw.org/
 
-Please note: On Ubuntu 12.04, just use the libraries provided with the OS, even if they are older versions.
+Please note: On Ubuntu 14.04, just use the libraries provided with the OS, even if they are older versions.
 
 Features:
 
@@ -73,10 +73,11 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-16.02.2014 Norbert Nopper (norbert@nopper.tv)
+24.04.2014 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Upgraded to Visual C++ 2012
 - Updated README
 - Removed MSVC build profile. Use CMakeLists.txt to create Visual C++ project
 - Updated to latest Boost (1.55.0) and FBX SDK (2014.2)

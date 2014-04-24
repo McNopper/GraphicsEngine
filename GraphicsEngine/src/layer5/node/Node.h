@@ -165,10 +165,6 @@ public:
 
 	const std::vector<boost::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
 
-	//
-
-	bool save(FILE* f) const;
-
 };
 
 typedef boost::shared_ptr<Node> NodeSP;

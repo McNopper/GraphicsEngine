@@ -68,8 +68,6 @@ public:
 
 	Point4 lerp(const Point4& other, float t) const;
 
-	bool save(FILE* f) const;
-
 };
 
 #endif /* POINT4_H_ */

@@ -32,8 +32,6 @@ public:
 
 	bool inside(const AxisAlignedBoundingBox& axisAlignedBox) const;
 
-	bool save(FILE* f) const;
-
 };
 
 #endif /* BOUNDINGSPHERE_H_ */

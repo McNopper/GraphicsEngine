@@ -57,36 +57,3 @@ float Sphere::distance(const Plane& other) const
 {
 	return other.distance(*this);
 }
-
-bool Sphere::save(FILE* f) const
-{
-	if (!f)
-	{
-		return false;
-	}
-
-	if (fprintf(f, "Sphere\n\n") < 0)
-	{
-		return false;
-	}
-
-	if (fprintf(f, "center\n") < 0)
-	{
-		return false;
-	}
-	if (!center.save(f))
-	{
-		return false;
-	}
-
-	if (fprintf(f, "radius\n") < 0)
-	{
-		return false;
-	}
-	if (fprintf(f, "%f\n\n", radius) < 0)
-	{
-		return false;
-	}
-
-	return true;
-}
