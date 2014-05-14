@@ -76,6 +76,7 @@
 								<option id="gnu.cpp.link.option.libs.508946003" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GraphicsEngined"/>
 									<listOptionValue builtIn="false" value="boost_thread"/>
+									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="IL"/>
 									<listOptionValue builtIn="false" value="ILU"/>
 									<listOptionValue builtIn="false" value="fbxsdk"/>
@@ -161,7 +162,7 @@
 									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
-									<listOptionValue builtIn="false" value="pthread"/>									
+									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1582910610" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/linux/lib}&quot;"/>
@@ -184,6 +185,7 @@
 								<option id="gnu.cpp.link.option.libs.1001720514" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="GraphicsEngine"/>
 									<listOptionValue builtIn="false" value="boost_thread"/>
+									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="IL"/>
 									<listOptionValue builtIn="false" value="ILU"/>
 									<listOptionValue builtIn="false" value="fbxsdk"/>
@@ -197,7 +199,7 @@
 									<listOptionValue builtIn="false" value="Xi"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="rt"/>
-									<listOptionValue builtIn="false" value="pthread"/>									
+									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.385596497" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -251,7 +253,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/x64__Darwin__GCC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/x64__Darwin__GCC_Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.2.1/lib/gcc4/ub/debug&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2015.1/lib/gcc4/ub/debug&quot;"/>
 								</option>
 								<option id="macosx.cpp.link.option.flags.1048208511" name="Linker flags" superClass="macosx.cpp.link.option.flags" value="-framework CoreFoundation -framework OpenGL -framework Cocoa -framework IOKit" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.752999923" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -270,7 +272,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Darwin/GCC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GraphicsEngine/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.2.1/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2015.1/include&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.869191615" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>

@@ -3,9 +3,9 @@ OpenGL Graphics Engine:
 
 How to build the engine / examples:
 
-1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux,
-   or the command line tools from XCode for Mac OS X.
-   For building with Visual C++ 2012, CMake and the Windows SDK 8.1 are needed.
+1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux.
+   (Removed: Command line tools from XCode for Mac OS X.)
+   For building with Visual C++ 2013, CMake and the Windows SDK 8.1 are needed.
 2. Extract this ZIP file and set GraphicsEngine-master folder as your Eclipse workspace.
 3. Set the build configurations in Eclipse to your operating system.
 4. Build GLUS.
@@ -22,7 +22,7 @@ If you get build errors:
 
 Libraries/SDKs used:
 
-- Autodesk FBX SDK 2014.2.1 http://usa.autodesk.com/fbx/
+- Autodesk FBX SDK 2015.1 http://usa.autodesk.com/fbx/
 - Boost 1.55.0 http://www.boost.org/ http://boost.teeks99.com/ http://www.macports.org/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.10.0 http://glew.sourceforge.net/
@@ -73,9 +73,15 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-24.04.2014 Norbert Nopper (norbert@nopper.tv)
+14.05.2014 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
+
+- Removed support for MacOS X. Engine will be based upon OpenGL 4.4 in the future.
+  If MacOS X supports OpenGL 4.4, support will be enabled again.
+- Upgraded to FBX SDK 2015.1
+- Upgraded to Visual C++ 2013
+- Some refactoring
 
 - Upgraded to Visual C++ 2012
 - Updated README

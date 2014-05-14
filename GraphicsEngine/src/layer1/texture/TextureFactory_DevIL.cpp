@@ -314,5 +314,5 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 	ilBindImage(0);
 	ilDeleteImages(1, &imageName);
 
-	return static_cast<bool>(result);
+	return static_cast<bool>(result == IL_TRUE);
 }

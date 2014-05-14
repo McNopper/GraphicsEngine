@@ -5,8 +5,6 @@
  *      Author: Norbert Nopper
  */
 
-#include "../../layer0/file/PrimitiveSaver.h"
-
 #include "SurfaceMaterial.h"
 
 using namespace std;

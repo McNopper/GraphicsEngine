@@ -261,7 +261,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GLUS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/External/x64/Darwin/GCC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/opt/local/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2014.2.1/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;/Applications/Autodesk/FBX SDK/2015.1/include&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.938706327" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="FBXSDK_NEW_API"/>
