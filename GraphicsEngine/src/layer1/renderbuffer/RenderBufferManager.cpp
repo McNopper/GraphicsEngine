@@ -12,10 +12,8 @@
 using namespace std;
 using namespace boost;
 
-RenderBufferManager* RenderBufferManager::instance = nullptr;
-
 RenderBufferManager::RenderBufferManager() :
-		allRenderBuffers()
+		Singleton<RenderBufferManager>(), allRenderBuffers()
 {
 }
 
@@ -29,25 +27,6 @@ RenderBufferManager::~RenderBufferManager()
 		walker++;
 	}
 	allRenderBuffers.clear();
-}
-
-RenderBufferManager* RenderBufferManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new RenderBufferManager();
-	}
-
-	return instance;
-}
-
-void RenderBufferManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void RenderBufferManager::addRenderBuffer(const string& key, const RenderBufferSP& renderBuffer)

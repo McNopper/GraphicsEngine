@@ -11,10 +11,8 @@ using namespace std;
 
 using namespace boost;
 
-FrameBuffer2DManager* FrameBuffer2DManager::instance = nullptr;
-
 FrameBuffer2DManager::FrameBuffer2DManager() :
-	allFrameBuffers(), allWindowFrameBuffers()
+	Singleton<FrameBuffer2DManager>(), allFrameBuffers(), allWindowFrameBuffers()
 {
 }
 
@@ -28,25 +26,6 @@ FrameBuffer2DManager::~FrameBuffer2DManager()
 	}
 	allFrameBuffers.clear();
 	allWindowFrameBuffers.clear();
-}
-
-FrameBuffer2DManager* FrameBuffer2DManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new FrameBuffer2DManager();
-	}
-
-	return instance;
-}
-
-void FrameBuffer2DManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = nullptr;
-	}
 }
 
 bool FrameBuffer2DManager::containsFrameBuffer(const string& key) const

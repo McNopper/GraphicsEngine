@@ -12,10 +12,8 @@
 using namespace std;
 using namespace boost;
 
-RenderBufferMultisampleManager* RenderBufferMultisampleManager::instance = nullptr;
-
 RenderBufferMultisampleManager::RenderBufferMultisampleManager() :
-		allRenderBuffers()
+		Singleton<RenderBufferMultisampleManager>(), allRenderBuffers()
 {
 }
 
@@ -29,25 +27,6 @@ RenderBufferMultisampleManager::~RenderBufferMultisampleManager()
 		walker++;
 	}
 	allRenderBuffers.clear();
-}
-
-RenderBufferMultisampleManager* RenderBufferMultisampleManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new RenderBufferMultisampleManager();
-	}
-
-	return instance;
-}
-
-void RenderBufferMultisampleManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void RenderBufferMultisampleManager::addRenderBuffer(const string& key, const RenderBufferMultisampleSP& renderBufferMultisample)

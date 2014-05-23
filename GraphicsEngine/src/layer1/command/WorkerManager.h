@@ -10,15 +10,17 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "StopCommand.h"
 #include "Worker.h"
 
-class WorkerManager
+class WorkerManager : public Singleton<WorkerManager>
 {
 
-private:
+	friend class Singleton<WorkerManager>;
 
-	static WorkerManager* instance;
+private:
 
 	StopCommandRecycleQueueSP stopCommandRecycleQueue;
 
@@ -30,10 +32,6 @@ private:
 	virtual ~WorkerManager();
 
 public:
-
-	static WorkerManager* getInstance();
-
-	static void terminate();
 
 	void addWorker();
 

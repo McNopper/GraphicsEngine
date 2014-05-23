@@ -9,12 +9,10 @@
 
 using namespace std;
 
-ViewportManager* ViewportManager::instance;
-
 const string ViewportManager::DEFAULT_VIEWPORT_KEY = "default";
 
 ViewportManager::ViewportManager() :
-	allViewports()
+		Singleton<ViewportManager>(), allViewports()
 {
 	allViewports[DEFAULT_VIEWPORT_KEY] = ViewportSP(new Viewport(0, 0, 1, 1));
 }
@@ -28,25 +26,6 @@ ViewportManager::~ViewportManager()
 		walker++;
 	}
 	allViewports.clear();
-}
-
-ViewportManager* ViewportManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new ViewportManager();
-	}
-
-	return instance;
-}
-
-void ViewportManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 const ViewportSP& ViewportManager::getDefaultViewport() const

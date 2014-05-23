@@ -11,16 +11,17 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/concurrency/ThreadsafeQueue.h"
+#include "../../layer0/stereotype/Singleton.h"
 
 #include "Event.h"
 #include "EventReceiver.h"
 
-class EventManager
+class EventManager : public Singleton<EventManager>
 {
 
-private:
+	friend class Singleton<EventManager>;
 
-	static EventManager* instance;
+private:
 
 	mutable boost::mutex eventMutex;
 
@@ -32,10 +33,6 @@ private:
 	virtual ~EventManager();
 
 public:
-
-	static EventManager* getInstance();
-
-	static void terminate();
 
 	void processEvents();
 

@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "RenderBuffer.h"
 
-class RenderBufferManager
+class RenderBufferManager : public Singleton<RenderBufferManager>
 {
-private:
 
-	static RenderBufferManager* instance;
+	friend class Singleton<RenderBufferManager>;
+
+private:
 
 	std::map<std::string, RenderBufferSP> allRenderBuffers;
 
@@ -24,10 +27,6 @@ private:
 	virtual ~RenderBufferManager();
 
 public:
-
-	static RenderBufferManager* getInstance();
-
-	static void terminate();
 
 	void addRenderBuffer(const std::string& key, const RenderBufferSP& renderBuffer);
 

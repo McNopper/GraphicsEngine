@@ -10,12 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Font.h"
 
-class FontManager {
-private:
+class FontManager : public Singleton<FontManager>
+{
 
-	static FontManager* instance;
+	friend class Singleton<FontManager>;
+
+private:
 
 	std::map<std::string, FontSP> allFonts;
 
@@ -23,10 +27,6 @@ private:
 	virtual ~FontManager();
 
 public:
-
-	static FontManager* getInstance();
-
-	static void terminate();
 
 	const FontSP& getFont(const std::string& key);
 

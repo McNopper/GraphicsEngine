@@ -11,10 +11,8 @@ using namespace std;
 
 using namespace boost;
 
-FrameBufferCubeMapManager* FrameBufferCubeMapManager::instance = nullptr;
-
 FrameBufferCubeMapManager::FrameBufferCubeMapManager() :
-		allFrameBuffers()
+		Singleton<FrameBufferCubeMapManager>(), allFrameBuffers()
 {
 }
 
@@ -27,25 +25,6 @@ FrameBufferCubeMapManager::~FrameBufferCubeMapManager()
 		walker++;
 	}
 	allFrameBuffers.clear();
-}
-
-FrameBufferCubeMapManager* FrameBufferCubeMapManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new FrameBufferCubeMapManager();
-	}
-
-	return instance;
-}
-
-void FrameBufferCubeMapManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = nullptr;
-	}
 }
 
 bool FrameBufferCubeMapManager::containsFrameBuffer(const string& key) const

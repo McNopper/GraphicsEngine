@@ -11,14 +11,12 @@
 
 using namespace std;
 
-ProgramManager* ProgramManager::instance;
-
 const string ProgramManager::DEFAULT_PROGRAM_TYPE = "default";
 const string ProgramManager::RENDER_TO_CUBEMAP_PROGRAM_TYPE = "renderToCubeMap";
 const string ProgramManager::RENDER_TO_SHADOWMAP_PROGRAM_TYPE = "renderToShadowMap";
 
 ProgramManager::ProgramManager() :
-	allPrograms()
+		Singleton<ProgramManager>(), allPrograms()
 {
 }
 
@@ -31,25 +29,6 @@ ProgramManager::~ProgramManager()
 		walker++;
 	}
 	allPrograms.clear();
-}
-
-ProgramManager* ProgramManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new ProgramManager();
-	}
-
-	return instance;
-}
-
-void ProgramManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void ProgramManager::addProgram(const ProgramSP& program)
@@ -91,8 +70,7 @@ ProgramSP ProgramManager::getComputeProgramBy(const string& computeFilename, con
 		walker++;
 	}
 
-	currentProgram
-			= ProgramSP(new Program(type, computeFilename));
+	currentProgram = ProgramSP(new Program(type, computeFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
@@ -116,8 +94,7 @@ ProgramSP ProgramManager::getVertexFragmentProgramBy(const string& vertexFilenam
 		walker++;
 	}
 
-	currentProgram
-			= ProgramSP(new Program(type, vertexFilename, fragmentFilename));
+	currentProgram = ProgramSP(new Program(type, vertexFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
@@ -141,8 +118,7 @@ ProgramSP ProgramManager::getVertexGeometryFragmentProgramBy(const string& verte
 		walker++;
 	}
 
-	currentProgram
-			= ProgramSP(new Program(type, vertexFilename, geometryFilename, fragmentFilename));
+	currentProgram = ProgramSP(new Program(type, vertexFilename, geometryFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 
@@ -166,8 +142,7 @@ ProgramSP ProgramManager::getVertexControlEvaluateGeometryFragmentProgramBy(cons
 		walker++;
 	}
 
-	currentProgram
-			= ProgramSP(new Program(type, vertexFilename, controlFilename, evaluationFilename, geometryFilename, fragmentFilename));
+	currentProgram = ProgramSP(new Program(type, vertexFilename, controlFilename, evaluationFilename, geometryFilename, fragmentFilename));
 
 	ProgramManager::getInstance()->addProgram(currentProgram);
 

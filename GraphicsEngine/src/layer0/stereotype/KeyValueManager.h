@@ -29,6 +29,16 @@ class KeyValueManager
 
 	public:
 
+		virtual typename std::map<K, V>::iterator begin()
+		{
+			return allKeyValues.begin();
+		}
+
+		virtual typename std::map<K, V>::iterator end()
+		{
+			return allKeyValues.end();
+		}
+
 		virtual bool add(const K& key, const V& value)
 		{
 			if (allKeyValues.find(key) != allKeyValues.end())
@@ -58,7 +68,7 @@ class KeyValueManager
 			return true;
 		}
 
-		V find(const K& key) const
+		virtual V find(const K& key) const
 		{
 			auto result = allKeyValues.find(key);
 
@@ -70,22 +80,22 @@ class KeyValueManager
 			return V();
 		}
 
-		bool contains(const K& key) const
+		virtual bool contains(const K& key) const
 		{
 			return allKeyValues.find(key) != allKeyValues.end();
 		}
 
-		V at(const K& key) const
+		virtual V at(const K& key) const
 		{
 			return allKeyValues.at(key);
 		}
 
-		const std::map<K, V>& getAllKeyValues() const
+		virtual const std::map<K, V>& getAllKeyValues() const
 		{
 			return allKeyValues;
 		}
 
-		boost::int32_t size() const
+		virtual boost::int32_t size() const
 		{
 			return allKeyValues.size();
 		}

@@ -10,12 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "LineGeometry.h"
 
-class LineGeometryManager {
-private:
+class LineGeometryManager : public Singleton<LineGeometryManager>
+{
 
-	static LineGeometryManager* instance;
+	friend class Singleton<LineGeometryManager>;
+
+private:
 
 	std::map<std::string, LineGeometrySP> allLineGeometries;
 
@@ -23,10 +27,6 @@ private:
 	virtual ~LineGeometryManager();
 
 public:
-
-	static LineGeometryManager* getInstance();
-
-	static void terminate();
 
 	bool containsLineGeometry(const std::string& key) const;
 

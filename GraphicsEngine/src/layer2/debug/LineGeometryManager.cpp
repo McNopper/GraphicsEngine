@@ -9,9 +9,9 @@
 
 using namespace std;
 
-LineGeometryManager* LineGeometryManager::instance;
-
-LineGeometryManager::LineGeometryManager() {
+LineGeometryManager::LineGeometryManager() :
+		Singleton<LineGeometryManager>()
+{
 }
 
 LineGeometryManager::~LineGeometryManager() {
@@ -22,24 +22,6 @@ LineGeometryManager::~LineGeometryManager() {
 		walker++;
 	}
 	allLineGeometries.clear();
-}
-
-LineGeometryManager* LineGeometryManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new LineGeometryManager();
-	}
-
-	return instance;}
-
-void LineGeometryManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 bool LineGeometryManager::containsLineGeometry(const string& key) const

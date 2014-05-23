@@ -12,10 +12,8 @@
 using namespace std;
 using namespace boost;
 
-Texture1DManager* Texture1DManager::instance;
-
 Texture1DManager::Texture1DManager() :
-	allTextures()
+		Singleton<Texture1DManager>(), allTextures()
 {
 }
 
@@ -29,25 +27,6 @@ Texture1DManager::~Texture1DManager()
 		walker++;
 	}
 	allTextures.clear();
-}
-
-Texture1DManager* Texture1DManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new Texture1DManager();
-	}
-
-	return instance;
-}
-
-void Texture1DManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void Texture1DManager::addTexture(const string& key, const Texture1DSP& texture)

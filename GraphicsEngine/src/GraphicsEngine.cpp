@@ -87,9 +87,9 @@ GLUSvoid terminateEngine(GLUSvoid)
 {
 	User::defaultUser.setUserCamera(CameraSP());
 
-	// TODO Make rest usage of Manager Template.
 	PathEntityManager::terminate();
 
+	// TODO Make rest usage of Manager Template.
 	GeneralEntityManager::terminate();
 
 	ModelManager::terminate();
@@ -99,7 +99,6 @@ GLUSvoid terminateEngine(GLUSvoid)
 	PostProcessor2DMultisampleManager::terminate();
 
 	SkyManager::terminate();
-	// TODO Make rest usage of Singleton Template.
 	GroundManager::terminate();
 	FontManager::terminate();
 	FrameBuffer2DManager::terminate();

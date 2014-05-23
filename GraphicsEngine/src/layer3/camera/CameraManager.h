@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Camera.h"
 
-class CameraManager
+class CameraManager : public Singleton<CameraManager>
 {
-private:
 
-	static CameraManager* instance;
+	friend class Singleton<CameraManager>;
+
+private:
 
 	std::map<std::string, CameraSP> allCameras;
 
@@ -33,10 +36,6 @@ private:
 	virtual ~CameraManager();
 
 public:
-
-	static CameraManager* getInstance();
-
-	static void terminate();
 
 	const CameraSP& getDefaultPerspectiveCamera() const;
 

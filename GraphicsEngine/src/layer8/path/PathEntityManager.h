@@ -8,18 +8,16 @@
 #ifndef PATHENTITYMANAGER_H_
 #define PATHENTITYMANAGER_H_
 
+#include "../../layer0/stereotype/KeyValueManager.h"
 #include "../../layer0/stereotype/Singleton.h"
 #include "../../layer7/entity/GeneralEntity.h"
+
 #include "Path.h"
 
-class PathEntityManager : public Singleton<PathEntityManager>
+class PathEntityManager : public Singleton<PathEntityManager>, private KeyValueManager<GeneralEntitySP, PathSP>
 {
 
 	friend class Singleton<PathEntityManager>;
-
-private:
-
-	std::map<GeneralEntitySP, PathSP> allPaths;
 
 protected:
 

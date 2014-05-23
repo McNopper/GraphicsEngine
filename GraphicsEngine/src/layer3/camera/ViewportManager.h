@@ -10,14 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Viewport.h"
 
-class ViewportManager
+class ViewportManager : public Singleton<ViewportManager>
 {
 
-private:
+	friend class Singleton<ViewportManager>;
 
-	static ViewportManager* instance;
+private:
 
 	std::map<std::string, ViewportSP> allViewports;
 
@@ -31,10 +33,6 @@ private:
 	virtual ~ViewportManager();
 
 public:
-
-	static ViewportManager* getInstance();
-
-	static void terminate();
 
 	const ViewportSP& getDefaultViewport() const;
 

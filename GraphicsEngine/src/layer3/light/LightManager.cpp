@@ -13,9 +13,8 @@ using namespace std;
 
 const string LightManager::DEFAULT_DIRECTIONAL_LIGHT_KEY = "default_directional";
 
-LightManager* LightManager::instance;
-
-LightManager::LightManager() : allLights(), ambientLightColor(Color::BLACK)
+LightManager::LightManager() :
+		Singleton<LightManager>(), allLights(), ambientLightColor(Color::BLACK)
 {
 	Color specular(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -31,25 +30,6 @@ LightManager::~LightManager()
 		walker++;
 	}
 	allLights.clear();
-}
-
-LightManager* LightManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new LightManager();
-	}
-
-	return instance;
-}
-
-void LightManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 bool LightManager::containsLight(const string& key) const

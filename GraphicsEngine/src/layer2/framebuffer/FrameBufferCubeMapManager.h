@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "FrameBufferCubeMap.h"
 
-class FrameBufferCubeMapManager
+class FrameBufferCubeMapManager : public Singleton<FrameBufferCubeMapManager>
 {
-private:
 
-	static FrameBufferCubeMapManager* instance;
+	friend class Singleton<FrameBufferCubeMapManager>;
+
+private:
 
 	std::map<std::string, FrameBufferCubeMapSP> allFrameBuffers;
 
@@ -24,10 +27,6 @@ private:
 	virtual ~FrameBufferCubeMapManager();
 
 public:
-
-	static FrameBufferCubeMapManager* getInstance();
-
-	static void terminate();
 
 	bool containsFrameBuffer(const std::string& key) const;
 

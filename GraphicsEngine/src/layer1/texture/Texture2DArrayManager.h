@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Texture2DArray.h"
 
-class Texture2DArrayManager
+class Texture2DArrayManager : public Singleton<Texture2DArrayManager>
 {
-private:
 
-	static Texture2DArrayManager* instance;
+	friend class Singleton<Texture2DArrayManager>;
+
+private:
 
 	std::map<std::string, Texture2DArraySP> allTextures;
 
@@ -26,10 +29,6 @@ private:
 	virtual ~Texture2DArrayManager();
 
 public:
-
-	static Texture2DArrayManager* getInstance();
-
-	static void terminate();
 
 	void addTexture(const std::string& key, const Texture2DArraySP& texture);
 

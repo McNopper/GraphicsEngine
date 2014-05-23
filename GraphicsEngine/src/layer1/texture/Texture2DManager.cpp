@@ -12,10 +12,8 @@
 using namespace std;
 using namespace boost;
 
-Texture2DManager* Texture2DManager::instance;
-
 Texture2DManager::Texture2DManager() :
-	allTextures()
+		Singleton<Texture2DManager>(), allTextures()
 {
 }
 
@@ -29,25 +27,6 @@ Texture2DManager::~Texture2DManager()
 		walker++;
 	}
 	allTextures.clear();
-}
-
-Texture2DManager* Texture2DManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new Texture2DManager();
-	}
-
-	return instance;
-}
-
-void Texture2DManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void Texture2DManager::addTexture(const string& key, const Texture2DSP& texture)

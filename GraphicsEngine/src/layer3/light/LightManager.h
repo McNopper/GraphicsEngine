@@ -10,14 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Light.h"
 
-class LightManager
+class LightManager : public Singleton<LightManager>
 {
 
-private:
+	friend class Singleton<LightManager>;
 
-	static LightManager* instance;
+private:
 
 	std::map<std::string, LightSP> allLights;
 
@@ -29,10 +31,6 @@ private:
 public:
 
 	static const std::string DEFAULT_DIRECTIONAL_LIGHT_KEY;
-
-	static LightManager* getInstance();
-
-	static void terminate();
 
 	bool containsLight(const std::string& key) const;
 

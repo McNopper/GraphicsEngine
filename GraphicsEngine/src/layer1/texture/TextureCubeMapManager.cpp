@@ -11,10 +11,8 @@
 
 using namespace std;
 
-TextureCubeMapManager* TextureCubeMapManager::instance;
-
 TextureCubeMapManager::TextureCubeMapManager() :
-	allTextures()
+		Singleton<TextureCubeMapManager>(), allTextures()
 {
 }
 
@@ -28,25 +26,6 @@ TextureCubeMapManager::~TextureCubeMapManager()
 		walker++;
 	}
 	allTextures.clear();
-}
-
-TextureCubeMapManager* TextureCubeMapManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new TextureCubeMapManager();
-	}
-
-	return instance;
-}
-
-void TextureCubeMapManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void TextureCubeMapManager::addTexture(const string& posX, const TextureCubeMapSP& texture)

@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Texture2DMultisample.h"
 
-class Texture2DMultisampleManager
+class Texture2DMultisampleManager : public Singleton<Texture2DMultisampleManager>
 {
-private:
 
-	static Texture2DMultisampleManager* instance;
+	friend class Singleton<Texture2DMultisampleManager>;
+
+private:
 
 	std::map<std::string, Texture2DMultisampleSP> allTextures;
 
@@ -26,10 +29,6 @@ private:
 	virtual ~Texture2DMultisampleManager();
 
 public:
-
-	static Texture2DMultisampleManager* getInstance();
-
-	static void terminate();
 
 	void addTexture(const std::string& key, const Texture2DMultisampleSP& texture);
 

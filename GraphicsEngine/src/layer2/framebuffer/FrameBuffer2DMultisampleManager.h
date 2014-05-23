@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "FrameBuffer2DMultisample.h"
 
-class FrameBuffer2DMultisampleManager
+class FrameBuffer2DMultisampleManager : public Singleton<FrameBuffer2DMultisampleManager>
 {
-private:
 
-	static FrameBuffer2DMultisampleManager* instance;
+	friend class Singleton<FrameBuffer2DMultisampleManager>;
+
+private:
 
 	std::map<std::string, FrameBuffer2DMultisampleSP> allFrameBuffers;
 
@@ -26,10 +29,6 @@ private:
 	virtual ~FrameBuffer2DMultisampleManager();
 
 public:
-
-	static FrameBuffer2DMultisampleManager* getInstance();
-
-	static void terminate();
 
 	bool containsFrameBuffer(const std::string& key) const;
 

@@ -9,12 +9,13 @@
 
 using namespace std;
 
-FontManager* FontManager::instance;
-
-FontManager::FontManager() {
+FontManager::FontManager() :
+		Singleton<FontManager>()
+{
 }
 
-FontManager::~FontManager() {
+FontManager::~FontManager()
+{
 	auto walker = allFonts.begin();
 	while (walker != allFonts.end())
 	{
@@ -22,24 +23,6 @@ FontManager::~FontManager() {
 		walker++;
 	}
 	allFonts.clear();
-}
-
-FontManager* FontManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new FontManager();
-	}
-
-	return instance;}
-
-void FontManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 const FontSP& FontManager::getFont(const string& key)

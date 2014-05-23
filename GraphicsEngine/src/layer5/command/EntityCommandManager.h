@@ -9,16 +9,17 @@
 #define ENTITYCOMMANDMANAGER_H_
 
 #include "../../layer0/concurrency/ThreadSafeCounter.h"
+#include "../../layer0/stereotype/Singleton.h"
 #include "../../layer4/entity/Entity.h"
 
 #include "UpdateCommand.h"
 
-class EntityCommandManager
+class EntityCommandManager : public Singleton<EntityCommandManager>
 {
 
-private:
+	friend class Singleton<EntityCommandManager>;
 
-	static EntityCommandManager* instance;
+private:
 
 	UpdateCommandRecycleQueueSP updateCommandRecycleQueue;
 
@@ -28,10 +29,6 @@ private:
 	~EntityCommandManager();
 
 public:
-
-	static EntityCommandManager* getInstance();
-
-	static void terminate();
 
 	void publishUpdateCommand(Entity* entity);
 

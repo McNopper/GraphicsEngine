@@ -13,8 +13,7 @@
 using namespace std;
 using namespace boost;
 
-TextureFactory::TextureFactory() :
-		autoInternalFloat(false), autoInternalInteger(true), floatBitsPerPixel(BitsPerPixel16), integerBitsPerPixel(BitsPerPixel8)
+TextureFactory::TextureFactory() : TextureFactoryBase()
 {
 	ilInit();
 	iluInit();
@@ -103,130 +102,6 @@ GLuint TextureFactory::loadImage(const string& filename, string& identifier) con
 	return 0;
 }
 
-GLenum TextureFactory::gatherInternalFormat(GLenum format, GLenum type) const
-{
-	if (type == GL_FLOAT || type == GL_HALF_FLOAT)
-	{
-		if (autoInternalFloat)
-		{
-			return format;
-		}
-
-		if (format == GL_RGB)
-		{
-			switch (floatBitsPerPixel)
-			{
-				case BitsPerPixel8:
-					glusLogPrint(GLUS_LOG_WARNING, "No 8 bit floating point internal format. Using automatic format.");
-				break;
-				case BitsPerPixel16:
-					return GL_RGB16F;
-				break;
-				case BitsPerPixel32:
-					return GL_RGB32F;
-				break;
-			}
-
-			return GL_RGB;
-		}
-		else if (format == GL_RGBA)
-		{
-			switch (floatBitsPerPixel)
-			{
-				case BitsPerPixel8:
-					glusLogPrint(GLUS_LOG_WARNING, "No 8 bit floating point internal format. Using automatic format.");
-				break;
-				case BitsPerPixel16:
-					return GL_RGBA16F;
-				break;
-				case BitsPerPixel32:
-					return GL_RGBA32F;
-				break;
-			}
-
-			return GL_RGBA;
-		}
-
-		return format;
-	}
-
-	if (autoInternalInteger)
-	{
-		return format;
-	}
-
-	if (format == GL_RGB)
-	{
-		switch (integerBitsPerPixel)
-		{
-			case BitsPerPixel8:
-				return GL_RGB8;
-			break;
-			case BitsPerPixel16:
-				return GL_RGB16;
-			break;
-			case BitsPerPixel32:
-				if (type == GL_BYTE || type == GL_SHORT || type == GL_INT)
-				{
-					return GL_RGB32I;
-				}
-				else
-				{
-					return GL_RGB32UI;
-				}
-			break;
-		}
-
-		return GL_RGB;
-	}
-	else if (format == GL_RGBA)
-	{
-		switch (integerBitsPerPixel)
-		{
-			case BitsPerPixel8:
-				return GL_RGBA8;
-			break;
-			case BitsPerPixel16:
-				return GL_RGBA16;
-			break;
-			case BitsPerPixel32:
-				if (type == GL_BYTE || type == GL_SHORT || type == GL_INT)
-				{
-					return GL_RGBA32I;
-				}
-				else
-				{
-					return GL_RGBA32UI;
-				}
-			break;
-		}
-
-		return GL_RGBA;
-	}
-
-	return format;
-}
-
-Texture1DSP TextureFactory::createTexture1D(const string& identifier, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture1DSP(new Texture1D(identifier, gatherInternalFormat(format, type), width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture1DSP TextureFactory::createTexture1D(const string& identifier, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture1DSP(new Texture1D(identifier, internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture1DArraySP TextureFactory::createTexture1DArray(const string& identifier, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture1DArraySP(new Texture1DArray(identifier, gatherInternalFormat(format, type), width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture1DArraySP TextureFactory::createTexture1DArray(const string& identifier, int internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture1DArraySP(new Texture1DArray(identifier, internalFormat, width, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
 Texture2DSP TextureFactory::loadTexture2D(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	Texture2DSP texture2D;
@@ -252,32 +127,7 @@ Texture2DSP TextureFactory::loadTexture2D(const string& filename, bool mipMap, G
 	return texture2D;
 }
 
-Texture2DSP TextureFactory::createTexture2D(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture2DSP(new Texture2D(identifier, gatherInternalFormat(format, type), width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture2DSP TextureFactory::createTexture2D(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture2DSP(new Texture2D(identifier, internalFormat, width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture2DArraySP TextureFactory::createTexture2DArray(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture2DArraySP(new Texture2DArray(identifier, gatherInternalFormat(format, type), width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture2DArraySP TextureFactory::createTexture2DArray(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return Texture2DArraySP(new Texture2DArray(identifier, internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-Texture2DMultisampleSP TextureFactory::createTexture2DMultisample(const string& identifier, int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) const
-{
-	return Texture2DMultisampleSP(new Texture2DMultisample(identifier, samples, internalFormat, width, height, fixedsamplelocations));
-}
-
-TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	TextureCubeMapSP textureCubeMap;
 
@@ -419,56 +269,6 @@ TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& filename, bool
 	return textureCubeMap;
 }
 
-TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(format, type), width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-TextureCubeMapSP TextureFactory::createTextureCubeMap(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
-{
-	return TextureCubeMapSP(new TextureCubeMap(identifier, internalFormat, width, height, format, type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
-}
-
-bool TextureFactory::isAutoInternalFloat() const
-{
-	return autoInternalFloat;
-}
-
-void TextureFactory::setAutoInternalFloat(bool autoInternalFloat)
-{
-	this->autoInternalFloat = autoInternalFloat;
-}
-
-bool TextureFactory::isAutoInternalInteger() const
-{
-	return autoInternalInteger;
-}
-
-void TextureFactory::setAutoInternalInteger(bool autoInternalInteger)
-{
-	this->autoInternalInteger = autoInternalInteger;
-}
-
-enum FormatDepth TextureFactory::getFloatBitsPerPixel() const
-{
-	return floatBitsPerPixel;
-}
-
-void TextureFactory::setFloatBitsPerPixel(enum FormatDepth floatBitsPerPixel)
-{
-	this->floatBitsPerPixel = floatBitsPerPixel;
-}
-
-enum FormatDepth TextureFactory::getIntegerBitsPerPixel() const
-{
-	return integerBitsPerPixel;
-}
-
-void TextureFactory::setIntegerBitsPerPixel(enum FormatDepth integerBitsPerPixel)
-{
-	this->integerBitsPerPixel = integerBitsPerPixel;
-}
-
 //
 // Saving
 //
@@ -514,44 +314,5 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 	ilBindImage(0);
 	ilDeleteImages(1, &imageName);
 
-	return static_cast<bool>(result);
-}
-
-bool TextureFactory::saveTexture2D(const Texture2DSP texture2D) const
-{
-	return saveImage(texture2D->getIdentifier(), texture2D->getPixelData());
-}
-
-bool TextureFactory::saveTextureCubeMap(const TextureCubeMapSP textureCubeMap) const
-{
-	string postFix;
-
-	for (int32_t i = 0; i < 6; i++)
-	{
-		switch (i)
-		{
-			case 0:
-				postFix = "_posX";
-			break;
-			case 1:
-				postFix = "_negX";
-			break;
-			case 2:
-				postFix = "_posY";
-			break;
-			case 3:
-				postFix = "_negY";
-			break;
-			case 4:
-				postFix = "_posZ";
-			break;
-			case 5:
-				postFix = "_negZ";
-			break;
-		}
-
-		saveImage(textureCubeMap->getIdentifier() + postFix, textureCubeMap->getPixelData(i));
-	}
-
-	return true;
+	return static_cast<bool>(result == IL_TRUE);
 }

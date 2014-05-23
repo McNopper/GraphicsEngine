@@ -9,10 +9,8 @@
 
 using namespace std;
 
-GroundManager* GroundManager::instance;
-
 GroundManager::GroundManager() :
-		allGrounds()
+	Singleton<GroundManager>(), allGrounds()
 {
 }
 
@@ -25,26 +23,6 @@ GroundManager::~GroundManager()
 		walker++;
 	}
 	allGrounds.clear();
-}
-
-
-GroundManager* GroundManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new GroundManager();
-	}
-
-	return instance;
-}
-
-void GroundManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 bool GroundManager::containsGroundByKey(const string& key) const

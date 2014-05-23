@@ -7,9 +7,8 @@
 
 #include "EventManager.h"
 
-EventManager* EventManager::instance = nullptr;
-
-EventManager::EventManager() : eventMutex(), allEvents(), allEventReceivers()
+EventManager::EventManager() :
+		Singleton<EventManager>(), eventMutex(), allEvents(), allEventReceivers()
 {
 }
 
@@ -19,31 +18,12 @@ EventManager::~EventManager()
 
 	EventSP currentEvent;
 
-	while(allEvents.take(currentEvent))
+	while (allEvents.take(currentEvent))
 	{
 		currentEvent.reset();
 	}
 
 	allEventReceivers.clear();
-}
-
-EventManager* EventManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new EventManager();
-	}
-
-	return instance;
-}
-
-void EventManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void EventManager::processEvents()

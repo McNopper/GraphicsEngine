@@ -10,11 +10,10 @@
 
 #include "WorkerManager.h"
 
-WorkerManager* WorkerManager::instance;
-
 using namespace boost;
 
-WorkerManager::WorkerManager()
+WorkerManager::WorkerManager() :
+		Singleton<WorkerManager>()
 {
 	stopCommandRecycleQueue = StopCommandRecycleQueueSP(new ThreadsafeQueue<StopCommand*>());
 	commandQueue = CommandQueueSP(new ThreadsafeQueue<Command*>());
@@ -26,7 +25,7 @@ WorkerManager::~WorkerManager()
 
 	StopCommand* currentStopCommand = nullptr;
 	bool available = stopCommandRecycleQueue->take(currentStopCommand);
-	while(available)
+	while (available)
 	{
 		delete currentStopCommand;
 
@@ -36,32 +35,13 @@ WorkerManager::~WorkerManager()
 
 	Command* currentCommand = nullptr;
 	available = commandQueue->take(currentCommand);
-	while(available)
+	while (available)
 	{
 		delete currentCommand;
 
 		available = commandQueue->take(currentCommand);
 	}
 	commandQueue.reset();
-}
-
-WorkerManager* WorkerManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new WorkerManager();
-	}
-
-	return instance;
-}
-
-void WorkerManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void WorkerManager::addWorker()

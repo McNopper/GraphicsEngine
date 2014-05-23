@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Ground.h"
 
-class GroundManager
+class GroundManager : public Singleton<GroundManager>
 {
-private:
 
-	static GroundManager* instance;
+	friend class Singleton<GroundManager>;
+
+private:
 
 	std::map<std::string, GroundSP> allGrounds;
 
@@ -24,10 +27,6 @@ private:
 	virtual ~GroundManager();
 
 public:
-
-	static GroundManager* getInstance();
-
-	static void terminate();
 
 	bool containsGroundByKey(const std::string& key) const;
 

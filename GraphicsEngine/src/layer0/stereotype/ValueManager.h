@@ -30,6 +30,16 @@ class ValueManager
 
 	public:
 
+		virtual typename std::vector<V>::iterator begin()
+		{
+			return allValues.begin();
+		}
+
+		virtual typename std::vector<V>::iterator end()
+		{
+			return allValues.end();
+		}
+
 		virtual bool add(const V& value)
 		{
 			auto walker = std::find(allValues.begin(), allValues.end(), value);
@@ -58,22 +68,22 @@ class ValueManager
 			return false;
 		}
 
-		bool contains(const V& value) const
+		virtual bool contains(const V& value) const
 		{
 			return std::find(allValues.begin(), allValues.end(), value) != allValues.end();
 		}
 
-		V at(boost::int32_t i) const
+		virtual V at(boost::int32_t i) const
 		{
 			return allValues.at(i);
 		}
 
-		const std::vector<V>& getAllValues() const
+		virtual const std::vector<V>& getAllValues() const
 		{
 			return allValues;
 		}
 
-		boost::int32_t size() const
+		virtual boost::int32_t size() const
 		{
 			return allValues.size();
 		}

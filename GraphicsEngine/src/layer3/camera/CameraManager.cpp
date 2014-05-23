@@ -12,14 +12,12 @@
 
 using namespace std;
 
-CameraManager* CameraManager::instance = nullptr;
-
 const string CameraManager::DEFAULT_PERSPECTIVE_CAMERA_KEY = "default_perspective";
 
 const string CameraManager::DEFAULT_ORTHOGRAPHIC_CAMERA_KEY = "default_orthographic";
 
 CameraManager::CameraManager() :
-	allCameras(), allWindowCameras()
+		Singleton<CameraManager>(), allCameras(), allWindowCameras()
 {
 	allCameras[DEFAULT_PERSPECTIVE_CAMERA_KEY] = CameraSP(new PerspectiveCamera(DEFAULT_PERSPECTIVE_CAMERA_KEY));
 	allCameras[DEFAULT_ORTHOGRAPHIC_CAMERA_KEY] = CameraSP(new OrthographicCamera(DEFAULT_ORTHOGRAPHIC_CAMERA_KEY));
@@ -40,25 +38,6 @@ CameraManager::~CameraManager()
 	}
 	allCameras.clear();
 	allWindowCameras.clear();
-}
-
-CameraManager* CameraManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new CameraManager();
-	}
-
-	return instance;
-}
-
-void CameraManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 const CameraSP& CameraManager::getDefaultPerspectiveCamera() const

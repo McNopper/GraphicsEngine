@@ -13,10 +13,8 @@ using namespace std;
 
 using namespace boost;
 
-Texture2DMultisampleManager* Texture2DMultisampleManager::instance;
-
 Texture2DMultisampleManager::Texture2DMultisampleManager() :
-	allTextures()
+		Singleton<Texture2DMultisampleManager>(), allTextures()
 {
 }
 
@@ -30,26 +28,6 @@ Texture2DMultisampleManager::~Texture2DMultisampleManager()
 		walker++;
 	}
 	allTextures.clear();
-}
-
-
-Texture2DMultisampleManager* Texture2DMultisampleManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new Texture2DMultisampleManager();
-	}
-
-	return instance;
-}
-
-void Texture2DMultisampleManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void Texture2DMultisampleManager::addTexture(const string& key, const Texture2DMultisampleSP& texture)

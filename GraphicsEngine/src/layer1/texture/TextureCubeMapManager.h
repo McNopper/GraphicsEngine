@@ -10,14 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "TextureCubeMap.h"
 
-class TextureCubeMapManager
+class TextureCubeMapManager : public Singleton<TextureCubeMapManager>
 {
 
-private:
+	friend class Singleton<TextureCubeMapManager>;
 
-	static TextureCubeMapManager* instance;
+private:
 
 	std::map<std::string, TextureCubeMapSP> allTextures;
 
@@ -27,10 +29,6 @@ private:
 	virtual ~TextureCubeMapManager();
 
 public:
-
-	static TextureCubeMapManager* getInstance();
-
-	static void terminate();
 
 	void addTexture(const std::string& posX, const TextureCubeMapSP& texture);
 

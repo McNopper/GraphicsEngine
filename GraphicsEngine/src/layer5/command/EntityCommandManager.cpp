@@ -9,9 +9,8 @@
 
 #include "EntityCommandManager.h"
 
-EntityCommandManager* EntityCommandManager::instance;
-
-EntityCommandManager::EntityCommandManager()
+EntityCommandManager::EntityCommandManager() :
+	Singleton<EntityCommandManager>()
 {
 	updateTaskCounter = ThreadSafeCounterSP(new ThreadSafeCounter());
 
@@ -31,25 +30,6 @@ EntityCommandManager::~EntityCommandManager()
 	updateCommandRecycleQueue.reset();
 
 	updateTaskCounter.reset();
-}
-
-EntityCommandManager* EntityCommandManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new EntityCommandManager();
-	}
-
-	return instance;
-}
-
-void EntityCommandManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void EntityCommandManager::publishUpdateCommand(Entity* entity)

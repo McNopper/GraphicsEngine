@@ -10,13 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "Program.h"
 
-class ProgramManager
+class ProgramManager : public Singleton<ProgramManager>
 {
-private:
 
-	static ProgramManager* instance;
+	friend class Singleton<ProgramManager>;
+
+private:
 
 	std::multimap<std::string, ProgramSP> allPrograms;
 
@@ -32,10 +35,6 @@ private:
 	virtual ~ProgramManager();
 
 public:
-
-	static ProgramManager* getInstance();
-
-	static void terminate();
 
 	void addProgram(const ProgramSP& program);
 

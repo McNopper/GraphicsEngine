@@ -12,10 +12,8 @@
 using namespace std;
 using namespace boost;
 
-Texture1DArrayManager* Texture1DArrayManager::instance;
-
 Texture1DArrayManager::Texture1DArrayManager() :
-		allTextures()
+		Singleton<Texture1DArrayManager>(), allTextures()
 {
 }
 
@@ -29,25 +27,6 @@ Texture1DArrayManager::~Texture1DArrayManager()
 		walker++;
 	}
 	allTextures.clear();
-}
-
-Texture1DArrayManager* Texture1DArrayManager::getInstance()
-{
-	if (!instance)
-	{
-		instance = new Texture1DArrayManager();
-	}
-
-	return instance;
-}
-
-void Texture1DArrayManager::terminate()
-{
-	if (instance)
-	{
-		delete instance;
-		instance = 0;
-	}
 }
 
 void Texture1DArrayManager::addTexture(const string& key, const Texture1DArraySP& texture)
@@ -86,5 +65,4 @@ Texture1DArraySP Texture1DArrayManager::createTexture(const string& key, GLint i
 
 	return allTextures[key];
 }
-
 

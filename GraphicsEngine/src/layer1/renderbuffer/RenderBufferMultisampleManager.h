@@ -10,14 +10,16 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/Singleton.h"
+
 #include "RenderBufferMultisample.h"
 
-class RenderBufferMultisampleManager
+class RenderBufferMultisampleManager : public Singleton<RenderBufferMultisampleManager>
 {
 
-private:
+	friend class Singleton<RenderBufferMultisampleManager>;
 
-	static RenderBufferMultisampleManager* instance;
+private:
 
 	std::map<std::string, RenderBufferMultisampleSP> allRenderBuffers;
 
@@ -25,10 +27,6 @@ private:
 	virtual ~RenderBufferMultisampleManager();
 
 public:
-
-	static RenderBufferMultisampleManager* getInstance();
-
-	static void terminate();
 
 	void addRenderBuffer(const std::string& key, const RenderBufferMultisampleSP& renderBufferMultisample);
 

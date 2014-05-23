@@ -8,39 +8,22 @@
 #include "PathEntityManager.h"
 
 PathEntityManager::PathEntityManager() :
-	Singleton<PathEntityManager>(), allPaths()
+	Singleton<PathEntityManager>(), KeyValueManager<GeneralEntitySP, PathSP>()
 {
 }
 
 PathEntityManager::~PathEntityManager()
 {
-	auto walker = allPaths.begin();
-
-	while (walker != allPaths.end())
-	{
-		walker->second.reset();
-
-		walker++;
-	}
-
-	allPaths.clear();
 }
 
 void PathEntityManager::addEntity(const GeneralEntitySP& entity, const PathSP& path)
 {
-	allPaths[entity] = path;
+	add(entity, path);
 }
 
 PathSP PathEntityManager::findPath(const GeneralEntitySP& entity) const
 {
-	auto result = allPaths.find(entity);
-
-	if (result != allPaths.end())
-	{
-		return result->second;
-	}
-
-	return PathSP();
+	return find(entity);
 }
 
 bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaTime)
@@ -55,14 +38,7 @@ bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaT
 		return false;
 	}
 
-	auto result = allPaths.find(entity);
-
-	if (result == allPaths.end())
-	{
-		return false;
-	}
-
-	PathSP path = result->second;
+	PathSP path = find(entity);
 
 	if (!path.get())
 	{
@@ -86,9 +62,9 @@ bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaT
 
 void PathEntityManager::updateEntities(float deltaTime)
 {
-	auto walker = allPaths.begin();
+	auto walker = begin();
 
-	while (walker != allPaths.end())
+	while (walker != end())
 	{
 		updateEntity(walker->first, deltaTime);
 
