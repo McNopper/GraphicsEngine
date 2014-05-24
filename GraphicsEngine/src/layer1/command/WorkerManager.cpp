@@ -48,7 +48,7 @@ void WorkerManager::addWorker()
 {
 	WorkerSP currentWorker = WorkerSP(new Worker(commandQueue));
 
-	allWorker.push_back(currentWorker);
+	allWorker.add(currentWorker);
 }
 
 void WorkerManager::removeAllWorker()

@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Model.h"
@@ -19,11 +20,9 @@ class ModelManager : public Singleton<ModelManager>
 
 	friend class Singleton<ModelManager>;
 
-private:
-
-	std::map<std::string, ModelSP> allModels;
-
 protected:
+
+	KeyValueMap<std::string, ModelSP> allModels;
 
 	ModelManager();
 	virtual ~ModelManager();

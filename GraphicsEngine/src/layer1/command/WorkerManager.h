@@ -11,6 +11,7 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/stereotype/Singleton.h"
+#include "../../layer0/stereotype/ValueVector.h"
 
 #include "StopCommand.h"
 #include "Worker.h"
@@ -26,7 +27,7 @@ private:
 
 	CommandQueueSP commandQueue;
 
-	std::vector<WorkerSP> allWorker;
+	ValueVector<WorkerSP> allWorker;
 
 	WorkerManager();
 	virtual ~WorkerManager();

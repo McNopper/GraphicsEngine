@@ -10,7 +10,7 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/stereotype/KeyValueManager.h"
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 #include "../../layer2/framebuffer/FrameBufferCubeMap.h"
 #include "../../layer3/camera/PerspectiveCamera.h"
@@ -18,12 +18,14 @@
 
 #include "DynamicEnvironment.h"
 
-class DynamicEnvironmentManager : public KeyValueManager<EntitySP, DynamicEnvironmentSP>, public Singleton<DynamicEnvironmentManager>
+class DynamicEnvironmentManager : public Singleton<DynamicEnvironmentManager>
 {
 
 	friend class Singleton<DynamicEnvironmentManager>;
 
 protected:
+
+	KeyValueMap<EntitySP, DynamicEnvironmentSP> allDynamicEnvironments;
 
 	DynamicEnvironmentManager();
 	virtual ~DynamicEnvironmentManager();

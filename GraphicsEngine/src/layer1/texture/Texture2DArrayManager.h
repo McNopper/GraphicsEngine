@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Texture2DArray.h"
@@ -21,7 +22,7 @@ class Texture2DArrayManager : public Singleton<Texture2DArrayManager>
 
 private:
 
-	std::map<std::string, Texture2DArraySP> allTextures;
+	KeyValueMap<std::string, Texture2DArraySP> allTextures;
 
 private:
 

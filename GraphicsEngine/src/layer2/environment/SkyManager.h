@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Sky.h"
@@ -21,7 +22,7 @@ class SkyManager : public Singleton<SkyManager>
 
 private:
 
-	std::map<std::string, SkySP> allSkies;
+	KeyValueMap<std::string, SkySP> allSkies;
 
 	SkySP activeSky;
 

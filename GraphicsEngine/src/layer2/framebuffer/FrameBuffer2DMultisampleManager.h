@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "FrameBuffer2DMultisample.h"
@@ -21,9 +22,9 @@ class FrameBuffer2DMultisampleManager : public Singleton<FrameBuffer2DMultisampl
 
 private:
 
-	std::map<std::string, FrameBuffer2DMultisampleSP> allFrameBuffers;
+	KeyValueMap<std::string, FrameBuffer2DMultisampleSP> allFrameBuffers;
 
-	std::map<std::string, FrameBuffer2DMultisampleSP> allWindowFrameBuffers;
+	KeyValueMap<std::string, FrameBuffer2DMultisampleSP> allWindowFrameBuffers;
 
 	FrameBuffer2DMultisampleManager();
 	virtual ~FrameBuffer2DMultisampleManager();

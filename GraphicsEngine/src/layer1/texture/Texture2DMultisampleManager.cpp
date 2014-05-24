@@ -37,11 +37,9 @@ void Texture2DMultisampleManager::addTexture(const string& key, const Texture2DM
 
 Texture2DMultisampleSP Texture2DMultisampleManager::createTexture(const string& key, int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations)
 {
-	auto walker = allTextures.find(key);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(key))
 	{
 		allTextures[key] = textureFactory.createTexture2DMultisample(key, samples, internalFormat, width, height, fixedsamplelocations);
 

@@ -1,40 +1,55 @@
 /*
- * KeyValueManager.h
+ * KeyValueMap.h
  *
  *  Created on: 22.05.2013
  *      Author: nopper
  */
 
-#ifndef KEYVALUEMANAGER_H_
-#define KEYVALUEMANAGER_H_
+#ifndef KEYVALUEMAP_H_
+#define KEYVALUEMAP_H_
 
 #include "../../UsedLibs.h"
 
 template<class K, class V>
-class KeyValueManager
+class KeyValueMap
 {
 
 	protected:
 
 		std::map<K, V> allKeyValues;
 
-		KeyValueManager()
+	public:
+
+		KeyValueMap()
 		{
 		}
 
-		virtual ~KeyValueManager()
+		virtual ~KeyValueMap()
+		{
+			clear();
+		}
+
+		virtual void clear()
 		{
 			allKeyValues.clear();
 		}
-
-	public:
 
 		virtual typename std::map<K, V>::iterator begin()
 		{
 			return allKeyValues.begin();
 		}
 
+		virtual typename std::map<K, V>::const_iterator begin() const
+		{
+			return allKeyValues.begin();
+		}
+
 		virtual typename std::map<K, V>::iterator end()
+		{
+			return allKeyValues.end();
+		}
+
+		virtual typename std::map<K, V>::const_iterator end() const
 		{
 			return allKeyValues.end();
 		}
@@ -56,7 +71,7 @@ class KeyValueManager
 			allKeyValues[key] = value;
 		}
 
-		virtual bool erase(const K& key)
+		virtual bool remove(const K& key)
 		{
 			if (allKeyValues.find(key) == allKeyValues.end())
 			{
@@ -68,7 +83,7 @@ class KeyValueManager
 			return true;
 		}
 
-		virtual V find(const K& key) const
+		virtual V search(const K& key) const
 		{
 			auto result = allKeyValues.find(key);
 
@@ -85,9 +100,19 @@ class KeyValueManager
 			return allKeyValues.find(key) != allKeyValues.end();
 		}
 
-		virtual V at(const K& key) const
+		virtual V& at(const K& key)
 		{
 			return allKeyValues.at(key);
+		}
+
+		virtual const V& at(const K& key) const
+		{
+			return allKeyValues.at(key);
+		}
+
+		virtual V& operator[](const K& key)
+		{
+			return allKeyValues[key];
 		}
 
 		virtual const std::map<K, V>& getAllKeyValues() const
@@ -102,4 +127,4 @@ class KeyValueManager
 
 };
 
-#endif /* KEYVALUEMANAGER_H_ */
+#endif /* KEYVALUEMAP_H_ */

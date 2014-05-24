@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Font.h"
@@ -21,7 +22,7 @@ class FontManager : public Singleton<FontManager>
 
 private:
 
-	std::map<std::string, FontSP> allFonts;
+	KeyValueMap<std::string, FontSP> allFonts;
 
 	FontManager();
 	virtual ~FontManager();

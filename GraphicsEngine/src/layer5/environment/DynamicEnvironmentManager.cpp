@@ -16,7 +16,7 @@ using namespace boost;
 using namespace std;
 
 DynamicEnvironmentManager::DynamicEnvironmentManager() :
-		KeyValueManager<EntitySP, DynamicEnvironmentSP>(), Singleton<DynamicEnvironmentManager>()
+		Singleton<DynamicEnvironmentManager>(), allDynamicEnvironments()
 {
 }
 
@@ -26,7 +26,7 @@ DynamicEnvironmentManager::~DynamicEnvironmentManager()
 
 FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& entity, int32_t length)
 {
-	DynamicEnvironmentSP dynamicEnvironment = find(entity);
+	DynamicEnvironmentSP dynamicEnvironment = allDynamicEnvironments.search(entity);
 
 	if (dynamicEnvironment.get())
 	{
@@ -49,7 +49,7 @@ FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& en
 
 	dynamicEnvironment = DynamicEnvironmentSP(new DynamicEnvironment(entity->getBoundingSphere().getCenter(), result));
 
-	add(entity, dynamicEnvironment);
+	allDynamicEnvironments.add(entity, dynamicEnvironment);
 
 	return result;
 }

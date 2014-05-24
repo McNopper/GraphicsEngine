@@ -8,7 +8,7 @@
 #include "PathEntityManager.h"
 
 PathEntityManager::PathEntityManager() :
-	Singleton<PathEntityManager>(), KeyValueManager<GeneralEntitySP, PathSP>()
+	Singleton<PathEntityManager>(), allPaths()
 {
 }
 
@@ -18,12 +18,12 @@ PathEntityManager::~PathEntityManager()
 
 void PathEntityManager::addEntity(const GeneralEntitySP& entity, const PathSP& path)
 {
-	add(entity, path);
+	allPaths[entity] = path;
 }
 
 PathSP PathEntityManager::findPath(const GeneralEntitySP& entity) const
 {
-	return find(entity);
+	return allPaths.search(entity);
 }
 
 bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaTime)
@@ -38,7 +38,7 @@ bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaT
 		return false;
 	}
 
-	PathSP path = find(entity);
+	PathSP path = allPaths.search(entity);
 
 	if (!path.get())
 	{
@@ -62,9 +62,9 @@ bool PathEntityManager::updateEntity(const GeneralEntitySP& entity, float deltaT
 
 void PathEntityManager::updateEntities(float deltaTime)
 {
-	auto walker = begin();
+	auto walker = allPaths.begin();
 
-	while (walker != end())
+	while (walker != allPaths.end())
 	{
 		updateEntity(walker->first, deltaTime);
 

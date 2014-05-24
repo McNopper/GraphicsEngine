@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Texture2DMultisample.h"
@@ -21,7 +22,7 @@ class Texture2DMultisampleManager : public Singleton<Texture2DMultisampleManager
 
 private:
 
-	std::map<std::string, Texture2DMultisampleSP> allTextures;
+	KeyValueMap<std::string, Texture2DMultisampleSP> allTextures;
 
 private:
 

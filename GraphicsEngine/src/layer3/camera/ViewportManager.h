@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Viewport.h"
@@ -21,7 +22,7 @@ class ViewportManager : public Singleton<ViewportManager>
 
 private:
 
-	std::map<std::string, ViewportSP> allViewports;
+	KeyValueMap<std::string, ViewportSP> allViewports;
 
 public:
 

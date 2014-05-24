@@ -36,11 +36,9 @@ void RenderBufferManager::addRenderBuffer(const string& key, const RenderBufferS
 
 RenderBufferSP RenderBufferManager::createRenderBuffer(const string& key, GLenum internalFormat, int32_t width, int32_t height)
 {
-	auto walker = allRenderBuffers.find(key);
-
 	RenderBufferFactory renderBufferFactory;
 
-	if (walker == allRenderBuffers.end())
+	if (!allRenderBuffers.contains(key))
 	{
 		allRenderBuffers[key] = renderBufferFactory.createRenderBuffer(internalFormat, width, height);
 

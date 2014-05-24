@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "PostProcessor2DMultisample.h"
@@ -19,11 +20,9 @@ class PostProcessor2DMultisampleManager : public Singleton<PostProcessor2DMultis
 
 	friend class Singleton<PostProcessor2DMultisampleManager>;
 
-private:
-
-	std::map<std::string, PostProcessor2DMultisampleSP> allPostProcessors;
-
 protected:
+
+	KeyValueMap<std::string, PostProcessor2DMultisampleSP> allPostProcessors;
 
 	PostProcessor2DMultisampleManager();
 	virtual ~PostProcessor2DMultisampleManager();

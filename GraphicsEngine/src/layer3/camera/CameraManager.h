@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Camera.h"
@@ -21,9 +22,9 @@ class CameraManager : public Singleton<CameraManager>
 
 private:
 
-	std::map<std::string, CameraSP> allCameras;
+	KeyValueMap<std::string, CameraSP> allCameras;
 
-	std::map<std::string, CameraSP> allWindowCameras;
+	KeyValueMap<std::string, CameraSP> allWindowCameras;
 
 public:
 

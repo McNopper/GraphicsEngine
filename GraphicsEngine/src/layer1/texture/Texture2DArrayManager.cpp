@@ -36,11 +36,9 @@ void Texture2DArrayManager::addTexture(const string& key, const Texture2DArraySP
 
 Texture2DArraySP Texture2DArrayManager::createTexture(const string& key, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
 {
-	auto walker = allTextures.find(key);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(key))
 	{
 		allTextures[key] = textureFactory.createTexture2DArray(key, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
 
@@ -52,11 +50,9 @@ Texture2DArraySP Texture2DArrayManager::createTexture(const string& key, int32_t
 
 Texture2DArraySP Texture2DArrayManager::createTexture(const string& key, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT)
 {
-	auto walker = allTextures.find(key);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(key))
 	{
 		allTextures[key] = textureFactory.createTexture2DArray(key, internalFormat, width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT);
 

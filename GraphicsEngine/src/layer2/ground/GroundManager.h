@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Ground.h"
@@ -21,7 +22,7 @@ class GroundManager : public Singleton<GroundManager>
 
 private:
 
-	std::map<std::string, GroundSP> allGrounds;
+	KeyValueMap<std::string, GroundSP> allGrounds;
 
 	GroundManager();
 	virtual ~GroundManager();

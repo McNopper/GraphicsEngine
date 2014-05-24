@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "TextureCubeMap.h"
@@ -21,7 +22,7 @@ class TextureCubeMapManager : public Singleton<TextureCubeMapManager>
 
 private:
 
-	std::map<std::string, TextureCubeMapSP> allTextures;
+	KeyValueMap<std::string, TextureCubeMapSP> allTextures;
 
 private:
 

@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "PostProcessor2D.h"
@@ -19,11 +20,9 @@ class PostProcessor2DManager : public Singleton<PostProcessor2DManager>
 
 	friend class Singleton<PostProcessor2DManager>;
 
-private:
-
-	std::map<std::string, PostProcessor2DSP> allPostProcessors;
-
 protected:
+
+	KeyValueMap<std::string, PostProcessor2DSP> allPostProcessors;
 
 	PostProcessor2DManager();
 	virtual ~PostProcessor2DManager();

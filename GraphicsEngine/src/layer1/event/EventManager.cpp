@@ -62,19 +62,14 @@ void EventManager::addEventReceiver(const EventReceiverSP& receiver)
 {
 	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
-	allEventReceivers.push_back(receiver);
+	allEventReceivers.add(receiver);
 }
 
 void EventManager::removeEventReceiver(const EventReceiverSP& receiver)
 {
 	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 
-	auto element = find(allEventReceivers.begin(), allEventReceivers.end(), receiver);
-
-	if (element != allEventReceivers.end())
-	{
-		allEventReceivers.erase(element);
-	}
+	allEventReceivers.remove(receiver);
 }
 
 /**
@@ -85,7 +80,7 @@ void EventManager::sendEvent(const EventSP& event)
 	allEvents.add(event);
 }
 
-const std::vector<EventReceiverSP>& EventManager::getEventReceivers() const
+const ValueVector<EventReceiverSP>& EventManager::getEventReceivers() const
 {
 	boost::lock_guard<boost::mutex> eventLock(eventMutex);
 

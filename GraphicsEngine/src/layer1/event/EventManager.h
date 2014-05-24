@@ -12,6 +12,7 @@
 
 #include "../../layer0/concurrency/ThreadsafeQueue.h"
 #include "../../layer0/stereotype/Singleton.h"
+#include "../../layer0/stereotype/ValueVector.h"
 
 #include "Event.h"
 #include "EventReceiver.h"
@@ -27,7 +28,7 @@ private:
 
 	ThreadsafeQueue<EventSP> allEvents;
 
-	std::vector<EventReceiverSP> allEventReceivers;
+	ValueVector<EventReceiverSP> allEventReceivers;
 
 	EventManager();
 	virtual ~EventManager();
@@ -44,7 +45,7 @@ public:
 
 	void sendEvent(const EventSP& event);
 
-	const std::vector<EventReceiverSP>& getEventReceivers() const;
+	const ValueVector<EventReceiverSP>& getEventReceivers() const;
 
 };
 

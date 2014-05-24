@@ -16,18 +16,11 @@ PostProcessor2DManager::PostProcessor2DManager() :
 
 PostProcessor2DManager::~PostProcessor2DManager()
 {
-	auto walker = allPostProcessors.begin();
-	while (walker != allPostProcessors.end())
-	{
-		walker->second.reset();
-		walker++;
-	}
-	allPostProcessors.clear();
 }
 
 bool PostProcessor2DManager::containsPostProcessor(const string& key) const
 {
-	return allPostProcessors.find(key) != allPostProcessors.end();
+	return allPostProcessors.contains(key);
 }
 
 const PostProcessor2DSP& PostProcessor2DManager::getPostProcessor(const string& key) const
@@ -37,20 +30,20 @@ const PostProcessor2DSP& PostProcessor2DManager::getPostProcessor(const string& 
 
 void PostProcessor2DManager::addPostProcessor(const string& key, const PostProcessor2DSP& postProcessor)
 {
-	allPostProcessors[key] = postProcessor;
+	allPostProcessors.add(key, postProcessor);
 }
 
 PostProcessor2DSP PostProcessor2DManager::createPostProcessor(const string& key, GLenum internalFormat, GLenum format, GLenum type)
 {
-	auto walker = allPostProcessors.find(key);
-
-	if (walker == allPostProcessors.end())
+	if (!allPostProcessors.contains(key))
 	{
-		allPostProcessors[key] = PostProcessor2DSP(new PostProcessor2D(internalFormat, format, type));
+		PostProcessor2DSP value = PostProcessor2DSP(new PostProcessor2D(internalFormat, format, type));
 
-		return allPostProcessors[key];
+		allPostProcessors.add(key, value);
+
+		return value;
 	}
 
-	return allPostProcessors[key];
+	return allPostProcessors.at(key);
 }
 

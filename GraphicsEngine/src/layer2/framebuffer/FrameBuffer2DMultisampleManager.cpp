@@ -30,7 +30,7 @@ FrameBuffer2DMultisampleManager::~FrameBuffer2DMultisampleManager()
 
 bool FrameBuffer2DMultisampleManager::containsFrameBuffer(const string& key) const
 {
-	return allFrameBuffers.find(key) != allFrameBuffers.end();
+	return allFrameBuffers.contains(key);
 }
 
 const FrameBuffer2DMultisampleSP& FrameBuffer2DMultisampleManager::getFrameBuffer(const string& key) const
@@ -50,9 +50,7 @@ void FrameBuffer2DMultisampleManager::addFrameBuffer(const string& key, const Fr
 
 FrameBuffer2DMultisampleSP FrameBuffer2DMultisampleManager::createFrameBuffer(const string& key, int32_t width, int32_t height, bool windowFrameBuffer)
 {
-	auto walker = allFrameBuffers.find(key);
-
-	if (walker == allFrameBuffers.end())
+	if (!allFrameBuffers.contains(key))
 	{
 		allFrameBuffers[key] = FrameBuffer2DMultisampleSP(new FrameBuffer2DMultisample(width, height));
 

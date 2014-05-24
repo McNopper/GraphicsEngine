@@ -35,7 +35,7 @@ const ViewportSP& ViewportManager::getDefaultViewport() const
 
 bool ViewportManager::containsViewport(const string& key) const
 {
-	return allViewports.find(key) != allViewports.end();
+	return allViewports.contains(key);
 }
 
 const ViewportSP& ViewportManager::getViewport(const string& key) const

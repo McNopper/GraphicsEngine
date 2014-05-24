@@ -16,18 +16,11 @@ PostProcessor2DMultisampleManager::PostProcessor2DMultisampleManager() :
 
 PostProcessor2DMultisampleManager::~PostProcessor2DMultisampleManager()
 {
-	auto walker = allPostProcessors.begin();
-	while (walker != allPostProcessors.end())
-	{
-		walker->second.reset();
-		walker++;
-	}
-	allPostProcessors.clear();
 }
 
 bool PostProcessor2DMultisampleManager::containsPostProcessor(const string& key) const
 {
-	return allPostProcessors.find(key) != allPostProcessors.end();
+	return allPostProcessors.contains(key);
 }
 
 const PostProcessor2DMultisampleSP& PostProcessor2DMultisampleManager::getPostProcessor(const string& key) const
@@ -37,20 +30,20 @@ const PostProcessor2DMultisampleSP& PostProcessor2DMultisampleManager::getPostPr
 
 void PostProcessor2DMultisampleManager::addPostProcessor(const string& key, const PostProcessor2DMultisampleSP& postProcessorMultisample)
 {
-	allPostProcessors[key] = postProcessorMultisample;
+	allPostProcessors.add(key, postProcessorMultisample);
 }
 
 PostProcessor2DMultisampleSP PostProcessor2DMultisampleManager::createPostProcessor(const string& key, int32_t samples, GLenum internalFormat, bool fixedsamplelocations)
 {
-	auto walker = allPostProcessors.find(key);
-
-	if (walker == allPostProcessors.end())
+	if (!allPostProcessors.contains(key))
 	{
-		allPostProcessors[key] = PostProcessor2DMultisampleSP(new PostProcessor2DMultisample(samples, internalFormat, fixedsamplelocations));
+		PostProcessor2DMultisampleSP value = PostProcessor2DMultisampleSP(new PostProcessor2DMultisample(samples, internalFormat, fixedsamplelocations));
 
-		return allPostProcessors[key];
+		allPostProcessors.add(key, value);
+
+		return value;
 	}
 
-	return allPostProcessors[key];
+	return allPostProcessors.at(key);
 }
 

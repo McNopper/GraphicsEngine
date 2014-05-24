@@ -36,11 +36,9 @@ void RenderBufferMultisampleManager::addRenderBuffer(const string& key, const Re
 
 RenderBufferMultisampleSP RenderBufferMultisampleManager::createRenderBuffer(const string& key, int32_t samples, GLenum internalFormat, int32_t width, int32_t height)
 {
-	auto walker = allRenderBuffers.find(key);
-
 	RenderBufferFactory renderBufferFactory;
 
-	if (walker == allRenderBuffers.end())
+	if (!allRenderBuffers.contains(key))
 	{
 		allRenderBuffers[key] = renderBufferFactory.createRenderBufferMultisample(samples, internalFormat, width, height);
 

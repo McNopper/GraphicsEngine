@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "RenderBufferMultisample.h"
@@ -21,7 +22,7 @@ class RenderBufferMultisampleManager : public Singleton<RenderBufferMultisampleM
 
 private:
 
-	std::map<std::string, RenderBufferMultisampleSP> allRenderBuffers;
+	KeyValueMap<std::string, RenderBufferMultisampleSP> allRenderBuffers;
 
 	RenderBufferMultisampleManager();
 	virtual ~RenderBufferMultisampleManager();

@@ -89,7 +89,6 @@ GLUSvoid terminateEngine(GLUSvoid)
 
 	PathEntityManager::terminate();
 
-	// TODO Make rest usage of Manager Template.
 	GeneralEntityManager::terminate();
 
 	ModelManager::terminate();

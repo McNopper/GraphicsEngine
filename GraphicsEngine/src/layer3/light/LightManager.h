@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Light.h"
@@ -21,7 +22,7 @@ class LightManager : public Singleton<LightManager>
 
 private:
 
-	std::map<std::string, LightSP> allLights;
+	KeyValueMap<std::string, LightSP> allLights;
 
 	Color ambientLightColor;
 

@@ -35,11 +35,9 @@ void TextureCubeMapManager::addTexture(const string& posX, const TextureCubeMapS
 
 TextureCubeMapSP TextureCubeMapManager::createTexture(const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
-	auto walker = allTextures.find(posX);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(posX))
 	{
 		allTextures[posX] = textureFactory.loadTextureCubeMap(identifier, posX, negX, posY, negY, posZ, negZ, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
@@ -51,11 +49,9 @@ TextureCubeMapSP TextureCubeMapManager::createTexture(const string& identifier, 
 
 TextureCubeMapSP TextureCubeMapManager::createTexture(const string& filename, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
-	auto walker = allTextures.find(filename);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(filename))
 	{
 		allTextures[filename] = textureFactory.loadTextureCubeMap(filename, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 

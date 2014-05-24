@@ -43,16 +43,16 @@ const SkySP& SkyManager::getActiveSky() const
 
 void SkyManager::setActiveSky(const string& key)
 {
-	auto foundSky = allSkies.find(key);
+	SkySP foundSky = allSkies.search(key);
 
-	if (foundSky == allSkies.end())
+	if (!foundSky.get())
 	{
 		activeSky.reset();
 
 		return;
 	}
 
-	activeSky = foundSky->second;
+	activeSky = foundSky;
 }
 
 void SkyManager::resetActiveSky()

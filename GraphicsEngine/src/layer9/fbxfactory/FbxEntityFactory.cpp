@@ -333,7 +333,7 @@ void FbxEntityFactory::processTexture(FbxTexture* texture)
 
 		Texture2DSP texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName(), true, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, wrapModeS, wrapModeT, 1.0f);
 
-		if (texture2D.get() == nullptr)
+		if (!texture2D.get())
 		{
 			glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
 		}
@@ -440,7 +440,7 @@ void FbxEntityFactory::processSurfaceMaterial(int32_t materialIndex, FbxSurfaceM
 			{
 				texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName());
 
-				if (texture2D.get() == nullptr)
+				if (!texture2D.get())
 				{
 					glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
 				}
@@ -491,7 +491,7 @@ FbxDouble3 FbxEntityFactory::processMaterialProperty(const FbxSurfaceMaterial * 
 			{
 				texture2D = Texture2DManager::getInstance()->createTexture(fileTexture->GetFileName());
 
-				if (texture2D.get() == nullptr)
+				if (!texture2D.get())
 				{
 					glusLogPrint(GLUS_LOG_WARNING, "Could not create file texture: %s", fileTexture->GetFileName());
 				}

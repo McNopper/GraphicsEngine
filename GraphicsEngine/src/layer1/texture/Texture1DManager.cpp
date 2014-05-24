@@ -36,11 +36,9 @@ void Texture1DManager::addTexture(const string& key, const Texture1DSP& texture)
 
 Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
-	auto walker = allTextures.find(key);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(key))
 	{
 		allTextures[key] = textureFactory.createTexture1D(key, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 
@@ -52,11 +50,9 @@ Texture1DSP Texture1DManager::createTexture(const string& key, int32_t width, GL
 
 Texture1DSP Texture1DManager::createTexture(const string& key, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
 {
-	auto walker = allTextures.find(key);
-
 	TextureFactory textureFactory;
 
-	if (walker == allTextures.end())
+	if (!allTextures.contains(key))
 	{
 		allTextures[key] = textureFactory.createTexture1D(key, internalFormat, width, format, type, pixels, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
 

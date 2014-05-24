@@ -27,7 +27,7 @@ GroundManager::~GroundManager()
 
 bool GroundManager::containsGroundByKey(const string& key) const
 {
-	return allGrounds.find(key) != allGrounds.end();
+	return allGrounds.contains(key);
 }
 
 const GroundSP& GroundManager::getGroundByKey(const string& key) const

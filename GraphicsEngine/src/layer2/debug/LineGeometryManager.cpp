@@ -26,7 +26,7 @@ LineGeometryManager::~LineGeometryManager() {
 
 bool LineGeometryManager::containsLineGeometry(const string& key) const
 {
-	return allLineGeometries.find(key) != allLineGeometries.end();
+	return allLineGeometries.contains(key);
 }
 
 const LineGeometrySP& LineGeometryManager::getLineGeometry(const string& key) const

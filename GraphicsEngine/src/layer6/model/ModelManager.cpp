@@ -27,7 +27,7 @@ ModelManager::~ModelManager()
 
 bool ModelManager::containsModelByKey(const string& key) const
 {
-	return allModels.find(key) != allModels.end();
+	return allModels.contains(key);
 }
 
 const ModelSP& ModelManager::getModelByKey(const string& key) const

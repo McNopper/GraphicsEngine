@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "LineGeometry.h"
@@ -21,7 +22,7 @@ class LineGeometryManager : public Singleton<LineGeometryManager>
 
 private:
 
-	std::map<std::string, LineGeometrySP> allLineGeometries;
+	KeyValueMap<std::string, LineGeometrySP> allLineGeometries;
 
 	LineGeometryManager();
 	virtual ~LineGeometryManager();

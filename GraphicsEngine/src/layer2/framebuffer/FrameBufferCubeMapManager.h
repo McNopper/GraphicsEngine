@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "FrameBufferCubeMap.h"
@@ -21,7 +22,7 @@ class FrameBufferCubeMapManager : public Singleton<FrameBufferCubeMapManager>
 
 private:
 
-	std::map<std::string, FrameBufferCubeMapSP> allFrameBuffers;
+	KeyValueMap<std::string, FrameBufferCubeMapSP> allFrameBuffers;
 
 	FrameBufferCubeMapManager();
 	virtual ~FrameBufferCubeMapManager();

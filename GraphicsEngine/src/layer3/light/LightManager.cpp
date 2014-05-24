@@ -34,7 +34,7 @@ LightManager::~LightManager()
 
 bool LightManager::containsLight(const string& key) const
 {
-	return allLights.find(key) != allLights.end();
+	return allLights.contains(key);
 }
 
 const LightSP& LightManager::getLight(const string& key) const

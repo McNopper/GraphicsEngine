@@ -124,7 +124,7 @@ void Octree::setEntityExcludeList(const EntityListSP& entityExcludeList)
 
 bool Octree::isEntityExcluded(const OctreeEntitySP& octreeEntity) const
 {
-	if (entityExcludeList.get() == nullptr)
+	if (!entityExcludeList.get())
 	{
 		return false;
 	}

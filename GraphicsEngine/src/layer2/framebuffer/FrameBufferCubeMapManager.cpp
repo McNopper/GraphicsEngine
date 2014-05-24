@@ -29,7 +29,7 @@ FrameBufferCubeMapManager::~FrameBufferCubeMapManager()
 
 bool FrameBufferCubeMapManager::containsFrameBuffer(const string& key) const
 {
-	return allFrameBuffers.find(key) != allFrameBuffers.end();
+	return allFrameBuffers.contains(key);
 }
 
 const FrameBufferCubeMapSP& FrameBufferCubeMapManager::getFrameBuffer(const string& key) const
@@ -44,9 +44,7 @@ void FrameBufferCubeMapManager::addFrameBuffer(const string& key, const FrameBuf
 
 FrameBufferCubeMapSP FrameBufferCubeMapManager::createFrameBuffer(const string& key, int32_t width, int32_t height)
 {
-	auto walker = allFrameBuffers.find(key);
-
-	if (walker == allFrameBuffers.end())
+	if (!allFrameBuffers.contains(key))
 	{
 		allFrameBuffers[key] = FrameBufferCubeMapSP(new FrameBufferCubeMap(width, height));
 

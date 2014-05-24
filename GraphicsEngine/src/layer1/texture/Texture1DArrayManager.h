@@ -10,6 +10,7 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/stereotype/KeyValueMap.h"
 #include "../../layer0/stereotype/Singleton.h"
 
 #include "Texture1DArray.h"
@@ -21,7 +22,7 @@ class Texture1DArrayManager : public Singleton<Texture1DArrayManager>
 
 private:
 
-	std::map<std::string, Texture1DArraySP> allTextures;
+	KeyValueMap<std::string, Texture1DArraySP> allTextures;
 
 private:
 
