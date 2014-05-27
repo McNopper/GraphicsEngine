@@ -8,13 +8,7 @@
 #ifndef PROGRAM_H_
 #define PROGRAM_H_
 
-#include <map>
-#include <string>
-
-#include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
-
-#include "GL/glus.h"
+#include "../../UsedLibs.h"
 
 class Program
 {

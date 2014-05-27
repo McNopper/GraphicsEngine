@@ -5,10 +5,6 @@
  *      Author: Norbert Nopper
  */
 
-#include <boost/assert.hpp>
-
-#include "GL/glus.h"
-
 #include "Program.h"
 
 using namespace std;
@@ -165,7 +161,8 @@ const string& Program::getType() const
 	return type;
 }
 
-const string& Program::getComputeFilename() const {
+const string& Program::getComputeFilename() const
+{
 	return computeFilename;
 }
 
