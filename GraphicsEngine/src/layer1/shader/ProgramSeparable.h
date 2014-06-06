@@ -24,6 +24,8 @@ protected:
 	std::map<std::string, boost::int32_t> allUniforms;
 	std::map<std::string, boost::int32_t> allAtribbs;
 
+	bool includeShader(std::string& shaderSource) const;
+
 public:
 
 	ProgramSeparable(const GLUSenum shaderType, const std::string& filename);
