@@ -21,6 +21,8 @@ protected:
 
 	GLUSprogrampipeline programpipeline;
 
+	std::string name;
+
 	std::string type;
 
 	ProgramSeparableSP computeProgramSeparable;
@@ -34,13 +36,15 @@ public:
 
 	static void off();
 
-	ProgramPipeline(const std::string& type, const ProgramSeparableSP& computeProgramSeparable);
-	ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable);
-	ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, ProgramSeparableSP& geometryProgramSeparable, ProgramSeparableSP& fragmentProgramSeparable);
-	ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& controlProgramSeparable, const ProgramSeparableSP& evaluationProgramSeparable, const ProgramSeparableSP& geometryProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable);
+	ProgramPipeline(const std::string& name, const std::string& type, const ProgramSeparableSP& computeProgramSeparable);
+	ProgramPipeline(const std::string& name, const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable);
+	ProgramPipeline(const std::string& name, const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, ProgramSeparableSP& geometryProgramSeparable, ProgramSeparableSP& fragmentProgramSeparable);
+	ProgramPipeline(const std::string& name, const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& controlProgramSeparable, const ProgramSeparableSP& evaluationProgramSeparable, const ProgramSeparableSP& geometryProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable);
 	virtual ~ProgramPipeline();
 
 	void use();
+
+	const std::string& getName() const;
 
 	const std::string& getType() const;
 

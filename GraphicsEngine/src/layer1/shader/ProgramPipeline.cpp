@@ -20,26 +20,26 @@ void ProgramPipeline::off()
 	lastUsedProgramPipeline = 0;
 }
 
-ProgramPipeline::ProgramPipeline(const std::string& type, const ProgramSeparableSP& computeProgramSeparable) :
-		type(type), computeProgramSeparable(computeProgramSeparable), vertexProgramSeparable(), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(), fragmentProgramSeparable()
+ProgramPipeline::ProgramPipeline(const string& name, const string& type, const ProgramSeparableSP& computeProgramSeparable) :
+		name(name), type(type), computeProgramSeparable(computeProgramSeparable), vertexProgramSeparable(), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(), fragmentProgramSeparable()
 {
 	glusBuildComputeProgramPipeline(&programpipeline, computeProgramSeparable->getProgram());
 }
 
-ProgramPipeline::ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable) :
-		type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(), fragmentProgramSeparable(fragmentProgramSeparable)
+ProgramPipeline::ProgramPipeline(const string& name, const string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable) :
+		name(name), type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(), fragmentProgramSeparable(fragmentProgramSeparable)
 {
 	glusBuildProgramPipeline(&programpipeline, vertexProgramSeparable->getProgram(), 0, 0, 0, vertexProgramSeparable->getProgram());
 }
 
-ProgramPipeline::ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, ProgramSeparableSP& geometryProgramSeparable, ProgramSeparableSP& fragmentProgramSeparable) :
-		type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(geometryProgramSeparable), fragmentProgramSeparable(fragmentProgramSeparable)
+ProgramPipeline::ProgramPipeline(const string& name, const string& type, const ProgramSeparableSP& vertexProgramSeparable, ProgramSeparableSP& geometryProgramSeparable, ProgramSeparableSP& fragmentProgramSeparable) :
+		name(name), type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(), evaluationProgramSeparable(), geometryProgramSeparable(geometryProgramSeparable), fragmentProgramSeparable(fragmentProgramSeparable)
 {
 	glusBuildProgramPipeline(&programpipeline, vertexProgramSeparable->getProgram(), 0, 0, geometryProgramSeparable->getProgram(), vertexProgramSeparable->getProgram());
 }
 
-ProgramPipeline::ProgramPipeline(const std::string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& controlProgramSeparable, const ProgramSeparableSP& evaluationProgramSeparable, const ProgramSeparableSP& geometryProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable) :
-		type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(controlProgramSeparable), evaluationProgramSeparable(evaluationProgramSeparable), geometryProgramSeparable(geometryProgramSeparable), fragmentProgramSeparable(fragmentProgramSeparable)
+ProgramPipeline::ProgramPipeline(const string& name, const string& type, const ProgramSeparableSP& vertexProgramSeparable, const ProgramSeparableSP& controlProgramSeparable, const ProgramSeparableSP& evaluationProgramSeparable, const ProgramSeparableSP& geometryProgramSeparable, const ProgramSeparableSP& fragmentProgramSeparable) :
+		name(name), type(type), computeProgramSeparable(), vertexProgramSeparable(vertexProgramSeparable), controlProgramSeparable(controlProgramSeparable), evaluationProgramSeparable(evaluationProgramSeparable), geometryProgramSeparable(geometryProgramSeparable), fragmentProgramSeparable(fragmentProgramSeparable)
 {
 	glusBuildProgramPipeline(&programpipeline, vertexProgramSeparable->getProgram(), controlProgramSeparable->getProgram(), evaluationProgramSeparable->getProgram(), geometryProgramSeparable->getProgram(), vertexProgramSeparable->getProgram());
 }
@@ -65,6 +65,11 @@ void ProgramPipeline::use()
 
 		lastUsedProgramPipeline = this;
 	}
+}
+
+const string& ProgramPipeline::getName() const
+{
+	return name;
 }
 
 const string& ProgramPipeline::getType() const
