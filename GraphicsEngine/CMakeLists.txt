@@ -32,8 +32,6 @@ ENDIF()
 # Source files
 file(GLOB_RECURSE CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.cpp)
 
-list(REMOVE_ITEM CPP_FILES ${IGNORE_CPP_FILES})
-
 # Header files
 file(GLOB_RECURSE H_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.h)
 
