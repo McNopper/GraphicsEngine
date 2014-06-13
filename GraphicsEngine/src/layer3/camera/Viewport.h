@@ -15,29 +15,29 @@ class Viewport
 
 private:
 
-	boost::int32_t x;
-	boost::int32_t y;
-	boost::int32_t width;
-	boost::int32_t height;
+	std::int32_t x;
+	std::int32_t y;
+	std::int32_t width;
+	std::int32_t height;
 
 public:
 
 	Viewport();
-	Viewport(boost::int32_t x, boost::int32_t y, boost::int32_t width, boost::int32_t height);
+	Viewport(std::int32_t x, std::int32_t y, std::int32_t width, std::int32_t height);
 	Viewport(const Viewport& other);
 	virtual ~Viewport();
 
-	void setViewport(boost::int32_t x, boost::int32_t y, boost::int32_t width, boost::int32_t height);
+	void setViewport(std::int32_t x, std::int32_t y, std::int32_t width, std::int32_t height);
 
 	void use() const;
 
-	boost::int32_t getX() const;
-	boost::int32_t getY() const;
-	boost::int32_t getWidth() const;
-	boost::int32_t getHeight() const;
+	std::int32_t getX() const;
+	std::int32_t getY() const;
+	std::int32_t getWidth() const;
+	std::int32_t getHeight() const;
 
 };
 
-typedef boost::shared_ptr<Viewport> ViewportSP;
+typedef std::shared_ptr<Viewport> ViewportSP;
 
 #endif /* VIEWPORT_H_ */

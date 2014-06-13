@@ -16,8 +16,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Octant::Octant(Octree* octree) :
 	AxisAlignedBoundingBox(Point4(), 0.0f, 0.0f, 0.0f), octree(octree), parent(0), level(0), maxLevels(0), allChilds(), allChildsPlusMe(), allOctreeEntities(), boundingSphere(), quicksortOctant(), quicksortOctreeEntity(), distanceToCamera(0.0f), debug(false)
 {
@@ -219,8 +217,8 @@ void Octant::updateDistanceToCamera()
 
 void Octant::createChilds()
 {
-	BOOST_ASSERT(octree != nullptr);
-	BOOST_ASSERT(allChilds.size() == 0);
+	assert(octree != nullptr);
+	assert(allChilds.size() == 0);
 
 	if (level + 1 < maxLevels)
 	{
@@ -254,7 +252,7 @@ void Octant::createChilds()
 
 bool Octant::releaseChilds()
 {
-	BOOST_ASSERT(octree != nullptr);
+	assert(octree != nullptr);
 
 	// Check if empty
 	vector<Octant*>::iterator walker = allChilds.begin();
@@ -287,7 +285,7 @@ bool Octant::releaseChilds()
 
 bool Octant::updateEntity(const OctreeEntitySP& octreeEntity)
 {
-	BOOST_ASSERT(octreeEntity.get() != nullptr);
+	assert(octreeEntity.get() != nullptr);
 
 	// Immediately return, if the bounding sphere does not fit
 	if (!encloses(octreeEntity->getBoundingSphere()))
@@ -338,7 +336,7 @@ bool Octant::updateEntity(const OctreeEntitySP& octreeEntity)
 
 void Octant::removeEntity(const OctreeEntitySP& octreeEntity)
 {
-	BOOST_ASSERT(octreeEntity.get() != nullptr);
+	assert(octreeEntity.get() != nullptr);
 
 	if (octreeEntity->getVisitingOctant() == this)
 	{

@@ -15,8 +15,6 @@ enum RenderFilter {RENDER_TRANSPARENT, RENDER_OPAQUE, RENDER_ALL};
 
 class Entity {
 
-	friend void boost::checked_delete<Entity>(Entity* x);
-
 private:
 
 	float distanceToCamera;
@@ -52,7 +50,7 @@ public:
     static enum RenderFilter getRenderFilter();
     static bool getDynamicCubeMaps();
 
-    static void setCubeMapViewMatrix(boost::int32_t face, const Matrix4x4& matrix);
+    static void setCubeMapViewMatrix(std::int32_t face, const Matrix4x4& matrix);
     static void setCubeMapProjectionMatrix(const Matrix4x4& matrix);
 
     static const Matrix4x4* getCubeMapViewMatrices();
@@ -68,6 +66,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Entity> EntitySP;
+typedef std::shared_ptr<Entity> EntitySP;
 
 #endif /* ENTITY_H_ */

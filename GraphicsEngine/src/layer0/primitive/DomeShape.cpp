@@ -7,7 +7,7 @@
 
 #include "DomeShape.h"
 
-using namespace boost;
+using namespace std;
 
 DomeShape::DomeShape(float radius, uint32_t numberSlices) : Shape()
 {

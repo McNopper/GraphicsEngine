@@ -16,8 +16,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Font::Font(const string& filename, float width, float height, int32_t columns, int32_t rows, float cellWidth, float cellHeight, float fontWidth, float fontHeight) :
 		width(width), height(height), columns(columns), rows(rows), cellWidth(cellWidth), cellHeight(cellHeight), fontWidth(fontWidth), fontHeight(fontHeight)
 {

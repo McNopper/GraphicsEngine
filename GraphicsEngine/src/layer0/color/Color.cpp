@@ -7,8 +7,6 @@
 
 #include "Color.h"
 
-using namespace boost;
-
 const Color Color::WHITE = Color(1.0f, 1.0f, 1.0f, 1.0f);
 const Color Color::WHITE_TRANSPARENT = Color(1.0f, 1.0f, 1.0f, 0.0f);
 const Color Color::BLACK = Color(0.0f, 0.0f, 0.0f, 1.0f);

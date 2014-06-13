@@ -21,7 +21,7 @@ public:
 	OctreeFactory();
 	virtual ~OctreeFactory();
 
-	OctreeSP createOctree(boost::uint32_t maxLevels, boost::uint32_t maxElements, const Point4& center, float width, float height, float depth) const;
+	OctreeSP createOctree(std::uint32_t maxLevels, std::uint32_t maxElements, const Point4& center, float width, float height, float depth) const;
 
 };
 

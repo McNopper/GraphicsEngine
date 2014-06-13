@@ -18,7 +18,7 @@ class PostProcessor2DMultisample : public PostProcessor
 {
 private:
 
-	boost::int32_t samples;
+	std::int32_t samples;
 	GLenum internalFormat;
 	bool fixedsamplelocations;
 
@@ -29,10 +29,10 @@ protected:
 	virtual void setUniforms() const;
 
 public:
-	PostProcessor2DMultisample(boost::int32_t samples, GLenum internalFormat, bool fixedsamplelocations, boost::int32_t blurPixel = 2, float blurSigma = 0.5f, boost::int32_t bloomPixel = 16, float bloomSigma = 5.0f, boost::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
+	PostProcessor2DMultisample(std::int32_t samples, GLenum internalFormat, bool fixedsamplelocations, std::int32_t blurPixel = 2, float blurSigma = 0.5f, std::int32_t bloomPixel = 16, float bloomSigma = 5.0f, std::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
 	virtual ~PostProcessor2DMultisample();
 };
 
-typedef boost::shared_ptr<PostProcessor2DMultisample> PostProcessor2DMultisampleSP;
+typedef std::shared_ptr<PostProcessor2DMultisample> PostProcessor2DMultisampleSP;
 
 #endif /* POSTPROCESSOR2DMULTISAMPLE_H_ */

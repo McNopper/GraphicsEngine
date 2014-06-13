@@ -7,7 +7,7 @@
 
 #include "PerlinNoise.h"
 
-using namespace boost;
+using namespace std;
 
 PerlinNoise::PerlinNoise(int32_t seed, float frequency, float amplitude, float persistence, int32_t octaves) :
 		data(nullptr), dataSize(0), seed(seed), frequency(frequency), amplitude(amplitude), persistence(persistence), octaves(octaves)
@@ -82,7 +82,7 @@ const uint8_t* PerlinNoise::getData() const
 	return data;
 }
 
-boost::int32_t PerlinNoise::getDataSize() const
+std::int32_t PerlinNoise::getDataSize() const
 {
 	return dataSize;
 }

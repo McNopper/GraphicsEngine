@@ -12,8 +12,6 @@
 
 #include "GroundEntity.h"
 
-using namespace boost;
-
 using namespace std;
 
 GroundEntity::GroundEntity(const string& name, const GroundSP& ground, const SurfaceMaterialSP& surfaceMaterial, float scaleX, float scaleY, float scaleZ) :

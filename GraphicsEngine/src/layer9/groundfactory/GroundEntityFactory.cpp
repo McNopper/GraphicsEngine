@@ -10,8 +10,6 @@
 
 #include "GroundEntityFactory.h"
 
-using namespace boost;
-
 using namespace std;
 
 GroundEntityFactory::GroundEntityFactory()

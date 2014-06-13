@@ -20,8 +20,8 @@ class SubMesh
 
 private:
 
-    boost::uint32_t indicesOffset;
-    boost::uint32_t triangleCount;
+    std::uint32_t indicesOffset;
+    std::uint32_t triangleCount;
 
 	std::map<std::string, SubMeshVAOSP> allVAOs;
 
@@ -29,13 +29,13 @@ private:
 
 public:
 
-	SubMesh(boost::uint32_t indicesOffset, boost::uint32_t triangleCount);
+	SubMesh(std::uint32_t indicesOffset, std::uint32_t triangleCount);
 
 	virtual ~SubMesh();
 
-	boost::uint32_t getIndicesOffset() const;
+	std::uint32_t getIndicesOffset() const;
 
-	boost::uint32_t getTriangleCount() const;
+	std::uint32_t getTriangleCount() const;
 
 	bool containsVAOByProgramType(const std::string& type) const;
 
@@ -43,6 +43,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<SubMesh> SubMeshSP;
+typedef std::shared_ptr<SubMesh> SubMeshSP;
 
 #endif /* SUBMESH_H_ */

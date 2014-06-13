@@ -7,7 +7,7 @@
 
 #include "Viewport.h"
 
-using namespace boost;
+using namespace std;
 
 Viewport::Viewport()
 {

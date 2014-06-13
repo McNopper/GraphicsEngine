@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 FrameBuffer2DManager::FrameBuffer2DManager() :
 	Singleton<FrameBuffer2DManager>(), allFrameBuffers(), allWindowFrameBuffers()
 {

@@ -47,6 +47,6 @@ public:
 	void setFovy(float fovy);
 };
 
-typedef boost::shared_ptr<PerspectiveCamera> PerspectiveCameraSP;
+typedef std::shared_ptr<PerspectiveCamera> PerspectiveCameraSP;
 
 #endif /* PERSPECTIVECAMERA_H_ */

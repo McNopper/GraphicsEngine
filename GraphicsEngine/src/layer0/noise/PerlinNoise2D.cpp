@@ -7,7 +7,7 @@
 
 #include "PerlinNoise2D.h"
 
-using namespace boost;
+using namespace std;
 
 PerlinNoise2D::PerlinNoise2D(int32_t width, int32_t height, int32_t seed, float frequency, float amplitude, float persistence, int32_t octaves) :
 		PerlinNoise(seed, frequency, amplitude, persistence, octaves), width(width), height(height)

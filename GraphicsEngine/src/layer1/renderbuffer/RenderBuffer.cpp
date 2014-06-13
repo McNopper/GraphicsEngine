@@ -7,7 +7,7 @@
 
 #include "RenderBuffer.h"
 
-using namespace boost;
+using namespace std;
 
 RenderBuffer::RenderBuffer(GLenum internalFormat, int32_t width, int32_t height) :
 		internalFormat(internalFormat), width(width), height(height), rb(0), valid(false)
@@ -77,7 +77,7 @@ void RenderBuffer::setInternalFormat(GLenum internalFormat)
 	init();
 }
 
-boost::int32_t RenderBuffer::getWidth() const
+std::int32_t RenderBuffer::getWidth() const
 {
 	return width;
 }
@@ -92,7 +92,7 @@ void RenderBuffer::setWidth(int32_t width)
 	}
 }
 
-boost::int32_t RenderBuffer::getHeight() const
+std::int32_t RenderBuffer::getHeight() const
 {
 	return height;
 }

@@ -15,7 +15,7 @@ class SphereShape : public Shape
 
 public:
 
-	SphereShape(float radius, boost::uint32_t numberSlices);
+	SphereShape(float radius, std::uint32_t numberSlices);
 	virtual ~SphereShape();
 
 };

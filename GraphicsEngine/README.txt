@@ -18,12 +18,11 @@ If you get build errors:
 
 - Please make sure, that you install all the needed header and libraries (see below).
 - Some pre-build libraries are located in the External project folder. If you want, replace these libraries with your own build.
-- The DevIL, Boost and the Autodesk FBX headers/libraries have to be installed separately. 
+- The DevIL and the Autodesk FBX headers/libraries have to be installed separately. 
 
 Libraries/SDKs used:
 
 - Autodesk FBX SDK 2015.1 http://usa.autodesk.com/fbx/
-- Boost 1.55.0 http://www.boost.org/ http://boost.teeks99.com/ http://www.macports.org/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.10.0 http://glew.sourceforge.net/
 - GLFW 3.0.4 http://www.glfw.org/
@@ -73,16 +72,16 @@ Configuration:				Debug, Release
 
 e.g. x86__Windows__MSVC_Debug
 
-14.05.2014 Norbert Nopper (norbert@nopper.tv)
+13.06.2014 Norbert Nopper (norbert@nopper.tv)
 
 Changelog:
 
+- Switched to C++11 and removed Boost dependencies.
 - Removed support for MacOS X. Engine will be based upon OpenGL 4.4 in the future.
   If MacOS X supports OpenGL 4.4, support will be enabled again.
 - Upgraded to FBX SDK 2015.1
 - Upgraded to Visual C++ 2013
 - Some refactoring
-
 - Upgraded to Visual C++ 2012
 - Updated README
 - Removed MSVC build profile. Use CMakeLists.txt to create Visual C++ project

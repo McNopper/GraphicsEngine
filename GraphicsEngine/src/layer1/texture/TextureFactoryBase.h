@@ -44,33 +44,33 @@ public:
 	TextureFactoryBase();
 	virtual ~TextureFactoryBase();
 
-	Texture1DSP createTexture1D(const std::string& identifier, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels = nullptr, boost::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture1DSP createTexture1D(const std::string& identifier, std::int32_t width, GLenum format, GLenum type, const std::uint8_t* pixels = nullptr, std::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
-	Texture1DSP createTexture1D(const std::string& identifier, GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels = nullptr, boost::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture1DSP createTexture1D(const std::string& identifier, GLint internalFormat, std::int32_t width, GLenum format, GLenum type, const std::uint8_t* pixels = nullptr, std::uint32_t sizeOfData = 0, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
 	//
 
-	Texture1DArraySP createTexture1DArray(const std::string& identifier, boost::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture1DArraySP createTexture1DArray(const std::string& identifier, std::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
-	Texture1DArraySP createTexture1DArray(const std::string& identifier, GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture1DArraySP createTexture1DArray(const std::string& identifier, GLint internalFormat, std::int32_t width, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
 	//
 
 	virtual Texture2DSP loadTexture2D(const std::string& filename, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const = 0;
 
-	Texture2DSP createTexture2D(const std::string& identifier, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture2DSP createTexture2D(const std::string& identifier, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
-	Texture2DSP createTexture2D(const std::string& identifier, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
-
-	//
-
-	Texture2DArraySP createTexture2DArray(const std::string& identifier, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
-
-	Texture2DArraySP createTexture2DArray(const std::string& identifier, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+	Texture2DSP createTexture2D(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
 
 	//
 
-	Texture2DMultisampleSP createTexture2DMultisample(const std::string& identifier, boost::int32_t samples, GLint internalFormat, boost::int32_t width, boost::int32_t height, bool fixedsamplelocations) const;
+	Texture2DArraySP createTexture2DArray(const std::string& identifier, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+
+	Texture2DArraySP createTexture2DArray(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f) const;
+
+	//
+
+	Texture2DMultisampleSP createTexture2DMultisample(const std::string& identifier, std::int32_t samples, GLint internalFormat, std::int32_t width, std::int32_t height, bool fixedsamplelocations) const;
 
 	/**
 	 * If you have DirectX images, convert the following way before usage:
@@ -90,9 +90,9 @@ public:
 	 */
 	virtual TextureCubeMapSP loadTextureCubeMap(const std::string& filename, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const = 0;
 
-	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
+	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
 
-	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
+	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
 
 	bool isAutoInternalFloat() const;
 	void setAutoInternalFloat(bool autoInternalFloat);

@@ -9,8 +9,6 @@
 
 #include "OrthographicCameraShadowMap2D.h"
 
-using namespace boost;
-
 using namespace std;
 
 OrthographicCameraShadowMap2D::OrthographicCameraShadowMap2D(int32_t size, float orthographicScale) :

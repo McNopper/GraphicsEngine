@@ -7,8 +7,6 @@
 
 #include "Texture1DArray.h"
 
-using namespace boost;
-
 using namespace std;
 
 Texture1DArray::Texture1DArray(const string& identifier, GLint internalFormat, int32_t width, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :

@@ -11,8 +11,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Texture2DMultisampleManager::Texture2DMultisampleManager() :
 		Singleton<Texture2DMultisampleManager>(), allTextures()
 {

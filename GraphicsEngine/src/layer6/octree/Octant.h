@@ -30,8 +30,8 @@ private:
 
 	Octant* parent;
 
-	boost::uint32_t level;
-	boost::uint32_t maxLevels;
+	std::uint32_t level;
+	std::uint32_t maxLevels;
 
 	std::vector<Octant*> allChilds;
 	std::vector<Octant*> allChildsPlusMe;
@@ -52,7 +52,7 @@ private:
 	Octant(Octree* octree);
 	virtual ~Octant();
 
-	void init(Octant* parent, boost::uint32_t level, boost::uint32_t numberLevels, const Point4& center, float halfWidth, float halfHeight, float halfDepth);
+	void init(Octant* parent, std::uint32_t level, std::uint32_t numberLevels, const Point4& center, float halfWidth, float halfHeight, float halfDepth);
 
 	void createChilds();
 

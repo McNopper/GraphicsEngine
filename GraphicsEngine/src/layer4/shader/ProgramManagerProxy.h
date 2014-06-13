@@ -25,19 +25,19 @@ private:
 
 public:
 
-	static void setLightByType(const std::string& programType, boost::int32_t index, const LightSP& light, const Point4& position, const Quaternion& rotation);
+	static void setLightByType(const std::string& programType, std::int32_t index, const LightSP& light, const Point4& position, const Quaternion& rotation);
 
 	static void setAmbientLightColorByType(const std::string& programType);
 
-	static void setNumberLightsByType(const std::string& programType, boost::int32_t numberLights);
+	static void setNumberLightsByType(const std::string& programType, std::int32_t numberLights);
 
 	static void setCameraByType(const std::string& programType, const CameraSP& camera, const Point4& position, const Quaternion& rotation, bool useLocation = false);
 
 	static void setNoShadowByType(const std::string& programType);
 
-	static void setShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, const Matrix4x4& shadowMatrix, boost::int32_t shadowType);
+	static void setShadowByType(const std::string& programType, std::int32_t index, const ShadowMap2DSP& shadowMap, const Matrix4x4& shadowMatrix, std::int32_t shadowType);
 
-	static void setCascadedShadowByType(const std::string& programType, boost::int32_t index, const ShadowMap2DSP& shadowMap, const std::vector<Matrix4x4>& shadowMatrices, boost::int32_t shadowType);
+	static void setCascadedShadowByType(const std::string& programType, std::int32_t index, const ShadowMap2DSP& shadowMap, const std::vector<Matrix4x4>& shadowMatrices, std::int32_t shadowType);
 
 };
 

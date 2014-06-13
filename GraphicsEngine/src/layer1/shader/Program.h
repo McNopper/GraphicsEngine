@@ -28,8 +28,8 @@ protected:
 	std::string geometryFilename;
 	std::string fragmentFilename;
 
-	std::map<std::string, boost::int32_t> allUniforms;
-	std::map<std::string, boost::int32_t> allAtribbs;
+	std::map<std::string, std::int32_t> allUniforms;
+	std::map<std::string, std::int32_t> allAtribbs;
 
 public:
 
@@ -45,8 +45,8 @@ public:
 
 	void use();
 
-	boost::int32_t getUniformLocation(const std::string& name);
-	boost::int32_t getAttribLocation(const std::string& name);
+	std::int32_t getUniformLocation(const std::string& name);
+	std::int32_t getAttribLocation(const std::string& name);
 
 	const std::string& getType() const;
 
@@ -63,6 +63,6 @@ public:
 	const std::string& getGeometryFilename() const;
 };
 
-typedef boost::shared_ptr<Program> ProgramSP;
+typedef std::shared_ptr<Program> ProgramSP;
 
 #endif /* PROGRAM_H_ */

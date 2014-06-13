@@ -68,6 +68,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<ProgramPipeline> ProgramPipelineSP;
+typedef std::shared_ptr<ProgramPipeline> ProgramPipelineSP;
 
 #endif /* PROGRAMPIPELINE_H_ */

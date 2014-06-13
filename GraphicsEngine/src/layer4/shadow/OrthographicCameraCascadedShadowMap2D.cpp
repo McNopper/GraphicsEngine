@@ -9,8 +9,6 @@
 
 #include "OrthographicCameraCascadedShadowMap2D.h"
 
-using namespace boost;
-
 using namespace std;
 
 OrthographicCameraCascadedShadowMap2D::OrthographicCameraCascadedShadowMap2D(int32_t size, int32_t sections) :

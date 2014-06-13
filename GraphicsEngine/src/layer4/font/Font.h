@@ -22,8 +22,8 @@ private:
 
 	float width;
 	float height;
-	boost::int32_t columns;
-	boost::int32_t rows;
+	std::int32_t columns;
+	std::int32_t rows;
 	float cellWidth;
 	float cellWidthNormalized;
 	float cellHeight;
@@ -38,7 +38,7 @@ private:
 
 	GLuint vboIndices;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
 	CameraSP camera;
 
@@ -50,7 +50,7 @@ private:
 
 public:
 
-	Font(const std::string& filename, float width, float height, boost::int32_t columns, boost::int32_t rows, float cellWidth, float cellHeight, float fontWidth, float fontHeight);
+	Font(const std::string& filename, float width, float height, std::int32_t columns, std::int32_t rows, float cellWidth, float cellHeight, float fontWidth, float fontHeight);
 	virtual ~Font();
 
 	GLuint getVboVertices() const;
@@ -64,6 +64,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Font> FontSP;
+typedef std::shared_ptr<Font> FontSP;
 
 #endif /* FONT_H_ */

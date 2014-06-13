@@ -14,7 +14,7 @@ EventManager::EventManager() :
 
 EventManager::~EventManager()
 {
-	boost::lock_guard<boost::mutex> eventLock(eventMutex);
+	std::lock_guard<std::mutex> eventLock(eventMutex);
 
 	EventSP currentEvent;
 
@@ -28,7 +28,7 @@ EventManager::~EventManager()
 
 void EventManager::processEvents()
 {
-	boost::lock_guard<boost::mutex> eventLock(eventMutex);
+	std::lock_guard<std::mutex> eventLock(eventMutex);
 
 	int32_t currentSize = allEvents.size();
 
@@ -60,14 +60,14 @@ void EventManager::processEvents()
 
 void EventManager::addEventReceiver(const EventReceiverSP& receiver)
 {
-	boost::lock_guard<boost::mutex> eventLock(eventMutex);
+	std::lock_guard<std::mutex> eventLock(eventMutex);
 
 	allEventReceivers.add(receiver);
 }
 
 void EventManager::removeEventReceiver(const EventReceiverSP& receiver)
 {
-	boost::lock_guard<boost::mutex> eventLock(eventMutex);
+	std::lock_guard<std::mutex> eventLock(eventMutex);
 
 	allEventReceivers.remove(receiver);
 }
@@ -82,7 +82,7 @@ void EventManager::sendEvent(const EventSP& event)
 
 const ValueVector<EventReceiverSP>& EventManager::getEventReceivers() const
 {
-	boost::lock_guard<boost::mutex> eventLock(eventMutex);
+	std::lock_guard<std::mutex> eventLock(eventMutex);
 
 	return allEventReceivers;
 }

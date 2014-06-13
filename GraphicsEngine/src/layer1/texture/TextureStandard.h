@@ -18,7 +18,7 @@ protected:
 	GLenum format;
 	GLenum type;
 
-	boost::uint32_t sizeOfData;
+	std::uint32_t sizeOfData;
 
 	bool mipMap;
 
@@ -33,7 +33,7 @@ protected:
 	virtual void changingSize();
 
 public:
-	TextureStandard(const std::string& identifier, GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
+	TextureStandard(const std::string& identifier, GLenum target, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~TextureStandard();
 
 	virtual void freePixels() = 0;

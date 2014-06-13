@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 SubMesh::SubMesh(uint32_t indicesOffset, uint32_t triangleCount) :
 	indicesOffset(indicesOffset), triangleCount(triangleCount), allVAOs()
 {

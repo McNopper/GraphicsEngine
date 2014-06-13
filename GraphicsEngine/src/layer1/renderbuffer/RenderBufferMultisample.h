@@ -15,10 +15,10 @@ class RenderBufferMultisample : public RenderBuffer
 
 private:
 
-	boost::int32_t samples;
+	std::int32_t samples;
 
 public:
-	RenderBufferMultisample(boost::int32_t samples, GLenum internalFormat, boost::int32_t width, boost::int32_t height);
+	RenderBufferMultisample(std::int32_t samples, GLenum internalFormat, std::int32_t width, std::int32_t height);
 	virtual ~RenderBufferMultisample();
 
 	virtual bool init();
@@ -27,6 +27,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<RenderBufferMultisample> RenderBufferMultisampleSP;
+typedef std::shared_ptr<RenderBufferMultisample> RenderBufferMultisampleSP;
 
 #endif /* RENDERBUFFERMULTISAMPLE_H_ */

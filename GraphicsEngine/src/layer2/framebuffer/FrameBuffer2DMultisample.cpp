@@ -7,7 +7,7 @@
 
 #include "FrameBuffer2DMultisample.h"
 
-using namespace boost;
+using namespace std;
 
 FrameBuffer2DMultisample::FrameBuffer2DMultisample(int32_t width, int32_t height) :
 		FrameBuffer(width, height)

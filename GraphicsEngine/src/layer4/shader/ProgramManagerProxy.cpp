@@ -12,8 +12,6 @@
 
 #include "ProgramManagerProxy.h"
 
-using namespace boost;
-
 using namespace std;
 
 ProgramManagerProxy::ProgramManagerProxy()
@@ -56,7 +54,7 @@ void ProgramManagerProxy::setAmbientLightColorByType(const string& programType)
 	}
 }
 
-void ProgramManagerProxy::setNumberLightsByType(const std::string& programType, boost::int32_t numberLights)
+void ProgramManagerProxy::setNumberLightsByType(const std::string& programType, std::int32_t numberLights)
 {
 	auto allPrograms = ProgramManager::getInstance()->getAllPrograms();
 

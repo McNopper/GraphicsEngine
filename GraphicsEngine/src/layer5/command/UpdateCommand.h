@@ -19,13 +19,13 @@ class UpdateCommand: public Command
 
 private:
 
-	boost::shared_ptr<ThreadsafeQueue<UpdateCommand*> > updateCommandRecycleQueue;
+	std::shared_ptr<ThreadsafeQueue<UpdateCommand*> > updateCommandRecycleQueue;
 
 	ThreadSafeCounterSP taskCounter;
 
 	Entity* entity;
 
-	UpdateCommand(const boost::shared_ptr<ThreadsafeQueue<UpdateCommand*> >& updateCommandRecycleQueue, const ThreadSafeCounterSP& taskCounter);
+	UpdateCommand(const std::shared_ptr<ThreadsafeQueue<UpdateCommand*> >& updateCommandRecycleQueue, const ThreadSafeCounterSP& taskCounter);
 
 	virtual ~UpdateCommand();
 
@@ -39,6 +39,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<ThreadsafeQueue<UpdateCommand*> > UpdateCommandRecycleQueueSP;
+typedef std::shared_ptr<ThreadsafeQueue<UpdateCommand*> > UpdateCommandRecycleQueueSP;
 
 #endif /* UPDATECOMMAND_H_ */

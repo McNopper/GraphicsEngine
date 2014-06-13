@@ -11,8 +11,6 @@
 
 #include "DynamicEnvironmentManager.h"
 
-using namespace boost;
-
 using namespace std;
 
 DynamicEnvironmentManager::DynamicEnvironmentManager() :
@@ -52,4 +50,9 @@ FrameBufferCubeMapSP DynamicEnvironmentManager::createCubeMap(const EntitySP& en
 	allDynamicEnvironments.add(entity, dynamicEnvironment);
 
 	return result;
+}
+
+const KeyValueMap<EntitySP, DynamicEnvironmentSP>& DynamicEnvironmentManager::getKeyValueMap() const
+{
+	return allDynamicEnvironments;
 }

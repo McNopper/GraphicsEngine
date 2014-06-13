@@ -16,9 +16,9 @@ class ThreadsafeQueue
 
 private:
 
-	mutable boost::mutex queueMutex;
+	mutable std::mutex queueMutex;
 
-	boost::condition_variable queueConditionVariable;
+	std::condition_variable queueConditionVariable;
 
 	std::queue<ELEMENT> allElements;
 
@@ -30,14 +30,14 @@ public:
 
 	ThreadsafeQueue(const ThreadsafeQueue& other)
 	{
-		boost::lock_guard<boost::mutex> queueLock(other.queueMutex);
+		std::lock_guard<std::mutex> queueLock(other.queueMutex);
 
 		allElements = other.allElements;
 	}
 
 	~ThreadsafeQueue()
 	{
-		boost::lock_guard<boost::mutex> queueLock(queueMutex);
+		std::lock_guard<std::mutex> queueLock(queueMutex);
 
 		while (allElements.size() > 0)
 		{
@@ -47,7 +47,7 @@ public:
 
 	void add(const ELEMENT& command)
 	{
-		boost::lock_guard<boost::mutex> queueLock(queueMutex);
+		std::lock_guard<std::mutex> queueLock(queueMutex);
 
 		allElements.push(command);
 
@@ -56,7 +56,7 @@ public:
 
 	bool take(ELEMENT& result)
 	{
-		boost::lock_guard<boost::mutex> queueLock(queueMutex);
+		std::lock_guard<std::mutex> queueLock(queueMutex);
 
 		if (!allElements.empty())
 		{
@@ -71,7 +71,7 @@ public:
 
 	void waitAndTake(ELEMENT& result)
 	{
-		boost::unique_lock<boost::mutex> queueLock(queueMutex);
+		std::unique_lock<std::mutex> queueLock(queueMutex);
 		queueConditionVariable.wait(queueLock, [this] {return !allElements.empty();} );
 
 		result = allElements.front();
@@ -80,14 +80,14 @@ public:
 
 	bool empty() const
 	{
-		boost::lock_guard<boost::mutex> queueLock(queueMutex);
+		std::lock_guard<std::mutex> queueLock(queueMutex);
 
 		return allElements.empty();
 	}
 
-	boost::int32_t size() const
+	std::int32_t size() const
 	{
-		boost::lock_guard<boost::mutex> queueLock(queueMutex);
+		std::lock_guard<std::mutex> queueLock(queueMutex);
 
 		return allElements.size();
 	}

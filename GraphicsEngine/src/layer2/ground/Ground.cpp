@@ -10,8 +10,6 @@
 
 #include "Ground.h"
 
-using namespace boost;
-
 using namespace std;
 
 Ground::Ground(const BoundingSphere& boundingSphere, const GridPlaneShape& gridPlaneShape) :

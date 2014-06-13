@@ -23,8 +23,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 const char* FbxEntityFactory::CHANNELS[] = { "X", "Y", "Z" };
 
 FbxEntityFactory::FbxEntityFactory() :

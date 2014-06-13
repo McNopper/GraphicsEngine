@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Program *Program::lastUsedProgram = 0;
 
 void Program::off()

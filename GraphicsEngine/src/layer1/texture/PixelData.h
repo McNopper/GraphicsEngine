@@ -15,17 +15,17 @@ class PixelData
 
 private:
 
-	boost::int32_t width;
-	boost::int32_t height;
+	std::int32_t width;
+	std::int32_t height;
 	GLenum format;
 	GLenum type;
-	boost::uint8_t* pixels;
-	boost::uint32_t sizeOfData;
+	std::uint8_t* pixels;
+	std::uint32_t sizeOfData;
 
 public:
 
 	PixelData();
-	PixelData(boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, const boost::uint8_t* pixels, boost::uint32_t sizeOfData);
+	PixelData(std::int32_t width, std::int32_t height, GLenum format, GLenum type, const std::uint8_t* pixels, std::uint32_t sizeOfData);
 	PixelData(const PixelData& other);
 	~PixelData();
 
@@ -34,15 +34,15 @@ public:
 	void setPixels(const PixelData& other);
 	void freePixels();
 
-	boost::int32_t getWidth() const;
-	boost::int32_t getHeight() const;
+	std::int32_t getWidth() const;
+	std::int32_t getHeight() const;
 	GLenum getFormat() const;
 	GLenum getType() const;
-	boost::uint8_t* getPixels() const;
-	boost::uint32_t getSizeOfData() const;
+	std::uint8_t* getPixels() const;
+	std::uint32_t getSizeOfData() const;
 
 };
 
-typedef boost::shared_ptr<PixelData> PixelDataSP;
+typedef std::shared_ptr<PixelData> PixelDataSP;
 
 #endif /* PIXELDATA_H_ */

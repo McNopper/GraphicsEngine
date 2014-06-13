@@ -22,7 +22,7 @@ private:
 
 	std::string name;
 
-	boost::uint32_t numberVertices;
+	std::uint32_t numberVertices;
 
 	float* vertices;
 	float* normals;
@@ -30,9 +30,9 @@ private:
 	float* tangents;
 	float* texCoords;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
-	boost::uint32_t* indices;
+	std::uint32_t* indices;
 
 	GLuint vboVertices;
 	GLuint vboNormals;
@@ -52,22 +52,22 @@ private:
 	GLuint vboBoneWeights[2];
 	GLuint vboBoneCounters;
 
-	std::map<boost::int32_t, SubMeshSP> subMeshes;
+	std::map<std::int32_t, SubMeshSP> subMeshes;
 
-	std::map<boost::int32_t, SurfaceMaterialSP> surfaceMaterials;
+	std::map<std::int32_t, SurfaceMaterialSP> surfaceMaterials;
 
 	void updateVAO();
 
 public:
 
-	Mesh(const std::string& name, boost::uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, boost::uint32_t numberIndices, boost::uint32_t* indices, const std::map<boost::int32_t, SubMeshSP>& subMeshes, const std::map<boost::int32_t, SurfaceMaterialSP>& surfaceMaterials);
+	Mesh(const std::string& name, std::uint32_t numberVertices, float* vertices, float* normals, float* bitangents, float* tangents, float* texCoords, std::uint32_t numberIndices, std::uint32_t* indices, const std::map<std::int32_t, SubMeshSP>& subMeshes, const std::map<std::int32_t, SurfaceMaterialSP>& surfaceMaterials);
 	virtual ~Mesh();
 
 	void cleanCpuData();
 
 	const std::string& getName() const;
 
-	boost::uint32_t getNumberVertices() const;
+	std::uint32_t getNumberVertices() const;
     GLuint getVboVertices() const;
     const float* getVertices() const;
 
@@ -83,21 +83,21 @@ public:
     GLuint getVboTexCoords() const;
     const float* getTexCoords() const;
 
-    boost::uint32_t getNumberIndices() const;
+    std::uint32_t getNumberIndices() const;
     GLuint getVboIndices() const;
-    const boost::uint32_t* getIndices() const;
+    const std::uint32_t* getIndices() const;
 
-    GLuint getVboBoneIndices(boost::int32_t index) const;
-    GLuint getVboBoneWeights(boost::int32_t index) const;
+    GLuint getVboBoneIndices(std::int32_t index) const;
+    GLuint getVboBoneWeights(std::int32_t index) const;
     GLuint getVboBoneCounters() const;
 
-    boost::uint32_t getSubMeshesCount() const;
-	bool containsSubMeshAt(boost::int32_t index) const;
-	const SubMeshSP& getSubMeshAt(boost::int32_t index) const;
+    std::uint32_t getSubMeshesCount() const;
+	bool containsSubMeshAt(std::int32_t index) const;
+	const SubMeshSP& getSubMeshAt(std::int32_t index) const;
 
-	boost::uint32_t getSurfaceMaterialsCount() const;
-	bool containsSurfaceMaterialAt(boost::int32_t index) const;
-	const SurfaceMaterialSP& getSurfaceMaterialAt(boost::int32_t index) const;
+	std::uint32_t getSurfaceMaterialsCount() const;
+	bool containsSurfaceMaterialAt(std::int32_t index) const;
+	const SurfaceMaterialSP& getSurfaceMaterialAt(std::int32_t index) const;
 
 	SurfaceMaterialSP findSurfaceMaterial(const std::string& name) const;
 
@@ -111,6 +111,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Mesh> MeshSP;
+typedef std::shared_ptr<Mesh> MeshSP;
 
 #endif /* MESH_H_ */

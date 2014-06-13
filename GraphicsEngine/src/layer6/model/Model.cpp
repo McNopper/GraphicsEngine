@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Model::Model(const BoundingSphere& boundingSphere, const NodeSP& node, int32_t numberJoints, bool animationData, bool skinned) :
 	boundingSphere(boundingSphere), rootNode(node), numberJoints(numberJoints), animated(animationData), skinned(skinned), allNodesByIndex(), allNodesByName(), allSurfaceMaterialsByName()
 {

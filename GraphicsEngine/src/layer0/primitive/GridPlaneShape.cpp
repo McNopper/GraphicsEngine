@@ -7,7 +7,7 @@
 
 #include "GridPlaneShape.h"
 
-using namespace boost;
+using namespace std;
 
 GridPlaneShape::GridPlaneShape(float horizontalExtend, float verticalExtend, uint32_t rows, uint32_t columns) :
 		Shape()

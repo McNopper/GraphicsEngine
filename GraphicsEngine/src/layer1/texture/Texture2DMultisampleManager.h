@@ -33,7 +33,7 @@ public:
 
 	void addTexture(const std::string& key, const Texture2DMultisampleSP& texture);
 
-	Texture2DMultisampleSP createTexture(const std::string& key, boost::int32_t samples, GLint internalFormat, boost::int32_t width, boost::int32_t height, bool fixedsamplelocations = false);
+	Texture2DMultisampleSP createTexture(const std::string& key, std::int32_t samples, GLint internalFormat, std::int32_t width, std::int32_t height, bool fixedsamplelocations = false);
 
 };
 

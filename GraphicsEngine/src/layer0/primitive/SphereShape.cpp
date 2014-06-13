@@ -7,7 +7,7 @@
 
 #include "SphereShape.h"
 
-using namespace boost;
+using namespace std;
 
 SphereShape::SphereShape(float radius, uint32_t numberSlices) : Shape()
 {

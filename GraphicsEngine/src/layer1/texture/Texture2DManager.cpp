@@ -10,7 +10,6 @@
 #include "Texture2DManager.h"
 
 using namespace std;
-using namespace boost;
 
 Texture2DManager::Texture2DManager() :
 		Singleton<Texture2DManager>(), allTextures()

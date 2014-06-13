@@ -68,6 +68,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<GroundEntity> GroundEntitySP;
+typedef std::shared_ptr<GroundEntity> GroundEntitySP;
 
 #endif /* GROUNDENTITY_H_ */

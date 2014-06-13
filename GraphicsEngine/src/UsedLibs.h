@@ -9,16 +9,16 @@
 #define USEDLIBS_H_
 
 #include <algorithm>
+#include <cassert>
+#include <condition_variable>
+#include <cstdint>
 #include <map>
+#include <memory>
+#include <mutex>
 #include <queue>
 #include <string>
+#include <thread>
 #include <vector>
-
-#include <boost/assert.hpp>
-#include <boost/checked_delete.hpp>
-#include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/thread.hpp>
 
 #include "GL/glus.h"
 

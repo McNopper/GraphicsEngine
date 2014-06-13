@@ -31,7 +31,7 @@ public:
 
 	void addRenderBuffer(const std::string& key, const RenderBufferMultisampleSP& renderBufferMultisample);
 
-	RenderBufferMultisampleSP createRenderBuffer(const std::string& key, boost::int32_t samples, GLenum internalFormat, boost::int32_t width, boost::int32_t height);
+	RenderBufferMultisampleSP createRenderBuffer(const std::string& key, std::int32_t samples, GLenum internalFormat, std::int32_t width, std::int32_t height);
 
 };
 

@@ -37,6 +37,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<EventReceiver> EventReceiverSP;
+typedef std::shared_ptr<EventReceiver> EventReceiverSP;
 
 #endif /* EVENTRECEIVER_H_ */

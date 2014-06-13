@@ -36,14 +36,14 @@ private:
 
 	NodeTreeFactory nodeTreeFactory;
 
-	std::map<boost::int32_t, SurfaceMaterialSP> currentSurfaceMaterials;
+	std::map<std::int32_t, SurfaceMaterialSP> currentSurfaceMaterials;
 	std::vector<SurfaceMaterialSP> allSurfaceMaterials;
 	std::vector<AnimationStackSP> allAnimationStacks;
 	std::vector<MeshSP> allMeshes;
 	std::vector<CameraSP> allCameras;
 	std::vector<LightSP> allLights;
-	boost::int32_t currentNumberJoints;
-	boost::int32_t currentNumberAnimationStacks;
+	std::int32_t currentNumberJoints;
+	std::int32_t currentNumberAnimationStacks;
 	bool currentEntityAnimated;
 	bool currentEntitySkinned;
 
@@ -67,13 +67,13 @@ private:
 
 	void processTexture(FbxTexture* texture);
 
-	void processSurfaceMaterial(boost::int32_t materialIndex, FbxSurfaceMaterial* surfaceMaterial);
+	void processSurfaceMaterial(std::int32_t materialIndex, FbxSurfaceMaterial* surfaceMaterial);
 
 	FbxDouble3 processMaterialProperty(const FbxSurfaceMaterial* Material, const char* propertyName, const char* factorPropertyName, const FbxDouble3& defaultColor, Texture2DSP& texture) const;
 
 	void traverseNode(FbxNode* node, const NodeSP& parentNode);
 
-	AnimationStackSP processAnimation(FbxNode* node, boost::int32_t animStackIndex);
+	AnimationStackSP processAnimation(FbxNode* node, std::int32_t animStackIndex);
 
 	MeshSP processMesh(FbxMesh* mesh);
 
@@ -85,7 +85,7 @@ private:
 
 	void postTraverseNode(FbxNode* node, const NodeSP& nodeGE, const Matrix4x4& parentMatrix);
 
-	void processMinMax(const float* vertices, boost::int32_t numberVertices, const Matrix4x4& matrix);
+	void processMinMax(const float* vertices, std::int32_t numberVertices, const Matrix4x4& matrix);
 
 	void postProcessMesh(FbxMesh* mesh, const MeshSP& currentMesh);
 

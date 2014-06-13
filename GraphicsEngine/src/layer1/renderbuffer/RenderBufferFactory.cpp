@@ -7,7 +7,7 @@
 
 #include "RenderBufferFactory.h"
 
-using namespace boost;
+using namespace std;
 
 RenderBufferFactory::RenderBufferFactory()
 {

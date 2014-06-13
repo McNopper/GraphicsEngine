@@ -27,7 +27,7 @@ private:
 
 	GLuint vboIndices;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
 	ProgramSP program;
 
@@ -52,6 +52,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<LineGeometry> LineGeometrySP;
+typedef std::shared_ptr<LineGeometry> LineGeometrySP;
 
 #endif /* LINEGEOMETRY_H_ */

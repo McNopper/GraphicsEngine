@@ -11,7 +11,6 @@
 #include "TextureFactory.h"
 
 using namespace std;
-using namespace boost;
 
 TextureFactory::TextureFactory() : TextureFactoryBase()
 {

@@ -20,7 +20,7 @@ class FrameBuffer2D : public FrameBuffer
 
 public:
 
-	FrameBuffer2D(boost::int32_t width, boost::int32_t height);
+	FrameBuffer2D(std::int32_t width, std::int32_t height);
 	virtual ~FrameBuffer2D();
 
 	virtual void setColorAttachment0(const TextureSP& texture);
@@ -30,7 +30,7 @@ public:
 	virtual void setColorAttachment1(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthAttachment(const TextureSP& texture);
-	virtual void setDepthAttachment(const TextureSP& texture, boost::int32_t layer);
+	virtual void setDepthAttachment(const TextureSP& texture, std::int32_t layer);
 	virtual void setDepthAttachment(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthStencilAttachment(const TextureSP& texture);
@@ -46,6 +46,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<FrameBuffer2D> FrameBuffer2DSP;
+typedef std::shared_ptr<FrameBuffer2D> FrameBuffer2DSP;
 
 #endif /* FRAMEBUFFER2D_H_ */

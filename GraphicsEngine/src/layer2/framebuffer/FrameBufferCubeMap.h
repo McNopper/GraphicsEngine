@@ -34,7 +34,7 @@ private:
 	bool enabled;
 
 public:
-	FrameBufferCubeMap(boost::int32_t width, boost::int32_t height);
+	FrameBufferCubeMap(std::int32_t width, std::int32_t height);
 	virtual ~FrameBufferCubeMap();
 
 	virtual bool init();
@@ -65,6 +65,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<FrameBufferCubeMap> FrameBufferCubeMapSP;
+typedef std::shared_ptr<FrameBufferCubeMap> FrameBufferCubeMapSP;
 
 #endif /* FRAMEBUFFERCUBEMAP_H_ */

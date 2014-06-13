@@ -15,20 +15,20 @@ class PerlinNoise3D : public PerlinNoise
 
 	private:
 
-		boost::int32_t width;
-		boost::int32_t height;
-		boost::int32_t depth;
+		std::int32_t width;
+		std::int32_t height;
+		std::int32_t depth;
 
 	public:
 
-		PerlinNoise3D(boost::int32_t width, boost::int32_t height, boost::int32_t depth, boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
+		PerlinNoise3D(std::int32_t width, std::int32_t height, std::int32_t depth, std::int32_t seed, float frequency, float amplitude, float persistence, std::int32_t octaves);
 		virtual ~PerlinNoise3D();
 
-		boost::int32_t getWidth() const;
+		std::int32_t getWidth() const;
 
-		boost::int32_t getHeight() const;
+		std::int32_t getHeight() const;
 
-		boost::int32_t getDepth() const;
+		std::int32_t getDepth() const;
 
 };
 

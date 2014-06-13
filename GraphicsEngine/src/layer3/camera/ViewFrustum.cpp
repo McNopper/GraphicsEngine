@@ -11,8 +11,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Plane ViewFrustum::SIDES_NDC[6] = { Plane(Vector3(0.0f, 0.0f, 1.0f), 1.0f), Plane(Vector3(0.0f, 0.0f, -1.0f), 1.0f), Plane(Vector3(1.0f, 0.0f, 0.0f), 1.0f), Plane(Vector3(-1.0f, 0.0f, .0f), 1.0f), Plane(Vector3(0.0f, 1.0f, 0.0f), 1.0f), Plane(Vector3(0.0f, -1.0f, 0.0f), 1.0f) };
 
 ViewFrustum::ViewFrustum()

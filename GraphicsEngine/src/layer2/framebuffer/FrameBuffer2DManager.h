@@ -37,9 +37,9 @@ public:
 
 	void addFrameBuffer(const std::string& key, const FrameBuffer2DSP& framBuffer2D, bool windowFrameBuffer);
 
-	FrameBuffer2DSP createFrameBuffer(const std::string& key, boost::int32_t width, boost::int32_t height, bool windowFrameBuffer);
+	FrameBuffer2DSP createFrameBuffer(const std::string& key, std::int32_t width, std::int32_t height, bool windowFrameBuffer);
 
-	void updateWidthHeight(boost::int32_t width, boost::int32_t height);
+	void updateWidthHeight(std::int32_t width, std::int32_t height);
 
 };
 

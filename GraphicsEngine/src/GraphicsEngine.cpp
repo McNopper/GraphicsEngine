@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 GLUSvoid mouseButtonEngine(GLUSboolean pressed, GLUSint button, GLUSint xPos, GLUSint yPos)
 {
 	User::defaultUser.mouseButton(pressed ? true : false, button, xPos, yPos);

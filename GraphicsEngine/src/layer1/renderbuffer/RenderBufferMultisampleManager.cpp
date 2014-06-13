@@ -10,7 +10,6 @@
 #include "RenderBufferMultisampleManager.h"
 
 using namespace std;
-using namespace boost;
 
 RenderBufferMultisampleManager::RenderBufferMultisampleManager() :
 		Singleton<RenderBufferMultisampleManager>(), allRenderBuffers()

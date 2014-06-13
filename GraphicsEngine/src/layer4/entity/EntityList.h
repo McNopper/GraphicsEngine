@@ -31,12 +31,12 @@ public:
 
 	bool containsEntity(const EntitySP& entity) const;
 
-	boost::int32_t size() const;
+	std::int32_t size() const;
 
 	void clear();
 
 };
 
-typedef boost::shared_ptr<EntityList> EntityListSP;
+typedef std::shared_ptr<EntityList> EntityListSP;
 
 #endif /* ENTITYLIST_H_ */

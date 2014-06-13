@@ -242,7 +242,7 @@ GLUSboolean updateGame(GLUSfloat deltaTime)
 	// Render the dynamic cube maps
 	//
 
-	auto allElements = DynamicEnvironmentManager::getInstance()->getAllKeyValues();
+	auto allElements = DynamicEnvironmentManager::getInstance()->getKeyValueMap();
 
 	auto walker = allElements.begin();
 

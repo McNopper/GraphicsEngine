@@ -7,7 +7,7 @@
 
 #include "TorusShape.h"
 
-using namespace boost;
+using namespace std;
 
 TorusShape::TorusShape(float innerRadius, float outerRadius, uint32_t numberSlices, uint32_t numberStacks) : Shape()
 {

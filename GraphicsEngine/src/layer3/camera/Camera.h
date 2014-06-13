@@ -113,7 +113,7 @@ public:
 
 	const std::vector<float>& getFrustumZs() const;
 
-	void setNumberSections(boost::int32_t sections);
+	void setNumberSections(std::int32_t sections);
 
 	float distanceToCamera(const BoundingSphere& boundingSphere) const;
 
@@ -123,6 +123,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Camera> CameraSP;
+typedef std::shared_ptr<Camera> CameraSP;
 
 #endif /* CAMERA_H_ */

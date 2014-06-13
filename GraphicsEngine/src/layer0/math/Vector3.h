@@ -32,7 +32,7 @@ public:
 	Vector3(const Vector3 & other);
 	~Vector3();
 
-	float& operator [](boost::int32_t i);
+	float& operator [](std::int32_t i);
 
 	Vector3 operator -() const;
 

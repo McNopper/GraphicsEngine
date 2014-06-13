@@ -35,7 +35,7 @@ public:
 
 	void addPostProcessor(const std::string& key, const PostProcessor2DMultisampleSP& postProcessorMultisample);
 
-	PostProcessor2DMultisampleSP createPostProcessor(const std::string& key, boost::int32_t samples, GLenum internalFormat, bool fixedsamplelocations);
+	PostProcessor2DMultisampleSP createPostProcessor(const std::string& key, std::int32_t samples, GLenum internalFormat, bool fixedsamplelocations);
 
 };
 

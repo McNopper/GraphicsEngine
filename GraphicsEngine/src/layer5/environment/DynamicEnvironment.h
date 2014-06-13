@@ -34,7 +34,7 @@ public:
 
 	const FrameBufferCubeMapSP& getFrameBufferCubeMap() const;
 
-	const PerspectiveCameraSP& getCamera(boost::int32_t index) const;
+	const PerspectiveCameraSP& getCamera(std::int32_t index) const;
 
 	bool use(const Point4& position);
 
@@ -42,6 +42,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<DynamicEnvironment> DynamicEnvironmentSP;
+typedef std::shared_ptr<DynamicEnvironment> DynamicEnvironmentSP;
 
 #endif /* DYNAMICENVIRONMENT_H_ */

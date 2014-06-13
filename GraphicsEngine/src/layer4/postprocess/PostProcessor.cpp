@@ -16,9 +16,6 @@
 
 using namespace std;
 
-using namespace boost;
-
-
 PostProcessor::PostProcessor(GLenum target, int32_t blurPixel, float blurSigma, int32_t bloomPixel, float bloomSigma, int32_t maxRadiusCoC, float cocSigma, float aperture, float focal, float focusedObject) :
 		target(target), outputFramebuffer(0), frameBuffer(), tempFrameBuffer(), depthOfFieldFrameBuffer(), bloomFrameBuffer(), blurTexture1DArray(), bloomTexture1DArray(), program(), vboVertices(0), vboTexCoords(0), vboIndices(0), numberIndices(0), useDoF(false), aperture(aperture), focal(focal), focusedObject(focusedObject), useBlur(false), useBloom(false), bloomLevel(1.0f), useExposure(false), exposure(1.0f), useGamma(false), gamma(2.2f)
 {

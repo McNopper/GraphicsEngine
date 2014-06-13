@@ -7,8 +7,6 @@
 
 #include "Texture2DMultisample.h"
 
-using namespace boost;
-
 using namespace std;
 
 Texture2DMultisample::Texture2DMultisample(const string& identifier, int32_t samples, GLint internalFormat, int32_t width, int32_t height, bool fixedsamplelocations) :

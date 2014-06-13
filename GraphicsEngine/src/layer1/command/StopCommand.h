@@ -19,9 +19,9 @@ class StopCommand: public Command
 
 private:
 
-	boost::shared_ptr<ThreadsafeQueue<StopCommand*> > stopCommandRecycleQueue;
+	std::shared_ptr<ThreadsafeQueue<StopCommand*> > stopCommandRecycleQueue;
 
-	StopCommand(const boost::shared_ptr<ThreadsafeQueue<StopCommand*> >& stopCommandRecycleQueue);
+	StopCommand(const std::shared_ptr<ThreadsafeQueue<StopCommand*> >& stopCommandRecycleQueue);
 	virtual ~StopCommand();
 
 public:
@@ -31,6 +31,6 @@ public:
 	virtual void recycle();
 };
 
-typedef boost::shared_ptr<ThreadsafeQueue<StopCommand*> > StopCommandRecycleQueueSP;
+typedef std::shared_ptr<ThreadsafeQueue<StopCommand*> > StopCommandRecycleQueueSP;
 
 #endif /* STOPCOMMAND_H_ */

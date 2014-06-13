@@ -18,7 +18,7 @@ class FrameBuffer : public FrameBufferBase
 
 private:
 
-	boost::int32_t layer;
+	std::int32_t layer;
 
 	TextureSP color0Texture;
 	RenderBufferSP color0RenderBuffer;
@@ -32,11 +32,11 @@ private:
 	TextureSP depthStencilTexture;
 	RenderBufferSP depthStencilRenderBuffer;
 
-	boost::int32_t getDrawBuffersCount() const;
+	std::int32_t getDrawBuffersCount() const;
 
 public:
 
-	FrameBuffer(boost::int32_t width, boost::int32_t height);
+	FrameBuffer(std::int32_t width, std::int32_t height);
 	virtual ~FrameBuffer();
 
 	virtual bool init();
@@ -50,7 +50,7 @@ public:
 	virtual void setColorAttachment1(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthAttachment(const TextureSP& texture);
-	virtual void setDepthAttachment(const TextureSP& texture, boost::int32_t layer);
+	virtual void setDepthAttachment(const TextureSP& texture, std::int32_t layer);
 	virtual void setDepthAttachment(const RenderBufferSP& renderBuffer);
 
 	virtual void setDepthStencilAttachment(const TextureSP& texture);
@@ -67,6 +67,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<FrameBuffer> FrameBufferSP;
+typedef std::shared_ptr<FrameBuffer> FrameBufferSP;
 
 #endif /* FRAMEBUFFER_H_ */

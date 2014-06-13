@@ -19,9 +19,9 @@ class OrthographicCameraCascadedShadowMap2D
 
 private:
 
-	boost::int32_t size;
+	std::int32_t size;
 
-	boost::int32_t sections;
+	std::int32_t sections;
 
 	ShadowMap2DSP shadowMap;
 
@@ -32,27 +32,27 @@ private:
 
 public:
 
-	OrthographicCameraCascadedShadowMap2D(boost::int32_t size, boost::int32_t sections);
+	OrthographicCameraCascadedShadowMap2D(std::int32_t size, std::int32_t sections);
 	virtual ~OrthographicCameraCascadedShadowMap2D();
 
-	void use(bool enable, boost::int32_t section) const;
+	void use(bool enable, std::int32_t section) const;
 
 	void updateShadowMatrices();
 
-	const OrthographicCameraSP& getOrthographicCamera(boost::int32_t section) const;
+	const OrthographicCameraSP& getOrthographicCamera(std::int32_t section) const;
 
-	const Matrix4x4& getShadowMatrix(boost::int32_t section) const;
+	const Matrix4x4& getShadowMatrix(std::int32_t section) const;
 
 	const std::vector<Matrix4x4>& getShadowMatrices() const;
 
 	const ShadowMap2DSP& getShadowMap2D() const;
 
-	boost::int32_t getSize() const;
+	std::int32_t getSize() const;
 
-	boost::int32_t getSections() const;
+	std::int32_t getSections() const;
 
 };
 
-typedef boost::shared_ptr<OrthographicCameraCascadedShadowMap2D> OrthographicCameraCascadedShadowMap2DSP;
+typedef std::shared_ptr<OrthographicCameraCascadedShadowMap2D> OrthographicCameraCascadedShadowMap2DSP;
 
 #endif /* ORTHOGRAPHICCAMERACASCADEDSHADOWMAP2D_H_ */

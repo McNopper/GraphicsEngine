@@ -21,15 +21,15 @@ protected:
 
 	GLint internalFormat;
 
-	boost::int32_t width;
-	boost::int32_t height;
+	std::int32_t width;
+	std::int32_t height;
 
 	GLuint textureName;
 
 	virtual void changingSize() = 0;
 
 public:
-	Texture(const std::string& identifier, GLenum target, GLint internalFormat, boost::int32_t width, boost::int32_t height);
+	Texture(const std::string& identifier, GLenum target, GLint internalFormat, std::int32_t width, std::int32_t height);
 	virtual ~Texture();
 
 	virtual bool init() = 0;
@@ -39,12 +39,12 @@ public:
 
 	GLenum getTarget() const;
 
-	boost::int32_t getWidth() const;
-	void setWidth(boost::int32_t width);
-	boost::int32_t getHeight() const;
-	void setHeight(boost::int32_t height);
+	std::int32_t getWidth() const;
+	void setWidth(std::int32_t width);
+	std::int32_t getHeight() const;
+	void setHeight(std::int32_t height);
 
-	void setWidthHeight(boost::int32_t width, boost::int32_t height);
+	void setWidthHeight(std::int32_t width, std::int32_t height);
 
 	GLuint getTextureName() const;
 
@@ -53,6 +53,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Texture> TextureSP;
+typedef std::shared_ptr<Texture> TextureSP;
 
 #endif /* TEXTURE_H_ */

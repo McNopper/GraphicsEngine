@@ -7,8 +7,6 @@
 
 #include "Texture1D.h"
 
-using namespace boost;
-
 using namespace std;
 
 Texture1D::Texture1D(const string& identifier, GLint internalFormat, int32_t width, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :

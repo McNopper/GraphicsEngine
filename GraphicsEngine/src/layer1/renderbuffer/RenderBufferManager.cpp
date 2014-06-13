@@ -10,7 +10,6 @@
 #include "RenderBufferManager.h"
 
 using namespace std;
-using namespace boost;
 
 RenderBufferManager::RenderBufferManager() :
 		Singleton<RenderBufferManager>(), allRenderBuffers()

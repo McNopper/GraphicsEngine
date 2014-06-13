@@ -40,20 +40,20 @@ private:
 
 	Quaternion rotation;
 
-	std::vector<boost::shared_ptr<InstanceNode> > allChilds;
+	std::vector<std::shared_ptr<InstanceNode> > allChilds;
 
 	std::string name;
 
-	void addChild(const boost::shared_ptr<InstanceNode>& instanceNode);
+	void addChild(const std::shared_ptr<InstanceNode>& instanceNode);
 
 public:
 
 	InstanceNode(const Node* node);
 	virtual ~InstanceNode();
 
-	const boost::shared_ptr<InstanceNode>& getChild(boost::int32_t i) const;
+	const std::shared_ptr<InstanceNode>& getChild(std::int32_t i) const;
 
-	boost::shared_ptr<InstanceNode> findChildRecursive(const std::string& name) const;
+	std::shared_ptr<InstanceNode> findChildRecursive(const std::string& name) const;
 
 	bool isVisible() const;
 
@@ -79,6 +79,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<InstanceNode> InstanceNodeSP;
+typedef std::shared_ptr<InstanceNode> InstanceNodeSP;
 
 #endif /* INSTANCENODE_H_ */

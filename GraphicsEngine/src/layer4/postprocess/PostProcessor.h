@@ -47,7 +47,7 @@ protected:
 
 	GLuint vboIndices;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
 	PostProcessorVAOSP postProcessorVAO;
 
@@ -73,7 +73,7 @@ protected:
 	std::string depthTexture;
 	std::string bloomTexture;
 
-	PostProcessor(GLenum target, boost::int32_t blurPixel = 2, float blurSigma = 0.5f, boost::int32_t bloomPixel = 16, float bloomSigma = 5.0f, boost::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
+	PostProcessor(GLenum target, std::int32_t blurPixel = 2, float blurSigma = 0.5f, std::int32_t bloomPixel = 16, float bloomSigma = 5.0f, std::int32_t maxRadiusCoC = 16, float cocSigma = 5.0f, float aperture = 10.0f, float focal = 3.0f, float focusedObject = 6.0f);
 
 	virtual void setUniforms() const = 0;
 
@@ -121,6 +121,6 @@ public:
 	void setUseGamma(bool useGamma);
 };
 
-typedef boost::shared_ptr<PostProcessor> PostProcessorSP;
+typedef std::shared_ptr<PostProcessor> PostProcessorSP;
 
 #endif /* POSTPROCESSOR_H_ */

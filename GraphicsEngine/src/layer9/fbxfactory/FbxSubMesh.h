@@ -15,26 +15,26 @@ class FbxSubMesh
 
 private:
 
-    boost::uint32_t indicesOffset;
-    boost::uint32_t storedIndices;
-    boost::uint32_t triangleCount;
+    std::uint32_t indicesOffset;
+    std::uint32_t storedIndices;
+    std::uint32_t triangleCount;
 
 public:
 	FbxSubMesh();
 	virtual ~FbxSubMesh();
 
-	void setIndicesOffset(boost::uint32_t indicesOffset);
-	boost::uint32_t getAndIncreaseStoredIndices();
+	void setIndicesOffset(std::uint32_t indicesOffset);
+	std::uint32_t getAndIncreaseStoredIndices();
 
-	void setTriangleCount(boost::uint32_t triangleCount);
+	void setTriangleCount(std::uint32_t triangleCount);
 	void increaseTriangleCount();
 
-	boost::uint32_t getIndicesOffset() const;
+	std::uint32_t getIndicesOffset() const;
 
-	boost::uint32_t getTriangleCount() const;
+	std::uint32_t getTriangleCount() const;
 
 };
 
-typedef boost::shared_ptr<FbxSubMesh> FbxSubMeshSP;
+typedef std::shared_ptr<FbxSubMesh> FbxSubMeshSP;
 
 #endif /* FBXSUBMESH_H_ */

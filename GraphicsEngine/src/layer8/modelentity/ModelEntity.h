@@ -34,11 +34,11 @@ private:
 	Matrix4x4 jointMatrices[MAX_MATRICES];
 	Matrix3x3 jointNormalMatrices[MAX_MATRICES];
 
-	boost::int32_t animStackIndex;
-	boost::int32_t animLayerIndex;
+	std::int32_t animStackIndex;
+	std::int32_t animLayerIndex;
 	InstanceNodeSP rootInstanceNode;
 
-	boost::int32_t jointIndex;
+	std::int32_t jointIndex;
 
 	bool dirty;
 
@@ -52,7 +52,7 @@ public:
 
     virtual const std::string& getCurrentProgramType() const;
 
-    virtual boost::int32_t getNumberJoints() const;
+    virtual std::int32_t getNumberJoints() const;
 
 	ModelEntity(const std::string& name, const ModelSP& model, float scaleX, float scaleY, float scaleZ);
 	virtual ~ModelEntity();
@@ -61,7 +61,7 @@ public:
     virtual void update();
     virtual void render() const;
 
-	void setAnimation(boost::int32_t animStackIndex, boost::int32_t animLayerIndex);
+	void setAnimation(std::int32_t animStackIndex, std::int32_t animLayerIndex);
 
     const ModelSP& getModel() const;
 
@@ -69,11 +69,11 @@ public:
 
     InstanceNodeSP findInstanceNodeRecursive(const std::string& name) const;
 
-    boost::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
+    std::shared_ptr<ModelEntity> getNewInstance(const std::string& name) const;
 
     //
 
-    virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+    virtual void renderNode(const Node& node, const InstanceNode& instanceNode, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
     virtual void addLightNode(const InstanceNodeSP& lightNode);
 
@@ -81,7 +81,7 @@ public:
 
     //
 
-    boost::int32_t setLights(boost::int32_t lightNumber) const;
+    std::int32_t setLights(std::int32_t lightNumber) const;
 
     CameraSP getCamera(const std::string& name) const;
 
@@ -89,7 +89,7 @@ public:
 
     bool setOrthographicCameraShadowMap(const std::string& lightName, const OrthographicCameraShadowMap2DSP& orthographicCameraShadowMap2D) const;
 
-    bool setOrthographicCameraCascadedShadowMap(const std::string& lightName, const CameraSP& camera, const OrthographicCameraCascadedShadowMap2DSP& orthographicCameraCascadedShadowMap2D, boost::int32_t section) const;
+    bool setOrthographicCameraCascadedShadowMap(const std::string& lightName, const CameraSP& camera, const OrthographicCameraCascadedShadowMap2DSP& orthographicCameraCascadedShadowMap2D, std::int32_t section) const;
 
     //
 
@@ -103,6 +103,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<ModelEntity> ModelEntitySP;
+typedef std::shared_ptr<ModelEntity> ModelEntitySP;
 
 #endif /* MODELENTITY_H_ */

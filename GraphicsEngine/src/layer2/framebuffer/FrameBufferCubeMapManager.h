@@ -35,7 +35,7 @@ public:
 
 	void addFrameBuffer(const std::string& key, const FrameBufferCubeMapSP& framBufferCubeMap);
 
-	FrameBufferCubeMapSP createFrameBuffer(const std::string& key, boost::int32_t width, boost::int32_t height);
+	FrameBufferCubeMapSP createFrameBuffer(const std::string& key, std::int32_t width, std::int32_t height);
 
 };
 

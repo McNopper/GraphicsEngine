@@ -7,7 +7,7 @@
 
 #include "CylinderShape.h"
 
-using namespace boost;
+using namespace std;
 
 CylinderShape::CylinderShape(float halfExtend, float radius, uint32_t numberSlices) : Shape()
 {

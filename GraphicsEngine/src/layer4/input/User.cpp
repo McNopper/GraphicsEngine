@@ -9,7 +9,7 @@
 
 #include "User.h"
 
-using namespace boost;
+using namespace std;
 
 User User::defaultUser = User();
 

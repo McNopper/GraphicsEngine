@@ -7,8 +7,6 @@
 
 #include "Texture2DArray.h"
 
-using namespace boost;
-
 using namespace std;
 
 Texture2DArray::Texture2DArray(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :

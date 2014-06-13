@@ -7,7 +7,7 @@
 
 #include "RenderBufferMultisample.h"
 
-using namespace boost;
+using namespace std;
 
 RenderBufferMultisample::RenderBufferMultisample(int32_t samples, GLenum internalFormat, int32_t width, int32_t height) :
 		RenderBuffer(internalFormat, width, height), samples(samples)

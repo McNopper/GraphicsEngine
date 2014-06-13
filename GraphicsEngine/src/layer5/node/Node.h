@@ -32,7 +32,7 @@ private:
 
 	std::string name;
 
-	boost::shared_ptr<Node> parentNode;
+	std::shared_ptr<Node> parentNode;
 
 	Matrix4x4 transformMatrix;
 	Matrix4x4 transformLinkMatrix;
@@ -61,11 +61,11 @@ private:
 
 	LightSP light;
 
-	std::vector<boost::shared_ptr<AnimationStack> > allAnimStacks;
+	std::vector<std::shared_ptr<AnimationStack> > allAnimStacks;
 
-	std::vector<boost::shared_ptr<Node> > allChilds;
+	std::vector<std::shared_ptr<Node> > allChilds;
 
-	boost::int32_t index;
+	std::int32_t index;
 
 	bool joint;
 
@@ -90,20 +90,20 @@ private:
 
 	bool transparent;
 
-	boost::int32_t createIndex(boost::int32_t index);
+	std::int32_t createIndex(std::int32_t index);
 
-	boost::int32_t countIndex(boost::int32_t index);
+	std::int32_t countIndex(std::int32_t index);
 
 	void setTransformMatrix(const std::string& jointName, const Matrix4x4& matrix);
 	void setTransformLinkMatrix(const std::string& jointName, const Matrix4x4& matrix);
 
-	void addChild(const boost::shared_ptr<Node>& child);
+	void addChild(const std::shared_ptr<Node>& child);
 
-	float getLimit(const float value[], const bool minActive[], const float min[], const bool maxActive[], const float max[], boost::int32_t index) const;
+	float getLimit(const float value[], const bool minActive[], const float min[], const bool maxActive[], const float max[], std::int32_t index) const;
 
-	void setTranslationLimits(bool minActive, float min, bool maxActive, float max, boost::int32_t index);
-	void setRotationLimits(bool minActive, float min, bool maxActive, float max, boost::int32_t index);
-	void setScalingLimits(bool minActive, float min, bool maxActive, float max, boost::int32_t index);
+	void setTranslationLimits(bool minActive, float min, bool maxActive, float max, std::int32_t index);
+	void setRotationLimits(bool minActive, float min, bool maxActive, float max, std::int32_t index);
+	void setScalingLimits(bool minActive, float min, bool maxActive, float max, std::int32_t index);
 
 	void setUsedJoint(const std::string& jointName);
 
@@ -111,7 +111,7 @@ private:
 
 public:
 
-	Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
+	Node(const std::string& name, const std::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
 	virtual ~Node();
 
 	const MeshSP& getMesh() const;
@@ -120,38 +120,38 @@ public:
 
 	const LightSP& getLight() const;
 
-	boost::uint32_t getChildCount() const;
-	const boost::shared_ptr<Node>& getChild(boost::int32_t i) const;
-	const boost::shared_ptr<Node>& getChild(const std::string& name) const;
+	std::uint32_t getChildCount() const;
+	const std::shared_ptr<Node>& getChild(std::int32_t i) const;
+	const std::shared_ptr<Node>& getChild(const std::string& name) const;
 
-	boost::shared_ptr<Node> findChildRecursive(const std::string& name) const;
+	std::shared_ptr<Node> findChildRecursive(const std::string& name) const;
 
-	const boost::shared_ptr<Node>& getParentNode() const;
+	const std::shared_ptr<Node>& getParentNode() const;
 
-	boost::int32_t getIndex() const;
-	boost::int32_t getIndexRecursive(const std::string& name) const;
+	std::int32_t getIndex() const;
+	std::int32_t getIndexRecursive(const std::string& name) const;
 
 	const std::string& getName() const;
 
 	bool isAnimated() const;
 
-	boost::int32_t getSkinningRootIndex() const;
+	std::int32_t getSkinningRootIndex() const;
 
-	bool updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	bool updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
 	void updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const;
 
-	void updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	void updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
-	void updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	void updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
-	void render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	void render(const NodeOwner& nodeOwner, const InstanceNode& instanceNode, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
 	const Matrix4x4& getGeometricTransform() const;
 
 	const Matrix4x4& getLocalFinalMatrix() const;
 
-	float getStopTime(boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const;
+	float getStopTime(std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
 	void updateInstanceNode(NodeOwner& nodeOwner, const InstanceNodeSP& instanceNode) const;
 
@@ -163,10 +163,10 @@ public:
 	void setVisible(bool visible);
 	void setVisibleRecursive(bool transparent);
 
-	const std::vector<boost::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
+	const std::vector<std::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
 
 };
 
-typedef boost::shared_ptr<Node> NodeSP;
+typedef std::shared_ptr<Node> NodeSP;
 
 #endif /* NODE_H_ */

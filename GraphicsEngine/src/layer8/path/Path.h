@@ -81,6 +81,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Path> PathSP;
+typedef std::shared_ptr<Path> PathSP;
 
 #endif /* PATH_H_ */

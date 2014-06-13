@@ -29,6 +29,6 @@ public:
 	virtual void recycle() = 0;
 };
 
-typedef boost::shared_ptr<ThreadsafeQueue<Command*> > CommandQueueSP;
+typedef std::shared_ptr<ThreadsafeQueue<Command*> > CommandQueueSP;
 
 #endif /* COMMAND_H_ */

@@ -12,8 +12,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 PrimitiveEntityFactory::PrimitiveEntityFactory()
 {
 }

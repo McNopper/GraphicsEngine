@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 Worker::Worker(const CommandQueueSP& workerQueue) : commandQueue(workerQueue)
 {
 	workerThread = new thread(&Worker::run, this);

@@ -31,14 +31,14 @@ public:
 	float getSpotCosCutOffOuter() const;
 	void setSpotCosCutOffOuter(float spotCosCutOffOuter);
 
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
+	virtual void setLightProperties(std::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
-	virtual boost::int32_t getShadowType() const;
+	virtual std::int32_t getShadowType() const;
 
 };
 
-typedef boost::shared_ptr<SpotLight> SpotLightSP;
+typedef std::shared_ptr<SpotLight> SpotLightSP;
 
 #endif /* SPOTLIGHT_H_ */

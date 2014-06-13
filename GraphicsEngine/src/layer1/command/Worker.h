@@ -19,7 +19,7 @@ private:
 
 	CommandQueueSP commandQueue;
 
-	boost::thread* workerThread;
+	std::thread* workerThread;
 
 public:
 	Worker(const CommandQueueSP& workerQueue);
@@ -31,6 +31,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Worker> WorkerSP;
+typedef std::shared_ptr<Worker> WorkerSP;
 
 #endif /* WORKER_H_ */

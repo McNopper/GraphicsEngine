@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Texture2D(const std::string& identifier, GLint internalFormat, boost::int32_t width, boost::int32_t height, GLenum format, GLenum type, const boost::uint8_t* pixels, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
+	Texture2D(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, const std::uint8_t* pixels, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture2D();
 
 	virtual bool init();
@@ -31,6 +31,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Texture2D> Texture2DSP;
+typedef std::shared_ptr<Texture2D> Texture2DSP;
 
 #endif /* TEXTURE2D_H_ */

@@ -19,9 +19,9 @@ public:
 	RenderBufferFactory();
 	virtual ~RenderBufferFactory();
 
-	RenderBufferSP createRenderBuffer(GLenum internalFormat, boost::int32_t width, boost::int32_t height) const;
+	RenderBufferSP createRenderBuffer(GLenum internalFormat, std::int32_t width, std::int32_t height) const;
 
-	RenderBufferMultisampleSP createRenderBufferMultisample(boost::int32_t samples, GLenum internalFormat, boost::int32_t width, boost::int32_t height) const;
+	RenderBufferMultisampleSP createRenderBufferMultisample(std::int32_t samples, GLenum internalFormat, std::int32_t width, std::int32_t height) const;
 
 };
 

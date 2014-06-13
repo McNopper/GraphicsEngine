@@ -7,7 +7,7 @@
 
 #include "FrameBufferBase.h"
 
-using namespace boost;
+using namespace std;
 
 FrameBufferBase::FrameBufferBase(int32_t width, int32_t height) :
 	fbo(0), width(width), height(height), drawBufferMode(GL_FRONT), readBufferMode(GL_FRONT)
@@ -36,7 +36,7 @@ GLuint FrameBufferBase::getFBO() const
 	return fbo;
 }
 
-boost::int32_t FrameBufferBase::getWidth() const
+std::int32_t FrameBufferBase::getWidth() const
 {
 	return width;
 }
@@ -52,7 +52,7 @@ void FrameBufferBase::setWidth(int32_t width)
 	}
 }
 
-boost::int32_t FrameBufferBase::getHeight() const
+std::int32_t FrameBufferBase::getHeight() const
 {
 	return height;
 }

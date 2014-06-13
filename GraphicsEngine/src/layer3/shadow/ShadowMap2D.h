@@ -18,7 +18,7 @@ class ShadowMap2D
 
 private:
 
-	boost::int32_t size;
+	std::int32_t size;
 
 	Texture2DArraySP depthTexture2D;
 
@@ -26,18 +26,18 @@ private:
 
 public:
 
-	ShadowMap2D(boost::int32_t size, boost::int32_t number);
+	ShadowMap2D(std::int32_t size, std::int32_t number);
 
 	virtual ~ShadowMap2D();
 
-	bool use(bool enable, boost::int32_t element) const;
+	bool use(bool enable, std::int32_t element) const;
 
 	GLuint getDepthTextureName() const;
 
-	boost::int32_t getSize() const;
+	std::int32_t getSize() const;
 
 };
 
-typedef boost::shared_ptr<ShadowMap2D> ShadowMap2DSP;
+typedef std::shared_ptr<ShadowMap2D> ShadowMap2DSP;
 
 #endif /* SHADOWMAP2D_H_ */

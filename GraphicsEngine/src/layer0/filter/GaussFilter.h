@@ -15,20 +15,20 @@ class GaussFilter
 
 private:
 
-	boost::int32_t pixel;
+	std::int32_t pixel;
 
 	float sigma;
 
 	float* values;
 
 public:
-	GaussFilter(boost::int32_t pixel, float sigma);
+	GaussFilter(std::int32_t pixel, float sigma);
 	GaussFilter(const GaussFilter& other);
 	virtual ~GaussFilter();
 
 	GaussFilter& operator =(const GaussFilter& other);
 
-	boost::int32_t getPixel() const;
+	std::int32_t getPixel() const;
 
 	float getSigma() const;
 
@@ -36,7 +36,7 @@ public:
 
 	const void* getVoidValues() const;
 
-	boost::int32_t getValuesSize() const;
+	std::int32_t getValuesSize() const;
 
 };
 

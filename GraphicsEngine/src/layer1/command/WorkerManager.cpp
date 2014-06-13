@@ -10,7 +10,7 @@
 
 #include "WorkerManager.h"
 
-using namespace boost;
+using namespace std;
 
 WorkerManager::WorkerManager() :
 		Singleton<WorkerManager>()

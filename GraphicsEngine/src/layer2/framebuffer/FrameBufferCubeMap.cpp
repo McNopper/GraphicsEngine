@@ -7,7 +7,7 @@
 
 #include "FrameBufferCubeMap.h"
 
-using namespace boost;
+using namespace std;
 
 FrameBufferCubeMap::FrameBufferCubeMap(int32_t width, int32_t height) :
 		FrameBufferBase(width, height), cubeMapTexture(), depthCubeMapTexture(), depthTexture(), depthRenderBuffer(), depthStencilCubeMapTexture(), depthStencilTexture(), depthStencilRenderBuffer(), activeSide(GL_TEXTURE_CUBE_MAP_POSITIVE_X), enabled(false)

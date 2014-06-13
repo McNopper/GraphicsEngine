@@ -18,7 +18,7 @@ OctreeEntity::OctreeEntity() :
 
 OctreeEntity::~OctreeEntity()
 {
-	BOOST_ASSERT(visitingOctant == nullptr);
+	assert(visitingOctant == nullptr);
 }
 
 Octant* OctreeEntity::getPreviousVisitingOctant() const

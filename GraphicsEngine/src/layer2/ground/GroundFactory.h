@@ -20,7 +20,7 @@ public:
 	GroundFactory();
 	virtual ~GroundFactory();
 
-	GroundSP createGround(float horizontalExtend, float verticalExtend, boost::uint32_t rows, boost::uint32_t columns) const;
+	GroundSP createGround(float horizontalExtend, float verticalExtend, std::uint32_t rows, std::uint32_t columns) const;
 
 };
 

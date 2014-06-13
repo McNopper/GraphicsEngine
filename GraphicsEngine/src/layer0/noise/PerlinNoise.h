@@ -14,10 +14,10 @@ class PerlinNoise
 {
 	protected:
 
-		boost::uint8_t* data;
-		boost::int32_t dataSize;
+		std::uint8_t* data;
+		std::int32_t dataSize;
 
-		boost::int32_t seed;
+		std::int32_t seed;
 
 		float frequency;
 
@@ -25,11 +25,11 @@ class PerlinNoise
 
 		float persistence;
 
-		boost::int32_t octaves;
+		std::int32_t octaves;
 
 	public:
 
-		PerlinNoise(boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
+		PerlinNoise(std::int32_t seed, float frequency, float amplitude, float persistence, std::int32_t octaves);
 		PerlinNoise(const PerlinNoise& other);
 		virtual ~PerlinNoise();
 
@@ -37,9 +37,9 @@ class PerlinNoise
 
 		void freeData();
 
-		const boost::uint8_t* getData() const;
+		const std::uint8_t* getData() const;
 
-		boost::int32_t getDataSize() const;
+		std::int32_t getDataSize() const;
 
 };
 

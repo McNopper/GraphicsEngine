@@ -24,8 +24,8 @@ private:
 	float rotationFactor;
 	float moveFactor;
 
-	boost::int32_t lastX;
-	boost::int32_t lastY;
+	std::int32_t lastX;
+	std::int32_t lastY;
 
 	Quaternion rotation;
 
@@ -58,13 +58,13 @@ public:
 
 	const CameraSP& getUserCamera() const;
 
-	void mouseButton(bool pressed, boost::int32_t button, boost::int32_t xPos, boost::int32_t yPos);
+	void mouseButton(bool pressed, std::int32_t button, std::int32_t xPos, std::int32_t yPos);
 
-	void mouseWheel(boost::int32_t buttons, boost::int32_t ticks, boost::int32_t xPos, boost::int32_t yPos);
+	void mouseWheel(std::int32_t buttons, std::int32_t ticks, std::int32_t xPos, std::int32_t yPos);
 
-	void mouseMove(boost::int32_t buttons, boost::int32_t xPos, boost::int32_t yPos);
+	void mouseMove(std::int32_t buttons, std::int32_t xPos, std::int32_t yPos);
 
-	void key(bool pressed, boost::int32_t key);
+	void key(bool pressed, std::int32_t key);
 
 	void update(float deltaTime);
 

@@ -7,8 +7,6 @@
 
 #include "Texture.h"
 
-using namespace boost;
-
 using namespace std;
 
 Texture::Texture(const string& identifier, GLenum target, GLint internalFormat, int32_t width, int32_t height) :

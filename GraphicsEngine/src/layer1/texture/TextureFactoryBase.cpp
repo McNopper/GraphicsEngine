@@ -8,7 +8,6 @@
 #include "TextureFactoryBase.h"
 
 using namespace std;
-using namespace boost;
 
 TextureFactoryBase::TextureFactoryBase() :
 		autoInternalFloat(false), autoInternalInteger(true), floatBitsPerPixel(BitsPerPixel16), integerBitsPerPixel(BitsPerPixel8)

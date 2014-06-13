@@ -17,14 +17,14 @@ protected:
 
 	GLuint fbo;
 
-	boost::int32_t width;
-	boost::int32_t height;
+	std::int32_t width;
+	std::int32_t height;
 
 	GLenum drawBufferMode;
 	GLenum readBufferMode;
 
 public:
-	FrameBufferBase(boost::int32_t width, boost::int32_t height);
+	FrameBufferBase(std::int32_t width, std::int32_t height);
 	virtual ~FrameBufferBase();
 
 	virtual bool init() = 0;
@@ -33,12 +33,12 @@ public:
 
 	GLuint getFBO() const;
 
-	boost::int32_t getWidth() const;
-	void setWidth(boost::int32_t width);
-	boost::int32_t getHeight() const;
-	void setHeight(boost::int32_t height);
+	std::int32_t getWidth() const;
+	void setWidth(std::int32_t width);
+	std::int32_t getHeight() const;
+	void setHeight(std::int32_t height);
 
-	void setWidthHeight(boost::int32_t width, boost::int32_t height);
+	void setWidthHeight(std::int32_t width, std::int32_t height);
 
 	GLenum getDrawBufferMode() const;
 	void setDrawBufferMode(GLenum drawBufferMode);
@@ -49,6 +49,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<FrameBufferBase> FrameBufferBaseSP;
+typedef std::shared_ptr<FrameBufferBase> FrameBufferBaseSP;
 
 #endif /* FRAMEBUFFERBASE_H_ */

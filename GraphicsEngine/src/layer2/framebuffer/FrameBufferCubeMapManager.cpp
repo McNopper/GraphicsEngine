@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 FrameBufferCubeMapManager::FrameBufferCubeMapManager() :
 		Singleton<FrameBufferCubeMapManager>(), allFrameBuffers()
 {

@@ -7,7 +7,7 @@
 
 #include "PixelData.h"
 
-using namespace boost;
+using namespace std;
 
 PixelData::PixelData() :
 		width(0), height(0), format(GL_RGB), type(GL_UNSIGNED_BYTE), pixels(nullptr), sizeOfData(0)
@@ -82,12 +82,12 @@ void PixelData::freePixels()
 	}
 }
 
-boost::int32_t PixelData::getWidth() const
+std::int32_t PixelData::getWidth() const
 {
 	return width;
 }
 
-boost::int32_t PixelData::getHeight() const
+std::int32_t PixelData::getHeight() const
 {
 	return height;
 }
@@ -102,12 +102,12 @@ GLenum PixelData::getType() const
 	return type;
 }
 
-boost::uint8_t* PixelData::getPixels() const
+std::uint8_t* PixelData::getPixels() const
 {
 	return pixels;
 }
 
-boost::uint32_t PixelData::getSizeOfData() const
+std::uint32_t PixelData::getSizeOfData() const
 {
 	return sizeOfData;
 }

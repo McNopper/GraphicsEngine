@@ -19,8 +19,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 PostProcessor2D::PostProcessor2D(GLenum internalFormat, GLenum format, GLenum type, int32_t blurPixel, float blurSigma, int32_t bloomPixel, float bloomSigma, int32_t maxRadiusCoC, float cocSigma, float aperture, float focal, float focusedObject) :
 	PostProcessor(GL_TEXTURE_2D, blurPixel, blurSigma, bloomPixel, bloomSigma, maxRadiusCoC, cocSigma, aperture, focal, focusedObject), internalFormat(internalFormat), format(format), type(type)
 {

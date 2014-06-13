@@ -7,7 +7,7 @@
 
 #include "GaussFilter.h"
 
-using namespace boost;
+using namespace std;
 
 GaussFilter::GaussFilter(int32_t pixel, float sigma) :
 		pixel(pixel), sigma(sigma), values(nullptr)

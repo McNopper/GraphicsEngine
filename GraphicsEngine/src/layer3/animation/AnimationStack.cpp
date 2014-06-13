@@ -8,7 +8,6 @@
 #include "AnimationStack.h"
 
 using namespace std;
-using namespace boost;
 
 AnimationStack::AnimationStack(const string& name, float startTime, float stopTime) :
 		name(name), startTime(startTime), stopTime(stopTime), allAnimationLayers()

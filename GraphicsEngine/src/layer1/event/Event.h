@@ -29,6 +29,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Event> EventSP;
+typedef std::shared_ptr<Event> EventSP;
 
 #endif /* EVENT_H_ */

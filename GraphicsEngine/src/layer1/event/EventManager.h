@@ -24,7 +24,7 @@ class EventManager : public Singleton<EventManager>
 
 private:
 
-	mutable boost::mutex eventMutex;
+	mutable std::mutex eventMutex;
 
 	ThreadsafeQueue<EventSP> allEvents;
 

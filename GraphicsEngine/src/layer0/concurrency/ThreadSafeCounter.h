@@ -15,11 +15,11 @@ class ThreadSafeCounter
 
 private:
 
-	boost::int32_t counter;
+	std::int32_t counter;
 
-	mutable boost::mutex counterMutex;
+	mutable std::mutex counterMutex;
 
-	mutable boost::condition_variable counterConditionVariable;
+	mutable std::condition_variable counterConditionVariable;
 
 public:
 	ThreadSafeCounter();
@@ -33,6 +33,6 @@ public:
 	void waitUntilZero() const;
 };
 
-typedef boost::shared_ptr<ThreadSafeCounter> ThreadSafeCounterSP;
+typedef std::shared_ptr<ThreadSafeCounter> ThreadSafeCounterSP;
 
 #endif /* THREADSAFECOUNTER_H_ */

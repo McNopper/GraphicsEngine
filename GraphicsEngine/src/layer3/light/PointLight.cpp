@@ -9,8 +9,6 @@
 
 #include "PointLight.h"
 
-using namespace boost;
-
 using namespace std;
 
 PointLight::PointLight(const string& name, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse,

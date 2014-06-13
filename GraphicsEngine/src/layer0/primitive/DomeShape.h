@@ -13,7 +13,7 @@
 class DomeShape: public Shape
 {
 public:
-	DomeShape(float radius, boost::uint32_t numberSlices);
+	DomeShape(float radius, std::uint32_t numberSlices);
 	virtual ~DomeShape();
 };
 

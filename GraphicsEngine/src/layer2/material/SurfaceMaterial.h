@@ -136,6 +136,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<SurfaceMaterial> SurfaceMaterialSP;
+typedef std::shared_ptr<SurfaceMaterial> SurfaceMaterialSP;
 
 #endif /* FBXSURFACEMATERIAL_H_ */

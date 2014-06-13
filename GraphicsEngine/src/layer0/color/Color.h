@@ -53,16 +53,16 @@ public:
 	Color(float r, float g, float b);
 	Color(float r, float g, float b, float a);
 	Color(const float rgba[4]);
-	Color(boost::uint8_t r, boost::uint8_t g, boost::uint8_t b);
-	Color(boost::uint8_t r, boost::uint8_t g, boost::uint8_t b, boost::uint8_t a);
-	Color(const boost::uint8_t rgba[4]);
+	Color(std::uint8_t r, std::uint8_t g, std::uint8_t b);
+	Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a);
+	Color(const std::uint8_t rgba[4]);
 	Color(const Color& other);
 	~Color();
 
 	void setRGBA(float r, float g, float b, float a);
 	void setRGBA(const float rgba[4]);
-	void setRGBA(boost::uint8_t r, boost::uint8_t g, boost::uint8_t b, boost::uint8_t a);
-	void setRGBA(const boost::uint8_t rgba[4]);
+	void setRGBA(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a);
+	void setRGBA(const std::uint8_t rgba[4]);
 
 	void setR(float r);
 	float getR() const;

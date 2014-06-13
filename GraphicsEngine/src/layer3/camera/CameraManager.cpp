@@ -62,7 +62,7 @@ const CameraSP& CameraManager::getCamera(const string& key) const
 
 void CameraManager::setCamera(const string& key, const CameraSP& camera, bool windowCamera)
 {
-	BOOST_ASSERT(DEFAULT_PERSPECTIVE_CAMERA_KEY.compare(key) != 0);
+	assert(DEFAULT_PERSPECTIVE_CAMERA_KEY.compare(key) != 0);
 
 	glusLogPrint(GLUS_LOG_INFO, "Adding camera to manager: %s", camera->getName().c_str());
 

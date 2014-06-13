@@ -7,8 +7,6 @@
 
 #include "EntityList.h"
 
-using namespace boost;
-
 using namespace std;
 
 EntityList::EntityList() :

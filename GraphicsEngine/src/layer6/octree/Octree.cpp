@@ -7,12 +7,12 @@
 
 #include "Octree.h"
 
-using namespace boost;
+using namespace std;
 
 Octree::Octree(uint32_t maxLevels, uint32_t maxElements, const Point4& center, float halfWidth, float halfHeight, float halfDepth):
 	entityExcludeList()
 {
-	BOOST_ASSERT(maxElements > 0);
+	assert(maxElements > 0);
 
 	Octant* walker = 0;
 
@@ -81,7 +81,7 @@ bool Octree::updateEntity(const OctreeEntitySP& octreeEntity) const
 
 		octreeEntity->getVisitingOctant()->removeEntity(octreeEntity);
 
-		BOOST_ASSERT(result);
+		assert(result);
 	}
 
 	return result;

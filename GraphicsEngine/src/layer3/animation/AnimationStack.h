@@ -30,9 +30,9 @@ public:
 
 	void addAnimationLayer(const AnimationLayerSP& animationLayer);
 
-	boost::int32_t getAnimationLayersCount() const;
+	std::int32_t getAnimationLayersCount() const;
 
-	const AnimationLayerSP& getAnimationLayer(boost::int32_t index) const;
+	const AnimationLayerSP& getAnimationLayer(std::int32_t index) const;
 
 	const std::string& getName() const;
 
@@ -41,6 +41,6 @@ public:
 	float getStopTime() const;
 };
 
-typedef boost::shared_ptr<AnimationStack> AnimationStackSP;
+typedef std::shared_ptr<AnimationStack> AnimationStackSP;
 
 #endif /* ANIMATIONSTACK_H_ */

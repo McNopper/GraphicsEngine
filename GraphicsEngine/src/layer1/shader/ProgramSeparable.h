@@ -21,8 +21,8 @@ protected:
 
 	std::string filename;
 
-	std::map<std::string, boost::int32_t> allUniforms;
-	std::map<std::string, boost::int32_t> allAtribbs;
+	std::map<std::string, std::int32_t> allUniforms;
+	std::map<std::string, std::int32_t> allAtribbs;
 
 	bool includeShader(std::string& shaderSource) const;
 
@@ -31,8 +31,8 @@ public:
 	ProgramSeparable(const GLUSenum shaderType, const std::string& filename);
 	virtual ~ProgramSeparable();
 
-	boost::int32_t getUniformLocation(const std::string& name);
-	boost::int32_t getAttribLocation(const std::string& name);
+	std::int32_t getUniformLocation(const std::string& name);
+	std::int32_t getAttribLocation(const std::string& name);
 
 	const GLUSuint getProgram() const;
 
@@ -42,6 +42,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<ProgramSeparable> ProgramSeparableSP;
+typedef std::shared_ptr<ProgramSeparable> ProgramSeparableSP;
 
 #endif /* PROGRAMSEPARABLE_H_ */

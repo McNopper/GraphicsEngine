@@ -24,11 +24,11 @@ private:
 	BoundingSphere boundingSphere;
 
 	NodeSP rootNode;
-	boost::int32_t numberJoints;
+	std::int32_t numberJoints;
 	bool animated;
 	bool skinned;
 
-	std::map<boost::int32_t, NodeSP> allNodesByIndex;
+	std::map<std::int32_t, NodeSP> allNodesByIndex;
 	std::map<std::string, NodeSP> allNodesByName;
 	std::map<std::string, SurfaceMaterialSP> allSurfaceMaterialsByName;
 
@@ -36,14 +36,14 @@ private:
 
 public:
 
-	Model(const BoundingSphere& boundingSphere, const NodeSP& node, boost::int32_t numberJoints, bool animationData, bool skinned);
+	Model(const BoundingSphere& boundingSphere, const NodeSP& node, std::int32_t numberJoints, bool animationData, bool skinned);
 	virtual ~Model();
 
 	const BoundingSphere& getBoundingSphere() const;
 
 	const NodeSP& getRootNode() const;
 
-	boost::int32_t getNumberJoints() const;
+	std::int32_t getNumberJoints() const;
 
 	bool isAnimated() const;
 
@@ -51,12 +51,12 @@ public:
 
 	SurfaceMaterialSP findSurfaceMaterial(const std::string& name) const;
 
-	boost::int32_t getSurfaceMaterialCount() const;
+	std::int32_t getSurfaceMaterialCount() const;
 
-	SurfaceMaterialSP getSurfaceMaterialAt(boost::int32_t index) const;
+	SurfaceMaterialSP getSurfaceMaterialAt(std::int32_t index) const;
 
 };
 
-typedef boost::shared_ptr<Model> ModelSP;
+typedef std::shared_ptr<Model> ModelSP;
 
 #endif /* MODEL_H_ */

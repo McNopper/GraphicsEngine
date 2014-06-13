@@ -12,8 +12,6 @@
 
 #include "MeshFactory.h"
 
-using namespace boost;
-
 using namespace std;
 
 MeshFactory::MeshFactory()

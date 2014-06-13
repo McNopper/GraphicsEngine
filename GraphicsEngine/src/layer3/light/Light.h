@@ -42,14 +42,14 @@ public:
 	const Color& getSpecular() const;
 	void setSpecular(const Color& specular);
 
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const = 0;
+	virtual void setLightProperties(std::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const = 0;
 
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const = 0;
 
-	virtual boost::int32_t getShadowType() const = 0;
+	virtual std::int32_t getShadowType() const = 0;
 
 };
 
-typedef boost::shared_ptr<Light> LightSP;
+typedef std::shared_ptr<Light> LightSP;
 
 #endif /* LIGHT_H_ */

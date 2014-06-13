@@ -17,15 +17,15 @@ protected:
 
 	GLenum internalFormat;
 
-	boost::int32_t width;
-	boost::int32_t height;
+	std::int32_t width;
+	std::int32_t height;
 
 	GLuint rb;
 
 	bool valid;
 
 public:
-	RenderBuffer(GLenum internalFormat, boost::int32_t width, boost::int32_t height);
+	RenderBuffer(GLenum internalFormat, std::int32_t width, std::int32_t height);
 	virtual ~RenderBuffer();
 
 	virtual bool init();
@@ -36,18 +36,18 @@ public:
 	GLenum getInternalFormat() const;
 	void setInternalFormat(GLenum internalFormat);
 
-	boost::int32_t getWidth() const;
-	void setWidth(boost::int32_t width);
-	boost::int32_t getHeight() const;
-	void setHeight(boost::int32_t height);
+	std::int32_t getWidth() const;
+	void setWidth(std::int32_t width);
+	std::int32_t getHeight() const;
+	void setHeight(std::int32_t height);
 
-	void setWidthHeight(boost::int32_t width, boost::int32_t height);
+	void setWidthHeight(std::int32_t width, std::int32_t height);
 
 	GLuint getRb() const;
 
 	bool isValid() const;
 };
 
-typedef boost::shared_ptr<RenderBuffer> RenderBufferSP;
+typedef std::shared_ptr<RenderBuffer> RenderBufferSP;
 
 #endif /* RENDERBUFFER_H_ */

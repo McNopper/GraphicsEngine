@@ -21,6 +21,6 @@ public:
 	virtual ~LineGeometryVAO();
 };
 
-typedef boost::shared_ptr<LineGeometryVAO> LineGeometryVAOSP;
+typedef std::shared_ptr<LineGeometryVAO> LineGeometryVAOSP;
 
 #endif /* LINEGEOMETRYVAO_H_ */

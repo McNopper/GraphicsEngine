@@ -19,8 +19,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 PostProcessor2DMultisample::PostProcessor2DMultisample(int32_t samples, GLenum internalFormat, bool fixedsamplelocations, int32_t blurPixel, float blurSigma, int32_t bloomPixel, float bloomSigma, int32_t maxRadiusCoC, float cocSigma, float aperture, float focal, float focusedObject) :
 	PostProcessor(GL_TEXTURE_2D_MULTISAMPLE, blurPixel, blurSigma, bloomPixel, bloomSigma, maxRadiusCoC, cocSigma, aperture, focal, focusedObject), samples(samples), internalFormat(internalFormat), fixedsamplelocations(fixedsamplelocations)
 {

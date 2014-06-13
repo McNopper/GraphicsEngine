@@ -15,21 +15,21 @@ class Quicksort
 
 private:
 
-	void quicksort(boost::int32_t left, boost::int32_t right, std::vector<SORT>& allElements) const
+	void quicksort(std::int32_t left, std::int32_t right, std::vector<SORT>& allElements) const
 	{
 		if (left < right)
 		{
-			boost::int32_t divider = divide(left, right, allElements);
+			std::int32_t divider = divide(left, right, allElements);
 			quicksort(left, divider - 1, allElements);
 			quicksort(divider + 1, right, allElements);
 		}
 	}
 
-	boost::int32_t divide(boost::int32_t left, boost::int32_t right, std::vector<SORT>& allElements) const
+	std::int32_t divide(std::int32_t left, std::int32_t right, std::vector<SORT>& allElements) const
 	{
-		boost::int32_t leftWalker = left;
+		std::int32_t leftWalker = left;
 
-		boost::int32_t rightWalker = right - 1;
+		std::int32_t rightWalker = right - 1;
 
 		SORT pivot = allElements[right];
 

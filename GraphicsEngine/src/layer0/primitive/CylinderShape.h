@@ -15,7 +15,7 @@ class CylinderShape: public Shape
 
 public:
 
-	CylinderShape(float halfExtend, float radius, boost::uint32_t numberSlices);
+	CylinderShape(float halfExtend, float radius, std::uint32_t numberSlices);
 	virtual ~CylinderShape();
 
 };

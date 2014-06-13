@@ -120,7 +120,7 @@ class KeyValueMap
 			return allKeyValues;
 		}
 
-		virtual boost::int32_t size() const
+		virtual std::int32_t size() const
 		{
 			return allKeyValues.size();
 		}

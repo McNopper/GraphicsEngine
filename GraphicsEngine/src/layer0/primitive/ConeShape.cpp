@@ -7,7 +7,7 @@
 
 #include "ConeShape.h"
 
-using namespace boost;
+using namespace std;
 
 ConeShape::ConeShape(float halfExtend, float radius, uint32_t numberSlices, uint32_t numberStacks) : Shape()
 {

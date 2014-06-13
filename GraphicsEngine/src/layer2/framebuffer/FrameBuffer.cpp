@@ -7,7 +7,7 @@
 
 #include "FrameBuffer.h"
 
-using namespace boost;
+using namespace std;
 
 FrameBuffer::FrameBuffer(int32_t width, int32_t height) : FrameBufferBase(width, height),
 	layer(-1), color0Texture(), color0RenderBuffer(), color1Texture(), color1RenderBuffer(), depthTexture(), depthRenderBuffer(), depthStencilTexture(), depthStencilRenderBuffer()

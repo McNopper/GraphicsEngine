@@ -13,7 +13,7 @@ ThreadSafeCounter::ThreadSafeCounter() : counter(0)
 
 ThreadSafeCounter::ThreadSafeCounter(const ThreadSafeCounter& other)
 {
-	boost::lock_guard<boost::mutex> taskCounterLock(other.counterMutex);
+	std::lock_guard<std::mutex> taskCounterLock(other.counterMutex);
 
 	counter = other.counter;
 }
@@ -24,24 +24,24 @@ ThreadSafeCounter::~ThreadSafeCounter()
 
 void ThreadSafeCounter::increment()
 {
-	boost::lock_guard<boost::mutex> taskCounterLock(counterMutex);
+	std::lock_guard<std::mutex> taskCounterLock(counterMutex);
 
 	counter++;
 }
 
 void ThreadSafeCounter::decrement()
 {
-	boost::lock_guard<boost::mutex> taskCounterLock(counterMutex);
+	std::lock_guard<std::mutex> taskCounterLock(counterMutex);
 
 	counter--;
 
-	BOOST_ASSERT(counter >= 0);
+	assert(counter >= 0);
 
 	counterConditionVariable.notify_all();
 }
 
 void ThreadSafeCounter::waitUntilZero() const
 {
-	boost::unique_lock<boost::mutex> taskCounterLock(counterMutex);
+	std::unique_lock<std::mutex> taskCounterLock(counterMutex);
 	counterConditionVariable.wait(taskCounterLock, [this] {return counter == 0;} );
 }

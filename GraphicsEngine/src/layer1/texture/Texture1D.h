@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Texture1D(const std::string& identifier, GLint internalFormat, boost::int32_t width, GLenum format, GLenum type, const boost::uint8_t* pixels, boost::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
+	Texture1D(const std::string& identifier, GLint internalFormat, std::int32_t width, GLenum format, GLenum type, const std::uint8_t* pixels, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture1D();
 
 	virtual bool init();
@@ -29,6 +29,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Texture1D> Texture1DSP;
+typedef std::shared_ptr<Texture1D> Texture1DSP;
 
 #endif /* TEXTURE1D_H_ */

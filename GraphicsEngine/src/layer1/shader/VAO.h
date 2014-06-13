@@ -8,9 +8,7 @@
 #ifndef VAO_H_
 #define VAO_H_
 
-#include <string>
-
-#include <boost/shared_ptr.hpp>
+#include "../../UsedLibs.h"
 
 #include "Program.h"
 
@@ -44,6 +42,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<VAO> VAOSP;
+typedef std::shared_ptr<VAO> VAOSP;
 
 #endif /* VAO_H_ */

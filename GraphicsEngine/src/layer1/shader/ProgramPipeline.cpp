@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 ProgramPipeline *ProgramPipeline::lastUsedProgramPipeline = 0;
 
 void ProgramPipeline::off()

@@ -7,8 +7,6 @@
 
 #include "TextureStandard.h"
 
-using namespace boost;
-
 using namespace std;
 
 TextureStandard::TextureStandard(const string& identifier, GLenum target, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :

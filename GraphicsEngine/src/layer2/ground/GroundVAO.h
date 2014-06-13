@@ -25,6 +25,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<GroundVAO> GroundVAOSP;
+typedef std::shared_ptr<GroundVAO> GroundVAOSP;
 
 #endif /* GROUNDVAO_H_ */

@@ -19,8 +19,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 const string& ModelEntity::getCurrentProgramType() const
 {
 	return GeneralEntity::currentProgramType;
@@ -180,7 +178,7 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 		SubMeshSP currentSubMesh;
 		SurfaceMaterialSP currentSurfaceMaterial;
 
-		const std::vector<boost::shared_ptr<AnimationStack> >& allAnimStacks = node.getAllAnimStacks();
+		const std::vector<std::shared_ptr<AnimationStack> >& allAnimStacks = node.getAllAnimStacks();
 
 		for (uint32_t subMeshIndex = 0; subMeshIndex < node.getMesh()->getSubMeshesCount(); subMeshIndex++)
 		{

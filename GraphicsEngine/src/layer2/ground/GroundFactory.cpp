@@ -11,8 +11,6 @@
 
 #include "GroundFactory.h"
 
-using namespace boost;
-
 using namespace std;
 
 GroundFactory::GroundFactory()

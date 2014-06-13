@@ -15,14 +15,14 @@ class PerlinNoise1D : public PerlinNoise
 
 	private:
 
-		boost::int32_t width;
+		std::int32_t width;
 
 	public:
 
-		PerlinNoise1D(boost::int32_t width, boost::int32_t seed, float frequency, float amplitude, float persistence, boost::int32_t octaves);
+		PerlinNoise1D(std::int32_t width, std::int32_t seed, float frequency, float amplitude, float persistence, std::int32_t octaves);
 		virtual ~PerlinNoise1D();
 
-		boost::int32_t getWidth() const;
+		std::int32_t getWidth() const;
 
 };
 

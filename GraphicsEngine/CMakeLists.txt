@@ -25,12 +25,9 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	
 	set(ENV_DIR ${Processor}/${OperatingSystem}/${Compiler})
 	
-	include_directories(${GraphicsEngine_SOURCE_DIR}/../External/${ENV_DIR}/include ${GraphicsEngine_SOURCE_DIR}/../GLUS/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2015.1/include" "C:/Development/Libraries/cpp/boost_1_55_0" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
+	include_directories(${GraphicsEngine_SOURCE_DIR}/../External/${ENV_DIR}/include ${GraphicsEngine_SOURCE_DIR}/../GLUS/src "C:/Program Files/Autodesk/FBX/Fbx Sdk/2015.1/include" "C:/Development/Libraries/cpp/devil_1_7_8/include")	
 		
 ENDIF()
-
-list(APPEND IGNORE_CPP_FILES	${GraphicsEngine_SOURCE_DIR}/src/layer1/texture/TextureFactory_GLUS.cpp
-)
 
 # Source files
 file(GLOB_RECURSE CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.cpp)

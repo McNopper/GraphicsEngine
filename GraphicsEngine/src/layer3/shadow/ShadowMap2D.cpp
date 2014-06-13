@@ -10,8 +10,6 @@
 
 #include "ShadowMap2D.h"
 
-using namespace boost;
-
 using namespace std;
 
 ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
@@ -53,7 +51,7 @@ ShadowMap2D::ShadowMap2D(int32_t size, int32_t number) :
 
 		depthFramebuffer2D->init();
 
-		BOOST_ASSERT(depthFramebuffer2D->isValid());
+		assert(depthFramebuffer2D->isValid());
 
 		allShadowMaps.push_back(depthFramebuffer2D);
 	}

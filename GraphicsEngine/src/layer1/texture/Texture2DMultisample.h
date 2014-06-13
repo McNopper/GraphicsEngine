@@ -15,20 +15,20 @@ class Texture2DMultisample : public Texture
 
 protected:
 
-	boost::int32_t samples;
+	std::int32_t samples;
 
 	bool fixedsamplelocations;
 
 	virtual void changingSize();
 
 public:
-	Texture2DMultisample(const std::string& identifier, boost::int32_t samples, GLint internalFormat, boost::int32_t width, boost::int32_t height, bool fixedsamplelocations = false);
+	Texture2DMultisample(const std::string& identifier, std::int32_t samples, GLint internalFormat, std::int32_t width, std::int32_t height, bool fixedsamplelocations = false);
 	virtual ~Texture2DMultisample();
 
 	virtual bool init();
 
 };
 
-typedef boost::shared_ptr<Texture2DMultisample> Texture2DMultisampleSP;
+typedef std::shared_ptr<Texture2DMultisample> Texture2DMultisampleSP;
 
 #endif /* TEXTURE2DMULTISAMPLE_H_ */

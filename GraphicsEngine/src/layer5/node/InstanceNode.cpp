@@ -11,8 +11,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 InstanceNode::InstanceNode(const Node* node) :
 	node(node), visible(true), visibleActive(false), transparent(false), transparentActive(false), modelMatrix(), normalModelMatrix(), position(), rotation(), allChilds()
 {

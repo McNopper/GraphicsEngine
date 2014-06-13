@@ -32,7 +32,9 @@ protected:
 
 public:
 
-	FrameBufferCubeMapSP createCubeMap(const EntitySP& entity, boost::int32_t length);
+	FrameBufferCubeMapSP createCubeMap(const EntitySP& entity, std::int32_t length);
+
+	const KeyValueMap<EntitySP, DynamicEnvironmentSP>& getKeyValueMap() const;
 
 };
 

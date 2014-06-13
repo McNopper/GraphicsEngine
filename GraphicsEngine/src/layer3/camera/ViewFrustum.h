@@ -39,7 +39,7 @@ private:
 
 	std::vector<Point4> frustumPoints;
 
-	boost::int32_t sections;
+	std::int32_t sections;
 
 public:
 
@@ -51,14 +51,14 @@ public:
 
 	bool isVisible(const BoundingSphere& boundingSphere) const;
 
-	void setNumberSections(boost::int32_t sections);
+	void setNumberSections(std::int32_t sections);
 
-	boost::int32_t getNumberSections() const;
+	std::int32_t getNumberSections() const;
 
 	const std::vector<Point4>& getFrustumPoints() const;
 
 };
 
-typedef boost::shared_ptr<ViewFrustum> ViewFrustumSP;
+typedef std::shared_ptr<ViewFrustum> ViewFrustumSP;
 
 #endif /* VIEWFRUSTUM_H_ */

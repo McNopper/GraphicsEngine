@@ -15,7 +15,7 @@ class TorusShape : public Shape
 
 public:
 
-	TorusShape(float innerRadius, float outerRadius, boost::uint32_t numberSlices, boost::uint32_t numberStacks);
+	TorusShape(float innerRadius, float outerRadius, std::uint32_t numberSlices, std::uint32_t numberStacks);
 	virtual ~TorusShape();
 
 };

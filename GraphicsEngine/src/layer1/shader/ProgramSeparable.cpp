@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 ProgramSeparable::ProgramSeparable(const GLUSenum shaderType, const string& filename) :
 		shaderType(shaderType), filename(filename)
 {

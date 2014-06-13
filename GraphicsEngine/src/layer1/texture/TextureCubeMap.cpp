@@ -7,8 +7,6 @@
 
 #include "TextureCubeMap.h"
 
-using namespace boost;
-
 using namespace std;
 
 TextureCubeMap::TextureCubeMap(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixelsPosX, const uint8_t* pixelsNegX, const uint8_t* pixelsPosY, const uint8_t* pixelsNegY, const uint8_t* pixelsPosZ, const uint8_t* pixelsNegZ, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
@@ -74,7 +72,7 @@ void TextureCubeMap::freePixels()
 	pixelDataNegZ.freePixels();
 }
 
-const PixelData& TextureCubeMap::getPixelData(boost::int32_t index) const
+const PixelData& TextureCubeMap::getPixelData(std::int32_t index) const
 {
 	switch (index)
 	{

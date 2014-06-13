@@ -23,6 +23,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<SubMeshVAO> SubMeshVAOSP;
+typedef std::shared_ptr<SubMeshVAO> SubMeshVAOSP;
 
 #endif /* SUBMESHVAO_H_ */

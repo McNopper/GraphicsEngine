@@ -13,7 +13,7 @@
 class GridPlaneShape : public Shape
 {
 public:
-	GridPlaneShape(float horizontalExtend, float verticalExtend, boost::uint32_t rows, boost::uint32_t columns);
+	GridPlaneShape(float horizontalExtend, float verticalExtend, std::uint32_t rows, std::uint32_t columns);
 	virtual ~GridPlaneShape();
 };
 

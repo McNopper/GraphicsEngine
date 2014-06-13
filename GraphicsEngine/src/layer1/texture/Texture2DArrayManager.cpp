@@ -10,7 +10,6 @@
 #include "Texture2DArrayManager.h"
 
 using namespace std;
-using namespace boost;
 
 Texture2DArrayManager::Texture2DArrayManager() :
 		Singleton<Texture2DArrayManager>(), allTextures()

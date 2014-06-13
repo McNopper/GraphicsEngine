@@ -24,14 +24,14 @@ public:
 			const Color& specular);
 	virtual ~DirectionalLight();
 
-	virtual void setLightProperties(boost::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
+	virtual void setLightProperties(std::uint32_t lightNumber, const ProgramSP& program, const Point4& position, const Quaternion& rotation) const;
 
 	virtual void debugDraw(const Point4& position, const Quaternion& rotation) const;
 
-	virtual boost::int32_t getShadowType() const;
+	virtual std::int32_t getShadowType() const;
 
 };
 
-typedef boost::shared_ptr<DirectionalLight> DirectionalLightSP;
+typedef std::shared_ptr<DirectionalLight> DirectionalLightSP;
 
 #endif /* DIRECTIONALLIGHT_H_ */

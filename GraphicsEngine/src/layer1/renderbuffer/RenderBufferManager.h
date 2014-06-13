@@ -31,7 +31,7 @@ public:
 
 	void addRenderBuffer(const std::string& key, const RenderBufferSP& renderBuffer);
 
-	RenderBufferSP createRenderBuffer(const std::string& key, GLenum internalFormat, boost::int32_t width, boost::int32_t height);
+	RenderBufferSP createRenderBuffer(const std::string& key, GLenum internalFormat, std::int32_t width, std::int32_t height);
 
 };
 

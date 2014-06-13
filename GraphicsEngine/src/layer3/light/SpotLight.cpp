@@ -9,8 +9,6 @@
 
 #include "SpotLight.h"
 
-using namespace boost;
-
 using namespace std;
 
 SpotLight::SpotLight(const string& name, float spotCosCutOff, float spotCosCutOffOuter, float constantAttenuation, float linearAttenuation, float quadraticAttenuation, const Color& diffuse, const Color& specular) :

@@ -7,7 +7,7 @@
 
 #include "UpdateCommand.h"
 
-using namespace boost;
+using namespace std;
 
 UpdateCommand::UpdateCommand(const UpdateCommandRecycleQueueSP& updateCommandRecycleQueue, const ThreadSafeCounterSP& taskCounter) : Command(), updateCommandRecycleQueue(updateCommandRecycleQueue), taskCounter(taskCounter), entity(nullptr)
 {
@@ -19,8 +19,8 @@ UpdateCommand::~UpdateCommand()
 
 bool UpdateCommand::execute()
 {
-	BOOST_ASSERT(this->taskCounter.get() != nullptr);
-	BOOST_ASSERT(this->entity != nullptr);
+	assert(this->taskCounter.get() != nullptr);
+	assert(this->entity != nullptr);
 
 	entity->update();
 
@@ -37,8 +37,8 @@ void UpdateCommand::recycle()
 
 void UpdateCommand::init(Entity* entity)
 {
-	BOOST_ASSERT(this->taskCounter.get() != nullptr);
-	BOOST_ASSERT(this->entity == nullptr);
+	assert(this->taskCounter.get() != nullptr);
+	assert(this->entity == nullptr);
 
 	taskCounter->increment();
 

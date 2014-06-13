@@ -20,6 +20,6 @@ public:
 	virtual ~PostProcessorVAO();
 };
 
-typedef boost::shared_ptr<PostProcessorVAO> PostProcessorVAOSP;
+typedef std::shared_ptr<PostProcessorVAO> PostProcessorVAOSP;
 
 #endif /* POSTPROCESSORVAO_H_ */

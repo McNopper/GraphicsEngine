@@ -7,7 +7,7 @@
 
 #include "FbxSubMesh.h"
 
-using namespace boost;
+using namespace std;
 
 FbxSubMesh::FbxSubMesh() : indicesOffset(0), storedIndices(0), triangleCount(0)
 {

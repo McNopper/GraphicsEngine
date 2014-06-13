@@ -19,9 +19,8 @@
 #include "Node.h"
 
 using namespace std;
-using namespace boost;
 
-Node::Node(const std::string& name, const boost::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
+Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
 	name(name), parentNode(parent), transformMatrix(), transformLinkMatrix(), rotateOffsetMatrix(), rotatePivotMatrix(), preRotateMatrix(), postRotateMatrix(), inverseRotatePivotMatrix(), scaleOffsetMatrix(), scalePivotMatrix(), inverseScalePivotMatrix(), geometricTransformMatrix(), localFinalMatrix(), mesh(mesh), camera(camera), light(light), allAnimStacks(allAnimStacks), allChilds(), index(-1), joint(joint), usedJoint(false), visible(true), transparent(false)
 {
 	this->translate[0] = translate[0];
@@ -233,7 +232,7 @@ void Node::addChild(const NodeSP& child)
 	allChilds.push_back(child);
 }
 
-boost::uint32_t Node::getChildCount() const
+std::uint32_t Node::getChildCount() const
 {
 	return allChilds.size();
 }
@@ -503,8 +502,8 @@ bool Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 
 void Node::updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const
 {
-	BOOST_ASSERT(allBindMatrices);
-	BOOST_ASSERT(allBindNormalMatrices);
+	assert(allBindMatrices);
+	assert(allBindNormalMatrices);
 
 	if (joint && usedJoint)
 	{
@@ -530,8 +529,8 @@ void Node::updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormal
 
 void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
 {
-	BOOST_ASSERT(allJointMatrices);
-	BOOST_ASSERT(allJointNormalMatrices);
+	assert(allJointMatrices);
+	assert(allJointNormalMatrices);
 
 	Matrix4x4 newParentMatrix = parentMatrix;
 
@@ -611,7 +610,7 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 	}
 }
 
-void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, boost::int32_t animStackIndex, boost::int32_t animLayerIndex) const
+void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const
 {
 	if (joint || (instanceNode.isVisibleActive() && !instanceNode.isVisible()) || (!instanceNode.isVisibleActive() && !visible))
 	{
@@ -810,7 +809,7 @@ void Node::setVisibleRecursive(bool visible)
 	}
 }
 
-const std::vector<boost::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() const
+const std::vector<std::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() const
 {
 	return allAnimStacks;
 }

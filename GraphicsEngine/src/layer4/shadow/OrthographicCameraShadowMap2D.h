@@ -19,7 +19,7 @@ class OrthographicCameraShadowMap2D
 
 private:
 
-	boost::int32_t size;
+	std::int32_t size;
 
 	float orthographicScale;
 
@@ -33,7 +33,7 @@ private:
 
 public:
 
-	OrthographicCameraShadowMap2D(boost::int32_t size, float orthographicScale);
+	OrthographicCameraShadowMap2D(std::int32_t size, float orthographicScale);
 	virtual ~OrthographicCameraShadowMap2D();
 
 	void use(bool enable) const;
@@ -46,10 +46,10 @@ public:
 
 	const ShadowMap2DSP& getShadowMap2D() const;
 
-	boost::int32_t getSize() const;
+	std::int32_t getSize() const;
 
 };
 
-typedef boost::shared_ptr<OrthographicCameraShadowMap2D> OrthographicCameraShadowMap2DSP;
+typedef std::shared_ptr<OrthographicCameraShadowMap2D> OrthographicCameraShadowMap2DSP;
 
 #endif /* ORTHOGRAPHICCAMERASHADOWMAP2D_H_ */

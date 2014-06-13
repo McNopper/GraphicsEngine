@@ -22,9 +22,9 @@ private:
 
 	BoundingSphere boundingSphere;
 
-	boost::uint32_t numberVertices;
+	std::uint32_t numberVertices;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
 	GLuint vboVertices;
 	GLuint vboNormals;
@@ -45,7 +45,7 @@ public:
 
 	const BoundingSphere& getBoundingSphere() const;
 
-    boost::uint32_t getNumberVertices() const;
+    std::uint32_t getNumberVertices() const;
 
     GLuint getVboVertices() const;
 
@@ -57,7 +57,7 @@ public:
 
     GLuint getVboTexCoords() const;
 
-    boost::uint32_t getNumberIndices() const;
+    std::uint32_t getNumberIndices() const;
 
     GLuint getVboIndices() const;
 
@@ -67,6 +67,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Ground> GroundSP;
+typedef std::shared_ptr<Ground> GroundSP;
 
 #endif /* GROUND_H_ */

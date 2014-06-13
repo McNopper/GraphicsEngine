@@ -23,7 +23,7 @@ private:
 
 	GLuint vboIndices;
 
-	boost::uint32_t numberIndices;
+	std::uint32_t numberIndices;
 
 	ProgramSP program;
 
@@ -58,6 +58,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<Sky> SkySP;
+typedef std::shared_ptr<Sky> SkySP;
 
 #endif /* SKY_H_ */

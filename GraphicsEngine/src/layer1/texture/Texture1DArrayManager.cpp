@@ -10,7 +10,6 @@
 #include "Texture1DArrayManager.h"
 
 using namespace std;
-using namespace boost;
 
 Texture1DArrayManager::Texture1DArrayManager() :
 		Singleton<Texture1DArrayManager>(), allTextures()

@@ -15,7 +15,7 @@ class ConeShape: public Shape
 
 public:
 
-	ConeShape(float halfExtend, float radius, boost::uint32_t numberSlices, boost::uint32_t numberStacks);
+	ConeShape(float halfExtend, float radius, std::uint32_t numberSlices, std::uint32_t numberStacks);
 	virtual ~ConeShape();
 
 };

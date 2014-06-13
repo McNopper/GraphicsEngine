@@ -9,8 +9,6 @@
 
 using namespace std;
 
-using namespace boost;
-
 NodeTreeFactory::NodeTreeFactory() : rootNode()
 {
 }

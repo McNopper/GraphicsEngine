@@ -20,7 +20,7 @@ class FrameBuffer2DMultisample : public FrameBuffer
 
 public:
 
-	FrameBuffer2DMultisample(boost::int32_t width, boost::int32_t height);
+	FrameBuffer2DMultisample(std::int32_t width, std::int32_t height);
 	virtual ~FrameBuffer2DMultisample();
 
 	virtual void setColorAttachment0(const TextureSP& texture);
@@ -49,6 +49,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<FrameBuffer2DMultisample> FrameBuffer2DMultisampleSP;
+typedef std::shared_ptr<FrameBuffer2DMultisample> FrameBuffer2DMultisampleSP;
 
 #endif /* FRAMEBUFFER2DMULTISAMPLE_H_ */

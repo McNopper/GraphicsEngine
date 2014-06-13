@@ -10,8 +10,6 @@
 
 #include "DynamicEnvironment.h"
 
-using namespace boost;
-
 using namespace std;
 
 DynamicEnvironment::DynamicEnvironment(const Point4& position, const FrameBufferCubeMapSP& frameBufferCubeMap) :

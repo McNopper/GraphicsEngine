@@ -19,6 +19,6 @@ public:
 	virtual ~FontVAO();
 };
 
-typedef boost::shared_ptr<FontVAO> FontVAOSP;
+typedef std::shared_ptr<FontVAO> FontVAOSP;
 
 #endif /* FONTVAO_H_ */

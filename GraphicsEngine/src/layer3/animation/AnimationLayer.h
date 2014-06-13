@@ -101,6 +101,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<AnimationLayer> AnimationLayerSP;
+typedef std::shared_ptr<AnimationLayer> AnimationLayerSP;
 
 #endif /* ANIMATIONLAYER_H_ */

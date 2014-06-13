@@ -20,6 +20,6 @@ public:
 	virtual ~SkyVAO();
 };
 
-typedef boost::shared_ptr<SkyVAO> SkyVAOSP;
+typedef std::shared_ptr<SkyVAO> SkyVAOSP;
 
 #endif /* SKYVAO_H_ */

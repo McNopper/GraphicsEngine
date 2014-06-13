@@ -9,8 +9,6 @@
 
 #include "DirectionalLight.h"
 
-using namespace boost;
-
 using namespace std;
 
 DirectionalLight::DirectionalLight(const string& name, const Color& diffuse,

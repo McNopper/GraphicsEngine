@@ -119,6 +119,6 @@ public:
 
 };
 
-typedef boost::shared_ptr<GeneralEntity> GeneralEntitySP;
+typedef std::shared_ptr<GeneralEntity> GeneralEntitySP;
 
 #endif /* GENERALENTITY_H_ */

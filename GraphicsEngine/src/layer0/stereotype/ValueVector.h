@@ -88,12 +88,12 @@ class ValueVector
 			return std::find(allValues.begin(), allValues.end(), value) != allValues.end();
 		}
 
-		virtual V& at(boost::int32_t i)
+		virtual V& at(std::int32_t i)
 		{
 			return allValues.at(i);
 		}
 
-		virtual const V& at(boost::int32_t i) const
+		virtual const V& at(std::int32_t i) const
 		{
 			return allValues.at(i);
 		}
@@ -103,7 +103,7 @@ class ValueVector
 			return allValues;
 		}
 
-		virtual boost::int32_t size() const
+		virtual std::int32_t size() const
 		{
 			return allValues.size();
 		}

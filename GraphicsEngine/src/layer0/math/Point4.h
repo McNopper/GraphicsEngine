@@ -33,7 +33,7 @@ public:
 	Point4(const Point4& other);
 	~Point4();
 
-	float& operator [](boost::int32_t i);
+	float& operator [](std::int32_t i);
 
 	bool operator ==(const Point4& other) const;
 	bool operator !=(const Point4& other) const;
