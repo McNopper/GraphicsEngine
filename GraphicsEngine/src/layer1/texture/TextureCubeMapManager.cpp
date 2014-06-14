@@ -18,19 +18,11 @@ TextureCubeMapManager::TextureCubeMapManager() :
 
 TextureCubeMapManager::~TextureCubeMapManager()
 {
-	auto walker = allTextures.begin();
-	while (walker != allTextures.end())
-	{
-		walker->second.reset();
-
-		walker++;
-	}
-	allTextures.clear();
 }
 
-void TextureCubeMapManager::addTexture(const string& posX, const TextureCubeMapSP& texture)
+void TextureCubeMapManager::addTexture(const string& identifier, const TextureCubeMapSP& texture)
 {
-	allTextures[posX] = texture;
+	allTextures[identifier] = texture;
 }
 
 TextureCubeMapSP TextureCubeMapManager::createTexture(const string& identifier, const string& posX, const string& negX, const string& posY, const string& negY, const string& posZ, const string& negZ, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)

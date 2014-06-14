@@ -12,7 +12,8 @@
 
 using namespace std;
 
-TextureFactory::TextureFactory() : TextureFactoryBase()
+TextureFactory::TextureFactory() :
+		TextureFactoryBase()
 {
 	ilInit();
 	iluInit();
@@ -266,6 +267,102 @@ TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& filename, bool
 	}
 
 	return textureCubeMap;
+}
+
+TextureCubeMapArraySP TextureFactory::loadTextureCubeMapArray(const string& identifier, const string filename[], int32_t sizeOfArray, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+{
+	TextureCubeMapArraySP textureCubeMapArray;
+
+	ILuint* imageName;
+	ILinfo* imageInfo;
+
+	const uint8_t** pixelsPos;
+
+	string dummy;
+
+	imageName = new ILuint[sizeOfArray * 6];
+
+	if (!imageName)
+	{
+		return textureCubeMapArray;
+	}
+
+	imageInfo = new ILinfo[sizeOfArray * 6];
+
+	if (!imageInfo)
+	{
+		delete[] imageName;
+
+		return textureCubeMapArray;
+	}
+
+	pixelsPos = new const uint8_t*[sizeOfArray * 6];
+
+	if (!pixelsPos)
+	{
+		delete[] imageName;
+		delete[] imageInfo;
+
+		return textureCubeMapArray;
+	}
+
+	for (int32_t i = 0; i < sizeOfArray; i++)
+	{
+		for (int32_t k = 0; k < 6; k++)
+		{
+			imageName[i * 6 + k] = loadImage(filename[i * 6 + k], dummy);
+
+			if (imageName[i * 6 + k])
+			{
+				iluGetImageInfo(&imageInfo[i * 6 + k]);
+
+				if (k > 0)
+				{
+					if (imageInfo[6 * sizeOfArray].SizeOfData != imageInfo[6 * sizeOfArray - 1].SizeOfData)
+					{
+						ilBindImage(0);
+						ilDeleteImages(6 * sizeOfArray, imageName);
+
+						delete[] imageName;
+						delete[] imageInfo;
+						delete[] pixelsPos;
+
+						return textureCubeMapArray;
+					}
+				}
+			}
+			else
+			{
+				if (k > 0)
+				{
+					ilBindImage(0);
+					ilDeleteImages(6 * sizeOfArray, imageName);
+				}
+
+				delete[] imageName;
+				delete[] imageInfo;
+				delete[] pixelsPos;
+
+				return textureCubeMapArray;
+			}
+
+			pixelsPos[i * 6 + k] = imageInfo[i * 6 + k].Data;
+		}
+
+	}
+
+	glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture array: %s", identifier.c_str());
+
+	textureCubeMapArray = TextureCubeMapArraySP(new TextureCubeMapArray(identifier, gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, pixelsPos, imageInfo[0].SizeOfData, sizeOfArray, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+
+	ilBindImage(0);
+	ilDeleteImages(6 * sizeOfArray, imageName);
+
+	delete[] imageName;
+	delete[] imageInfo;
+	delete[] pixelsPos;
+
+	return textureCubeMapArray;
 }
 
 //

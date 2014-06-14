@@ -44,6 +44,8 @@ public:
 	 */
 	virtual TextureCubeMapSP loadTextureCubeMap(const std::string& filename, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
 
+	virtual TextureCubeMapArraySP loadTextureCubeMapArray(const std::string& identifier, const std::string filename[], std::int32_t sizeOfArray, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
+
 };
 
 #endif /* TEXTUREFACTORY_H_ */

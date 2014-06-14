@@ -16,6 +16,7 @@
 #include "Texture2DArray.h"
 #include "Texture2DMultisample.h"
 #include "TextureCubeMap.h"
+#include "TextureCubeMapArray.h"
 
 enum FormatDepth
 {
@@ -93,6 +94,8 @@ public:
 	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
 
 	TextureCubeMapSP createTextureCubeMap(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const;
+
+	virtual TextureCubeMapArraySP loadTextureCubeMapArray(const std::string& identifier, const std::string filename[], std::int32_t sizeOfArray, bool mipMap = false, GLint minFilter = GL_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_CLAMP_TO_EDGE, GLint wrapT = GL_CLAMP_TO_EDGE, float anisotropic = 1.0f) const = 0;
 
 	bool isAutoInternalFloat() const;
 	void setAutoInternalFloat(bool autoInternalFloat);
