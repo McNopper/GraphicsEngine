@@ -45,4 +45,7 @@ public:
 
 typedef std::shared_ptr<PixelData> PixelDataSP;
 
+// C++11 Lambda function macro for deleting arrays.
+#define DELETE_ARRAY_PixelDataSP [](PixelData* p) {delete[] p;}
+
 #endif /* PIXELDATA_H_ */

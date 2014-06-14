@@ -16,12 +16,7 @@ class TextureCubeMap : public TextureStandard
 
 private:
 
-	PixelData pixelDataPosX;
-	PixelData pixelDataNegX;
-	PixelData pixelDataPosY;
-	PixelData pixelDataNegY;
-	PixelData pixelDataPosZ;
-	PixelData pixelDataNegZ;
+	PixelData pixelData[6];
 
 public:
 
