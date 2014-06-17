@@ -34,8 +34,6 @@ protected:
 	enum FormatDepth floatBitsPerPixel;
 	enum FormatDepth integerBitsPerPixel;
 
-	virtual GLuint loadImage(const std::string& filename, std::string& identifier) const = 0;
-
 	GLenum gatherInternalFormat(GLenum format, GLenum type) const;
 
 	virtual bool saveImage(const std::string& identifier, const PixelData& pixelData) const = 0;

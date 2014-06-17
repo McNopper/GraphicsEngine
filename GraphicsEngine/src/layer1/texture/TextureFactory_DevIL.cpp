@@ -1,14 +1,11 @@
 /*
- * TextureFactory.cpp
+ * TextureFactory_DevIL.cpp
  *
  *  Created on: 31.05.2011
  *      Author: Norbert Nopper
  */
 
-#include <IL/il.h>
-#include <IL/ilu.h>
-
-#include "TextureFactory.h"
+#include "TextureFactory_DevIL.h"
 
 using namespace std;
 
@@ -27,7 +24,7 @@ TextureFactory::~TextureFactory()
 {
 }
 
-GLuint TextureFactory::loadImage(const string& filename, string& identifier) const
+ILuint TextureFactory::loadImage(const string& filename, string& identifier) const
 {
 	ILuint imageName = 0;
 
@@ -69,13 +66,25 @@ GLuint TextureFactory::loadImage(const string& filename, string& identifier) con
 
 		iluGetImageInfo(&imageInfo);
 
+		if (imageInfo.Type != IL_FLOAT && imageInfo.Type != IL_UNSIGNED_BYTE)
+		{
+			if (imageInfo.Type == IL_DOUBLE || imageInfo.Type == IL_HALF)
+			{
+				ilConvertImage(imageInfo.Format, IL_FLOAT);
+			}
+			else
+			{
+				ilConvertImage(imageInfo.Format, IL_UNSIGNED_BYTE);
+			}
+		}
+
 		if (imageInfo.Format == IL_BGR)
 		{
-			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			ilConvertImage(IL_RGB, imageInfo.Type);
 		}
 		else if (imageInfo.Format == IL_BGRA)
 		{
-			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			ilConvertImage(IL_RGBA, imageInfo.Type);
 		}
 
 		found = strippedFilename.find_last_of(".");

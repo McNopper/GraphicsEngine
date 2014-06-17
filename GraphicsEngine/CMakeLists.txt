@@ -29,10 +29,24 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 		
 ENDIF()
 
+# Populate ignore list
+list(APPEND IGNORE_CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/layer1/texture/TextureFactory_GLUS.cpp)
+
 # Source files
 file(GLOB_RECURSE CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.cpp)
 
+# Remove elements
+list(REMOVE_ITEM CPP_FILES ${IGNORE_CPP_FILES})
+
+
+# Populate ignore list
+list(APPEND IGNORE_H_FILES ${GraphicsEngine_SOURCE_DIR}/src/layer1/texture/TextureFactory_GLUS.h)
+
 # Header files
 file(GLOB_RECURSE H_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.h)
+
+# Remove elements
+list(REMOVE_ITEM H_FILES ${IGNORE_H_FILES})
+
 
 add_library(GraphicsEngine ${CPP_FILES} ${H_FILES})
