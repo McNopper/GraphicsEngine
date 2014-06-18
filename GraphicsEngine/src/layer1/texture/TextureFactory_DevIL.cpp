@@ -200,7 +200,7 @@ TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& identifier, co
 		}
 	}
 
-	glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", posX.c_str());
+	glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", identifier.c_str());
 
 	textureCubeMap = TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
@@ -267,7 +267,7 @@ TextureCubeMapSP TextureFactory::loadTextureCubeMap(const string& filename, bool
 			}
 		}
 
-		glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", filename.c_str());
+		glusLogPrint(GLUS_LOG_DEBUG, "Creating cube texture: %s", identifier.c_str());
 
 		textureCubeMap = TextureCubeMapSP(new TextureCubeMap(identifier, gatherInternalFormat(imageInfo[0].Format, imageInfo[0].Type), imageInfo[0].Width, imageInfo[0].Height, imageInfo[0].Format, imageInfo[0].Type, imageInfo[0].Data, imageInfo[1].Data, imageInfo[2].Data, imageInfo[3].Data, imageInfo[4].Data, imageInfo[5].Data, imageInfo[0].SizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
@@ -382,9 +382,13 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 {
 	ILuint imageName = 0;
 	ILboolean result;
-	ILubyte numChannels = 3;
+	ILubyte numChannels = 1;
 
-	if (pixelData.getFormat() == GL_RGBA)
+	if (pixelData.getFormat() == GL_RGB)
+	{
+		numChannels = 3;
+	}
+	else if (pixelData.getFormat() == GL_RGBA)
 	{
 		numChannels = 4;
 	}
@@ -405,15 +409,19 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 
 	if (pixelData.getType() == GL_FLOAT || pixelData.getType() == GL_HALF_FLOAT)
 	{
-		glusLogPrint(GLUS_LOG_DEBUG, "Saving HDR texture: %s", identifier.c_str());
+		string filename = identifier + ".hdr";
 
-		result = ilSave(IL_HDR, (identifier + ".hdr").c_str());
+		glusLogPrint(GLUS_LOG_DEBUG, "Saving HDR texture: %s", filename.c_str());
+
+		result = ilSave(IL_HDR, filename.c_str());
 	}
 	else
 	{
-		glusLogPrint(GLUS_LOG_DEBUG, "Saving TGA texture: %s", identifier.c_str());
+		string filename = identifier + ".tga";
 
-		result = ilSave(IL_TGA, (identifier + ".tga").c_str());
+		glusLogPrint(GLUS_LOG_DEBUG, "Saving TGA texture: %s", filename.c_str());
+
+		result = ilSave(IL_TGA, filename.c_str());
 	}
 
 	ilBindImage(0);

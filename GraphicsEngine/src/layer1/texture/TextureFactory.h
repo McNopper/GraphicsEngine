@@ -11,7 +11,7 @@
 #ifndef GE_NO_DEVIL
 #include "TextureFactory_DevIL.h"
 #else
-// TODO
+#include "TextureFactory_GLUS.h"
 #endif
 
 #endif /* TEXTUREFACTORY_H_ */

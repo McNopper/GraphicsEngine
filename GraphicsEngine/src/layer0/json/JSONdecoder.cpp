@@ -119,16 +119,20 @@ bool JSONdecoder::decodePoint(size_t& index, string& characters)
 
 //
 
-bool JSONdecoder::decodeHexadecimalDigit(size_t& index, int32_t& value)
+bool JSONdecoder::decodeHexadecimalDigit(size_t& index, string& characters, int32_t& value)
 {
 	if (match(JSON_A, index) || match(JSON_B, index) || match(JSON_C, index) || match(JSON_D, index) || match(JSON_E, index) || match(JSON_F, index))
 	{
+		characters += jsonText.substr(index - 1, 1);
+
 		value = static_cast<int32_t>(jsonText.substr(index - 1, 1)[0] - JSON_A[0]);
 
 		return true;
 	}
 	if (match(JSON_a, index) || match(JSON_b, index) || match(JSON_c, index) || match(JSON_d, index) || match(JSON_e, index) || match(JSON_f, index))
 	{
+		characters += jsonText.substr(index - 1, 1);
+
 		value = static_cast<int32_t>(jsonText.substr(index - 1, 1)[0] - JSON_a[0]);
 
 		return true;
@@ -139,33 +143,37 @@ bool JSONdecoder::decodeHexadecimalDigit(size_t& index, int32_t& value)
 
 //
 
-bool JSONdecoder::decodeDigit_0(size_t& index, string& characters)
+bool JSONdecoder::decodeDigit_0(size_t& index, string& characters, int32_t& value)
 {
 	if (match(JSON_0, index))
 	{
 		characters += JSON_0;
 
+		value = 0;
+
 		return true;
 	}
 
 	return false;
 }
 
-bool JSONdecoder::decodeDigit_1_9(size_t& index, string& characters)
+bool JSONdecoder::decodeDigit_1_9(size_t& index, string& characters, int32_t& value)
 {
 	if (match(JSON_1, index) || match(JSON_2, index) || match(JSON_3, index) || match(JSON_4, index) || match(JSON_5, index) || match(JSON_6, index) || match(JSON_7, index) || match(JSON_8, index) || match(JSON_9, index))
 	{
 		characters += jsonText.substr(index - 1, 1);
 
+		value = atoi(jsonText.substr(index - 1, 1).c_str());
+
 		return true;
 	}
 
 	return false;
 }
 
-bool JSONdecoder::decodeDigit(size_t& index, string& characters)
+bool JSONdecoder::decodeDigit(size_t& index, string& characters, int32_t& value)
 {
-	return decodeDigit_0(index, characters) || decodeDigit_1_9(index, characters);
+	return decodeDigit_0(index, characters, value) || decodeDigit_1_9(index, characters, value);
 }
 
 bool JSONdecoder::decodeExponent(size_t& index, string& characters)
@@ -297,12 +305,12 @@ bool JSONdecoder::decodeHexadecimalNumber(size_t& index, string& characters)
 
 	while (tempIndex < jsonText.length())
 	{
-		if (!decodeDigit(tempIndex, characters) && !decodeHexadecimalDigit(tempIndex, tempValue))
+		if (!decodeDigit(tempIndex, characters, tempValue) && !decodeHexadecimalDigit(tempIndex, characters, tempValue))
 		{
 			return false;
 		}
 
-		value = value * 10 + tempValue;
+		value = value * 16 + tempValue;
 	}
 
 	characters += static_cast<char>(value & 0xFF);
@@ -458,6 +466,7 @@ bool JSONdecoder::decodeArray(size_t& index, JSONarraySP& jsonArray)
 bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 {
 	string tempString = "";
+	int32_t dummy;
 
 	size_t tempIndex = index;
 
@@ -470,11 +479,11 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 		//
 	}
 
-	if (decodeDigit_0(tempIndex, tempString))
+	if (decodeDigit_0(tempIndex, tempString, dummy))
 	{
 		//
 	}
-	else if (decodeDigit_1_9(tempIndex, tempString))
+	else if (decodeDigit_1_9(tempIndex, tempString, dummy))
 	{
 		bool loop = true;
 
@@ -482,7 +491,7 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 		{
 			loop = false;
 
-			loop = decodeDigit(tempIndex, tempString);
+			loop = decodeDigit(tempIndex, tempString, dummy);
 		}
 	}
 	else
@@ -496,7 +505,7 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 
 		bool loop = true;
 
-		if (!decodeDigit(tempIndex, tempString))
+		if (!decodeDigit(tempIndex, tempString, dummy))
 		{
 			return false;
 		}
@@ -505,7 +514,7 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 		{
 			loop = false;
 
-			loop = decodeDigit(tempIndex, tempString);
+			loop = decodeDigit(tempIndex, tempString, dummy);
 		}
 	}
 
@@ -518,7 +527,7 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 			//
 		}
 
-		if (!decodeDigit(tempIndex, tempString))
+		if (!decodeDigit(tempIndex, tempString, dummy))
 		{
 			return false;
 		}
@@ -527,7 +536,7 @@ bool JSONdecoder::decodeNumber(size_t& index, JSONnumberSP& jsonNumber)
 		{
 			loop = false;
 
-			loop = decodeDigit(tempIndex, tempString);
+			loop = decodeDigit(tempIndex, tempString, dummy);
 		}
 	}
 

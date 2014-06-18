@@ -49,11 +49,11 @@ private:
 	bool decodeMinus(size_t& index, std::string& characters);
 	bool decodePoint(size_t& index, std::string& characters);
 
-	bool decodeHexadecimalDigit(size_t& index, std::int32_t& value);
+	bool decodeHexadecimalDigit(size_t& index, std::string& characters, std::int32_t& value);
 
-	bool decodeDigit_0(size_t& index, std::string& characters);
-	bool decodeDigit_1_9(size_t& index, std::string& characters);
-	bool decodeDigit(size_t& index, std::string& characters);
+	bool decodeDigit_0(size_t& index, std::string& characters, std::int32_t& value);
+	bool decodeDigit_1_9(size_t& index, std::string& characters, std::int32_t& value);
+	bool decodeDigit(size_t& index, std::string& characters, std::int32_t& value);
 
 	bool decodeExponent(size_t& index, std::string& characters);
 
