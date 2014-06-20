@@ -51,39 +51,42 @@ bool JSONencoder::encodeObject(const JSONobjectSP jsonObject)
 
 	jsonText += JSON_left_curly_bracket;
 
-	doLineFeed(1);
-
 	auto allKeyValues = jsonObject->getAllKeyValues();
 
-	auto walker = allKeyValues.begin();
-
-	while (walker != allKeyValues.end())
+	if (allKeyValues.size() > 0)
 	{
-		if (!encodeString(walker->first))
+		doLineFeed(1);
+
+		auto walker = allKeyValues.begin();
+
+		while (walker != allKeyValues.end())
 		{
-			return false;
+			if (!encodeString(walker->first))
+			{
+				return false;
+			}
+
+			jsonText += JSON_space;
+			jsonText += JSON_colon;
+			jsonText += JSON_space;
+
+			if (!encodeValue(walker->second))
+			{
+				return false;
+			}
+
+			walker++;
+
+			if (walker != allKeyValues.end())
+			{
+				jsonText += JSON_comma;
+
+				doLineFeed(0);
+			}
 		}
 
-		jsonText += JSON_space;
-		jsonText += JSON_colon;
-		jsonText += JSON_space;
-
-		if (!encodeValue(walker->second))
-		{
-			return false;
-		}
-
-		walker++;
-
-		if (walker != allKeyValues.end())
-		{
-			jsonText += JSON_comma;
-
-			doLineFeed(0);
-		}
+		doLineFeed(-1);
 	}
-
-	doLineFeed(-1);
 
 	jsonText += JSON_right_curly_bracket;
 
@@ -99,30 +102,33 @@ bool JSONencoder::encodeArray(const JSONarraySP jsonArray)
 
 	jsonText += JSON_left_square_bracket;
 
-	doLineFeed(1);
-
 	auto allValues = jsonArray->getAllValues();
 
-	auto walker = allValues.begin();
-
-	while (walker != allValues.end())
+	if (allValues.size() > 0)
 	{
-		if (!encodeValue(*walker))
+		doLineFeed(1);
+
+		auto walker = allValues.begin();
+
+		while (walker != allValues.end())
 		{
-			return false;
+			if (!encodeValue(*walker))
+			{
+				return false;
+			}
+
+			walker++;
+
+			if (walker != allValues.end())
+			{
+				jsonText += JSON_comma;
+
+				doLineFeed(0);
+			}
 		}
 
-		walker++;
-
-		if (walker != allValues.end())
-		{
-			jsonText += JSON_comma;
-
-			doLineFeed(0);
-		}
+		doLineFeed(-1);
 	}
-
-	doLineFeed(-1);
 
 	jsonText += JSON_right_square_bracket;
 

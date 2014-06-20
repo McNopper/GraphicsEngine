@@ -28,7 +28,6 @@ private:
 	bool animated;
 	bool skinned;
 
-	std::map<std::int32_t, NodeSP> allNodesByIndex;
 	std::map<std::string, NodeSP> allNodesByName;
 	std::map<std::string, SurfaceMaterialSP> allSurfaceMaterialsByName;
 
@@ -50,6 +49,10 @@ public:
 	bool isSkinned() const;
 
 	SurfaceMaterialSP findSurfaceMaterial(const std::string& name) const;
+
+	std::int32_t getNodeCount() const;
+
+	NodeSP getNodeAt(std::int32_t index) const;
 
 	std::int32_t getSurfaceMaterialCount() const;
 

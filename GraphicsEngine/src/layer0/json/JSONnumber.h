@@ -25,6 +25,7 @@ private:
 
 public:
 
+	JSONnumber();
 	JSONnumber(const std::string& value, bool isFloat);
 	JSONnumber(float value);
 	JSONnumber(std::int32_t value);

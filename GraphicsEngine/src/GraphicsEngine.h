@@ -91,6 +91,7 @@
 #ifndef GE_NO_FBX
 #include "layer9/fbxfactory/FbxEntityFactory.h"
 #endif
+#include "layer9/gltffactory/GlTfEntityFactory.h"
 #include "layer9/groundfactory/GroundEntityFactory.h"
 #include "layer9/lightfactory/LightEntityFactory.h"
 #include "layer9/primitivefactory/PrimitiveEntityFactory.h"

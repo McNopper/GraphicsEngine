@@ -9,6 +9,15 @@
 
 using namespace std;
 
+JSONnumber::JSONnumber() : JSONvalue(), isFloat(true)
+{
+	assert(sizeof(float) == sizeof(int32_t));
+
+	jsonNumber = true;
+
+	this->value.floatValue = 0.0f;
+}
+
 JSONnumber::JSONnumber(const string& value, bool isFloat) : JSONvalue(), isFloat(isFloat)
 {
 	assert(sizeof(float) == sizeof(int32_t));

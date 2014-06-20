@@ -19,6 +19,7 @@ private:
 
 public:
 
+	JSONstring();
 	JSONstring(const std::string& value);
 	virtual ~JSONstring();
 

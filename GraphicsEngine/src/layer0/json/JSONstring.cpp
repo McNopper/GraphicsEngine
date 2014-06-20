@@ -9,6 +9,11 @@
 
 using namespace std;
 
+JSONstring::JSONstring() : JSONvalue(), value("")
+{
+	jsonString = true;
+}
+
 JSONstring::JSONstring(const string& value) : JSONvalue(), value(value)
 {
 	jsonString = true;

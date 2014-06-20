@@ -419,39 +419,39 @@ bool JSONdecoder::decodeArray(size_t& index, JSONarraySP& jsonArray)
 
 	if (decodeRightSquareBracket(tempIndex))
 	{
-		index = tempIndex;
-
-		return true;
+		//
 	}
-
-	while (decodeWhitespace(tempIndex));
-
-	while (loop)
+	else
 	{
-		JSONvalueSP jsonValue;
+		while (decodeWhitespace(tempIndex));
 
-		loop = false;
+		while (loop)
+		{
+			JSONvalueSP jsonValue;
 
-		if (!decodeValue(tempIndex, jsonValue))
+			loop = false;
+
+			if (!decodeValue(tempIndex, jsonValue))
+			{
+				return false;
+			}
+
+			tempJsonArray->addValue(jsonValue);
+
+			while (decodeWhitespace(tempIndex));
+
+			if (decodeComma(tempIndex))
+			{
+				loop = true;
+			}
+
+			while (decodeWhitespace(tempIndex));
+		}
+
+		if (!decodeRightSquareBracket(tempIndex))
 		{
 			return false;
 		}
-
-		tempJsonArray->addValue(jsonValue);
-
-		while (decodeWhitespace(tempIndex));
-
-		if (decodeComma(tempIndex))
-		{
-			loop = true;
-		}
-
-		while (decodeWhitespace(tempIndex));
-	}
-
-	if (!decodeRightSquareBracket(tempIndex))
-	{
-		return false;
 	}
 
 	while (decodeWhitespace(tempIndex));
