@@ -408,7 +408,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 		for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
 		{
-			string currentMeshName = "mesh_";
+			string currentMeshName = "mesh_" + node->getName() + "_";
 
 			sprintf(buffer, "%03d", k);
 
