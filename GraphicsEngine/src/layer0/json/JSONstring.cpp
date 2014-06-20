@@ -23,7 +23,7 @@ JSONstring::~JSONstring()
 {
 }
 
-const std::string& JSONstring::getValue() const
+const string& JSONstring::getValue() const
 {
 	return value;
 }

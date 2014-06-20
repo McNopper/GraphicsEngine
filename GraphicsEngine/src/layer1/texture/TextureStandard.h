@@ -8,6 +8,8 @@
 #ifndef TEXTURESTANDARD_H_
 #define TEXTURESTANDARD_H_
 
+#include "../../layer0/color/Color.h"
+
 #include "Texture.h"
 
 class TextureStandard : public Texture
@@ -33,6 +35,8 @@ protected:
 	virtual void changingSize();
 
 public:
+	TextureStandard(const std::string& identifier, GLenum target, float red);
+	TextureStandard(const std::string& identifier, GLenum target, const Color& color);
 	TextureStandard(const std::string& identifier, GLenum target, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~TextureStandard();
 

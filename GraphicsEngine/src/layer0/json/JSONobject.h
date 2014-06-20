@@ -11,12 +11,20 @@
 #include "JSONstring.h"
 #include "JSONvalue.h"
 
+class CompareJSONstringSP
+{
+	public:
+		bool operator()(const JSONstringSP& first, const JSONstringSP& second) const { return first->getValue() < second->getValue(); }
+};
+
 class JSONobject : public JSONvalue
 {
 
 private:
 
-	std::map<JSONstringSP, JSONvalueSP> allKeyValues;
+	std::map<JSONstringSP, JSONvalueSP, CompareJSONstringSP> allKeyValues;
+
+	std::vector<JSONstringSP> allKeys;
 
 public:
 
@@ -30,7 +38,9 @@ public:
 
 	JSONvalueSP getValue(const JSONstringSP& key) const;
 
-	const std::map<JSONstringSP, JSONvalueSP>& getAllKeyValues() const;
+	const std::map<JSONstringSP, JSONvalueSP, CompareJSONstringSP>& getAllKeyValues() const;
+
+	const std::vector<JSONstringSP>& getAllKeys() const;
 
 	size_t size() const;
 

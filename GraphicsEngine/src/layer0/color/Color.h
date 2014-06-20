@@ -50,15 +50,22 @@ public:
 	const static Color DEFAULT_REFRACTION;
 
 	Color();
+
+	Color(float luminance);
 	Color(float r, float g, float b);
 	Color(float r, float g, float b, float a);
 	Color(const float rgba[4]);
+
+	Color(std::uint8_t luminance);
 	Color(std::uint8_t r, std::uint8_t g, std::uint8_t b);
 	Color(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a);
 	Color(const std::uint8_t rgba[4]);
 	Color(const Color& other);
+
 	~Color();
 
+	void setLuminance(float luminance);
+	void setLuminance(std::uint8_t luminance);
 	void setRGBA(float r, float g, float b, float a);
 	void setRGBA(const float rgba[4]);
 	void setRGBA(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a);

@@ -45,6 +45,24 @@ Color::Color()
 	this->rgba[3] = 1.0f;
 }
 
+Color::Color(float luminance)
+{
+	this->rgba[0] = luminance;
+	this->rgba[1] = luminance;
+	this->rgba[2] = luminance;
+	this->rgba[3] = 1.0f;
+}
+
+Color::Color(uint8_t luminance)
+{
+	float luminancef = (float)luminance / 255.0f;
+
+	this->rgba[0] = luminancef;
+	this->rgba[1] = luminancef;
+	this->rgba[2] = luminancef;
+	this->rgba[3] = 1.0f;
+}
+
 Color::Color(float r, float g, float b)
 {
 	this->rgba[0] = r;
@@ -148,6 +166,24 @@ float Color::getA() const
 const float* Color::getRGBA() const
 {
 	return rgba;
+}
+
+void Color::setLuminance(float luminance)
+{
+	rgba[0] = luminance;
+	rgba[1] = luminance;
+	rgba[2] = luminance;
+	rgba[3] = 1.0f;
+}
+
+void Color::setLuminance(uint8_t luminance)
+{
+	float luminancef = (float)luminance / 255.0f;
+
+	this->rgba[0] = luminancef;
+	this->rgba[1] = luminancef;
+	this->rgba[2] = luminancef;
+	this->rgba[3] = 1.0f;
 }
 
 void Color::setRGBA(float r, float g, float b, float a)

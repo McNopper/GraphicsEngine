@@ -20,6 +20,8 @@ private:
 
 public:
 
+	Texture1D(const std::string& identifier, float red);
+	Texture1D(const std::string& identifier, const Color& color);
 	Texture1D(const std::string& identifier, GLint internalFormat, std::int32_t width, GLenum format, GLenum type, const std::uint8_t* pixels, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture1D();
 

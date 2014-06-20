@@ -9,6 +9,18 @@
 
 using namespace std;
 
+Texture2D::Texture2D(const std::string& identifier, float red) :
+	TextureStandard(identifier, GL_TEXTURE_2D, red), pixelData(1, 1, GL_RGBA, GL_FLOAT, (const uint8_t*)&red, sizeof(float))
+{
+	init();
+}
+
+Texture2D::Texture2D(const string& identifier, const Color& color) :
+	TextureStandard(identifier, GL_TEXTURE_2D, color), pixelData(1, 1, GL_RGBA, GL_FLOAT, (const uint8_t*)color.getRGBA(), sizeof(Color))
+{
+	init();
+}
+
 Texture2D::Texture2D(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixels, uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) :
 	TextureStandard(identifier, GL_TEXTURE_2D, internalFormat, width, height, format, type, sizeOfData, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic), pixelData(width, width, format, type, pixels, sizeOfData)
 {

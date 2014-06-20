@@ -51,17 +51,17 @@ bool JSONencoder::encodeObject(const JSONobjectSP jsonObject)
 
 	jsonText += JSON_left_curly_bracket;
 
-	auto allKeyValues = jsonObject->getAllKeyValues();
+	auto allKeys = jsonObject->getAllKeys();
 
-	if (allKeyValues.size() > 0)
+	if (allKeys.size() > 0)
 	{
 		doLineFeed(1);
 
-		auto walker = allKeyValues.begin();
+		auto walker = allKeys.begin();
 
-		while (walker != allKeyValues.end())
+		while (walker != allKeys.end())
 		{
-			if (!encodeString(walker->first))
+			if (!encodeString(*walker))
 			{
 				return false;
 			}
@@ -70,14 +70,14 @@ bool JSONencoder::encodeObject(const JSONobjectSP jsonObject)
 			jsonText += JSON_colon;
 			jsonText += JSON_space;
 
-			if (!encodeValue(walker->second))
+			if (!encodeValue(jsonObject->getValue(*walker)))
 			{
 				return false;
 			}
 
 			walker++;
 
-			if (walker != allKeyValues.end())
+			if (walker != allKeys.end())
 			{
 				jsonText += JSON_comma;
 
@@ -148,7 +148,9 @@ bool JSONencoder::encodeNumber(const JSONnumberSP jsonNumber)
 	{
 		float dummy;
 
-		if (fabsf(jsonNumber->getFloatValue()) >= 1000000.0 || fabsf(modff(jsonNumber->getFloatValue(), &dummy)) <= 0.0000001)
+		float fractpart = fabsf(modff(jsonNumber->getFloatValue(), &dummy));
+
+		if (fabsf(jsonNumber->getFloatValue()) >= 1000000.0f || (fractpart <= 0.0000001f && fractpart > 0.0f))
 		{
 			sprintf(buffer, "%e", jsonNumber->getFloatValue());
 		}

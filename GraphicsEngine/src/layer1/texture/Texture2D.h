@@ -20,6 +20,8 @@ private:
 
 public:
 
+	Texture2D(const std::string& identifier, float red);
+	Texture2D(const std::string& identifier, const Color& color);
 	Texture2D(const std::string& identifier, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, const std::uint8_t* pixels, std::uint32_t sizeOfData, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic);
 	virtual ~Texture2D();
 
