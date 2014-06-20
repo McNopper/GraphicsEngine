@@ -21,26 +21,45 @@ private:
 
 	std::string name;
 
+	//
+	// BRDF
+	//
+
+	float reflectionCoefficient;
+	Texture2DSP reflectionCoefficientTexture;
+
+	float roughness;
+	Texture2DSP roughnessTexture;
+
+	//
+
 	Color emissive;
 	Texture2DSP emissiveTexture;
 
+	// TODO Remove.
 	Color ambient;
 	Texture2DSP ambientTexture;
 
 	Color diffuse;
 	Texture2DSP diffuseTexture;
 
+	// TODO Remove.
 	Color specular;
 	Texture2DSP specularTexture;
 
+	// TODO Remove.
 	float shininess;
+	Texture2DSP shininessTexture;
 
+	// TODO Remove.
 	Color reflection;
 	Texture2DSP reflectionTexture;
 
+	// TODO Remove.
 	Color refraction;
 	Texture2DSP refractionTexture;
 
+	// TODO Remove.
 	float refractiveIndex;
 
 	float transparency;
@@ -61,6 +80,22 @@ public:
 
 	const std::string& getName() const;
 
+	//
+
+	float getReflectionCoefficient() const;
+	const Texture2DSP& getReflectionCoefficientTexture() const;
+	GLuint getReflectionCoefficientTextureName() const;
+
+	float getRoughness() const;
+	const Texture2DSP& getRoughnessTexture() const;
+	GLuint getRoughnessTextureName() const;
+
+	//
+
+    const Color& getEmissive() const;
+	const Texture2DSP& getEmissiveTexture() const;
+    GLuint getEmissiveTextureName() const;
+
     const Color& getAmbient() const;
 	const Texture2DSP& getAmbientTexture() const;
     GLuint getAmbientTextureName() const;
@@ -69,15 +104,13 @@ public:
 	const Texture2DSP& getDiffuseTexture() const;
     GLuint getDiffuseTextureName() const;
 
-    const Color& getEmissive() const;
-	const Texture2DSP& getEmissiveTexture() const;
-    GLuint getEmissiveTextureName() const;
-
     const Color& getSpecular() const;
 	const Texture2DSP& getSpecularTexture() const;
     GLuint getSpecularTextureName() const;
 
     float getShininess() const;
+	const Texture2DSP& getShininessTexture() const;
+    GLuint getShininessTextureName() const;
 
     const Color& getReflection() const;
 	const Texture2DSP& getReflectionTexture() const;
@@ -90,6 +123,8 @@ public:
     float getRefractiveIndex() const;
 
     float getTransparency() const;
+	const Texture2DSP& getTransparencyTexture() const;
+    GLuint getTransparencyTextureName() const;
 
 	const Texture2DSP& getNormalMapTexture() const;
     GLuint getNormalMapTextureName() const;
@@ -100,19 +135,22 @@ public:
 	const TextureCubeMapSP& getDynamicCubeMapTexture() const;
     GLuint getDynamicCubeMapTextureName() const;
 
+    //
+
+    void setEmissive(const Color& emissive);
+    void setEmissiveTexture(const Texture2DSP& emissiveTexture);
+
     void setAmbient(const Color& ambient);
     void setAmbientTexture(const Texture2DSP& ambientTexture);
 
     void setDiffuse(const Color& diffuse);
     void setDiffuseTexture(const Texture2DSP& diffuseTexture);
 
-    void setEmissive(const Color& emissive);
-    void setEmissiveTexture(const Texture2DSP& emissiveTexture);
-
     void setSpecular(const Color& specular);
     void setSpecularTexture(const Texture2DSP& specularTexture);
 
     void setShininess(float shininess);
+    void setShininessTexture(const Texture2DSP& shininessTexture);
 
     void setReflection(const Color& reflection);
     void setReflectionTexture(const Texture2DSP& reflectionTexture);
@@ -123,12 +161,15 @@ public:
     void setRefractiveIndex(float refractiveIndex);
 
     void setTransparency(float transparency);
+    void setTransparencyTexture(const Texture2DSP& transparencyTexture);
 
     void setNormalMapTexture(const Texture2DSP& normalMapTexture);
 
     void setDisplacementMapTexture(const Texture2DSP& displacementMapTexture);
 
     void setDynamicCubeMapTexture(const TextureCubeMapSP& dynamicCubeMapTexture);
+
+    //
 
 	bool isConvertDirectX() const;
 

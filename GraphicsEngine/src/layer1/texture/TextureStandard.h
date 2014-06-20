@@ -61,6 +61,8 @@ public:
 	void setAnisotropic(float level);
 	void setMaxAnisotropic();
 
+	GLenum getFormat() const;
+	GLenum getType() const;
 };
 
 #endif /* TEXTURESTANDARD_H_ */

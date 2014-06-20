@@ -10,10 +10,20 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/json/JSONobject.h"
+#include "../../layer0/json/JSONstring.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
 class GlTfEntityFactory
 {
+
+private:
+
+	void addSampler(JSONobjectSP& samplersObject, const JSONstringSP& key, const Texture2DSP& texture) const;
+
+	void addImage(JSONobjectSP& imagesObject, const JSONstringSP& key, const Texture2DSP& texture) const;
+
+	void addTexture(JSONobjectSP& texturesObject, const JSONstringSP& key, const Texture2DSP& texture) const;
 
 public:
 

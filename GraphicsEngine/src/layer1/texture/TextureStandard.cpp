@@ -170,3 +170,13 @@ void TextureStandard::setMaxAnisotropic()
 		setAnisotropic(max);
 	}
 }
+
+GLenum TextureStandard::getFormat() const
+{
+	return format;
+}
+
+GLenum TextureStandard::getType() const
+{
+	return type;
+}
