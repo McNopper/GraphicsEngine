@@ -19,15 +19,17 @@ GlTfEntityFactory::~GlTfEntityFactory()
 {
 }
 
-void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, int32_t count, GLenum type) const
+void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
 {
 	JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView"));
 	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
 	JSONstringSP byteStrideString = JSONstringSP(new JSONstring("byteStride"));
+	JSONstringSP componentTypeString = JSONstringSP(new JSONstring("componentType"));
 	JSONstringSP countString = JSONstringSP(new JSONstring("count"));
 	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
 
 	JSONnumberSP valueNumber;
+	JSONstringSP valueString;
 
 	accessorObject->addKeyValue(bufferViewString, bufferViewValueString);
 
@@ -37,14 +39,17 @@ void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const J
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteStride));
 	accessorObject->addKeyValue(byteStrideString, valueNumber);
 
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)componentType));
+	accessorObject->addKeyValue(componentTypeString, valueNumber);
+
 	valueNumber = JSONnumberSP(new JSONnumber(count));
 	accessorObject->addKeyValue(countString, valueNumber);
 
-	valueNumber = JSONnumberSP(new JSONnumber((int32_t)type));
-	accessorObject->addKeyValue(typeString, valueNumber);
+	valueString = JSONstringSP(new JSONstring(type));
+	accessorObject->addKeyValue(typeString, valueString);
 }
 
-void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteLength, size_t byteOffset, GLenum target) const
+void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const
 {
 	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
@@ -55,11 +60,11 @@ void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, con
 
 	bufferViewObject->addKeyValue(bufferString, bufferValueString);
 
-	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteLength));
-	bufferViewObject->addKeyValue(byteLengthString, valueNumber);
-
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteOffset));
 	bufferViewObject->addKeyValue(byteOffsetString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteLength));
+	bufferViewObject->addKeyValue(byteLengthString, valueNumber);
 
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)target));
 	bufferViewObject->addKeyValue(targetString, valueNumber);
@@ -105,13 +110,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	bufferViewObject = JSONobjectSP(new JSONobject());
 	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-	addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+	addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 	accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC4);
+	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 	if (mesh->getNormals())
 	{
@@ -123,13 +128,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getBitangents())
@@ -142,13 +147,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTangents())
@@ -161,13 +166,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTexCoords())
@@ -180,13 +185,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC2);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
 	}
 
 	beforeTotalLength = bin.getLength();
@@ -197,7 +202,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	bufferViewObject = JSONobjectSP(new JSONobject());
 	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-	addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ELEMENT_ARRAY_BUFFER);
+	addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ELEMENT_ARRAY_BUFFER);
 
 	for (uint32_t i = 0; i < mesh->getSubMeshesCount(); i++)
 	{
@@ -209,7 +214,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, currentSubMesh->getTriangleCount() * 3, GL_UNSIGNED_INT);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, GL_UNSIGNED_INT, currentSubMesh->getTriangleCount() * 3, "SCALAR");
 	}
 
 	//
@@ -219,17 +224,21 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	JSONobjectSP bufferObject = JSONobjectSP(new JSONobject());
 	buffersObject->addKeyValue(bufferString, bufferObject);
 
+	JSONstringSP uriString = JSONstringSP(new JSONstring("uri"));
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
-	JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
+	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
 
 	JSONstringSP valueString;
 	JSONnumberSP valueNumber;
 
+	valueString =  JSONstringSP(new JSONstring(mesh->getName() + ".bin"));
+	bufferObject->addKeyValue(uriString, valueString);
+
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
 	bufferObject->addKeyValue(byteLengthString, valueNumber);
 
-	valueString =  JSONstringSP(new JSONstring(mesh->getName() + ".bin"));
-	bufferObject->addKeyValue(pathString, valueString);
+	valueString =  JSONstringSP(new JSONstring("arraybuffer"));
+	bufferObject->addKeyValue(typeString, valueString);
 
 	// TODO Save binary buffer.
 }
@@ -361,7 +370,7 @@ void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP&
 
 	//
 
-	JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
+	JSONstringSP uriString = JSONstringSP(new JSONstring("uri"));
 
 	JSONstringSP valueString;
 
@@ -377,7 +386,7 @@ void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP&
 	}
 
 	valueString = JSONstringSP(new JSONstring(path));
-	imageObject->addKeyValue(pathString, valueString);
+	imageObject->addKeyValue(uriString, valueString);
 
 	// TODO Save image.
 }
@@ -838,6 +847,8 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		//
 		// Matrix
 		//
+
+		// TODO Remove Matrix.
 
 		matrixArray = JSONarraySP(new JSONarray());
 
