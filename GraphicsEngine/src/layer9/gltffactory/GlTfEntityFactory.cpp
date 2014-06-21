@@ -98,7 +98,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	//
 
 	beforeTotalLength = bin.getLength();
-	currentLength = mesh->getNumberVertices() * 4 * sizeof(float);
+	currentLength = mesh->getNumberVertices() * 4 * sizeof(GLfloat);
 	bin.addData((const uint8_t*)mesh->getVertices(), currentLength);
 
 	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_vertices"));
@@ -111,12 +111,12 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC4);
 
 	if (mesh->getNormals())
 	{
 		beforeTotalLength = bin.getLength();
-		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(GLfloat);
 		bin.addData((const uint8_t*)mesh->getNormals(), currentLength);
 
 		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_normals"));
@@ -129,13 +129,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
 	}
 
 	if (mesh->getBitangents())
 	{
 		beforeTotalLength = bin.getLength();
-		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(GLfloat);
 		bin.addData((const uint8_t*)mesh->getBitangents(), currentLength);
 
 		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_bitangents"));
@@ -148,13 +148,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
 	}
 
 	if (mesh->getTangents())
 	{
 		beforeTotalLength = bin.getLength();
-		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(GLfloat);
 		bin.addData((const uint8_t*)mesh->getTangents(), currentLength);
 
 		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_tangents"));
@@ -167,13 +167,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC3);
 	}
 
 	if (mesh->getTexCoords())
 	{
 		beforeTotalLength = bin.getLength();
-		currentLength = mesh->getNumberVertices() * 2 * sizeof(float);
+		currentLength = mesh->getNumberVertices() * 2 * sizeof(GLfloat);
 		bin.addData((const uint8_t*)mesh->getTexCoords(), currentLength);
 
 		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_texcoords"));
@@ -186,11 +186,11 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT_VEC2);
 	}
 
 	beforeTotalLength = bin.getLength();
-	currentLength = mesh->getNumberIndices() * sizeof(uint32_t);
+	currentLength = mesh->getNumberIndices() * sizeof(GLuint);
 	bin.addData((const uint8_t*)mesh->getIndices(), currentLength);
 
 	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_indices"));
@@ -221,7 +221,6 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
 	JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
-	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
 
 	JSONstringSP valueString;
 	JSONnumberSP valueNumber;
@@ -231,9 +230,6 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 
 	valueString =  JSONstringSP(new JSONstring(mesh->getName() + ".bin"));
 	bufferObject->addKeyValue(pathString, valueString);
-
-	valueString =  JSONstringSP(new JSONstring("arraybuffer"));
-	bufferObject->addKeyValue(typeString, valueString);
 
 	// TODO Save binary buffer.
 }
@@ -325,7 +321,7 @@ void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& 
 
 	if (mesh->getTexCoords())
 	{
-		attributeString = JSONstringSP(new JSONstring("TEXCOORD_0"));
+		attributeString = JSONstringSP(new JSONstring("TEXCOORD"));
 		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
 		valueObject->addKeyValue(attributeString, attributeValueString);
 	}
@@ -341,7 +337,7 @@ void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& 
 	valueString = JSONstringSP(new JSONstring(surfaceMaterial->getName()));
 	primitivesObject->addKeyValue(materialString, valueString);
 
-	valueNumber = JSONnumberSP(new JSONnumber(6));	// Always GL_TRIANGLES
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)GL_TRIANGLES));
 	primitivesObject->addKeyValue(primitiveString, valueNumber);
 }
 
