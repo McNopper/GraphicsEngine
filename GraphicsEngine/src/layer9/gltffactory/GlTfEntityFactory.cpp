@@ -805,9 +805,20 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONarraySP childrenArray;
 	JSONstringSP childNodeString;
 
-	JSONstringSP matrixString = JSONstringSP(new JSONstring("matrix"));
-	JSONarraySP matrixArray;
-	JSONnumberSP matrixNumber;
+	// FBX
+
+	JSONstringSP LclTranslationString = JSONstringSP(new JSONstring("LclTranslation"));
+	JSONstringSP RotationOffsetString = JSONstringSP(new JSONstring("RotationOffset"));
+	JSONstringSP RotationPivotString = JSONstringSP(new JSONstring("RotationPivot"));
+	JSONstringSP PreRotationString = JSONstringSP(new JSONstring("PreRotation"));
+	JSONstringSP LclRotationString = JSONstringSP(new JSONstring("LclRotation"));
+	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("PostRotation"));
+	JSONstringSP ScalingOffsetString = JSONstringSP(new JSONstring("ScalingOffset"));
+	JSONstringSP ScalingPivotString = JSONstringSP(new JSONstring("ScalingPivot"));
+	JSONstringSP LclScalingString = JSONstringSP(new JSONstring("LclScaling"));
+	JSONstringSP GeometricTranslationString = JSONstringSP(new JSONstring("GeometricTranslation"));
+	JSONstringSP GeometricRotationString = JSONstringSP(new JSONstring("GeometricRotation"));
+	JSONstringSP GeometricScalingString = JSONstringSP(new JSONstring("GeometricScaling"));
 
 	JSONstringSP nodeMeshesString = JSONstringSP(new JSONstring("meshes"));
 	JSONarraySP nodeMeshesArray;
@@ -844,24 +855,12 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 			childrenArray->addValue(childNodeString);
 		}
 
+
 		//
-		// Matrix
+		// FBX parameters
 		//
 
-		// TODO Remove Matrix.
-
-		matrixArray = JSONarraySP(new JSONarray());
-
-		nodeObject->addKeyValue(matrixString, matrixArray);
-
-		for (int32_t k = 0; k < 16; k++)
-		{
-			matrixNumber = JSONnumberSP(new JSONnumber(node->getLocalFinalMatrix().getM()[k]));
-
-			matrixArray->addValue(matrixNumber);
-		}
-
-		// TODO Add FBX matrices parameters.
+		// TODO Add parameters.
 
 		//
 		// Meshes

@@ -37,23 +37,35 @@ private:
 	Matrix4x4 transformMatrix;
 	Matrix4x4 transformLinkMatrix;
 
-	Matrix4x4 rotateOffsetMatrix;
-	Matrix4x4 rotatePivotMatrix;
-	Matrix4x4 preRotateMatrix;
-	Matrix4x4 postRotateMatrix;
-	Matrix4x4 inverseRotatePivotMatrix;
+	Matrix4x4 rotationOffsetMatrix;
+	Matrix4x4 rotationPivotMatrix;
+	Matrix4x4 preRotationMatrix;
+	Matrix4x4 postRotationMatrix;
+	Matrix4x4 inverseRotationPivotMatrix;
 
-	Matrix4x4 scaleOffsetMatrix;
-	Matrix4x4 scalePivotMatrix;
-	Matrix4x4 inverseScalePivotMatrix;
+	Matrix4x4 scalingOffsetMatrix;
+	Matrix4x4 scalingPivotMatrix;
+	Matrix4x4 inverseScalingPivotMatrix;
 
 	Matrix4x4 geometricTransformMatrix;
 
 	Matrix4x4 localFinalMatrix;
 
-	float translate[3];
-	float rotate[3];
-	float scale[3];
+	float LclTranslation[3];
+	float LclRotation[3];
+	float LclScaling[3];
+
+	float RotationOffset[3];
+	float RotationPivot[3];
+	float PreRotation[3];
+	float PostRotation[3];
+
+	float ScalingOffset[3];
+	float ScalingPivot[3];
+
+	float GeometricTranslation[3];
+	float GeometricRotation[3];
+	float GeometricScaling[3];
 
 	MeshSP mesh;
 
@@ -69,20 +81,20 @@ private:
 
 	bool joint;
 
-	bool transMinActive[3];
-	bool transMaxActive[3];
-	float minTrans[3];
-	float maxTrans[3];
+	bool translationMinActive[3];
+	bool translationMaxActive[3];
+	float translationMin[3];
+	float translationMax[3];
 
-	bool rotMinActive[3];
-	bool rotMaxActive[3];
-	float minRot[3];
-	float maxRot[3];
+	bool rotationMinActive[3];
+	bool rotationMaxActive[3];
+	float rotationMin[3];
+	float rotationMax[3];
 
-	bool scaleMinActive[3];
-	bool scaleMaxActive[3];
-	float minScale[3];
-	float maxScale[3];
+	bool scalingMinActive[3];
+	bool scalingMaxActive[3];
+	float scalingMin[3];
+	float scalingMax[3];
 
 	bool usedJoint;
 
@@ -111,7 +123,7 @@ private:
 
 public:
 
-	Node(const std::string& name, const std::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
+	Node(const std::string& name, const std::shared_ptr<Node>& parent, float LclTranslation[3], float RotationOffset[3], float RotationPivot[3], float PreRotation[3], float LclRotation[3], float PostRotation[3], float ScalingOffset[3], float ScalingPivot[3], float LclScaling[3], float GeometricTranslation[3], float GeometricRotation[3], float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks, bool joint);
 	virtual ~Node();
 
 	const MeshSP& getMesh() const;

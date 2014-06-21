@@ -20,45 +20,81 @@
 
 using namespace std;
 
-Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
-	name(name), parentNode(parent), transformMatrix(), transformLinkMatrix(), rotateOffsetMatrix(), rotatePivotMatrix(), preRotateMatrix(), postRotateMatrix(), inverseRotatePivotMatrix(), scaleOffsetMatrix(), scalePivotMatrix(), inverseScalePivotMatrix(), geometricTransformMatrix(), localFinalMatrix(), mesh(mesh), camera(camera), light(light), allAnimStacks(allAnimStacks), allChilds(), index(-1), joint(joint), usedJoint(false), visible(true), transparent(false)
+Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float LclTranslation[3], float RotationOffset[3], float RotationPivot[3], float PreRotation[3], float LclRotation[3], float PostRotation[3], float ScalingOffset[3], float ScalingPivot[3], float LclScaling[3], float GeometricTranslation[3], float GeometricRotation[3], float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint) :
+	name(name), parentNode(parent), transformMatrix(), transformLinkMatrix(), rotationOffsetMatrix(), rotationPivotMatrix(), preRotationMatrix(), postRotationMatrix(), inverseRotationPivotMatrix(), scalingOffsetMatrix(), scalingPivotMatrix(), inverseScalingPivotMatrix(), geometricTransformMatrix(), localFinalMatrix(), mesh(mesh), camera(camera), light(light), allAnimStacks(allAnimStacks), allChilds(), index(-1), joint(joint), usedJoint(false), visible(true), transparent(false)
 {
-	this->translate[0] = translate[0];
-	this->translate[1] = translate[1];
-	this->translate[2] = translate[2];
+	this->LclTranslation[0] = LclTranslation[0];
+	this->LclTranslation[1] = LclTranslation[1];
+	this->LclTranslation[2] = LclTranslation[2];
 
-	this->rotate[0] = rotate[0];
-	this->rotate[1] = rotate[1];
-	this->rotate[2] = rotate[2];
+	this->RotationOffset[0] = RotationOffset[0];
+	this->RotationOffset[1] = RotationOffset[1];
+	this->RotationOffset[2] = RotationOffset[2];
 
-	this->scale[0] = scale[0];
-	this->scale[1] = scale[1];
-	this->scale[2] = scale[2];
+	this->RotationPivot[0] = RotationPivot[0];
+	this->RotationPivot[1] = RotationPivot[1];
+	this->RotationPivot[2] = RotationPivot[2];
 
-	rotateOffsetMatrix.translate(rotateOffset[0], rotateOffset[1], rotateOffset[2]);
-	rotatePivotMatrix.translate(rotatePivot[0], rotatePivot[1], rotatePivot[2]);
-	preRotateMatrix.rotateRzRyRx(preRotate[2], preRotate[1], preRotate[0]);
-	postRotateMatrix.rotateRzRyRx(postRotate[2], postRotate[1], postRotate[0]);
-	inverseRotatePivotMatrix = rotatePivotMatrix;
-	inverseRotatePivotMatrix.inverseRigidBody();
+	this->PreRotation[0] = PreRotation[0];
+	this->PreRotation[1] = PreRotation[1];
+	this->PreRotation[2] = PreRotation[2];
 
-	scaleOffsetMatrix.translate(scaleOffset[0], scaleOffset[1], scaleOffset[2]);
-	scalePivotMatrix.translate(scalePivot[0], scalePivot[1], scalePivot[2]);
-	inverseScalePivotMatrix = scalePivotMatrix;
-	inverseScalePivotMatrix.inverseRigidBody();
+	this->LclRotation[0] = LclRotation[0];
+	this->LclRotation[1] = LclRotation[1];
+	this->LclRotation[2] = LclRotation[2];
 
-	geometricTransformMatrix.translate(geoTranslate[0], geoTranslate[1], geoTranslate[2]);
-	geometricTransformMatrix.rotateRzRyRx(geoRotate[2], geoRotate[1], geoRotate[0]);
-	geometricTransformMatrix.scale(geoScale[0], geoScale[1], geoScale[2]);
+	this->PostRotation[0] = PostRotation[0];
+	this->PostRotation[1] = PostRotation[1];
+	this->PostRotation[2] = PostRotation[2];
+
+	this->ScalingOffset[0] = ScalingOffset[0];
+	this->ScalingOffset[1] = ScalingOffset[1];
+	this->ScalingOffset[2] = ScalingOffset[2];
+
+	this->ScalingPivot[0] = ScalingPivot[0];
+	this->ScalingPivot[1] = ScalingPivot[1];
+	this->ScalingPivot[2] = ScalingPivot[2];
+
+	this->LclScaling[0] = LclScaling[0];
+	this->LclScaling[1] = LclScaling[1];
+	this->LclScaling[2] = LclScaling[2];
+
+	this->GeometricTranslation[0] = GeometricTranslation[0];
+	this->GeometricTranslation[1] = GeometricTranslation[1];
+	this->GeometricTranslation[2] = GeometricTranslation[2];
+
+	this->GeometricRotation[0] = GeometricRotation[0];
+	this->GeometricRotation[1] = GeometricRotation[1];
+	this->GeometricRotation[2] = GeometricRotation[2];
+
+	this->GeometricScaling[0] = GeometricScaling[0];
+	this->GeometricScaling[1] = GeometricScaling[1];
+	this->GeometricScaling[2] = GeometricScaling[2];
+
+	rotationOffsetMatrix.translate(RotationOffset[0], RotationOffset[1], RotationOffset[2]);
+	rotationPivotMatrix.translate(RotationPivot[0], RotationPivot[1], RotationPivot[2]);
+	preRotationMatrix.rotateRzRyRx(PreRotation[2], PreRotation[1], PreRotation[0]);
+	postRotationMatrix.rotateRzRyRx(PostRotation[2], PostRotation[1], PostRotation[0]);
+	inverseRotationPivotMatrix = rotationPivotMatrix;
+	inverseRotationPivotMatrix.inverseRigidBody();
+
+	scalingOffsetMatrix.translate(ScalingOffset[0], ScalingOffset[1], ScalingOffset[2]);
+	scalingPivotMatrix.translate(ScalingPivot[0], ScalingPivot[1], ScalingPivot[2]);
+	inverseScalingPivotMatrix = scalingPivotMatrix;
+	inverseScalingPivotMatrix.inverseRigidBody();
+
+	geometricTransformMatrix.translate(GeometricTranslation[0], GeometricTranslation[1], GeometricTranslation[2]);
+	geometricTransformMatrix.rotateRzRyRx(GeometricRotation[2], GeometricRotation[1], GeometricRotation[0]);
+	geometricTransformMatrix.scale(GeometricScaling[0], GeometricScaling[1], GeometricScaling[2]);
 
 	for (int32_t i = 0; i < 3; i++)
 	{
-		transMinActive[i] = false;
-		transMaxActive[i] = false;
-		rotMinActive[i] = false;
-		rotMaxActive[i] = false;
-		scaleMinActive[i] = false;
-		scaleMaxActive[i] = false;
+		translationMinActive[i] = false;
+		translationMaxActive[i] = false;
+		rotationMinActive[i] = false;
+		rotationMaxActive[i] = false;
+		scalingMinActive[i] = false;
+		scalingMaxActive[i] = false;
 	}
 
 	updateLocalFinalMatrix();
@@ -303,30 +339,30 @@ float Node::getLimit(const float value[], const bool minActive[], const float mi
 
 void Node::setTranslationLimits(bool minActive, float min, bool maxActive, float max, int32_t index)
 {
-	transMinActive[index] = minActive;
-	minTrans[index] = min;
-	transMaxActive[index] = maxActive;
-	maxTrans[index] = max;
+	translationMinActive[index] = minActive;
+	translationMin[index] = min;
+	translationMaxActive[index] = maxActive;
+	translationMax[index] = max;
 
 	updateLocalFinalMatrix();
 }
 
 void Node::setRotationLimits(bool minActive, float min, bool maxActive, float max, int32_t index)
 {
-	rotMinActive[index] = minActive;
-	minRot[index] = min;
-	rotMaxActive[index] = maxActive;
-	maxRot[index] = max;
+	rotationMinActive[index] = minActive;
+	rotationMin[index] = min;
+	rotationMaxActive[index] = maxActive;
+	rotationMax[index] = max;
 
 	updateLocalFinalMatrix();
 }
 
 void Node::setScalingLimits(bool minActive, float min, bool maxActive, float max, int32_t index)
 {
-	scaleMinActive[index] = minActive;
-	minScale[index] = min;
-	scaleMaxActive[index] = maxActive;
-	maxScale[index] = max;
+	scalingMinActive[index] = minActive;
+	scalingMin[index] = min;
+	scalingMaxActive[index] = maxActive;
+	scalingMax[index] = max;
 
 	updateLocalFinalMatrix();
 }
@@ -353,17 +389,17 @@ void Node::setUsedJoint(const std::string& jointName)
 void Node::updateLocalFinalMatrix()
 {
 	localFinalMatrix.identity();
-	localFinalMatrix.translate(getLimit(translate, transMinActive, minTrans, transMaxActive, maxTrans, 0), getLimit(translate, transMinActive, minTrans, transMaxActive, maxTrans, 1), getLimit(translate, transMinActive, minTrans, transMaxActive, maxTrans, 2));
-	localFinalMatrix.multiply(rotateOffsetMatrix);
-	localFinalMatrix.multiply(rotatePivotMatrix);
-	localFinalMatrix.multiply(preRotateMatrix);
-	localFinalMatrix.rotateRzRyRx(getLimit(rotate, rotMinActive, minRot, rotMaxActive, maxRot, 2), getLimit(rotate, rotMinActive, minRot, rotMaxActive, maxRot, 1), getLimit(rotate, rotMinActive, minRot, rotMaxActive, maxRot, 0));
-	localFinalMatrix.multiply(postRotateMatrix);
-	localFinalMatrix.multiply(inverseRotatePivotMatrix);
-	localFinalMatrix.multiply(scaleOffsetMatrix);
-	localFinalMatrix.multiply(scalePivotMatrix);
-	localFinalMatrix.scale(getLimit(scale, scaleMinActive, minScale, scaleMaxActive, maxScale, 0), getLimit(scale, scaleMinActive, minScale, scaleMaxActive, maxScale, 1), getLimit(scale, scaleMinActive, minScale, scaleMaxActive, maxScale, 2));
-	localFinalMatrix.multiply(inverseScalePivotMatrix);
+	localFinalMatrix.translate(getLimit(LclTranslation, translationMinActive, translationMin, translationMaxActive, translationMax, 0), getLimit(LclTranslation, translationMinActive, translationMin, translationMaxActive, translationMax, 1), getLimit(LclTranslation, translationMinActive, translationMin, translationMaxActive, translationMax, 2));
+	localFinalMatrix.multiply(rotationOffsetMatrix);
+	localFinalMatrix.multiply(rotationPivotMatrix);
+	localFinalMatrix.multiply(preRotationMatrix);
+	localFinalMatrix.rotateRzRyRx(getLimit(LclRotation, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 2), getLimit(LclRotation, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 1), getLimit(LclRotation, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 0));
+	localFinalMatrix.multiply(postRotationMatrix);
+	localFinalMatrix.multiply(inverseRotationPivotMatrix);
+	localFinalMatrix.multiply(scalingOffsetMatrix);
+	localFinalMatrix.multiply(scalingPivotMatrix);
+	localFinalMatrix.scale(getLimit(LclScaling, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 0), getLimit(LclScaling, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 1), getLimit(LclScaling, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 2));
+	localFinalMatrix.multiply(inverseScalingPivotMatrix);
 }
 
 const NodeSP& Node::getParentNode() const
@@ -428,9 +464,9 @@ bool Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 
 	for (int32_t i = 0; i < 3; i++)
 	{
-		currentTranslate[i] = translate[i];
-		currentRotate[i] = rotate[i];
-		currentScale[i] = scale[i];
+		currentTranslate[i] = LclTranslation[i];
+		currentRotate[i] = LclRotation[i];
+		currentScale[i] = LclScaling[i];
 	}
 
 	if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
@@ -457,17 +493,17 @@ bool Node::updateRenderingMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatri
 
 	Matrix4x4 localMatrix;
 
-	localMatrix.translate(getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 0), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 1), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 2));
-	localMatrix.multiply(rotateOffsetMatrix);
-	localMatrix.multiply(rotatePivotMatrix);
-	localMatrix.multiply(preRotateMatrix);
-	localMatrix.rotateRzRyRx(getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 2), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 1), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 0));
-	localMatrix.multiply(postRotateMatrix);
-	localMatrix.multiply(inverseRotatePivotMatrix);
-	localMatrix.multiply(scaleOffsetMatrix);
-	localMatrix.multiply(scalePivotMatrix);
-	localMatrix.scale(getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 0), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 1), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 2));
-	localMatrix.multiply(inverseScalePivotMatrix);
+	localMatrix.translate(getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 0), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 1), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 2));
+	localMatrix.multiply(rotationOffsetMatrix);
+	localMatrix.multiply(rotationPivotMatrix);
+	localMatrix.multiply(preRotationMatrix);
+	localMatrix.rotateRzRyRx(getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 2), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 1), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 0));
+	localMatrix.multiply(postRotationMatrix);
+	localMatrix.multiply(inverseRotationPivotMatrix);
+	localMatrix.multiply(scalingOffsetMatrix);
+	localMatrix.multiply(scalingPivotMatrix);
+	localMatrix.scale(getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 0), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 1), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 2));
+	localMatrix.multiply(inverseScalingPivotMatrix);
 
 	Matrix4x4 newParentMatrix = parentMatrix * localMatrix;
 
@@ -540,9 +576,9 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 
 	for (int32_t i = 0; i < 3; i++)
 	{
-		currentTranslate[i] = translate[i];
-		currentRotate[i] = rotate[i];
-		currentScale[i] = scale[i];
+		currentTranslate[i] = LclTranslation[i];
+		currentRotate[i] = LclRotation[i];
+		currentScale[i] = LclScaling[i];
 	}
 
 	if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
@@ -571,17 +607,17 @@ void Node::updateJointMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNor
 
 	if (usedJoint)
 	{
-		jointLocalMatrix.translate(getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 0), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 1), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 2));
-		jointLocalMatrix.multiply(rotateOffsetMatrix);
-		jointLocalMatrix.multiply(rotatePivotMatrix);
-		jointLocalMatrix.multiply(preRotateMatrix);
-		jointLocalMatrix.rotateRzRyRx(getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 2), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 1), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 0));
-		jointLocalMatrix.multiply(postRotateMatrix);
-		jointLocalMatrix.multiply(inverseRotatePivotMatrix);
-		jointLocalMatrix.multiply(scaleOffsetMatrix);
-		jointLocalMatrix.multiply(scalePivotMatrix);
-		jointLocalMatrix.scale(getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 0), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 1), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 2));
-		jointLocalMatrix.multiply(inverseScalePivotMatrix);
+		jointLocalMatrix.translate(getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 0), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 1), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 2));
+		jointLocalMatrix.multiply(rotationOffsetMatrix);
+		jointLocalMatrix.multiply(rotationPivotMatrix);
+		jointLocalMatrix.multiply(preRotationMatrix);
+		jointLocalMatrix.rotateRzRyRx(getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 2), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 1), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 0));
+		jointLocalMatrix.multiply(postRotationMatrix);
+		jointLocalMatrix.multiply(inverseRotationPivotMatrix);
+		jointLocalMatrix.multiply(scalingOffsetMatrix);
+		jointLocalMatrix.multiply(scalingPivotMatrix);
+		jointLocalMatrix.scale(getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 0), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 1), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 2));
+		jointLocalMatrix.multiply(inverseScalingPivotMatrix);
 	}
 	else
 	{
@@ -623,9 +659,9 @@ void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instance
 
 	for (int32_t i = 0; i < 3; i++)
 	{
-		currentTranslate[i] = translate[i];
-		currentRotate[i] = rotate[i];
-		currentScale[i] = scale[i];
+		currentTranslate[i] = LclTranslation[i];
+		currentRotate[i] = LclRotation[i];
+		currentScale[i] = LclScaling[i];
 	}
 
 	if (animStackIndex >= 0 && animLayerIndex >= 0 && static_cast<decltype(allAnimStacks.size())>(animStackIndex) < allAnimStacks.size() && animLayerIndex < allAnimStacks[animStackIndex]->getAnimationLayersCount())
@@ -652,17 +688,17 @@ void Node::updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instance
 
 	Matrix4x4 localMatrix;
 
-	localMatrix.translate(getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 0), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 1), getLimit(currentTranslate, transMinActive, minTrans, transMaxActive, maxTrans, 2));
-	localMatrix.multiply(rotateOffsetMatrix);
-	localMatrix.multiply(rotatePivotMatrix);
-	localMatrix.multiply(preRotateMatrix);
-	localMatrix.rotateRzRyRx(getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 2), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 1), getLimit(currentRotate, rotMinActive, minRot, rotMaxActive, maxRot, 0));
-	localMatrix.multiply(postRotateMatrix);
-	localMatrix.multiply(inverseRotatePivotMatrix);
-	localMatrix.multiply(scaleOffsetMatrix);
-	localMatrix.multiply(scalePivotMatrix);
-	localMatrix.scale(getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 0), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 1), getLimit(currentScale, scaleMinActive, minScale, scaleMaxActive, maxScale, 2));
-	localMatrix.multiply(inverseScalePivotMatrix);
+	localMatrix.translate(getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 0), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 1), getLimit(currentTranslate, translationMinActive, translationMin, translationMaxActive, translationMax, 2));
+	localMatrix.multiply(rotationOffsetMatrix);
+	localMatrix.multiply(rotationPivotMatrix);
+	localMatrix.multiply(preRotationMatrix);
+	localMatrix.rotateRzRyRx(getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 2), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 1), getLimit(currentRotate, rotationMinActive, rotationMin, rotationMaxActive, rotationMax, 0));
+	localMatrix.multiply(postRotationMatrix);
+	localMatrix.multiply(inverseRotationPivotMatrix);
+	localMatrix.multiply(scalingOffsetMatrix);
+	localMatrix.multiply(scalingPivotMatrix);
+	localMatrix.scale(getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 0), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 1), getLimit(currentScale, scalingMinActive, scalingMin, scalingMaxActive, scalingMax, 2));
+	localMatrix.multiply(inverseScalingPivotMatrix);
 
 	Matrix4x4 newParentMatrix = parentMatrix * localMatrix;
 
