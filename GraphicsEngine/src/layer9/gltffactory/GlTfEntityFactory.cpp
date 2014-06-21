@@ -19,6 +19,332 @@ GlTfEntityFactory::~GlTfEntityFactory()
 {
 }
 
+void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, int32_t count, GLenum type) const
+{
+	JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView"));
+	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
+	JSONstringSP byteStrideString = JSONstringSP(new JSONstring("byteStride"));
+	JSONstringSP countString = JSONstringSP(new JSONstring("count"));
+	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
+
+	JSONnumberSP valueNumber;
+
+	accessorObject->addKeyValue(bufferViewString, bufferViewValueString);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteOffset));
+	accessorObject->addKeyValue(byteOffsetString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteStride));
+	accessorObject->addKeyValue(byteStrideString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber(count));
+	accessorObject->addKeyValue(countString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)type));
+	accessorObject->addKeyValue(typeString, valueNumber);
+}
+
+void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteLength, size_t byteOffset, GLenum target) const
+{
+	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
+	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
+	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
+	JSONstringSP targetString = JSONstringSP(new JSONstring("target"));
+
+	JSONnumberSP valueNumber;
+
+	bufferViewObject->addKeyValue(bufferString, bufferValueString);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteLength));
+	bufferViewObject->addKeyValue(byteLengthString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteOffset));
+	bufferViewObject->addKeyValue(byteOffsetString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)target));
+	bufferViewObject->addKeyValue(targetString, valueNumber);
+}
+
+void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const
+{
+	auto walker = buffersObject->getAllKeys().begin();
+
+	while (walker != buffersObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == bufferString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	//
+
+	char buffer[128];
+
+	size_t beforeTotalLength;
+
+	size_t currentLength;
+
+	JSONstringSP bufferViewString;
+	JSONobjectSP bufferViewObject;
+
+	JSONstringSP accessorString;
+	JSONobjectSP accessorObject;
+
+	GlTfBin bin;
+
+	//
+
+	beforeTotalLength = bin.getLength();
+	currentLength = mesh->getNumberVertices() * 4 * sizeof(float);
+	bin.addData((const uint8_t*)mesh->getVertices(), currentLength);
+
+	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_vertices"));
+	bufferViewObject = JSONobjectSP(new JSONobject());
+	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+	addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+
+	accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
+	accessorObject = JSONobjectSP(new JSONobject());
+	accessorsObject->addKeyValue(accessorString, accessorObject);
+
+	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+
+	if (mesh->getNormals())
+	{
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		bin.addData((const uint8_t*)mesh->getNormals(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_normals"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+	}
+
+	if (mesh->getBitangents())
+	{
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		bin.addData((const uint8_t*)mesh->getBitangents(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_bitangents"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+	}
+
+	if (mesh->getTangents())
+	{
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 3 * sizeof(float);
+		bin.addData((const uint8_t*)mesh->getTangents(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_tangents"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+	}
+
+	if (mesh->getTexCoords())
+	{
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 2 * sizeof(float);
+		bin.addData((const uint8_t*)mesh->getTexCoords(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_texcoords"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, mesh->getNumberVertices(), GL_FLOAT);
+	}
+
+	beforeTotalLength = bin.getLength();
+	currentLength = mesh->getNumberIndices() * sizeof(uint32_t);
+	bin.addData((const uint8_t*)mesh->getIndices(), currentLength);
+
+	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_indices"));
+	bufferViewObject = JSONobjectSP(new JSONobject());
+	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+	addBufferViewsValues(bufferViewObject, bufferString, currentLength, beforeTotalLength, GL_ELEMENT_ARRAY_BUFFER);
+
+	for (uint32_t i = 0; i < mesh->getSubMeshesCount(); i++)
+	{
+		const SubMeshSP& currentSubMesh = mesh->getSubMeshAt((int32_t)i);
+
+		sprintf(buffer, "%03d", i);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_indices_" + buffer));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, currentSubMesh->getTriangleCount() * 3, GL_UNSIGNED_INT);
+	}
+
+	//
+	// Buffer
+	//
+
+	JSONobjectSP bufferObject = JSONobjectSP(new JSONobject());
+	buffersObject->addKeyValue(bufferString, bufferObject);
+
+	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
+	JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
+	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
+
+	JSONstringSP valueString;
+	JSONnumberSP valueNumber;
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
+	bufferObject->addKeyValue(byteLengthString, valueNumber);
+
+	valueString =  JSONstringSP(new JSONstring(mesh->getName() + ".bin"));
+	bufferObject->addKeyValue(pathString, valueString);
+
+	valueString =  JSONstringSP(new JSONstring("arraybuffer"));
+	bufferObject->addKeyValue(typeString, valueString);
+
+	// TODO Save binary buffer.
+}
+
+void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, int32_t index) const
+{
+	auto walker = meshesObject->getAllKeys().begin();
+
+	while (walker != meshesObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == meshString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	const SurfaceMaterialSP& surfaceMaterial = mesh->getSurfaceMaterialAt(index);
+
+	//
+
+	char buffer[128];
+
+	JSONobjectSP meshObject = JSONobjectSP(new JSONobject());
+
+	meshesObject->addKeyValue(meshString, meshObject);
+
+	//
+
+	JSONstringSP nameString = JSONstringSP(new JSONstring("name"));
+	JSONstringSP primitivesString = JSONstringSP(new JSONstring("primitives"));
+
+	JSONarraySP valueArray;
+
+	valueArray = JSONarraySP(new JSONarray());
+	meshObject->addKeyValue(primitivesString, valueArray);
+
+	meshObject->addKeyValue(nameString, meshString);
+
+	//
+
+	JSONobjectSP primitivesObject = JSONobjectSP(new JSONobject());
+
+	valueArray->addValue(primitivesObject);
+
+	//
+
+	JSONstringSP attributesString = JSONstringSP(new JSONstring("attributes"));
+	JSONstringSP indicesString = JSONstringSP(new JSONstring("indices"));
+	JSONstringSP materialString = JSONstringSP(new JSONstring("material"));
+	JSONstringSP primitiveString = JSONstringSP(new JSONstring("primitive"));
+
+	JSONstringSP valueString;
+	JSONnumberSP valueNumber;
+	JSONobjectSP valueObject;
+
+	valueObject =  JSONobjectSP(new JSONobject());
+
+	//
+
+	JSONstringSP attributeString;
+	JSONstringSP attributeValueString;
+
+	attributeString = JSONstringSP(new JSONstring("POSITION"));
+	attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
+	valueObject->addKeyValue(attributeString, attributeValueString);
+
+	if (mesh->getNormals())
+	{
+		attributeString = JSONstringSP(new JSONstring("NORMAL"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+	}
+
+	if (mesh->getBitangents())
+	{
+		attributeString = JSONstringSP(new JSONstring("BITANGENT"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+	}
+
+	if (mesh->getTangents())
+	{
+		attributeString = JSONstringSP(new JSONstring("TANGENT"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+	}
+
+	if (mesh->getTexCoords())
+	{
+		attributeString = JSONstringSP(new JSONstring("TEXCOORD_0"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+	}
+
+	//
+
+	primitivesObject->addKeyValue(attributesString, valueObject);
+
+	sprintf(buffer, "%03d", index);
+	valueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_indices_" + buffer));
+	primitivesObject->addKeyValue(indicesString, valueString);
+
+	valueString = JSONstringSP(new JSONstring(surfaceMaterial->getName()));
+	primitivesObject->addKeyValue(materialString, valueString);
+
+	valueNumber = JSONnumberSP(new JSONnumber(6));	// Always GL_TRIANGLES
+	primitivesObject->addKeyValue(primitiveString, valueNumber);
+}
+
 void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const
 {
 	auto walker = imagesObject->getAllKeys().begin();
@@ -171,8 +497,20 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	// Go through model entity and create glTF.
 	//
 
+	JSONstringSP accessorsString = JSONstringSP(new JSONstring("accessors"));
+	JSONobjectSP accessorsObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP bufferViewsString = JSONstringSP(new JSONstring("bufferViews"));
+	JSONobjectSP bufferViewsObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP buffersString = JSONstringSP(new JSONstring("buffers"));
+	JSONobjectSP buffersObject = JSONobjectSP(new JSONobject());
+
 	JSONstringSP imagesString = JSONstringSP(new JSONstring("images"));
 	JSONobjectSP imagesObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP meshesString = JSONstringSP(new JSONstring("meshes"));
+	JSONobjectSP meshesObject = JSONobjectSP(new JSONobject());
 
 	JSONstringSP samplersString = JSONstringSP(new JSONstring("samplers"));
 	JSONobjectSP samplersObject = JSONobjectSP(new JSONobject());
@@ -181,19 +519,33 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONobjectSP texturesObject = JSONobjectSP(new JSONobject());
 
 	//
-	// TODO Accessors.
+	// Accessors
 	//
+
+	glTF->addKeyValue(accessorsString, accessorsObject);
 
 	//
 	// TODO Animations.
 	//
 
 	//
-	// TODO Buffer views.
+	// FIXME Asset,
 	//
 
 	//
-	// TODO Buffers.
+	// Buffer views
+	//
+
+	glTF->addKeyValue(bufferViewsString, bufferViewsObject);
+
+	//
+	// Buffers
+	//
+
+	glTF->addKeyValue(buffersString, buffersObject);
+
+	//
+	// FIXME Cameras.
 	//
 
 	//
@@ -201,6 +553,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	//
 
 	glTF->addKeyValue(imagesString, imagesObject);
+
+	//
+	// FIXME Lights.
+	//
 
 	//
 	// Materials
@@ -263,6 +619,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		instanceTechniqueObject = JSONobjectSP(new JSONobject());
 
 		materialObject->addKeyValue(instanceTechniqueString, instanceTechniqueObject);
+
+		//
+
+		// FIXME Technique.
 
 		//
 
@@ -415,14 +775,16 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	}
 
 	//
-	// TODO Meshes.
+	// Meshes
 	//
+
+	glTF->addKeyValue(meshesString, meshesObject);
 
 	//
 	// Nodes
 	//
 
-	char buffer[1024];
+	char buffer[128];
 
 	//
 
@@ -442,9 +804,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONarraySP matrixArray;
 	JSONnumberSP matrixNumber;
 
-	JSONstringSP meshesString = JSONstringSP(new JSONstring("meshes"));
-	JSONarraySP meshesArray;
-	JSONstringSP meshString;
+	JSONstringSP nodeMeshesString = JSONstringSP(new JSONstring("meshes"));
+	JSONarraySP nodeMeshesArray;
+	JSONstringSP nodeBufferString;
+	JSONstringSP nodeMeshString;
 
 	JSONstringSP nodeName = JSONstringSP(new JSONstring("name"));
 
@@ -497,21 +860,32 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		// Meshes
 		//
 
-		meshesArray = JSONarraySP(new JSONarray());
+		nodeMeshesArray = JSONarraySP(new JSONarray());
 
-		nodeObject->addKeyValue(meshesString, meshesArray);
+		nodeObject->addKeyValue(nodeMeshesString, nodeMeshesArray);
 
-		for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
+		if (node->getMesh())
 		{
-			string currentMeshName = "mesh_" + node->getName() + "_";
+			nodeBufferString = JSONstringSP(new JSONstring("buffer_" + node->getMesh()->getName()));
 
-			sprintf(buffer, "%03d", k);
+			addBufferBufferViewsAccessors(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh());
 
-			currentMeshName.append(buffer);
+			for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
+			{
+				string currentMeshName = "mesh_" + node->getMesh()->getName() + "_";
 
-			meshString = JSONstringSP(new JSONstring(currentMeshName));
+				sprintf(buffer, "%03d", k);
 
-			meshesArray->addValue(meshString);
+				currentMeshName.append(buffer);
+
+				nodeMeshString = JSONstringSP(new JSONstring(currentMeshName));
+
+				nodeMeshesArray->addValue(nodeMeshString);
+
+				//
+
+				addMesh(meshesObject, nodeMeshString, node->getMesh(), (int32_t)k);
+			}
 		}
 
 		//
@@ -520,6 +894,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 		nodeObject->addKeyValue(nodeName, nodeString);
 	}
+
+	//
+	// FIXME Programs.
+	//
 
 	//
 	// Samplers
@@ -536,7 +914,15 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	//
 
 	//
+	// FIXME Shaders.
+	//
+
+	//
 	// TODO Skins.
+	//
+
+	//
+	// FIXME Techniques.
 	//
 
 	//
@@ -546,7 +932,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(texturesString, texturesObject);
 
 	//
-	// Save as JSON text.
+	// TODO Save as JSON text.
 	//
 
 	JSONencoder encoder;

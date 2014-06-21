@@ -14,10 +14,22 @@
 #include "../../layer0/json/JSONstring.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
+#include "GlTfBin.h"
+
 class GlTfEntityFactory
 {
 
 private:
+
+	void addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, int32_t count, GLenum type) const;
+
+	void addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteLength, size_t byteOffset, GLenum target) const;
+
+	void addBufferBufferViewsAccessors(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const;
+
+
+	void addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, std::int32_t index) const;
+
 
 	void addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const;
 
