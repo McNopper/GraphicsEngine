@@ -19,11 +19,13 @@ class GlTfEntityFactory
 
 private:
 
-	void addSampler(JSONobjectSP& samplersObject, const JSONstringSP& key, const Texture2DSP& texture) const;
+	void addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const;
 
-	void addImage(JSONobjectSP& imagesObject, const JSONstringSP& key, const Texture2DSP& texture) const;
+	void addSampler(JSONobjectSP& samplersObject, const JSONstringSP& samplerString, const Texture2DSP& texture) const;
 
-	void addTexture(JSONobjectSP& texturesObject, const JSONstringSP& key, const Texture2DSP& texture) const;
+	void addTexture(JSONobjectSP& texturesObject, const JSONstringSP& textureString, const Texture2DSP& texture) const;
+
+	void addTextureSamplerImage(JSONobjectSP& texturesObject, const JSONstringSP& textureString, JSONobjectSP& samplersObject, const JSONstringSP& samplerString, JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const;
 
 public:
 

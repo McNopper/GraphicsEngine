@@ -19,23 +19,94 @@ GlTfEntityFactory::~GlTfEntityFactory()
 {
 }
 
-void GlTfEntityFactory::addSampler(JSONobjectSP& samplersObject, const JSONstringSP& key, const Texture2DSP& texture) const
+void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const
 {
-	// TODO Implement.
+	auto walker = imagesObject->getAllKeys().begin();
+
+	while (walker != imagesObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == imageString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	JSONobjectSP imageObject = JSONobjectSP(new JSONobject());
+
+	imagesObject->addKeyValue(imageString, imageObject);
+
+	//
+
+	JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
+
+	JSONstringSP valueString;
+
+	string path = texture->getIdentifier();
+
+	if (texture->getType() == GL_FLOAT || texture->getType() == GL_HALF_FLOAT)
+	{
+		path += ".hdr";
+	}
+	else
+	{
+		path += ".tga";
+	}
+
+	valueString = JSONstringSP(new JSONstring(path));
+	imageObject->addKeyValue(pathString, valueString);
+
+	// TODO Save image.
 }
 
-void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP& key, const Texture2DSP& texture) const
+void GlTfEntityFactory::addSampler(JSONobjectSP& samplersObject, const JSONstringSP& samplerString, const Texture2DSP& texture) const
 {
-	// TODO Implement.
+	auto walker = samplersObject->getAllKeys().begin();
+
+	while (walker != samplersObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == samplerString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	JSONobjectSP samplerObject = JSONobjectSP(new JSONobject());
+
+	samplersObject->addKeyValue(samplerString, samplerObject);
+
+	//
+
+	JSONstringSP magFilterString = JSONstringSP(new JSONstring("magFilter"));
+	JSONstringSP minFilterString = JSONstringSP(new JSONstring("minFilter"));
+	JSONstringSP wrapSString = JSONstringSP(new JSONstring("wrapS"));
+	JSONstringSP wrapTString = JSONstringSP(new JSONstring("wrapT"));
+
+	JSONnumberSP valueNumber;
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)texture->getMagFilter()));
+	samplerObject->addKeyValue(magFilterString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)texture->getMinFilter()));
+	samplerObject->addKeyValue(minFilterString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)texture->getWrapS()));
+	samplerObject->addKeyValue(wrapSString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)texture->getWrapT()));
+	samplerObject->addKeyValue(wrapTString, valueNumber);
 }
 
-void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstringSP& key, const Texture2DSP& texture) const
+void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstringSP& textureString, const Texture2DSP& texture) const
 {
 	auto walker = texturesObject->getAllKeys().begin();
 
 	while (walker != texturesObject->getAllKeys().end())
 	{
-		if ((*walker)->getValue() == key->getValue())
+		if ((*walker)->getValue() == textureString->getValue())
 		{
 			return;
 		}
@@ -45,7 +116,7 @@ void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstrin
 
 	JSONobjectSP textureObject = JSONobjectSP(new JSONobject());
 
-	texturesObject->addKeyValue(key, textureObject);
+	texturesObject->addKeyValue(textureString, textureObject);
 
 	//
 
@@ -76,6 +147,15 @@ void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstrin
 
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)texture->getType()));
 	textureObject->addKeyValue(typeString, valueNumber);
+}
+
+void GlTfEntityFactory::addTextureSamplerImage(JSONobjectSP& texturesObject, const JSONstringSP& textureString, JSONobjectSP& samplersObject, const JSONstringSP& samplerString, JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const
+{
+	addTexture(texturesObject, textureString, texture);
+
+	addSampler(samplersObject, samplerString, texture);
+
+	addImage(imagesObject, imageString, texture);
 }
 
 bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, const string& identifier)
@@ -155,6 +235,8 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	JSONstringSP displacementMapString = JSONstringSP(new JSONstring("displacementMap"));
 
+	JSONstringSP imageString;
+	JSONstringSP samplerString;
 	JSONstringSP textureString;
 	JSONarraySP array;
 	JSONnumberSP number;
@@ -192,12 +274,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getEmissiveTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getEmissiveTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getEmissiveTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getEmissiveTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(emissionString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getEmissiveTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getEmissiveTexture());
 		}
 		else
 		{
@@ -215,13 +299,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getDiffuseTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getDiffuseTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getDiffuseTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getDiffuseTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(diffuseString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getDiffuseTexture());
-		}
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDiffuseTexture());		}
 		else
 		{
 			array = JSONarraySP(new JSONarray());
@@ -238,12 +323,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getReflectionCoefficientTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getReflectionCoefficientTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getReflectionCoefficientTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getReflectionCoefficientTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(reflectionCoefficientString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getReflectionCoefficientTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getReflectionCoefficientTexture());
 		}
 		else
 		{
@@ -256,12 +343,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getRoughnessTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getRoughnessTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getRoughnessTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getRoughnessTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(roughnessString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getRoughnessTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getRoughnessTexture());
 		}
 		else
 		{
@@ -274,12 +363,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getTransparencyTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getTransparencyTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getTransparencyTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getTransparencyTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(alphaString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getTransparencyTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getTransparencyTexture());
 		}
 		else
 		{
@@ -292,24 +383,28 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		if (surfaceMaterial->getNormalMapTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getNormalMapTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getNormalMapTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getNormalMapTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(normalMapString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getNormalMapTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getNormalMapTexture());
 		}
 
 		// Displacement map
 		if (surfaceMaterial->getDisplacementMapTextureName())
 		{
 			textureString = JSONstringSP(new JSONstring("texture_" + surfaceMaterial->getDisplacementMapTexture()->getIdentifier()));
+			samplerString = JSONstringSP(new JSONstring("sampler_" + surfaceMaterial->getDisplacementMapTexture()->getIdentifier()));
+			imageString = JSONstringSP(new JSONstring("image_" + surfaceMaterial->getDisplacementMapTexture()->getIdentifier()));
 
 			valuesObject->addKeyValue(displacementMapString, textureString);
 
 			//
 
-			addTexture(texturesObject, textureString, surfaceMaterial->getDisplacementMapTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDisplacementMapTexture());
 		}
 
 		//
@@ -459,7 +554,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	encoder.encode(glTF, jsonText);
 
-	printf("Encoded:\n%s\n", jsonText.c_str());
+	printf("\nEncoded Crate Cube:\n%s\n\n", jsonText.c_str());
 
 	return true;
 }
