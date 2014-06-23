@@ -19,6 +19,286 @@ GlTfEntityFactory::~GlTfEntityFactory()
 {
 }
 
+void GlTfEntityFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const
+{
+	JSONstringSP LclTranslationString = JSONstringSP(new JSONstring("LclTranslation"));
+	JSONstringSP LclRotationString = JSONstringSP(new JSONstring("LclRotation"));
+	JSONstringSP LclScalingString = JSONstringSP(new JSONstring("LclScaling"));
+
+	JSONstringSP RotationOffsetString = JSONstringSP(new JSONstring("RotationOffset"));
+	JSONstringSP RotationPivotString = JSONstringSP(new JSONstring("RotationPivot"));
+	JSONstringSP PreRotationString = JSONstringSP(new JSONstring("PreRotation"));
+	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("PostRotation"));
+
+	JSONstringSP ScalingOffsetString = JSONstringSP(new JSONstring("ScalingOffset"));
+	JSONstringSP ScalingPivotString = JSONstringSP(new JSONstring("ScalingPivot"));
+
+	JSONstringSP GeometricTranslationString = JSONstringSP(new JSONstring("GeometricTranslation"));
+	JSONstringSP GeometricRotationString = JSONstringSP(new JSONstring("GeometricRotation"));
+	JSONstringSP GeometricScalingString = JSONstringSP(new JSONstring("GeometricScaling"));
+
+
+	JSONstringSP TranslationLimitsString = JSONstringSP(new JSONstring("TranslationLimits"));
+	JSONstringSP RotationLimitsString = JSONstringSP(new JSONstring("RotationLimits"));
+	JSONstringSP ScalingLimitsString = JSONstringSP(new JSONstring("ScalingLimits"));
+
+	JSONstringSP MinString = JSONstringSP(new JSONstring("Min"));
+	JSONstringSP MaxString = JSONstringSP(new JSONstring("Max"));
+
+	JSONstringSP MinActiveString = JSONstringSP(new JSONstring("MinActive"));
+	JSONstringSP MaxActiveString = JSONstringSP(new JSONstring("MaxActive"));
+
+	JSONarraySP valueArray;
+	JSONobjectSP valueObject;
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclTranslation()[i])));
+	}
+	nodeObject->addKeyValue(LclTranslationString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclRotation()[i])));
+	}
+	nodeObject->addKeyValue(LclRotationString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclScaling()[i])));
+	}
+	nodeObject->addKeyValue(LclScalingString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationOffset()[i])));
+	}
+	nodeObject->addKeyValue(RotationOffsetString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationPivot()[i])));
+	}
+	nodeObject->addKeyValue(RotationPivotString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPreRotation()[i])));
+	}
+	nodeObject->addKeyValue(PreRotationString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPostRotation()[i])));
+	}
+	nodeObject->addKeyValue(PostRotationString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingOffset()[i])));
+	}
+	nodeObject->addKeyValue(ScalingOffsetString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingPivot()[i])));
+	}
+	nodeObject->addKeyValue(ScalingPivotString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricTranslation()[i])));
+	}
+	nodeObject->addKeyValue(GeometricTranslationString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricRotation()[i])));
+	}
+	nodeObject->addKeyValue(GeometricRotationString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricScaling()[i])));
+	}
+	nodeObject->addKeyValue(GeometricScalingString, valueArray);
+
+	//
+	//
+	//
+
+	valueObject = JSONobjectSP(new JSONobject());
+	nodeObject->addKeyValue(TranslationLimitsString, valueObject);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getTranslationMin()[i])));
+	}
+	valueObject->addKeyValue(MinString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getTranslationMinActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MinActiveString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getTranslationMax()[i])));
+	}
+	valueObject->addKeyValue(MaxString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getTranslationMaxActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MaxActiveString, valueArray);
+
+	//
+	//
+
+	valueObject = JSONobjectSP(new JSONobject());
+	nodeObject->addKeyValue(RotationLimitsString, valueObject);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationMin()[i])));
+	}
+	valueObject->addKeyValue(MinString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getRotationMinActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MinActiveString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationMax()[i])));
+	}
+	valueObject->addKeyValue(MaxString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getRotationMaxActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MaxActiveString, valueArray);
+
+	//
+	//
+
+	valueObject = JSONobjectSP(new JSONobject());
+	nodeObject->addKeyValue(ScalingLimitsString, valueObject);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingMin()[i])));
+	}
+	valueObject->addKeyValue(MinString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getScalingMinActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MinActiveString, valueArray);
+
+	//
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingMax()[i])));
+	}
+	valueObject->addKeyValue(MaxString, valueArray);
+
+	valueArray = JSONarraySP(new JSONarray());
+	for (int32_t i = 0; i < 3; i++)
+	{
+		if (node->getScalingMaxActive()[i])
+		{
+			valueArray->addValue(JSONtrueSP(new JSONtrue()));
+		}
+		else
+		{
+			valueArray->addValue(JSONfalseSP(new JSONfalse()));
+		}
+	}
+	valueObject->addKeyValue(MaxActiveString, valueArray);
+}
+
 void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
 {
 	JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView"));
@@ -89,7 +369,6 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	char buffer[128];
 
 	size_t beforeTotalLength;
-
 	size_t currentLength;
 
 	JSONstringSP bufferViewString;
@@ -240,7 +519,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	valueString =  JSONstringSP(new JSONstring("arraybuffer"));
 	bufferObject->addKeyValue(typeString, valueString);
 
-	// TODO Save binary buffer.
+	// TODO Save binary buffer to file.
 }
 
 void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, int32_t index) const
@@ -388,7 +667,7 @@ void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP&
 	valueString = JSONstringSP(new JSONstring(path));
 	imageObject->addKeyValue(uriString, valueString);
 
-	// TODO Save image.
+	// TODO Save image to file.
 }
 
 void GlTfEntityFactory::addSampler(JSONobjectSP& samplersObject, const JSONstringSP& samplerString, const Texture2DSP& texture) const
@@ -489,6 +768,178 @@ void GlTfEntityFactory::addTextureSamplerImage(JSONobjectSP& texturesObject, con
 	addImage(imagesObject, imageString, texture);
 }
 
+void GlTfEntityFactory::addShader(JSONobjectSP& shadersObject, const JSONstringSP& shaderString, const ProgramSeparableSP programSeparable) const
+{
+	if (programSeparable.get() == nullptr)
+	{
+		return;
+	}
+
+	auto walker = shadersObject->getAllKeys().begin();
+
+	while (walker != shadersObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == shaderString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	JSONobjectSP shaderObject = JSONobjectSP(new JSONobject());
+
+	shadersObject->addKeyValue(shaderString, shaderObject);
+
+	//
+
+	JSONstringSP uriString = JSONstringSP(new JSONstring("uri"));
+	JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
+
+	shaderObject->addKeyValue(uriString, JSONstringSP(new JSONstring(programSeparable->getFilename())));
+
+	shaderObject->addKeyValue(typeString, JSONnumberSP(new JSONnumber((int32_t)programSeparable->getShaderType())));
+}
+
+void GlTfEntityFactory::addProgramShader(JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& programString, const ProgramPipelineSP programPipeline) const
+{
+	if (programPipeline.get() == nullptr)
+	{
+		return;
+	}
+
+	auto walker = programsObject->getAllKeys().begin();
+
+	while (walker != programsObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == programString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	JSONobjectSP programObject = JSONobjectSP(new JSONobject());
+
+	programsObject->addKeyValue(programString, programObject);
+
+	JSONstringSP valueString;
+
+	//
+
+	JSONstringSP vertexShaderString = JSONstringSP(new JSONstring("vertexShader"));
+
+	JSONstringSP tessControlShaderString = JSONstringSP(new JSONstring("tessControlShader"));
+	JSONstringSP tessEvaluationShaderString = JSONstringSP(new JSONstring("tessEvaluationShader"));
+
+	JSONstringSP geometryShaderString = JSONstringSP(new JSONstring("geometryShader"));
+
+	JSONstringSP fragmentShaderString = JSONstringSP(new JSONstring("fragmentShader"));
+
+	if (programPipeline->hasVertexProgramSeparable())
+	{
+		valueString = JSONstringSP(new JSONstring(vertexShaderString->getValue() + "_" + programPipeline->getName()));
+
+		programObject->addKeyValue(vertexShaderString, valueString);
+
+		addShader(shadersObject, valueString, programPipeline->getVertexProgramSeparable());
+	}
+
+	if (programPipeline->hasControlProgramSeparable())
+	{
+		valueString = JSONstringSP(new JSONstring(tessControlShaderString->getValue() + "_" + programPipeline->getName()));
+
+		programObject->addKeyValue(tessControlShaderString, valueString);
+
+		addShader(shadersObject, valueString, programPipeline->getControlProgramSeparable());
+	}
+	if (programPipeline->hasEvaluationProgramSeparable())
+	{
+		valueString = JSONstringSP(new JSONstring(tessEvaluationShaderString->getValue() + "_" + programPipeline->getName()));
+
+		programObject->addKeyValue(tessEvaluationShaderString, valueString);
+
+		addShader(shadersObject, valueString, programPipeline->getEvaluationProgramSeparable());
+	}
+
+	if (programPipeline->hasGeometryProgramSeparable())
+	{
+		valueString = JSONstringSP(new JSONstring(geometryShaderString->getValue() + "_" + programPipeline->getName()));
+
+		programObject->addKeyValue(geometryShaderString, valueString);
+
+		addShader(shadersObject, valueString, programPipeline->getGeometryProgramSeparable());
+	}
+
+	if (programPipeline->hasFragmentProgramSeparable())
+	{
+		valueString = JSONstringSP(new JSONstring(fragmentShaderString->getValue() + "_" + programPipeline->getName()));
+
+		programObject->addKeyValue(fragmentShaderString, valueString);
+
+		addShader(shadersObject, valueString, programPipeline->getFragmentProgramSeparable());
+	}
+}
+
+void GlTfEntityFactory::addTechniqueProgramShader(JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& techniqueString, const ProgramPipelineSP programPipeline) const
+{
+	if (programPipeline.get() == nullptr)
+	{
+		return;
+	}
+
+	auto walker = techniquesObject->getAllKeys().begin();
+
+	while (walker != techniquesObject->getAllKeys().end())
+	{
+		if ((*walker)->getValue() == techniqueString->getValue())
+		{
+			return;
+		}
+
+		walker++;
+	}
+
+	JSONobjectSP techniqueObject = JSONobjectSP(new JSONobject());
+
+	techniquesObject->addKeyValue(techniqueString, techniqueObject);
+
+	//
+
+	JSONstringSP passString = JSONstringSP(new JSONstring("pass"));
+
+	JSONstringSP valueString = JSONstringSP(new JSONstring("defaultPass"));
+	techniqueObject->addKeyValue(passString, valueString);
+
+	//
+
+	JSONstringSP passesString = JSONstringSP(new JSONstring("passes"));
+
+	JSONobjectSP valueObject = JSONobjectSP(new JSONobject());
+	techniqueObject->addKeyValue(passesString, valueObject);
+
+	JSONobjectSP passObject = JSONobjectSP(new JSONobject());
+	valueObject->addKeyValue(valueString, passObject);
+
+	//
+
+	JSONstringSP instanceProgramString = JSONstringSP(new JSONstring("instanceProgram"));
+	JSONobjectSP instanceProgramObject = JSONobjectSP(new JSONobject());
+
+	passObject->addKeyValue(instanceProgramString, instanceProgramObject);
+
+	//
+
+	JSONstringSP programString = JSONstringSP(new JSONstring("program"));
+
+	valueString = JSONstringSP(new JSONstring("program_" + programPipeline->getName()));
+
+	instanceProgramObject->addKeyValue(programString, valueString);
+
+	addProgramShader(programsObject, shadersObject, valueString, programPipeline);
+}
+
 bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, const string& identifier)
 {
 	if (modelEntity.get() == nullptr)
@@ -502,8 +953,23 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	// Go through model entity and create glTF.
 	//
 
+	JSONarraySP valueArray;
+	JSONnumberSP valueNumber;
+	JSONstringSP valueString;
+
+	//
+
+	JSONstringSP allExtensionsString = JSONstringSP(new JSONstring("allExtensions"));
+	JSONarraySP allExtensionsArray = JSONarraySP(new JSONarray());
+
 	JSONstringSP accessorsString = JSONstringSP(new JSONstring("accessors"));
 	JSONobjectSP accessorsObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP animationsString = JSONstringSP(new JSONstring("animations"));
+	JSONobjectSP animationsObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP assetString = JSONstringSP(new JSONstring("asset"));
+	JSONobjectSP assetObject = JSONobjectSP(new JSONobject());
 
 	JSONstringSP bufferViewsString = JSONstringSP(new JSONstring("bufferViews"));
 	JSONobjectSP bufferViewsObject = JSONobjectSP(new JSONobject());
@@ -511,17 +977,50 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONstringSP buffersString = JSONstringSP(new JSONstring("buffers"));
 	JSONobjectSP buffersObject = JSONobjectSP(new JSONobject());
 
+	JSONstringSP camerasString = JSONstringSP(new JSONstring("cameras"));
+	JSONobjectSP camerasObject = JSONobjectSP(new JSONobject());
+
 	JSONstringSP imagesString = JSONstringSP(new JSONstring("images"));
 	JSONobjectSP imagesObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP lightsString = JSONstringSP(new JSONstring("lights"));
+	JSONobjectSP lightsObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP materialsString = JSONstringSP(new JSONstring("materials"));
+	JSONobjectSP materialsObject = JSONobjectSP(new JSONobject());
 
 	JSONstringSP meshesString = JSONstringSP(new JSONstring("meshes"));
 	JSONobjectSP meshesObject = JSONobjectSP(new JSONobject());
 
+	JSONstringSP programsString = JSONstringSP(new JSONstring("programs"));
+	JSONobjectSP programsObject = JSONobjectSP(new JSONobject());
+
 	JSONstringSP samplersString = JSONstringSP(new JSONstring("samplers"));
 	JSONobjectSP samplersObject = JSONobjectSP(new JSONobject());
 
+	JSONstringSP sceneString = JSONstringSP(new JSONstring("scene"));
+
+	JSONstringSP scenesString = JSONstringSP(new JSONstring("scenes"));
+	JSONobjectSP scenesObject = JSONobjectSP(new JSONobject());
+	JSONarraySP nodesArray = JSONarraySP(new JSONarray());
+
+	JSONstringSP shadersString = JSONstringSP(new JSONstring("shaders"));
+	JSONobjectSP shadersObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP skinsString = JSONstringSP(new JSONstring("skins"));
+	JSONobjectSP skinsObject = JSONobjectSP(new JSONobject());
+
 	JSONstringSP texturesString = JSONstringSP(new JSONstring("textures"));
 	JSONobjectSP texturesObject = JSONobjectSP(new JSONobject());
+
+	JSONstringSP techniquesString = JSONstringSP(new JSONstring("techniques"));
+	JSONobjectSP techniquesObject = JSONobjectSP(new JSONobject());
+
+	//
+	// All extensions
+	//
+
+	glTF->addKeyValue(allExtensionsString, allExtensionsArray);
 
 	//
 	// Accessors
@@ -530,12 +1029,30 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(accessorsString, accessorsObject);
 
 	//
-	// TODO Animations.
+	// Animations
 	//
 
+	glTF->addKeyValue(animationsString, animationsObject);
+
+	// TODO Add animation elements.
+
 	//
-	// FIXME Asset,
+	// Asset
 	//
+
+	glTF->addKeyValue(assetString, assetObject);
+
+	JSONstringSP generatorString = JSONstringSP(new JSONstring("generator"));
+	valueString = JSONstringSP(new JSONstring("Norbert Nopper's Graphics Engine"));
+	assetObject->addKeyValue(generatorString, valueString);
+
+	JSONstringSP profileString = JSONstringSP(new JSONstring("profile"));
+	valueString = JSONstringSP(new JSONstring("OpenGL 4.4 Core Profile"));
+	assetObject->addKeyValue(profileString, valueString);
+
+	JSONstringSP versionString = JSONstringSP(new JSONstring("version"));
+	valueString = JSONstringSP(new JSONstring("0.6"));
+	assetObject->addKeyValue(versionString, valueString);
 
 	//
 	// Buffer views
@@ -550,8 +1067,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(buffersString, buffersObject);
 
 	//
-	// FIXME Cameras.
+	// Cameras
 	//
+
+	glTF->addKeyValue(camerasString, camerasObject);
 
 	//
 	// Images
@@ -560,15 +1079,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(imagesString, imagesObject);
 
 	//
-	// FIXME Lights.
+	// Lights
 	//
+
+	glTF->addKeyValue(lightsString, lightsObject);
 
 	//
 	// Materials
 	//
-
-	JSONstringSP materialsString = JSONstringSP(new JSONstring("materials"));
-	JSONobjectSP materialsObject = JSONobjectSP(new JSONobject());
 
 	glTF->addKeyValue(materialsString, materialsObject);
 
@@ -577,6 +1095,8 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	JSONstringSP instanceTechniqueString = JSONstringSP(new JSONstring("instanceTechniqueString"));
 	JSONobjectSP instanceTechniqueObject;
+
+	JSONstringSP techniqueString = JSONstringSP(new JSONstring("technique"));
 
 	JSONstringSP valuesString = JSONstringSP(new JSONstring("values"));
 	JSONobjectSP valuesObject;
@@ -588,6 +1108,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONstringSP diffuseString = JSONstringSP(new JSONstring("diffuse"));
 
 	JSONstringSP reflectionCoefficientString = JSONstringSP(new JSONstring("reflectionCoefficient"));
+
 	JSONstringSP roughnessString = JSONstringSP(new JSONstring("roughness"));
 
 	JSONstringSP alphaString = JSONstringSP(new JSONstring("alpha"));
@@ -599,8 +1120,6 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONstringSP imageString;
 	JSONstringSP samplerString;
 	JSONstringSP textureString;
-	JSONarraySP array;
-	JSONnumberSP number;
 
 	//
 
@@ -626,9 +1145,20 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		materialObject->addKeyValue(instanceTechniqueString, instanceTechniqueObject);
 
 		//
+		// Technique
+		//
 
-		// FIXME Technique.
+		if (surfaceMaterial->getProgramPipeline().get() != nullptr)
+		{
+			valueString = JSONstringSP(new JSONstring("technique_" + surfaceMaterial->getProgramPipeline()->getName()));
 
+			instanceTechniqueObject->addKeyValue(techniqueString, valueString);
+
+			addTechniqueProgramShader(techniquesObject, programsObject, shadersObject, valueString, surfaceMaterial->getProgramPipeline());
+		}
+
+		//
+		// Values
 		//
 
 		valuesObject = JSONobjectSP(new JSONobject());
@@ -650,14 +1180,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 		else
 		{
-			array = JSONarraySP(new JSONarray());
+			valueArray = JSONarraySP(new JSONarray());
 
 			for (int32_t k = 0; k < 4; k++)
 			{
-				array->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getEmissive().getRGBA()[k])));
+				valueArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getEmissive().getRGBA()[k])));
 			}
 
-			valuesObject->addKeyValue(emissionString, array);
+			valuesObject->addKeyValue(emissionString, valueArray);
 		}
 
 		// Diffuse
@@ -674,14 +1204,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDiffuseTexture());		}
 		else
 		{
-			array = JSONarraySP(new JSONarray());
+			valueArray = JSONarraySP(new JSONarray());
 
 			for (int32_t k = 0; k < 4; k++)
 			{
-				array->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getDiffuse().getRGBA()[k])));
+				valueArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getDiffuse().getRGBA()[k])));
 			}
 
-			valuesObject->addKeyValue(diffuseString, array);
+			valuesObject->addKeyValue(diffuseString, valueArray);
 		}
 
 		// Reflection coefficient
@@ -699,9 +1229,9 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 		else
 		{
-			number = JSONnumberSP(new JSONnumber(surfaceMaterial->getReflectionCoefficient()));
+			valueNumber = JSONnumberSP(new JSONnumber(surfaceMaterial->getReflectionCoefficient()));
 
-			valuesObject->addKeyValue(reflectionCoefficientString, number);
+			valuesObject->addKeyValue(reflectionCoefficientString, valueNumber);
 		}
 
 		// Roughness
@@ -719,9 +1249,9 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 		else
 		{
-			number = JSONnumberSP(new JSONnumber(surfaceMaterial->getRoughness()));
+			valueNumber = JSONnumberSP(new JSONnumber(surfaceMaterial->getRoughness()));
 
-			valuesObject->addKeyValue(roughnessString, number);
+			valuesObject->addKeyValue(roughnessString, valueNumber);
 		}
 
 		// Alpha
@@ -739,9 +1269,9 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 		else
 		{
-			number = JSONnumberSP(new JSONnumber(surfaceMaterial->getTransparency()));
+			valueNumber = JSONnumberSP(new JSONnumber(surfaceMaterial->getTransparency()));
 
-			valuesObject->addKeyValue(alphaString, number);
+			valuesObject->addKeyValue(alphaString, valueNumber);
 		}
 
 		// Normal map
@@ -805,21 +1335,6 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONarraySP childrenArray;
 	JSONstringSP childNodeString;
 
-	// FBX
-
-	JSONstringSP LclTranslationString = JSONstringSP(new JSONstring("LclTranslation"));
-	JSONstringSP RotationOffsetString = JSONstringSP(new JSONstring("RotationOffset"));
-	JSONstringSP RotationPivotString = JSONstringSP(new JSONstring("RotationPivot"));
-	JSONstringSP PreRotationString = JSONstringSP(new JSONstring("PreRotation"));
-	JSONstringSP LclRotationString = JSONstringSP(new JSONstring("LclRotation"));
-	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("PostRotation"));
-	JSONstringSP ScalingOffsetString = JSONstringSP(new JSONstring("ScalingOffset"));
-	JSONstringSP ScalingPivotString = JSONstringSP(new JSONstring("ScalingPivot"));
-	JSONstringSP LclScalingString = JSONstringSP(new JSONstring("LclScaling"));
-	JSONstringSP GeometricTranslationString = JSONstringSP(new JSONstring("GeometricTranslation"));
-	JSONstringSP GeometricRotationString = JSONstringSP(new JSONstring("GeometricRotation"));
-	JSONstringSP GeometricScalingString = JSONstringSP(new JSONstring("GeometricScaling"));
-
 	JSONstringSP nodeMeshesString = JSONstringSP(new JSONstring("meshes"));
 	JSONarraySP nodeMeshesArray;
 	JSONstringSP nodeBufferString;
@@ -855,12 +1370,11 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 			childrenArray->addValue(childNodeString);
 		}
 
-
 		//
 		// FBX parameters
 		//
 
-		// TODO Add parameters.
+		addFBXValues(nodeObject, node);
 
 		//
 		// Meshes
@@ -902,8 +1416,10 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	}
 
 	//
-	// FIXME Programs.
+	// Programs
 	//
+
+	glTF->addKeyValue(programsString, programsObject);
 
 	//
 	// Samplers
@@ -912,24 +1428,49 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(samplersString, samplersObject);
 
 	//
-	// TODO Scene.
+	// Scene
 	//
 
-	//
-	// TODO Scenes.
-	//
+	valueString = JSONstringSP(new JSONstring("defaultScene"));
+
+	glTF->addKeyValue(sceneString, valueString);
 
 	//
-	// FIXME Shaders.
+	// Scenes
 	//
 
-	//
-	// TODO Skins.
-	//
+	glTF->addKeyValue(scenesString, scenesObject);
+
+	JSONobjectSP sceneObject = JSONobjectSP(new JSONobject());
+
+	scenesObject->addKeyValue(valueString, sceneObject);
+
+	// Root Nodes
+
+	JSONstringSP rootNodeString = JSONstringSP(new JSONstring(modelEntity->getModel()->getRootNode()->getName()));
+	nodesArray->addValue(rootNodeString);
+
+	sceneObject->addKeyValue(nodesString, nodesArray);
 
 	//
-	// FIXME Techniques.
+	// Shaders
 	//
+
+	glTF->addKeyValue(shadersString, shadersObject);
+
+	//
+	// Skins
+	//
+
+	glTF->addKeyValue(skinsString, skinsObject);
+
+	// TODO Add skin elements.
+
+	//
+	// Techniques
+	//
+
+	glTF->addKeyValue(techniquesString, techniquesObject);
 
 	//
 	// Textures
@@ -938,7 +1479,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(texturesString, texturesObject);
 
 	//
-	// TODO Save as JSON text.
+	// TODO Save JSON text to file.
 	//
 
 	JSONencoder encoder;

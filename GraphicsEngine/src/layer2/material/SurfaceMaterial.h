@@ -11,6 +11,7 @@
 #include "../../UsedLibs.h"
 
 #include "../../layer0/color/Color.h"
+#include "../../layer1/shader/ProgramPipeline.h"
 #include "../../layer1/texture/Texture2D.h"
 #include "../../layer1/texture/TextureCubeMap.h"
 
@@ -72,6 +73,8 @@ private:
 	TextureCubeMapSP dynamicCubeMapTexture;
 
 	bool convertDirectX;
+
+	ProgramPipelineSP programPipeline;
 
 public:
 
@@ -137,6 +140,12 @@ public:
 
     //
 
+	void setReflectionCoefficient(float reflectionCoefficient);
+	void setReflectionCoefficientTexture( const Texture2DSP& reflectionCoefficientTexture);
+
+	void setRoughness(float roughness);
+	void setRoughnessTexture(const Texture2DSP& roughnessTexture);
+
     void setEmissive(const Color& emissive);
     void setEmissiveTexture(const Texture2DSP& emissiveTexture);
 
@@ -174,6 +183,11 @@ public:
 	bool isConvertDirectX() const;
 
 	void setConvertDirectX(bool convertDirectX);
+
+	//
+
+	const ProgramPipelineSP& getProgramPipeline() const;
+	void setProgramPipeline(const ProgramPipelineSP& programPipeline);
 
 };
 

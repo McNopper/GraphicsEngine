@@ -10,7 +10,7 @@
 using namespace std;
 
 SurfaceMaterial::SurfaceMaterial(const string& name) :
-	name(name), reflectionCoefficient(0.0f), reflectionCoefficientTexture(), roughness(0.0f), roughnessTexture(), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), shininessTexture(), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(1.0f), normalMapTexture(), displacementMapTexture(), dynamicCubeMapTexture(), convertDirectX(true)
+	name(name), reflectionCoefficient(0.0f), reflectionCoefficientTexture(), roughness(0.0f), roughnessTexture(), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), shininessTexture(), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(1.0f), normalMapTexture(), displacementMapTexture(), dynamicCubeMapTexture(), convertDirectX(true), programPipeline()
 {
 }
 
@@ -279,6 +279,26 @@ GLuint SurfaceMaterial::getDynamicCubeMapTextureName() const
 
 //
 
+void SurfaceMaterial::setReflectionCoefficient(float reflectionCoefficient)
+{
+	this->reflectionCoefficient = reflectionCoefficient;
+}
+
+void SurfaceMaterial::setReflectionCoefficientTexture(const Texture2DSP& reflectionCoefficientTexture)
+{
+	this->reflectionCoefficientTexture = reflectionCoefficientTexture;
+}
+
+void SurfaceMaterial::setRoughness(float roughness)
+{
+	this->roughness = roughness;
+}
+
+void SurfaceMaterial::setRoughnessTexture(const Texture2DSP& roughnessTexture)
+{
+	this->roughnessTexture = roughnessTexture;
+}
+
 void SurfaceMaterial::setEmissive(const Color& emissive)
 {
 	this->emissive = emissive;
@@ -389,4 +409,14 @@ bool SurfaceMaterial::isConvertDirectX() const
 void SurfaceMaterial::setConvertDirectX(bool convertDirectX)
 {
 	this->convertDirectX = convertDirectX;
+}
+
+const ProgramPipelineSP& SurfaceMaterial::getProgramPipeline() const
+{
+	return programPipeline;
+}
+
+void SurfaceMaterial::setProgramPipeline(const ProgramPipelineSP& programPipeline)
+{
+	this->programPipeline = programPipeline;
 }

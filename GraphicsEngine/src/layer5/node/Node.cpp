@@ -90,11 +90,17 @@ Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float L
 	for (int32_t i = 0; i < 3; i++)
 	{
 		translationMinActive[i] = false;
+		translationMin[i] = 0.0f;
 		translationMaxActive[i] = false;
+		translationMax[i] = 0.0f;
 		rotationMinActive[i] = false;
+		rotationMin[i] = 0.0f;
 		rotationMaxActive[i] = false;
+		rotationMax[i] = 0.0f;
 		scalingMinActive[i] = false;
+		scalingMin[i] = 0.0f;
 		scalingMaxActive[i] = false;
+		scalingMax[i] = 0.0f;
 	}
 
 	updateLocalFinalMatrix();
@@ -848,4 +854,124 @@ void Node::setVisibleRecursive(bool visible)
 const std::vector<std::shared_ptr<AnimationStack> >& Node::getAllAnimStacks() const
 {
 	return allAnimStacks;
+}
+
+const float* Node::getGeometricRotation() const
+{
+	return GeometricRotation;
+}
+
+const float* Node::getGeometricScaling() const
+{
+	return GeometricScaling;
+}
+
+const float* Node::getGeometricTranslation() const
+{
+	return GeometricTranslation;
+}
+
+const float* Node::getLclRotation() const
+{
+	return LclRotation;
+}
+
+const float* Node::getLclScaling() const
+{
+	return LclScaling;
+}
+
+const float* Node::getLclTranslation() const
+{
+	return LclTranslation;
+}
+
+const float* Node::getPostRotation() const
+{
+	return PostRotation;
+}
+
+const float* Node::getPreRotation() const
+{
+	return PreRotation;
+}
+
+const float* Node::getRotationMax() const
+{
+	return rotationMax;
+}
+
+const bool* Node::getRotationMaxActive() const
+{
+	return rotationMaxActive;
+}
+
+const float* Node::getRotationMin() const
+{
+	return rotationMin;
+}
+
+const bool* Node::getRotationMinActive() const
+{
+	return rotationMinActive;
+}
+
+const float* Node::getRotationOffset() const
+{
+	return RotationOffset;
+}
+
+const float* Node::getRotationPivot() const
+{
+	return RotationPivot;
+}
+
+const float* Node::getScalingMax() const
+{
+	return scalingMax;
+}
+
+const bool* Node::getScalingMaxActive() const
+{
+	return scalingMaxActive;
+}
+
+const float* Node::getScalingMin() const
+{
+	return scalingMin;
+}
+
+const bool* Node::getScalingMinActive() const
+{
+	return scalingMinActive;
+}
+
+const float* Node::getScalingOffset() const
+{
+	return ScalingOffset;
+}
+
+const float* Node::getScalingPivot() const
+{
+	return ScalingPivot;
+}
+
+const float* Node::getTranslationMax() const
+{
+	return translationMax;
+}
+
+const bool* Node::getTranslationMaxActive() const
+{
+	return translationMaxActive;
+}
+
+const float* Node::getTranslationMin() const
+{
+	return translationMin;
+}
+
+const bool* Node::getTranslationMinActive() const
+{
+	return translationMinActive;
 }

@@ -38,6 +38,11 @@ GLUSboolean initGame(GLUSvoid)
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Crate", Color::DEFAULT_EMISSIVE, Color::DEFAULT_AMBIENT, Color::DEFAULT_DIFFUSE, cubeTexture, Color::DEFAULT_SPECULAR, 0.0f);
 	position = Point4(0.0f, 0.0f, -20.0f);
 
+	ProgramSeparableSP vertextProgramSeparable = ProgramSeparableSP(new ProgramSeparable(GL_VERTEX_SHADER, "../GraphicsEngine/shader/Phong.vert.glsl"));
+	ProgramSeparableSP fragmentProgramSeparable = ProgramSeparableSP(new ProgramSeparable(GL_FRAGMENT_SHADER, "../GraphicsEngine/shader/Phong.frag.glsl"));
+	ProgramPipelineSP programPipeline = ProgramPipelineSP(new ProgramPipeline("Phong", ProgramManager::DEFAULT_PROGRAM_TYPE, vertextProgramSeparable, fragmentProgramSeparable));
+	surfaceMaterial->setProgramPipeline(programPipeline);
+
 	animationLayer = AnimationLayerSP(new AnimationLayer());
 	animationLayer->addRotationValue(AnimationLayer::Y, 0.0f, 0.0f, LinearInterpolator::interpolator);
 	animationLayer->addRotationValue(AnimationLayer::Y, 5.0f, 360.0f, LinearInterpolator::interpolator);

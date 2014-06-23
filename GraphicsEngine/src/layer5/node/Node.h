@@ -177,6 +177,31 @@ public:
 
 	const std::vector<std::shared_ptr<AnimationStack> >& getAllAnimStacks() const;
 
+	const float* getGeometricRotation() const;
+	const float* getGeometricScaling() const;
+	const float* getGeometricTranslation() const;
+	const float* getLclRotation() const;
+	const float* getLclScaling() const;
+	const float* getLclTranslation() const;
+	const float* getPostRotation() const;
+	const float* getPreRotation() const;
+	const float* getRotationMax() const;
+	const bool* getRotationMaxActive() const;
+	const float* getRotationMin() const;
+	const bool* getRotationMinActive() const;
+	const float* getRotationOffset() const;
+	const float* getRotationPivot() const;
+	const float* getScalingMax() const;
+	const bool* getScalingMaxActive() const;
+	const float* getScalingMin() const;
+	const bool* getScalingMinActive() const;
+	const float* getScalingOffset() const;
+	const float* getScalingPivot() const;
+	const float* getTranslationMax() const;
+	const bool* getTranslationMaxActive() const;
+	const float* getTranslationMin() const;
+	const bool* getTranslationMinActive() const;
+
 };
 
 typedef std::shared_ptr<Node> NodeSP;

@@ -12,6 +12,8 @@
 
 #include "../../layer0/json/JSONobject.h"
 #include "../../layer0/json/JSONstring.h"
+#include "../../layer1/shader/ProgramPipeline.h"
+#include "../../layer1/shader/ProgramSeparable.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
 #include "GlTfBin.h"
@@ -20,6 +22,9 @@ class GlTfEntityFactory
 {
 
 private:
+
+	void addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const;
+
 
 	void addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const std::string& type) const;
 
@@ -38,6 +43,13 @@ private:
 	void addTexture(JSONobjectSP& texturesObject, const JSONstringSP& textureString, const Texture2DSP& texture) const;
 
 	void addTextureSamplerImage(JSONobjectSP& texturesObject, const JSONstringSP& textureString, JSONobjectSP& samplersObject, const JSONstringSP& samplerString, JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const;
+
+
+	void addShader(JSONobjectSP& shadersObject, const JSONstringSP& shaderString, const ProgramSeparableSP programSeparable) const;
+
+	void addProgramShader(JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& programString, const ProgramPipelineSP programPipeline) const;
+
+	void addTechniqueProgramShader(JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& techniqueString, const ProgramPipelineSP programPipeline) const;
 
 public:
 
