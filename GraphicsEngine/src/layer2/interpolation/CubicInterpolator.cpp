@@ -24,7 +24,7 @@ CubicInterpolator::~CubicInterpolator()
 }
 
 /**
- * see http://en.wikipedia.org/wiki/Cubic_Hermite_spline
+ * see http://paulbourke.net/miscellaneous/interpolation/
  */
 float CubicInterpolator::interpolate(const map<float, float>& table, float time) const
 {
@@ -49,7 +49,6 @@ float CubicInterpolator::interpolate(const map<float, float>& table, float time)
 	float startValue = walker->second;
 
 	walker--;
-	float prevStartTime = walker->first;
 	float prevStartValue = walker->second;
 
 	walker++;
@@ -66,7 +65,6 @@ float CubicInterpolator::interpolate(const map<float, float>& table, float time)
 	{
 		return LinearInterpolator::interpolator.interpolate(table, time);
 	}
-	float postStopTime = walker->first;
 	float postStopValue = walker->second;
 
 	float delta = stopTime - startTime;
@@ -76,27 +74,14 @@ float CubicInterpolator::interpolate(const map<float, float>& table, float time)
 		return startValue;
 	}
 
-	float time1 = (time - startTime) / delta;
-	float time2 = time1 * time1;
-	float time3 = time2 * time1;
+	float x = (time - startTime) / delta;
 
-	float h00 = 2.0f * time3 - 3.0f * time2 + 1;
-	float h10 = time3 - 2.0f * time2 + time1;
-	float h01 = -2.0f * time3 + 3.0f * time2;
-	float h11 = time3 - time2;
+	float a0, a1, a2, a3;
 
-	float p0 = startValue;
-	float p1 = stopValue;
-	float m0 = (stopValue - startValue) / (stopTime - startTime);
-	if (startTime - prevStartTime != 0.0f)
-	{
-		m0 = m0 / 2.0f + (startValue - prevStartValue) / (2.0f * (startTime - prevStartTime));
-	}
-	float m1 = (stopValue - startValue) / (stopTime - startTime);
-	if (postStopTime - stopTime != 0.0f)
-	{
-		m1 = m1 / 2.0f + (postStopValue - stopValue) / (2.0f * (postStopTime - stopTime));
-	}
+	a0 = postStopValue - stopValue - prevStartValue + startValue;
+	a1 = prevStartValue - startValue - a0;
+	a2 = stopValue - prevStartValue;
+	a3 = startValue;
 
-	return h00 * p0 + h10 * delta * m0 + h01 * p1 + h11 * delta * m1;
+	return (a0 * x * x * x + a1 * x * x + a2 * x + a3);
 }
