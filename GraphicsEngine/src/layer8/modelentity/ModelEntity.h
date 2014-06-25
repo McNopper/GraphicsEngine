@@ -29,10 +29,10 @@ private:
 
 	float time;
 
+	Matrix4x4 inverseBindMatrices[MAX_MATRICES];
+	Matrix3x3 inverseBindNormalMatrices[MAX_MATRICES];
 	Matrix4x4 bindMatrices[MAX_MATRICES];
 	Matrix3x3 bindNormalMatrices[MAX_MATRICES];
-	Matrix4x4 jointMatrices[MAX_MATRICES];
-	Matrix3x3 jointNormalMatrices[MAX_MATRICES];
 
 	std::int32_t animStackIndex;
 	std::int32_t animLayerIndex;

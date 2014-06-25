@@ -61,7 +61,7 @@ NodeSP NodeTreeFactory::getRootNode() const
 	return rootNode;
 }
 
-NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint)
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks)
 {
 	float translate[3] = {0.0f, 0.0f, 0.0f};
 	float rotateOffset[3] = {0.0f, 0.0f, 0.0f};
@@ -76,14 +76,14 @@ NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentN
 	float geoRotate[3] = {0.0f, 0.0f, 0.0f};
 	float geoScale[3] = {1.0f, 1.0f, 1.0f};
 
-	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks, joint);
+	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks);
 }
 
-NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks, bool joint)
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks)
 {
 	NodeSP parentNode = findNode(parentNodeName, rootNode);
 
-	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks, joint));
+	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks));
 
 	if (parentNode.get())
 	{
@@ -101,7 +101,7 @@ int32_t NodeTreeFactory::createIndex() const
 {
 	if (rootNode.get())
 	{
-		return rootNode->createIndex(0);
+		return rootNode->createJointIndex(0);
 	}
 
 	return -1;
@@ -111,13 +111,13 @@ int32_t NodeTreeFactory::getIndex(const string& name) const
 {
 	if (rootNode.get())
 	{
-		return rootNode->getIndexRecursive(name);
+		return rootNode->getJointIndexRecursive(name);
 	}
 
 	return -1;
 }
 
-bool NodeTreeFactory::setTransformMatrix(const string& jointName, const Matrix4x4& matrix) const
+bool NodeTreeFactory::setBindShapeInverseBindMatrix(const string& jointName, const Matrix4x4& transformMatrix, const Matrix4x4& transformLinkMatrix) const
 {
 	NodeSP node = findNode(jointName, rootNode);
 
@@ -126,21 +126,14 @@ bool NodeTreeFactory::setTransformMatrix(const string& jointName, const Matrix4x
 		return false;
 	}
 
-	node->setTransformMatrix(jointName, matrix);
+	//
 
-	return true;
-}
+	Matrix4x4 bindShapeMatrix = transformMatrix * node->getGeometricTransformMatrix();
 
-bool NodeTreeFactory::setTransformLinkMatrix(const string& jointName, const Matrix4x4& matrix) const
-{
-	NodeSP node = findNode(jointName, rootNode);
+	Matrix4x4 inverseBindMatrix = transformLinkMatrix;
+	inverseBindMatrix.inverseRigidBody();
 
-	if (!node.get())
-	{
-		return false;
-	}
-
-	node->setTransformLinkMatrix(jointName, matrix);
+	node->setBindShapeInverseBindMatrix(jointName, bindShapeMatrix, inverseBindMatrix);
 
 	return true;
 }
@@ -157,49 +150,7 @@ bool NodeTreeFactory::addChild(const NodeSP& parentNode, const NodeSP& child) co
 	return true;
 }
 
-bool NodeTreeFactory::setTranslationLimits(const string& name, bool minActive, float min, bool maxActive, float max, int32_t index) const
-{
-	NodeSP node = findNode(name, rootNode);
-
-	if (!node.get())
-	{
-		return false;
-	}
-
-	node->setTranslationLimits(minActive, min, maxActive, max, index);
-
-	return true;
-}
-
-bool NodeTreeFactory::setRotationLimits(const string& name, bool minActive, float min, bool maxActive, float max, int32_t index) const
-{
-	NodeSP node = findNode(name, rootNode);
-
-	if (!node.get())
-	{
-		return false;
-	}
-
-	node->setRotationLimits(minActive, min, maxActive, max, index);
-
-	return true;
-}
-
-bool NodeTreeFactory::setScalingLimits(const string& name, bool minActive, float min, bool maxActive, float max, int32_t index) const
-{
-	NodeSP node = findNode(name, rootNode);
-
-	if (!node.get())
-	{
-		return false;
-	}
-
-	node->setScalingLimits(minActive, min, maxActive, max, index);
-
-	return true;
-}
-
-bool NodeTreeFactory::setUsedJoint(const string& jointName) const
+bool NodeTreeFactory::setJoint(const string& jointName) const
 {
 	NodeSP node = findNode(jointName, rootNode);
 
@@ -208,7 +159,7 @@ bool NodeTreeFactory::setUsedJoint(const string& jointName) const
 		return false;
 	}
 
-	node->setUsedJoint(jointName);
+	node->setJoint(jointName);
 
 	return true;
 }

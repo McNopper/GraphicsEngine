@@ -21,282 +21,45 @@ GlTfEntityFactory::~GlTfEntityFactory()
 
 void GlTfEntityFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const
 {
-	JSONstringSP LclTranslationString = JSONstringSP(new JSONstring("LclTranslation"));
-	JSONstringSP LclRotationString = JSONstringSP(new JSONstring("LclRotation"));
-	JSONstringSP LclScalingString = JSONstringSP(new JSONstring("LclScaling"));
+	JSONstringSP PostTranslationString = JSONstringSP(new JSONstring("postTranslation"));
+	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("postRotation"));
+	JSONstringSP PostScalingString = JSONstringSP(new JSONstring("postScaling"));
 
-	JSONstringSP RotationOffsetString = JSONstringSP(new JSONstring("RotationOffset"));
-	JSONstringSP RotationPivotString = JSONstringSP(new JSONstring("RotationPivot"));
-	JSONstringSP PreRotationString = JSONstringSP(new JSONstring("PreRotation"));
-	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("PostRotation"));
-
-	JSONstringSP ScalingOffsetString = JSONstringSP(new JSONstring("ScalingOffset"));
-	JSONstringSP ScalingPivotString = JSONstringSP(new JSONstring("ScalingPivot"));
-
-	JSONstringSP GeometricTranslationString = JSONstringSP(new JSONstring("GeometricTranslation"));
-	JSONstringSP GeometricRotationString = JSONstringSP(new JSONstring("GeometricRotation"));
-	JSONstringSP GeometricScalingString = JSONstringSP(new JSONstring("GeometricScaling"));
-
-
-	JSONstringSP TranslationLimitsString = JSONstringSP(new JSONstring("TranslationLimits"));
-	JSONstringSP RotationLimitsString = JSONstringSP(new JSONstring("RotationLimits"));
-	JSONstringSP ScalingLimitsString = JSONstringSP(new JSONstring("ScalingLimits"));
-
-	JSONstringSP MinString = JSONstringSP(new JSONstring("Min"));
-	JSONstringSP MaxString = JSONstringSP(new JSONstring("Max"));
-
-	JSONstringSP MinActiveString = JSONstringSP(new JSONstring("MinActive"));
-	JSONstringSP MaxActiveString = JSONstringSP(new JSONstring("MaxActive"));
+	JSONstringSP GeometricTranslationString = JSONstringSP(new JSONstring("geometricTransform"));
 
 	JSONarraySP valueArray;
 	JSONobjectSP valueObject;
 
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclTranslation()[i])));
-	}
-	nodeObject->addKeyValue(LclTranslationString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclRotation()[i])));
-	}
-	nodeObject->addKeyValue(LclRotationString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getLclScaling()[i])));
-	}
-	nodeObject->addKeyValue(LclScalingString, valueArray);
-
 	//
 
 	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 16; i++)
 	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationOffset()[i])));
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPostTranslationMatrix().getM()[i])));
 	}
-	nodeObject->addKeyValue(RotationOffsetString, valueArray);
+	nodeObject->addKeyValue(PostTranslationString, valueArray);
 
 	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 16; i++)
 	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationPivot()[i])));
-	}
-	nodeObject->addKeyValue(RotationPivotString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPreRotation()[i])));
-	}
-	nodeObject->addKeyValue(PreRotationString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPostRotation()[i])));
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPostRotationMatrix().getM()[i])));
 	}
 	nodeObject->addKeyValue(PostRotationString, valueArray);
 
-	//
-
 	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 16; i++)
 	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingOffset()[i])));
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getPostScalingMatrix().getM()[i])));
 	}
-	nodeObject->addKeyValue(ScalingOffsetString, valueArray);
+	nodeObject->addKeyValue(PostScalingString, valueArray);
 
 	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 16; i++)
 	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingPivot()[i])));
-	}
-	nodeObject->addKeyValue(ScalingPivotString, valueArray);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricTranslation()[i])));
+		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricTransformMatrix().getM()[i])));
 	}
 	nodeObject->addKeyValue(GeometricTranslationString, valueArray);
 
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricRotation()[i])));
-	}
-	nodeObject->addKeyValue(GeometricRotationString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getGeometricScaling()[i])));
-	}
-	nodeObject->addKeyValue(GeometricScalingString, valueArray);
-
-	//
-	//
-	//
-
-	valueObject = JSONobjectSP(new JSONobject());
-	nodeObject->addKeyValue(TranslationLimitsString, valueObject);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getTranslationMin()[i])));
-	}
-	valueObject->addKeyValue(MinString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getTranslationMinActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MinActiveString, valueArray);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getTranslationMax()[i])));
-	}
-	valueObject->addKeyValue(MaxString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getTranslationMaxActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MaxActiveString, valueArray);
-
-	//
-	//
-
-	valueObject = JSONobjectSP(new JSONobject());
-	nodeObject->addKeyValue(RotationLimitsString, valueObject);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationMin()[i])));
-	}
-	valueObject->addKeyValue(MinString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getRotationMinActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MinActiveString, valueArray);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getRotationMax()[i])));
-	}
-	valueObject->addKeyValue(MaxString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getRotationMaxActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MaxActiveString, valueArray);
-
-	//
-	//
-
-	valueObject = JSONobjectSP(new JSONobject());
-	nodeObject->addKeyValue(ScalingLimitsString, valueObject);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingMin()[i])));
-	}
-	valueObject->addKeyValue(MinString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getScalingMinActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MinActiveString, valueArray);
-
-	//
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		valueArray->addValue(JSONnumberSP(new JSONnumber(node->getScalingMax()[i])));
-	}
-	valueObject->addKeyValue(MaxString, valueArray);
-
-	valueArray = JSONarraySP(new JSONarray());
-	for (int32_t i = 0; i < 3; i++)
-	{
-		if (node->getScalingMaxActive()[i])
-		{
-			valueArray->addValue(JSONtrueSP(new JSONtrue()));
-		}
-		else
-		{
-			valueArray->addValue(JSONfalseSP(new JSONfalse()));
-		}
-	}
-	valueObject->addKeyValue(MaxActiveString, valueArray);
 }
 
 void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
@@ -953,7 +716,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	// Go through model entity and create glTF.
 	//
 
-	JSONarraySP valueArray;
+	JSONarraySP transformArray;
 	JSONnumberSP valueNumber;
 	JSONstringSP valueString;
 
@@ -1180,14 +943,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 		else
 		{
-			valueArray = JSONarraySP(new JSONarray());
+			transformArray = JSONarraySP(new JSONarray());
 
 			for (int32_t k = 0; k < 4; k++)
 			{
-				valueArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getEmissive().getRGBA()[k])));
+				transformArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getEmissive().getRGBA()[k])));
 			}
 
-			valuesObject->addKeyValue(emissionString, valueArray);
+			valuesObject->addKeyValue(emissionString, transformArray);
 		}
 
 		// Diffuse
@@ -1204,14 +967,14 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDiffuseTexture());		}
 		else
 		{
-			valueArray = JSONarraySP(new JSONarray());
+			transformArray = JSONarraySP(new JSONarray());
 
 			for (int32_t k = 0; k < 4; k++)
 			{
-				valueArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getDiffuse().getRGBA()[k])));
+				transformArray->addValue(JSONnumberSP(new JSONnumber(surfaceMaterial->getDiffuse().getRGBA()[k])));
 			}
 
-			valuesObject->addKeyValue(diffuseString, valueArray);
+			valuesObject->addKeyValue(diffuseString, transformArray);
 		}
 
 		// Reflection coefficient
@@ -1335,6 +1098,13 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	JSONarraySP childrenArray;
 	JSONstringSP childNodeString;
 
+	JSONstringSP jointString = JSONstringSP(new JSONstring("joint"));
+	JSONstringSP jointValueString;
+
+	JSONstringSP LclTranslationString = JSONstringSP(new JSONstring("translation"));
+	JSONstringSP LclRotationString = JSONstringSP(new JSONstring("rotation"));
+	JSONstringSP LclScalingString = JSONstringSP(new JSONstring("scale"));
+
 	JSONstringSP nodeMeshesString = JSONstringSP(new JSONstring("meshes"));
 	JSONarraySP nodeMeshesArray;
 	JSONstringSP nodeBufferString;
@@ -1371,10 +1141,27 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		}
 
 		//
-		// FBX parameters
+		// Instance skin
 		//
 
-		addFBXValues(nodeObject, node);
+		// TODO Add instance skin.
+
+		//
+		// Joint
+		//
+
+		if (node->getJointIndex() >= 0)
+		{
+			string currentJointName = "joint_";
+
+			sprintf(buffer, "%03d", node->getJointIndex());
+
+			currentJointName.append(buffer);
+
+			jointValueString  = JSONstringSP(new JSONstring(currentJointName));
+
+			nodeObject->addKeyValue(jointString, jointValueString);
+		}
 
 		//
 		// Meshes
@@ -1407,6 +1194,37 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 				addMesh(meshesObject, nodeMeshString, node->getMesh(), (int32_t)k);
 			}
 		}
+
+		//
+		// Transform
+		//
+
+		transformArray = JSONarraySP(new JSONarray());
+		for (int32_t i = 0; i < 3; i++)
+		{
+			transformArray->addValue(JSONnumberSP(new JSONnumber(node->getLclTranslation()[i])));
+		}
+		nodeObject->addKeyValue(LclTranslationString, transformArray);
+
+		transformArray = JSONarraySP(new JSONarray());
+		for (int32_t i = 0; i < 3; i++)
+		{
+			transformArray->addValue(JSONnumberSP(new JSONnumber(node->getLclRotation()[i])));
+		}
+		nodeObject->addKeyValue(LclRotationString, transformArray);
+
+		transformArray = JSONarraySP(new JSONarray());
+		for (int32_t i = 0; i < 3; i++)
+		{
+			transformArray->addValue(JSONnumberSP(new JSONnumber(node->getLclScaling()[i])));
+		}
+		nodeObject->addKeyValue(LclScalingString, transformArray);
+
+		//
+		// FBX parameters
+		//
+
+		addFBXValues(nodeObject, node);
 
 		//
 		// Name

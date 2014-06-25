@@ -80,8 +80,6 @@ bool Octree::updateEntity(const OctreeEntitySP& octreeEntity) const
 		glusLogPrint(GLUS_LOG_WARNING, "Entity does not fit into octree anymore.");
 
 		octreeEntity->getVisitingOctant()->removeEntity(octreeEntity);
-
-		assert(result);
 	}
 
 	return result;

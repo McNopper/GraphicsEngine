@@ -68,10 +68,10 @@
 #define u_writeBrightColor "u_writeBrightColor"
 #define u_brightColorLimit "u_brightColorLimit"
 
+#define u_inverseBindMatrix "u_inverseBindMatrix"
+#define u_inverseBindNormalMatrix "u_inverseBindNormalMatrix"
 #define u_bindMatrix "u_bindMatrix"
 #define u_bindNormalMatrix "u_bindNormalMatrix"
-#define u_jointMatrix "u_jointMatrix"
-#define u_jointNormalMatrix "u_jointNormalMatrix"
 
 #define u_fontLeft "u_fontLeft"
 #define u_fontTop "u_fontTop"

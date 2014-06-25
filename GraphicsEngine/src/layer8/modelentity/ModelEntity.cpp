@@ -41,10 +41,10 @@ ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX,
 
 	if (model->isAnimated() && model->isSkinned())
 	{
-		jointIndex = model->getRootNode()->getSkinningRootIndex();
+		jointIndex = model->getRootNode()->getRootJointIndex();
 
-		model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices);
-		model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), 0.0f, animStackIndex, animLayerIndex);
+		model->getRootNode()->updateInverseBindMatrix(inverseBindMatrices, inverseBindNormalMatrices);
+		model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices, Matrix4x4(), 0.0f, animStackIndex, animLayerIndex);
 	}
 	rootInstanceNode = InstanceNodeSP(new InstanceNode(model->getRootNode().get()));
 	model->getRootNode()->updateInstanceNode(*this, rootInstanceNode);
@@ -76,11 +76,11 @@ void ModelEntity::updateBoundingSphereCenter(bool force)
 		Matrix4x4 skinningMatrix;
 		if (model->isSkinned())
 		{
-			skinningMatrix = jointMatrices[jointIndex] * bindMatrices[jointIndex];
+			skinningMatrix = bindMatrices[jointIndex] * inverseBindMatrices[jointIndex];
 		}
 
 		Matrix4x4 renderingMatrix;
-		model->getRootNode()->updateRenderingMatrix(renderingMatrix, getModelMatrix(), time, animStackIndex, animLayerIndex);
+		model->getRootNode()->updateBoundingSphereMatrix(renderingMatrix, getModelMatrix(), time, animStackIndex, animLayerIndex);
 
 		Point4 center = renderingMatrix * skinningMatrix * Point4();
 
@@ -103,7 +103,7 @@ void ModelEntity::update()
 		// Calculate skinning and pass later to shader
 		if (model->isSkinned() && animStackIndex >= 0 && animLayerIndex >= 0)
 		{
-			model->getRootNode()->updateJointMatrix(jointMatrices, jointNormalMatrices, Matrix4x4(), time, animStackIndex, animLayerIndex);
+			model->getRootNode()->updateBindMatrix(bindMatrices, bindNormalMatrices, Matrix4x4(), time, animStackIndex, animLayerIndex);
 		}
 
 		dirty = true;
@@ -407,8 +407,8 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 				glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), model->getNumberJoints(), GL_FALSE, bindMatrices[0].getM());
 				glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), model->getNumberJoints(), GL_TRUE, bindNormalMatrices[0].getM());
 
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), model->getNumberJoints(), GL_FALSE, jointMatrices[0].getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), model->getNumberJoints(), GL_TRUE, jointNormalMatrices[0].getM());
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_inverseBindMatrix), model->getNumberJoints(), GL_FALSE, inverseBindMatrices[0].getM());
+				glUniformMatrix3fv(currentProgram->getUniformLocation(u_inverseBindNormalMatrix), model->getNumberJoints(), GL_TRUE, inverseBindNormalMatrices[0].getM());
 			}
 			else
 			{
@@ -417,8 +417,8 @@ void ModelEntity::renderNode(const Node& node, const InstanceNode& instanceNode,
 				glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), model->getNumberJoints(), GL_FALSE, Matrix4x4().getM());
 				glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), model->getNumberJoints(), GL_TRUE, Matrix3x3().getM());
 
-				glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), model->getNumberJoints(), GL_FALSE, Matrix4x4().getM());
-				glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), model->getNumberJoints(), GL_TRUE, Matrix3x3().getM());
+				glUniformMatrix4fv(currentProgram->getUniformLocation(u_inverseBindMatrix), model->getNumberJoints(), GL_FALSE, Matrix4x4().getM());
+				glUniformMatrix3fv(currentProgram->getUniformLocation(u_inverseBindNormalMatrix), model->getNumberJoints(), GL_TRUE, Matrix3x3().getM());
 			}
 
 			// Write bright color

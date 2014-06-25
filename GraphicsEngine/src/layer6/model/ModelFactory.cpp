@@ -26,22 +26,19 @@ ModelFactory::~ModelFactory()
 ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere& boundingSphere, const CameraSP& camera) const
 {
 	vector<AnimationStackSP> allAnimStacks;
-	bool joint = false;
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), camera, LightSP(), allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), camera, LightSP(), allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, false, false));
 }
 
 ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere& boundingSphere, const CameraSP& camera, const std::vector<AnimationStackSP>& allAnimStacks) const
 {
-	bool joint = false;
-
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), camera, LightSP(), allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), camera, LightSP(), allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, true, false));
 }
@@ -49,22 +46,19 @@ ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere&
 ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere& boundingSphere, const LightSP& light) const
 {
 	vector<AnimationStackSP> allAnimStacks;
-	bool joint = false;
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), CameraSP(), light, allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), CameraSP(), light, allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, false, false));
 }
 
 ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere& boundingSphere, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks) const
 {
-	bool joint = false;
-
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), CameraSP(), light, allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", MeshSP(), CameraSP(), light, allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, true, false));
 }
@@ -72,30 +66,26 @@ ModelSP ModelFactory::createModel(const std::string& name, const BoundingSphere&
 ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boundingSphere, const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial) const
 {
 	vector<AnimationStackSP> allAnimStacks;
-	bool joint = false;
-
 	MeshFactory meshFactory;
 
 	MeshSP mesh = meshFactory.createMesh(name, shape, surfaceMaterial);
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, false, false));
 }
 
 ModelSP ModelFactory::createModel(const string& name, const BoundingSphere& boundingSphere, const GLUSshape& shape, const SurfaceMaterialSP& surfaceMaterial, const vector<AnimationStackSP>& allAnimStacks) const
 {
-	bool joint = false;
-
 	MeshFactory meshFactory;
 
 	MeshSP mesh = meshFactory.createMesh(name, shape, surfaceMaterial);
 
 	NodeTreeFactory nodeTreeFactory;
 
-	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks, joint);
+	NodeSP node = nodeTreeFactory.createNode(name, "", mesh, CameraSP(), LightSP(), allAnimStacks);
 
 	return ModelSP(new Model(boundingSphere, node, 0, true, false));
 }

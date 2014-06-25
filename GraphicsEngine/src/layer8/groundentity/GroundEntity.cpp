@@ -225,8 +225,8 @@ void GroundEntity::render() const
 	glUniformMatrix4fv(currentProgram->getUniformLocation(u_bindMatrix), 0, GL_FALSE, Matrix4x4().getM());
 	glUniformMatrix3fv(currentProgram->getUniformLocation(u_bindNormalMatrix), 0, GL_TRUE, Matrix3x3().getM());
 
-	glUniformMatrix4fv(currentProgram->getUniformLocation(u_jointMatrix), 0, GL_FALSE, Matrix4x4().getM());
-	glUniformMatrix3fv(currentProgram->getUniformLocation(u_jointNormalMatrix), 0, GL_TRUE, Matrix3x3().getM());
+	glUniformMatrix4fv(currentProgram->getUniformLocation(u_inverseBindMatrix), 0, GL_FALSE, Matrix4x4().getM());
+	glUniformMatrix3fv(currentProgram->getUniformLocation(u_inverseBindNormalMatrix), 0, GL_TRUE, Matrix3x3().getM());
 
 	// Write bright color
 	glUniform1i(currentProgram->getUniformLocation(u_writeBrightColor), writeBrightColor);

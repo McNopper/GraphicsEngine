@@ -520,7 +520,6 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 	}
 
 	bool createNode = false;
-	bool joint = false;
 
 	MeshSP newMesh;
 	CameraSP newCamera;
@@ -537,8 +536,6 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 		break;
 		case FbxNodeAttribute::eSkeleton:
 			currentEntitySkinned = true;
-
-			joint = true;
 
 			createNode = true;
 		break;
@@ -674,7 +671,7 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 		scaleOffset[1] = static_cast<float>(node->ScalingOffset.Get()[1]);
 		scaleOffset[2] = static_cast<float>(node->ScalingOffset.Get()[2]);
 
-		scalePivot[0] = static_cast<float>(node->ScalingPivot.Get()[0]);
+		//scalePivot[0] = static_cast<float>(node->ScalingPivot.Get()[0]);
 		scalePivot[1] = static_cast<float>(node->ScalingPivot.Get()[1]);
 		scalePivot[2] = static_cast<float>(node->ScalingPivot.Get()[2]);
 
@@ -703,63 +700,9 @@ void FbxEntityFactory::traverseNode(FbxNode* node, const NodeSP& parentNode)
 
 		string parentNodeName = parentNode.get() ? parentNode->getName() : "[NULL]";
 
-		NodeSP newNode = nodeTreeFactory.createNode(node->GetName(), parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, newMesh, newCamera, newLight, allAnimationStacks, joint);
+		NodeSP newNode = nodeTreeFactory.createNode(node->GetName(), parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, newMesh, newCamera, newLight, allAnimationStacks);
 
 		glusLogPrint(GLUS_LOG_INFO, "Created node: %s", node->GetName());
-
-		bool min[3];
-		bool max[3];
-
-		if (node->GetTranslationLimits().GetActive())
-		{
-			min[0] = false;
-			min[1] = false;
-			min[2] = false;
-			max[0] = false;
-			max[1] = false;
-			max[2] = false;
-
-			node->GetTranslationLimits().GetMinActive(min[0], min[1], min[2]);
-			node->GetTranslationLimits().GetMaxActive(max[0], max[1], max[2]);
-			for (int32_t index = 0; index < 3; index++)
-			{
-				nodeTreeFactory.setTranslationLimits(newNode->getName(), min[index], static_cast<float>(node->GetTranslationLimits().GetMin()[index]), max[index], static_cast<float>(node->GetTranslationLimits().GetMax()[index]), index);
-			}
-		}
-
-		if (node->GetRotationLimits().GetActive())
-		{
-			min[0] = false;
-			min[1] = false;
-			min[2] = false;
-			max[0] = false;
-			max[1] = false;
-			max[2] = false;
-
-			node->GetRotationLimits().GetMinActive(min[0], min[1], min[2]);
-			node->GetRotationLimits().GetMaxActive(max[0], max[1], max[2]);
-			for (int32_t index = 0; index < 3; index++)
-			{
-				nodeTreeFactory.setRotationLimits(newNode->getName(), min[index], static_cast<float>(node->GetRotationLimits().GetMin()[index]), max[index], static_cast<float>(node->GetRotationLimits().GetMax()[index]), index);
-			}
-		}
-
-		if (node->GetScalingLimits().GetActive())
-		{
-			min[0] = false;
-			min[1] = false;
-			min[2] = false;
-			max[0] = false;
-			max[1] = false;
-			max[2] = false;
-
-			node->GetScalingLimits().GetMinActive(min[0], min[1], min[2]);
-			node->GetScalingLimits().GetMaxActive(max[0], max[1], max[2]);
-			for (int32_t index = 0; index < 3; index++)
-			{
-				nodeTreeFactory.setScalingLimits(newNode->getName(), min[index], static_cast<float>(node->GetScalingLimits().GetMin()[index]), max[index], static_cast<float>(node->GetScalingLimits().GetMax()[index]), index);
-			}
-		}
 
 		newParentNode = newNode;
 	}
@@ -811,6 +754,31 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 		enum AnimationLayer::eCHANNELS_XYZ currentChannel = AnimationLayer::X;
 		float time;
 		float value;
+
+		bool minTranslation[3];
+		bool maxTranslation[3];
+		bool minRotation[3];
+		bool maxRotation[3];
+		bool minScaling[3];
+		bool maxScaling[3];
+		float limitedValue;
+
+		if (node->GetTranslationLimits().GetActive())
+		{
+			node->GetTranslationLimits().GetMinActive(minTranslation[0], minTranslation[1], minTranslation[2]);
+			node->GetTranslationLimits().GetMaxActive(maxTranslation[0], maxTranslation[1], maxTranslation[2]);
+		}
+		if (node->GetRotationLimits().GetActive())
+		{
+			node->GetRotationLimits().GetMinActive(minRotation[0], minRotation[1], minRotation[2]);
+			node->GetRotationLimits().GetMaxActive(maxRotation[0], maxRotation[1], maxRotation[2]);
+		}
+		if (node->GetScalingLimits().GetActive())
+		{
+			node->GetScalingLimits().GetMinActive(minScaling[0], minScaling[1], minScaling[2]);
+			node->GetScalingLimits().GetMaxActive(maxScaling[0], maxScaling[1], maxScaling[2]);
+		}
+
 		for (int32_t i = 0; i < numberAnimationLayers; i++)
 		{
 			animLayer = static_cast<FbxAnimLayer*>(animStack->GetMember(i));
@@ -843,6 +811,29 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 
 						value = static_cast<float>(animCurve->KeyGetValue(m));
 
+						if (node->GetTranslationLimits().GetActive())
+						{
+							if (minTranslation[k])
+							{
+								limitedValue = static_cast<float>(node->GetTranslationLimits().GetMin()[k]);
+
+								if (limitedValue < value)
+								{
+									value = limitedValue;
+								}
+							}
+
+							if (maxTranslation[k])
+							{
+								limitedValue = static_cast<float>(node->GetTranslationLimits().GetMax()[k]);
+
+								if (limitedValue > value)
+								{
+									value = limitedValue;
+								}
+							}
+						}
+
 						switch (animCurve->KeyGetInterpolation(m))
 						{
 							case FbxAnimCurveDef::eInterpolationConstant:
@@ -869,6 +860,29 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 
 						value = static_cast<float>(animCurve->KeyGetValue(m));
 
+						if (node->GetRotationLimits().GetActive())
+						{
+							if (minRotation[k])
+							{
+								limitedValue = static_cast<float>(node->GetRotationLimits().GetMin()[k]);
+
+								if (limitedValue < value)
+								{
+									value = limitedValue;
+								}
+							}
+
+							if (maxRotation[k])
+							{
+								limitedValue = static_cast<float>(node->GetRotationLimits().GetMax()[k]);
+
+								if (limitedValue > value)
+								{
+									value = limitedValue;
+								}
+							}
+						}
+
 						switch (animCurve->KeyGetInterpolation(m))
 						{
 							case FbxAnimCurveDef::eInterpolationConstant:
@@ -894,6 +908,29 @@ AnimationStackSP FbxEntityFactory::processAnimation(FbxNode* node, int32_t animS
 						time = static_cast<float>(animCurve->KeyGetTime(m).GetSecondDouble());
 
 						value = static_cast<float>(animCurve->KeyGetValue(m));
+
+						if (node->GetScalingLimits().GetActive())
+						{
+							if (minScaling[k])
+							{
+								limitedValue = static_cast<float>(node->GetScalingLimits().GetMin()[k]);
+
+								if (limitedValue < value)
+								{
+									value = limitedValue;
+								}
+							}
+
+							if (maxScaling[k])
+							{
+								limitedValue = static_cast<float>(node->GetScalingLimits().GetMax()[k]);
+
+								if (limitedValue > value)
+								{
+									value = limitedValue;
+								}
+							}
+						}
 
 						switch (animCurve->KeyGetInterpolation(m))
 						{
@@ -1531,7 +1568,7 @@ void FbxEntityFactory::preTraverseIndexCreation(FbxNode* node, const NodeSP& nod
 						continue;
 					}
 
-					nodeTreeFactory.setUsedJoint(linkNode->GetName());
+					nodeTreeFactory.setJoint(linkNode->GetName());
 				}
 			}
 		}
@@ -1578,10 +1615,13 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 			if (loadMesh)
 			{
 				Matrix4x4 matrix;
+				Matrix4x4 localMatrix;
 
-				newParentMatrix = newParentMatrix * nodeGE->getLocalFinalMatrix();
+				nodeGE->calculateLocalMatrix(localMatrix);
 
-				matrix = newParentMatrix * nodeGE->getGeometricTransform();
+				newParentMatrix = newParentMatrix * localMatrix;
+
+				matrix = newParentMatrix * nodeGE->getGeometricTransformMatrix();
 
 				// Update the min max for the final bounding sphere
 				processMinMax(nodeGE->getMesh()->getVertices(), nodeGE->getMesh()->getNumberVertices(), matrix);
@@ -1594,10 +1634,13 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 			if (loadLight)
 			{
 				Matrix4x4 matrix;
+				Matrix4x4 localMatrix;
 
-				newParentMatrix = newParentMatrix * nodeGE->getLocalFinalMatrix();
+				nodeGE->calculateLocalMatrix(localMatrix);
 
-				matrix = newParentMatrix * nodeGE->getGeometricTransform();
+				newParentMatrix = newParentMatrix * localMatrix;
+
+				matrix = newParentMatrix * nodeGE->getGeometricTransformMatrix();
 
 				for (int32_t i = 0; i < 2; i++)
 				{
@@ -1616,10 +1659,13 @@ void FbxEntityFactory::postTraverseNode(FbxNode* node, const NodeSP& nodeGE, con
 			if (loadCamera)
 			{
 				Matrix4x4 matrix;
+				Matrix4x4 localMatrix;
 
-				newParentMatrix = newParentMatrix * nodeGE->getLocalFinalMatrix();
+				nodeGE->calculateLocalMatrix(localMatrix);
 
-				matrix = newParentMatrix * nodeGE->getGeometricTransform();
+				newParentMatrix = newParentMatrix * localMatrix;
+
+				matrix = newParentMatrix * nodeGE->getGeometricTransformMatrix();
 
 				for (int32_t i = 0; i < 2; i++)
 				{
@@ -1935,21 +1981,20 @@ void FbxEntityFactory::postProcessMesh(FbxMesh* mesh, const MeshSP& currentMesh)
 
 			FbxAMatrix matrix;
 
+
 			cluster->GetTransformMatrix(matrix);
 
 			float tm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)), static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)), static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)), static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
 
 			Matrix4x4 transformMatrix(tm);
-
-			nodeTreeFactory.setTransformMatrix(linkNode->GetName(), transformMatrix);
-
 			cluster->GetTransformLinkMatrix(matrix);
 
 			float tlm[16] = { static_cast<float>(matrix.Get(0, 0)), static_cast<float>(matrix.Get(0, 1)), static_cast<float>(matrix.Get(0, 2)), static_cast<float>(matrix.Get(0, 3)), static_cast<float>(matrix.Get(1, 0)), static_cast<float>(matrix.Get(1, 1)), static_cast<float>(matrix.Get(1, 2)), static_cast<float>(matrix.Get(1, 3)), static_cast<float>(matrix.Get(2, 0)), static_cast<float>(matrix.Get(2, 1)), static_cast<float>(matrix.Get(2, 2)), static_cast<float>(matrix.Get(2, 3)), static_cast<float>(matrix.Get(3, 0)), static_cast<float>(matrix.Get(3, 1)), static_cast<float>(matrix.Get(3, 2)), static_cast<float>(matrix.Get(3, 3)) };
 
 			Matrix4x4 transformLinkMatrix(tlm);
 
-			nodeTreeFactory.setTransformLinkMatrix(linkNode->GetName(), transformLinkMatrix);
+
+			nodeTreeFactory.setBindShapeInverseBindMatrix(linkNode->GetName(), transformMatrix, transformLinkMatrix);
 		}
 	}
 

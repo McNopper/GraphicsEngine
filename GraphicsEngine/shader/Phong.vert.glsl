@@ -10,8 +10,8 @@ uniform mat3 u_normalModelMatrix;
 
 uniform mat4 u_bindMatrix[MAX_MATRICES];
 uniform mat3 u_bindNormalMatrix[MAX_MATRICES];
-uniform mat4 u_jointMatrix[MAX_MATRICES];
-uniform mat3 u_jointNormalMatrix[MAX_MATRICES];
+uniform mat4 u_inverseBindMatrix[MAX_MATRICES];
+uniform mat3 u_inverseBindNormalMatrix[MAX_MATRICES];
 
 uniform int u_hasSkinning;
 uniform	int u_hasDiffuseTexture;
@@ -90,14 +90,14 @@ void main(void)
 					currentWeight = a_boneWeight_1[i-4];
 				}
 				
-				vertex += (u_jointMatrix[currentBone] * u_bindMatrix[currentBone] * a_vertex) * currentWeight;
+				vertex += (u_bindMatrix[currentBone] * u_inverseBindMatrix[currentBone] * a_vertex) * currentWeight;
 				
-				normal += (u_jointNormalMatrix[currentBone] * u_bindNormalMatrix[currentBone] * a_normal) * currentWeight;
+				normal += (u_bindNormalMatrix[currentBone] * u_inverseBindNormalMatrix[currentBone] * a_normal) * currentWeight;
 
 				if (u_hasNormalMapTexture != 0)
 				{
-					bitangent += (u_jointNormalMatrix[currentBone] * u_bindNormalMatrix[currentBone] * a_bitangent) * currentWeight;
-					tangent += (u_jointNormalMatrix[currentBone] * u_bindNormalMatrix[currentBone] * a_tangent) * currentWeight;
+					bitangent += (u_bindNormalMatrix[currentBone] * u_inverseBindNormalMatrix[currentBone] * a_bitangent) * currentWeight;
+					tangent += (u_bindNormalMatrix[currentBone] * u_inverseBindNormalMatrix[currentBone] * a_tangent) * currentWeight;
 				}
 			}
 		}
