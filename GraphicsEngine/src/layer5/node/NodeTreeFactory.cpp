@@ -117,7 +117,7 @@ int32_t NodeTreeFactory::getIndex(const string& name) const
 	return -1;
 }
 
-bool NodeTreeFactory::setBindShapeInverseBindMatrix(const string& jointName, const Matrix4x4& transformMatrix, const Matrix4x4& transformLinkMatrix) const
+bool NodeTreeFactory::setInverseBindMatrix(const string& jointName, const Matrix4x4& inverseBindMatrix) const
 {
 	NodeSP node = findNode(jointName, rootNode);
 
@@ -126,14 +126,7 @@ bool NodeTreeFactory::setBindShapeInverseBindMatrix(const string& jointName, con
 		return false;
 	}
 
-	//
-
-	Matrix4x4 bindShapeMatrix = transformMatrix * node->getGeometricTransformMatrix();
-
-	Matrix4x4 inverseBindMatrix = transformLinkMatrix;
-	inverseBindMatrix.inverseRigidBody();
-
-	node->setBindShapeInverseBindMatrix(jointName, bindShapeMatrix, inverseBindMatrix);
+	node->setInverseBindMatrix(jointName, inverseBindMatrix);
 
 	return true;
 }

@@ -10,7 +10,7 @@
 
 #include "../../UsedLibs.h"
 
-#include "../../layer0/algorithm/Quicksort.h"
+#include "../../layer0/algorithm/QuicksortPointer.h"
 #include "../../layer0/math/Point4.h"
 #include "../../layer1/collision/AxisAlignedBoundingBox.h"
 #include "../../layer1/collision/BoundingSphere.h"
@@ -40,8 +40,8 @@ private:
 
 	BoundingSphere boundingSphere;
 
-	Quicksort<Octant*> quicksortOctant;
-	Quicksort<OctreeEntitySP> quicksortOctreeEntity;
+	QuicksortPointer<Octant*> quicksortOctant;
+	QuicksortPointer<OctreeEntitySP> quicksortOctreeEntity;
 
 	float distanceToCamera;
 

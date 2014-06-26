@@ -66,7 +66,6 @@ private:
 
 	std::int32_t jointIndex;
 
-	Matrix4x4 bindShapeMatrix;
 	Matrix4x4 inverseBindMatrix;
 
 	//
@@ -85,7 +84,7 @@ private:
 
 	std::int32_t countJointIndex(std::int32_t index);
 
-	void setBindShapeInverseBindMatrix(const std::string& jointName, const Matrix4x4& bindShapeMatrix, const Matrix4x4& inverseBindMatrix);
+	void setInverseBindMatrix(const std::string& jointName, const Matrix4x4& inverseBindMatrix);
 
 	//
 

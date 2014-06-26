@@ -43,7 +43,7 @@ public:
 
 	std::int32_t getIndex(const std::string& name) const;
 
-	bool setBindShapeInverseBindMatrix(const std::string& jointName, const Matrix4x4& transformMatrix, const Matrix4x4& transformLinkMatrix) const;
+	bool setInverseBindMatrix(const std::string& jointName, const Matrix4x4& inverseBindMatrix) const;
 
 	bool setJoint(const std::string& jointName) const;
 

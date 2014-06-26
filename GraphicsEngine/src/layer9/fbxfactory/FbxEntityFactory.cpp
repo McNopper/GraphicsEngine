@@ -1993,8 +1993,12 @@ void FbxEntityFactory::postProcessMesh(FbxMesh* mesh, const MeshSP& currentMesh)
 
 			Matrix4x4 transformLinkMatrix(tlm);
 
+			//
 
-			nodeTreeFactory.setBindShapeInverseBindMatrix(linkNode->GetName(), transformMatrix, transformLinkMatrix);
+			Matrix4x4 inverseTransformLinkMatrix = transformLinkMatrix;
+			inverseTransformLinkMatrix.inverseRigidBody();
+
+			nodeTreeFactory.setInverseBindMatrix(linkNode->GetName(), inverseTransformLinkMatrix * transformMatrix);
 		}
 	}
 

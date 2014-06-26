@@ -5,6 +5,7 @@
  *      Author: nopper
  */
 
+#include "../../layer0/algorithm/Quicksort.h"
 #include "../../layer0/json/JSONencoder.h"
 
 #include "GlTfEntityFactory.h"
@@ -710,6 +711,8 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 		return false;
 	}
 
+	char buffer[128];
+
 	JSONobjectSP glTF = JSONobjectSP(new JSONobject());
 
 	//
@@ -797,7 +800,110 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(animationsString, animationsObject);
 
-	// TODO Add animation elements.
+	if (modelEntity->getModel()->isAnimated())
+	{
+		bool processAnimStacks = true;
+		size_t animStackIndex = 0;
+
+		while (processAnimStacks)
+		{
+			string currentAnimation = "animation_";
+
+			sprintf(buffer, "%03d", (int32_t)animStackIndex);
+
+			currentAnimation.append(buffer);
+
+			JSONstringSP animationString = JSONstringSP(new JSONstring(currentAnimation));
+			JSONobjectSP animationObject = JSONobjectSP(new JSONobject());
+
+			animationsObject->addKeyValue(animationString, animationObject);
+
+			//
+
+			processAnimStacks = false;
+
+			JSONstringSP channelsString = JSONstringSP(new JSONstring("channels"));
+			JSONarraySP channelsArray = JSONarraySP(new JSONarray());
+
+			animationObject->addKeyValue(channelsString, channelsArray);
+
+			JSONobjectSP channelObject;
+
+			for (int32_t i = 0; i < modelEntity->getModel()->getNodeCount(); i++)
+			{
+				NodeSP node = modelEntity->getModel()->getNodeAt(i);
+
+				auto allAnimStacks = node->getAllAnimStacks();
+
+				// Check, if we have to loop through the animation stacks again.
+				if (animStackIndex + 1 < allAnimStacks.size())
+				{
+					processAnimStacks = true;
+				}
+
+				if (animStackIndex < allAnimStacks.size())
+				{
+					auto animStack = allAnimStacks[animStackIndex];
+
+					if (animStack->getAnimationLayersCount() > 0)
+					{
+						// Note: Only one animation layer supported.
+						auto animLayer = animStack->getAnimationLayer(0);
+
+						// Translation
+						for (AnimationLayer::eCHANNELS_XYZ channel = AnimationLayer::X; channel <= AnimationLayer::Z; channel = static_cast<enum AnimationLayer::eCHANNELS_XYZ>(channel + 1))
+						{
+							if (animLayer->hasTranslationValue(channel))
+							{
+								// TODO Create binary buffer.
+
+								channelObject = JSONobjectSP(new JSONobject());
+
+								channelsArray->addValue(channelObject);
+
+								// TODO Add sub elements.
+							}
+						}
+
+						// Rotation
+						for (AnimationLayer::eCHANNELS_XYZ channel = AnimationLayer::X; channel <= AnimationLayer::Z; channel = static_cast<enum AnimationLayer::eCHANNELS_XYZ>(channel + 1))
+						{
+							if (animLayer->hasRotationValue(channel))
+							{
+								// TODO Create binary buffer.
+
+								channelObject = JSONobjectSP(new JSONobject());
+
+								channelsArray->addValue(channelObject);
+
+								// TODO Add sub elements.
+							}
+						}
+
+						// Scale
+						for (AnimationLayer::eCHANNELS_XYZ channel = AnimationLayer::X; channel <= AnimationLayer::Z; channel = static_cast<enum AnimationLayer::eCHANNELS_XYZ>(channel + 1))
+						{
+							if (animLayer->hasScalingValue(channel))
+							{
+								// TODO Create binary buffer.
+
+								channelObject = JSONobjectSP(new JSONobject());
+
+								channelsArray->addValue(channelObject);
+
+								// TODO Add sub elements.
+							}
+						}
+					}
+				}
+			}
+
+			if (processAnimStacks)
+			{
+				animStackIndex++;
+			}
+		}
+	}
 
 	//
 	// Asset
@@ -1080,10 +1186,6 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	//
 	// Nodes
-	//
-
-	char buffer[128];
-
 	//
 
 	JSONstringSP nodesString = JSONstringSP(new JSONstring("nodes"));

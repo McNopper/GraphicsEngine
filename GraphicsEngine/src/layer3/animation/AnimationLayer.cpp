@@ -124,11 +124,11 @@ void AnimationLayer::addTransparencyValue(enum eCHANNELS_SCALAR channel, float t
 	allTransparencyInterpolators[channel][time] = &interpolator;
 }
 
-float AnimationLayer::getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time) const
+float AnimationLayer::getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time, float defaultValue) const
 {
 	if (currentTableInterpolators.size() == 0)
 	{
-		return 0.0f;
+		return defaultValue;
 	}
 
 	auto walker = less_equal_bound<float, const Interpolator*>(currentTableInterpolators, time);
@@ -219,7 +219,7 @@ float AnimationLayer::getScalingValue(enum eCHANNELS_XYZ channel, float time) co
 	const std::map<float, float>& currentTableValues = allScalingValues[channel];
 	const std::map<float, const Interpolator*>& currentTableInterpolators = allScalingInterpolators[channel];
 
-	return getInterpolatedValue(currentTableValues, currentTableInterpolators, time);
+	return getInterpolatedValue(currentTableValues, currentTableInterpolators, time, 1.0f);
 }
 
 float AnimationLayer::getEmissiveColorValue(enum eCHANNELS_RGBA channel, float time) const
@@ -284,4 +284,19 @@ float AnimationLayer::getTransparencyValue(enum eCHANNELS_SCALAR channel, float 
 	const std::map<float, const Interpolator*>& currentTableInterpolators = allTransparencyInterpolators[channel];
 
 	return getInterpolatedValue(currentTableValues, currentTableInterpolators, time);
+}
+
+const map<float, float>& AnimationLayer::getAllTranslationValues(enum eCHANNELS_XYZ channel) const
+{
+	return allTranslationValues[channel];
+}
+
+const map<float, float>& AnimationLayer::getAllRotationValues(enum eCHANNELS_XYZ channel) const
+{
+	return allRotationValues[channel];
+}
+
+const map<float, float>& AnimationLayer::getAllScalingValues(enum eCHANNELS_XYZ channel) const
+{
+	return allScalingValues[channel];
 }

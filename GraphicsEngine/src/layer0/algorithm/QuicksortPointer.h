@@ -1,16 +1,16 @@
 /*
- * Quicksort.h
+ * QuicksortPointer.h
  *
  *  Created on: 04.05.2011
  *      Author: Norbert Nopper
  */
-#ifndef QUICKSORT_H_
-#define QUICKSORT_H_
+#ifndef QUICKSORTPOINTER_H_
+#define QUICKSORTPOINTER_H_
 
 #include "../../UsedLibs.h"
 
 template<class SORT>
-class Quicksort
+class QuicksortPointer
 {
 
 private:
@@ -35,12 +35,12 @@ private:
 
 		do
 		{
-			while (allElements[leftWalker] <= pivot && leftWalker < right)
+			while (*allElements[leftWalker] <= *pivot && leftWalker < right)
 			{
 				leftWalker++;
 			}
 
-			while (allElements[rightWalker] >= pivot && rightWalker > left)
+			while (*allElements[rightWalker] >= *pivot && rightWalker > left)
 			{
 				rightWalker--;
 			}
@@ -63,11 +63,11 @@ private:
 
 public:
 
-	Quicksort()
+	QuicksortPointer()
 	{
 	}
 
-	~Quicksort()
+	~QuicksortPointer()
 	{
 	}
 
@@ -78,4 +78,4 @@ public:
 
 };
 
-#endif /* QUICKSORT_H_ */
+#endif /* QUICKSORTPOINTER_H_ */

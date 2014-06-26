@@ -56,7 +56,7 @@ private:
 	std::map<float, float> allTransparencyValues[1];
 	std::map<float, const Interpolator*> allTransparencyInterpolators[1];
 
-	float getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time) const;
+	float getInterpolatedValue(const std::map<float, float>& currentTableValues, const std::map<float, const Interpolator*>& currentTableInterpolators, float time, float defaultValue = 0.0f) const;
 
 public:
 
@@ -98,6 +98,10 @@ public:
 	float getRefractionColorValue(enum eCHANNELS_RGBA channel, float time) const;
 	float getShininessValue(enum eCHANNELS_SCALAR channel, float time) const;
 	float getTransparencyValue(enum eCHANNELS_SCALAR channel, float time) const;
+
+	const std::map<float, float>& getAllTranslationValues(enum eCHANNELS_XYZ channel) const;
+	const std::map<float, float>& getAllRotationValues(enum eCHANNELS_XYZ channel) const;
+	const std::map<float, float>& getAllScalingValues(enum eCHANNELS_XYZ channel) const;
 
 };
 
