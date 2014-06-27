@@ -13,9 +13,15 @@
 class Interpolator
 {
 
+private:
+
+	std::string name;
+
+	std::int32_t id;
+
 protected:
 
-	Interpolator()
+	Interpolator(const std::string& name, std::int32_t id) : name(name), id(id)
 	{
 
 	}
@@ -28,6 +34,16 @@ protected:
 public:
 
 	virtual float interpolate(const std::map<float, float>& table, float time) const = 0;
+
+	const std::string& getName() const
+	{
+		return name;
+	}
+
+	std::int32_t getId() const
+	{
+		return id;
+	}
 
 };
 

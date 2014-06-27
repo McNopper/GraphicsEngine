@@ -14,7 +14,7 @@ using namespace std;
 const LinearInterpolator LinearInterpolator::interpolator = LinearInterpolator();
 
 LinearInterpolator::LinearInterpolator() :
-		Interpolator()
+		Interpolator("LINEAR", 1)
 {
 }
 

@@ -15,7 +15,7 @@ using namespace std;
 const CubicInterpolator CubicInterpolator::interpolator = CubicInterpolator();
 
 CubicInterpolator::CubicInterpolator() :
-		Interpolator()
+		Interpolator("CUBIC", 2)
 {
 }
 

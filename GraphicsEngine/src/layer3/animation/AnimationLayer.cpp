@@ -300,3 +300,18 @@ const map<float, float>& AnimationLayer::getAllScalingValues(enum eCHANNELS_XYZ 
 {
 	return allScalingValues[channel];
 }
+
+const std::map<float, const Interpolator*>& AnimationLayer::getAllTranslationInterpolators(enum eCHANNELS_XYZ channel) const
+{
+	return allTranslationInterpolators[channel];
+}
+
+const std::map<float, const Interpolator*>& AnimationLayer::getAllRotationInterpolators(enum eCHANNELS_XYZ channel) const
+{
+	return allRotationInterpolators[channel];
+}
+
+const std::map<float, const Interpolator*>& AnimationLayer::getAllScalingInterpolators(enum eCHANNELS_XYZ channel) const
+{
+	return allScalingInterpolators[channel];
+}

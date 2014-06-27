@@ -103,6 +103,10 @@ public:
 	const std::map<float, float>& getAllRotationValues(enum eCHANNELS_XYZ channel) const;
 	const std::map<float, float>& getAllScalingValues(enum eCHANNELS_XYZ channel) const;
 
+	const std::map<float, const Interpolator*>& getAllTranslationInterpolators(enum eCHANNELS_XYZ channel) const;
+	const std::map<float, const Interpolator*>& getAllRotationInterpolators(enum eCHANNELS_XYZ channel) const;
+	const std::map<float, const Interpolator*>& getAllScalingInterpolators(enum eCHANNELS_XYZ channel) const;
+
 };
 
 typedef std::shared_ptr<AnimationLayer> AnimationLayerSP;

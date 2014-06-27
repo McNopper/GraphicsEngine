@@ -14,7 +14,7 @@ using namespace std;
 const ConstantInterpolator ConstantInterpolator::interpolator = ConstantInterpolator();
 
 ConstantInterpolator::ConstantInterpolator() :
-		Interpolator()
+		Interpolator("CONSTANT", 0)
 {
 }
 
