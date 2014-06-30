@@ -10,10 +10,12 @@
 
 #include "../../UsedLibs.h"
 
+#include "../../layer0/json/JSONarray.h"
 #include "../../layer0/json/JSONobject.h"
 #include "../../layer0/json/JSONstring.h"
 #include "../../layer1/shader/ProgramPipeline.h"
 #include "../../layer1/shader/ProgramSeparable.h"
+#include "../../layer2/interpolation/Interpolator.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
 #include "GlTfBin.h"
@@ -23,12 +25,15 @@ class GlTfEntityFactory
 
 private:
 
-	JSONstringSP getElement(const AnimationLayer::eCHANNELS_XYZ channel) const;
+	std::string channelToString(const AnimationLayer::eCHANNELS_XYZ channel) const;
 
 
-	void addChannel(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idString, const JSONstringSP& pathString, const JSONstringSP& elementString) const;
+	void addChannelValues(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idString, const JSONstringSP& pathString, const JSONstringSP& elementString) const;
 
-	void addAnimationAccessors(JSONobjectSP& animationsObject, JSONobjectSP& accessorsObject, const ModelSP& model) const;
+	void addChannelParameterSampler(GlTfBin& bin, JSONarraySP& channelsArray, JSONobjectSP& parametersObject, JSONobjectSP& samplersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const JSONstringSP& bufferString, const JSONstringSP& nodeValueString, const std::string& identifier, const std::string& transform, const std::string& channel, const std::map<float, float>& timeValues, const std::map<float, const Interpolator*>& timeInterpolators) const;
+
+	void addAnimationBufferBufferViewAccessor(JSONobjectSP& animationsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelSP& model) const;
+
 
 	void addAsset(JSONobjectSP& assetObject) const;
 
@@ -55,17 +60,19 @@ private:
 	void addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const;
 
 
-	void addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const std::string& type) const;
+	void addAccessorValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const std::string& type) const;
 
-	void addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const;
+	void addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const;
 
-	void addBufferBufferViewsAccessors(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const;
+	void addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength) const;
+
+	void addBufferBufferViewAccessor(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const;
 
 
 	void addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, std::int32_t index) const;
 
 
-	void addNodeBufferBufferViewsAccessorsMeshes(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model) const;
+	void addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model) const;
 
 
 	void addScene(JSONobjectSP& scenesObject, const JSONstringSP& sceneString, const NodeSP& rootNode) const;

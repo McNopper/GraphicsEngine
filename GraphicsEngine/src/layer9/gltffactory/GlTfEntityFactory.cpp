@@ -20,7 +20,7 @@ GlTfEntityFactory::~GlTfEntityFactory()
 {
 }
 
-JSONstringSP GlTfEntityFactory::getElement(const AnimationLayer::eCHANNELS_XYZ channel) const
+string GlTfEntityFactory::channelToString(const AnimationLayer::eCHANNELS_XYZ channel) const
 {
 	string value;
 
@@ -37,10 +37,160 @@ JSONstringSP GlTfEntityFactory::getElement(const AnimationLayer::eCHANNELS_XYZ c
 			break;
 	}
 
-	return JSONstringSP(new JSONstring(value));
+	return value;
 }
 
-void GlTfEntityFactory::addChannel(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idValueString, const JSONstringSP& pathValueString, const JSONstringSP& elementValueString) const
+void GlTfEntityFactory::addChannelParameterSampler(GlTfBin& bin, JSONarraySP& channelsArray, JSONobjectSP& parametersObject, JSONobjectSP& samplersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const JSONstringSP& bufferString, const JSONstringSP& nodeValueString, const string& identifier, const string& transform, const string& channel, const map<float, float>& timeValues, const map<float, const Interpolator*>& timeInterpolators) const
+{
+	JSONstringSP inputString = JSONstringSP(new JSONstring("input"));
+	JSONstringSP interpolationString = JSONstringSP(new JSONstring("interpolation"));
+	JSONstringSP outputString = JSONstringSP(new JSONstring("output"));
+
+	JSONobjectSP channelObject;
+
+	JSONstringSP samplerValueString;
+	JSONstringSP pathValueString;
+	JSONstringSP elementValueString;
+
+	JSONobjectSP samplerObject;
+
+	JSONstringSP accessorString;
+	JSONstringSP parameterString;
+
+	string value;
+
+	channelObject = JSONobjectSP(new JSONobject());
+
+	channelsArray->addValue(channelObject);
+
+	//
+
+	value = "sampler_" + identifier + "_" + transform + "_" + channel;
+
+	samplerValueString = JSONstringSP(new JSONstring(value));
+
+	pathValueString = JSONstringSP(new JSONstring(transform));
+
+	elementValueString = JSONstringSP(new JSONstring(channel));
+
+	addChannelValues(channelObject, samplerValueString, nodeValueString, pathValueString, elementValueString);
+
+	samplerObject = JSONobjectSP(new JSONobject());
+	samplersObject->addKeyValue(samplerValueString, samplerObject);
+
+	//
+
+	vector<float> times;
+	vector<float> values;
+	vector<uint32_t> interpolators;
+
+	for (auto& currentTimeValue : timeValues)
+	{
+		times.push_back(currentTimeValue.first);
+		values.push_back(currentTimeValue.second);
+	}
+
+	for (auto& currentTimeInterpolator : timeInterpolators)
+	{
+		interpolators.push_back(currentTimeInterpolator.second->getId());
+	}
+
+	size_t beforeTotalLength;
+	size_t currentLength;
+
+	JSONstringSP bufferViewString;
+	JSONobjectSP bufferViewObject;
+
+	JSONobjectSP accessorObject;
+
+	//
+
+	value = "accessor_" + identifier + "_" + transform + "_" + channel + "_time";
+	accessorString = JSONstringSP(new JSONstring(value));
+
+	value = "parameter_" + identifier + "_" + transform + "_" + channel + "_time";
+	parameterString = JSONstringSP(new JSONstring(value));
+
+	parametersObject->addKeyValue(parameterString, accessorString);
+
+
+	samplerObject->addKeyValue(inputString, parameterString);
+
+
+	beforeTotalLength = bin.getLength();
+	currentLength = times.size() * sizeof(GLfloat);
+	bin.addData((const uint8_t*)&times[0], currentLength);
+
+	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + identifier + "_" + transform + "_" + channel + "_time"));
+	bufferViewObject = JSONobjectSP(new JSONobject());
+	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+	addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength);
+
+	accessorObject = JSONobjectSP(new JSONobject());
+	accessorsObject->addKeyValue(accessorString, accessorObject);
+
+	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, times.size(), "SCALAR");
+
+	//
+
+	value = "accessor_" + identifier + "_" + transform + "_" + channel + "_interpolation";
+	accessorString = JSONstringSP(new JSONstring(value));
+
+	value = "parameter_" + identifier + "_" + transform + "_" + channel + "_interpolation";
+	parameterString = JSONstringSP(new JSONstring(value));
+
+	parametersObject->addKeyValue(parameterString, accessorString);
+
+
+	samplerObject->addKeyValue(interpolationString, parameterString);
+
+
+	beforeTotalLength = bin.getLength();
+	currentLength = interpolators.size() * sizeof(GLfloat);
+	bin.addData((const uint8_t*)&interpolators[0], currentLength);
+
+	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + identifier + "_" + transform + "_" + channel + "_interpolator"));
+	bufferViewObject = JSONobjectSP(new JSONobject());
+	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+	addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength);
+
+	accessorObject = JSONobjectSP(new JSONobject());
+	accessorsObject->addKeyValue(accessorString, accessorObject);
+
+	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_UNSIGNED_INT, interpolators.size(), "SCALAR");
+	//
+
+	value = "accessor_" + identifier + "_" + transform + "_" + channel;
+	accessorString = JSONstringSP(new JSONstring(value));
+
+	value = "parameter_" + identifier + "_" + transform + "_" + channel;
+	parameterString = JSONstringSP(new JSONstring(value));
+
+	parametersObject->addKeyValue(parameterString, accessorString);
+
+
+	samplerObject->addKeyValue(outputString, parameterString);
+
+
+	beforeTotalLength = bin.getLength();
+	currentLength = values.size() * sizeof(GLfloat);
+	bin.addData((const uint8_t*)&values[0], currentLength);
+
+	bufferViewString = JSONstringSP(new JSONstring("bufferView_" + identifier + "_" + transform + "_" + channel));
+	bufferViewObject = JSONobjectSP(new JSONobject());
+	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+	addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength);
+
+	accessorObject = JSONobjectSP(new JSONobject());
+	accessorsObject->addKeyValue(accessorString, accessorObject);
+
+	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, values.size(), "SCALAR");
+}
+
+void GlTfEntityFactory::addChannelValues(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idValueString, const JSONstringSP& pathValueString, const JSONstringSP& elementValueString) const
 {
 	JSONstringSP samplerString = JSONstringSP(new JSONstring("sampler"));
 
@@ -60,12 +210,8 @@ void GlTfEntityFactory::addChannel(JSONobjectSP& channelObject, const JSONstring
 	targetObject->addKeyValue(elementString, elementValueString);
 }
 
-void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JSONobjectSP& accessorsObject, const ModelSP& model) const
+void GlTfEntityFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP& animationsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelSP& model) const
 {
-	JSONstringSP inputString = JSONstringSP(new JSONstring("input"));
-	JSONstringSP interpolationString = JSONstringSP(new JSONstring("interpolation"));
-	JSONstringSP outputString = JSONstringSP(new JSONstring("output"));
-
 	char buffer[128];
 
 	if (model->isAnimated())
@@ -75,11 +221,19 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 
 		while (processAnimStacks)
 		{
+			GlTfBin bin;
+
 			string currentAnimation = "animation_";
 
 			sprintf(buffer, "%03d", (int32_t)animStackIndex);
 
 			currentAnimation.append(buffer);
+
+			//
+
+			JSONstringSP animationBufferString = JSONstringSP(new JSONstring("buffer_" + currentAnimation));
+
+			//
 
 			JSONstringSP animationString = JSONstringSP(new JSONstring(currentAnimation));
 			JSONobjectSP animationObject = JSONobjectSP(new JSONobject());
@@ -109,19 +263,7 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 
 			//
 
-			JSONobjectSP channelObject;
-
-			JSONstringSP samplerValueString;
-			JSONobjectSP samplerObject;
-
 			JSONstringSP nodeValueString;
-			JSONstringSP pathValueString;
-			JSONstringSP elementValueString;
-
-			JSONstringSP parameterString;
-			JSONstringSP accessorString;
-
-			string value;
 
 			for (int32_t i = 0; i < model->getNodeCount(); i++)
 			{
@@ -151,63 +293,7 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 						{
 							if (animLayer->hasTranslationValue(channel))
 							{
-								// TODO Create binary buffer, accessor, buffer and buffer view.
-
-								channelObject = JSONobjectSP(new JSONobject());
-
-								channelsArray->addValue(channelObject);
-
-								//
-
-								value = "sampler_" + currentAnimation + "_" + node->getName() + "_translation";
-
-								samplerValueString = JSONstringSP(new JSONstring(value));
-
-								pathValueString = JSONstringSP(new JSONstring("translation"));
-
-								elementValueString = getElement(channel);
-
-								addChannel(channelObject, samplerValueString, nodeValueString, pathValueString, elementValueString);
-
-								//
-
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_translation_time";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_translation_time";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(inputString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_translation_interpolation";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_translation_interpolation";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(interpolationString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_translation_" + elementValueString->getValue();
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_translation_" + elementValueString->getValue();
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(outputString, parameterString);
+								addChannelParameterSampler(bin, channelsArray, parametersObject, samplersObject, bufferViewsObject, accessorsObject, animationBufferString, nodeValueString, currentAnimation + "_" + node->getName(), "translation", channelToString(channel), animLayer->getAllTranslationValues(channel), animLayer->getAllTranslationInterpolators(channel));
 							}
 						}
 
@@ -216,65 +302,7 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 						{
 							if (animLayer->hasRotationValue(channel))
 							{
-								// TODO Create binary buffer, accessor, buffer and buffer view.
-
-								channelObject = JSONobjectSP(new JSONobject());
-
-								channelsArray->addValue(channelObject);
-
-								//
-
-								value = "sampler_" + currentAnimation + "_" + node->getName() + "_rotation";
-
-								samplerValueString = JSONstringSP(new JSONstring(value));
-
-								pathValueString = JSONstringSP(new JSONstring("rotation"));
-
-								elementValueString = getElement(channel);
-
-								addChannel(channelObject, samplerValueString, nodeValueString, pathValueString, elementValueString);
-
-								samplerObject = JSONobjectSP(new JSONobject());
-								samplersObject->addKeyValue(samplerValueString, samplerObject);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_rotation_time";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_rotation_time";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(inputString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_rotation_interpolation";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_rotation_interpolation";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(interpolationString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_rotation_" + elementValueString->getValue();
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_rotation_" + elementValueString->getValue();
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(outputString, parameterString);
+								addChannelParameterSampler(bin, channelsArray, parametersObject, samplersObject, bufferViewsObject, accessorsObject, animationBufferString, nodeValueString, currentAnimation + "_" + node->getName(), "rotation", channelToString(channel), animLayer->getAllRotationValues(channel), animLayer->getAllRotationInterpolators(channel));
 							}
 						}
 
@@ -283,62 +311,7 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 						{
 							if (animLayer->hasScalingValue(channel))
 							{
-								// TODO Create binary buffer, accessor, buffer and buffer view.
-
-								channelObject = JSONobjectSP(new JSONobject());
-
-								channelsArray->addValue(channelObject);
-
-								//
-
-								value = "sampler_" + currentAnimation + "_" + node->getName() + "_scale";
-
-								samplerValueString = JSONstringSP(new JSONstring(value));
-
-								pathValueString = JSONstringSP(new JSONstring("scale"));
-
-								elementValueString = getElement(channel);
-
-								addChannel(channelObject, samplerValueString, nodeValueString, pathValueString, elementValueString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_scale_time";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_scale_time";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(inputString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_scale_interpolation";
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_scale_interpolation";
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(interpolationString, parameterString);
-
-								//
-
-								value = "accessor_" + currentAnimation + "_" + node->getName() + "_scale_" + elementValueString->getValue();
-								accessorString = JSONstringSP(new JSONstring(value));
-
-								value = "parameter_" + currentAnimation + "_" + node->getName() + "_scale_" + elementValueString->getValue();
-								parameterString = JSONstringSP(new JSONstring(value));
-
-								parametersObject->addKeyValue(parameterString, accessorString);
-
-
-								samplerObject->addKeyValue(outputString, parameterString);
+								addChannelParameterSampler(bin, channelsArray, parametersObject, samplersObject, bufferViewsObject, accessorsObject, animationBufferString, nodeValueString, currentAnimation + "_" + node->getName(), "scale", channelToString(channel), animLayer->getAllScalingValues(channel), animLayer->getAllScalingInterpolators(channel));
 							}
 						}
 					}
@@ -349,6 +322,27 @@ void GlTfEntityFactory::addAnimationAccessors(JSONobjectSP& animationsObject, JS
 			{
 				animStackIndex++;
 			}
+
+			//
+			// Buffer
+			//
+
+			JSONobjectSP bufferObject = JSONobjectSP(new JSONobject());
+			buffersObject->addKeyValue(animationBufferString, bufferObject);
+
+			JSONstringSP uriString = JSONstringSP(new JSONstring("uri"));
+			JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
+
+			JSONstringSP valueString;
+			JSONnumberSP valueNumber;
+
+			valueString =  JSONstringSP(new JSONstring(currentAnimation + ".bin"));
+			bufferObject->addKeyValue(uriString, valueString);
+
+			valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
+			bufferObject->addKeyValue(byteLengthString, valueNumber);
+
+			// TODO Save animation binary to file.
 		}
 	}
 }
@@ -366,7 +360,7 @@ void GlTfEntityFactory::addAsset(JSONobjectSP& assetObject) const
 	assetObject->addKeyValue(profileString, valueString);
 
 	JSONstringSP versionString = JSONstringSP(new JSONstring("version"));
-	valueString = JSONstringSP(new JSONstring("0.6"));
+	valueString = JSONstringSP(new JSONstring("0.6 plus own extensions"));
 	assetObject->addKeyValue(versionString, valueString);
 }
 
@@ -949,7 +943,7 @@ void GlTfEntityFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& nod
 	nodeObject->addKeyValue(GeometricTranslationString, valueArray);
 }
 
-void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
+void GlTfEntityFactory::addAccessorValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
 {
 	JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView"));
 	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
@@ -979,7 +973,7 @@ void GlTfEntityFactory::addAccessorsValues(JSONobjectSP& accessorObject, const J
 	accessorObject->addKeyValue(typeString, valueString);
 }
 
-void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const
+void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const
 {
 	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
@@ -1000,7 +994,24 @@ void GlTfEntityFactory::addBufferViewsValues(JSONobjectSP& bufferViewObject, con
 	bufferViewObject->addKeyValue(targetString, valueNumber);
 }
 
-void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const
+void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength) const
+{
+	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
+	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
+	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
+
+	JSONnumberSP valueNumber;
+
+	bufferViewObject->addKeyValue(bufferString, bufferValueString);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteOffset));
+	bufferViewObject->addKeyValue(byteOffsetString, valueNumber);
+
+	valueNumber = JSONnumberSP(new JSONnumber((int32_t)byteLength));
+	bufferViewObject->addKeyValue(byteLengthString, valueNumber);
+}
+
+void GlTfEntityFactory::addBufferBufferViewAccessor(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const
 {
 	auto walker = buffersObject->getAllKeys().begin();
 
@@ -1039,13 +1050,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	bufferViewObject = JSONobjectSP(new JSONobject());
 	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-	addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+	addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 	accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 	if (mesh->getNormals())
 	{
@@ -1057,13 +1068,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getBitangents())
@@ -1076,13 +1087,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTangents())
@@ -1095,13 +1106,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTexCoords())
@@ -1114,13 +1125,13 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		bufferViewObject = JSONobjectSP(new JSONobject());
 		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-		addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
 
 		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
 	}
 
 	beforeTotalLength = bin.getLength();
@@ -1131,7 +1142,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 	bufferViewObject = JSONobjectSP(new JSONobject());
 	bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
 
-	addBufferViewsValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ELEMENT_ARRAY_BUFFER);
+	addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ELEMENT_ARRAY_BUFFER);
 
 	for (uint32_t i = 0; i < mesh->getSubMeshesCount(); i++)
 	{
@@ -1143,7 +1154,7 @@ void GlTfEntityFactory::addBufferBufferViewsAccessors(JSONobjectSP& buffersObjec
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorsValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, GL_UNSIGNED_INT, currentSubMesh->getTriangleCount() * 3, "SCALAR");
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, GL_UNSIGNED_INT, currentSubMesh->getTriangleCount() * 3, "SCALAR");
 	}
 
 	//
@@ -1279,7 +1290,7 @@ void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& 
 	primitivesObject->addKeyValue(primitiveString, valueNumber);
 }
 
-void GlTfEntityFactory::addNodeBufferBufferViewsAccessorsMeshes(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model) const
+void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model) const
 {
 	char buffer[128];
 
@@ -1367,7 +1378,7 @@ void GlTfEntityFactory::addNodeBufferBufferViewsAccessorsMeshes(JSONobjectSP& no
 		{
 			nodeBufferString = JSONstringSP(new JSONstring("buffer_" + node->getMesh()->getName()));
 
-			addBufferBufferViewsAccessors(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh());
+			addBufferBufferViewAccessor(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh());
 
 			for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
 			{
@@ -1533,7 +1544,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(animationsString, animationsObject);
 
-	addAnimationAccessors(animationsObject, accessorsObject, modelEntity->getModel());
+	addAnimationBufferBufferViewAccessor(animationsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity->getModel());
 
 
 	//
@@ -1594,7 +1605,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(nodesString, nodesObject);
 
-	addNodeBufferBufferViewsAccessorsMeshes(nodesObject, buffersObject, bufferViewsObject, accessorsObject, meshesObject, modelEntity->getModel());
+	addNodeBufferBufferViewAccessorMesh(nodesObject, buffersObject, bufferViewsObject, accessorsObject, meshesObject, modelEntity->getModel());
 
 	//
 	// Programs
