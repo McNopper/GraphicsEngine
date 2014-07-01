@@ -652,3 +652,13 @@ void ModelEntity::setAmbientLightColor(const Color& ambientLightColor)
 {
 	this->ambientLightColor = ambientLightColor;
 }
+
+const Matrix4x4& ModelEntity::getInverseBindMatrix(int32_t index) const
+{
+	return inverseBindMatrices[index];
+}
+
+const Matrix3x3& ModelEntity::getInverseBindNormalMatrix(int32_t index) const
+{
+	return inverseBindNormalMatrices[index];
+}

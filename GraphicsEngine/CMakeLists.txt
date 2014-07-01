@@ -30,7 +30,7 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 ENDIF()
 
 # Populate ignore list
-list(APPEND IGNORE_CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/layer1/texture/TextureFactory_GLUS.cpp)
+list(APPEND IGNORE_CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/layer0/os/Directory_Linux.cpp ${GraphicsEngine_SOURCE_DIR}/src/layer1/texture/TextureFactory_GLUS.cpp)
 
 # Source files
 file(GLOB_RECURSE CPP_FILES ${GraphicsEngine_SOURCE_DIR}/src/*.cpp)

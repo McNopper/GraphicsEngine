@@ -101,6 +101,12 @@ public:
 
 	void setAmbientLightColor(const Color& ambientLightColor);
 
+	//
+
+	const Matrix4x4& getInverseBindMatrix(int32_t index) const;
+
+	const Matrix3x3& getInverseBindNormalMatrix(int32_t index) const;
+
 };
 
 typedef std::shared_ptr<ModelEntity> ModelEntitySP;

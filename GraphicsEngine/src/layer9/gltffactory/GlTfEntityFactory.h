@@ -77,6 +77,9 @@ private:
 
 	void addScene(JSONobjectSP& scenesObject, const JSONstringSP& sceneString, const NodeSP& rootNode) const;
 
+
+	void addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelEntitySP& modelEntity) const;
+
 public:
 
 	GlTfEntityFactory();

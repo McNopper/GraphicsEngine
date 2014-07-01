@@ -1450,6 +1450,103 @@ void GlTfEntityFactory::addScene(JSONobjectSP& scenesObject, const JSONstringSP&
 	nodesArray->addValue(rootNodeString);
 }
 
+void GlTfEntityFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelEntitySP& modelEntity) const
+{
+	// TODO Move to method.
+	if (modelEntity->getModel()->isSkinned())
+	{
+		size_t beforeTotalLength;
+		size_t currentLength;
+
+
+		GlTfBin bin;
+
+		JSONstringSP skinString = JSONstringSP(new JSONstring("skin_" + modelEntity->getModel()->getRootNode()->getName()));
+		JSONobjectSP skinObject = JSONobjectSP(new JSONobject());
+
+		skinsObject->addKeyValue(skinString, skinObject);
+
+		//
+
+		JSONstringSP inverseBindMatricesString = JSONstringSP(new JSONstring("inverseBindMatrices"));
+		JSONstringSP accessorString = JSONstringSP(new JSONstring("accessor_" + skinString->getValue()));
+
+		skinObject->addKeyValue(inverseBindMatricesString, accessorString);
+
+		//
+
+		JSONstringSP jointsString = JSONstringSP(new JSONstring("joints"));
+		JSONarraySP jointsArray = JSONarraySP(new JSONarray());
+
+		skinObject->addKeyValue(jointsString, jointsArray);
+
+		JSONstringSP jointString;
+
+		beforeTotalLength = bin.getLength();
+
+		for (int32_t jointIndex = 0; jointIndex < modelEntity->getNumberJoints(); jointIndex++)
+		{
+			// Add all the inverse bind matrices.
+			const Matrix4x4& currentInverseBindMatrix = modelEntity->getInverseBindMatrix(jointIndex);
+			bin.addData((const uint8_t*)currentInverseBindMatrix.getM(), 16 * sizeof(float));
+
+			// Make sure that nodes are stored in the correct order.
+			for (int32_t i = 0; i < modelEntity->getModel()->getNodeCount(); i++)
+			{
+				NodeSP currentNode = modelEntity->getModel()->getNodeAt(i);
+
+				if (currentNode->getJointIndex() == jointIndex)
+				{
+					jointString = JSONstringSP(new JSONstring(currentNode->getName()));
+
+					jointsArray->addValue(jointString);
+
+					break;
+				}
+			}
+		}
+
+		JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer_" + skinString->getValue()));
+
+		//
+
+		currentLength = bin.getLength();
+
+		JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView_" + skinString->getValue()));
+		JSONobjectSP bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength);
+
+		JSONobjectSP accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, modelEntity->getNumberJoints(), "MAT4");
+
+		//
+		// Buffer
+		//
+
+		JSONobjectSP bufferObject = JSONobjectSP(new JSONobject());
+		buffersObject->addKeyValue(bufferString, bufferObject);
+
+		JSONstringSP uriString = JSONstringSP(new JSONstring("uri"));
+		JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
+		JSONstringSP typeString = JSONstringSP(new JSONstring("type"));
+
+		JSONstringSP valueString;
+		JSONnumberSP valueNumber;
+
+		valueString =  JSONstringSP(new JSONstring(skinString->getValue() + ".bin"));
+		bufferObject->addKeyValue(uriString, valueString);
+
+		valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
+		bufferObject->addKeyValue(byteLengthString, valueNumber);
+
+		// TODO Save inverse bind matrices binary.
+	}
+}
+
 bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, const string& identifier)
 {
 	if (modelEntity.get() == nullptr)
@@ -1647,7 +1744,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(skinsString, skinsObject);
 
-	// TODO Add skin elements.
+	addSkin(skinsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity);
 
 	//
 	// Techniques

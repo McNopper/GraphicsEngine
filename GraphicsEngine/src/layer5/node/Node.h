@@ -120,9 +120,9 @@ public:
 
 	bool updateBoundingSphereMatrix(Matrix4x4& matrix, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
-	void updateInverseBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const;
+	void updateInverseBindMatrix(Matrix4x4* allInverseBindMatrices, Matrix3x3* allInverseBindNormalMatrices) const;
 
-	void updateBindMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
+	void updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 
 	void updateRenderMatrix(const NodeOwner& nodeOwner, InstanceNode& instanceNode, const Matrix4x4& parentMatrix, float time, std::int32_t animStackIndex, std::int32_t animLayerIndex) const;
 

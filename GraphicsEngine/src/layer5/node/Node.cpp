@@ -391,33 +391,33 @@ bool Node::updateBoundingSphereMatrix(Matrix4x4& matrix, const Matrix4x4& parent
 	return false;
 }
 
-void Node::updateInverseBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices) const
+void Node::updateInverseBindMatrix(Matrix4x4* allInverseBindMatrices, Matrix3x3* allInverseBindNormalMatrices) const
 {
-	assert(allBindMatrices);
-	assert(allBindNormalMatrices);
+	assert(allInverseBindMatrices);
+	assert(allInverseBindNormalMatrices);
 
 	if (joint)
 	{
-		allBindMatrices[jointIndex] = inverseBindMatrix * geometricTransformMatrix;
+		allInverseBindMatrices[jointIndex] = inverseBindMatrix * geometricTransformMatrix;
 
-		allBindNormalMatrices[jointIndex] = allBindMatrices[jointIndex].extractMatrix3x3();
-		allBindNormalMatrices[jointIndex].inverse();
+		allInverseBindNormalMatrices[jointIndex] = allInverseBindMatrices[jointIndex].extractMatrix3x3();
+		allInverseBindNormalMatrices[jointIndex].inverse();
 	}
 
 	vector<NodeSP>::const_iterator walker = allChilds.begin();
 
 	while (walker != allChilds.end())
 	{
-		(*walker)->updateInverseBindMatrix(allBindMatrices, allBindNormalMatrices);
+		(*walker)->updateInverseBindMatrix(allInverseBindMatrices, allInverseBindNormalMatrices);
 
 		walker++;
 	}
 }
 
-void Node::updateBindMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNormalMatrices, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
+void Node::updateBindMatrix(Matrix4x4* allBindMatrices, Matrix3x3* allBindNormalMatrices, const Matrix4x4& parentMatrix, float time, int32_t animStackIndex, int32_t animLayerIndex) const
 {
-	assert(allJointMatrices);
-	assert(allJointNormalMatrices);
+	assert(allBindMatrices);
+	assert(allBindNormalMatrices);
 
 	Matrix4x4 newParentMatrix = parentMatrix;
 
@@ -444,17 +444,17 @@ void Node::updateBindMatrix(Matrix4x4* allJointMatrices, Matrix3x3* allJointNorm
 
 	if (joint)
 	{
-		allJointMatrices[jointIndex] = newParentMatrix * geometricTransformMatrix;
+		allBindMatrices[jointIndex] = newParentMatrix * geometricTransformMatrix;
 
-		allJointNormalMatrices[jointIndex] = allJointMatrices[jointIndex].extractMatrix3x3();
-		allJointNormalMatrices[jointIndex].inverse();
+		allBindNormalMatrices[jointIndex] = allBindMatrices[jointIndex].extractMatrix3x3();
+		allBindNormalMatrices[jointIndex].inverse();
 	}
 
 	vector<NodeSP>::const_iterator walker = allChilds.begin();
 
 	while (walker != allChilds.end())
 	{
-		(*walker)->updateBindMatrix(allJointMatrices, allJointNormalMatrices, newParentMatrix, time, animStackIndex, animLayerIndex);
+		(*walker)->updateBindMatrix(allBindMatrices, allBindNormalMatrices, newParentMatrix, time, animStackIndex, animLayerIndex);
 
 		walker++;
 	}
