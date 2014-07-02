@@ -36,3 +36,15 @@ size_t GlTfBin::getCounter() const
 {
 	return counter;
 }
+
+const uint8_t* GlTfBin::getData() const
+{
+	return &data[0];
+}
+
+void GlTfBin::reset()
+{
+	data.clear();
+
+	counter = 0;
+}

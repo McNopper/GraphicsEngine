@@ -109,6 +109,14 @@ public:
 
 	bool hasTangents() const;
 
+	//
+
+	float* getBoneCounters() const;
+	float* getBoneIndices0() const;
+	float* getBoneIndices1() const;
+	float* getBoneWeights0() const;
+	float* getBoneWeights1() const;
+
 };
 
 typedef std::shared_ptr<Mesh> MeshSP;

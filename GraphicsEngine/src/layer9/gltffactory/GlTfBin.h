@@ -30,6 +30,10 @@ public:
 
 	size_t getCounter() const;
 
+	const std::uint8_t* getData() const;
+
+	void reset();
+
 };
 
 #endif /* GLTFBIN_H_ */

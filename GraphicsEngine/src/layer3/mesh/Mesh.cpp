@@ -367,3 +367,28 @@ bool Mesh::hasTangents() const
 {
 	return vboTangents != 0 && vboBitangents != 0;
 }
+
+float* Mesh::getBoneCounters() const
+{
+	return boneCounters;
+}
+
+float* Mesh::getBoneIndices0() const
+{
+	return boneIndices0;
+}
+
+float* Mesh::getBoneIndices1() const
+{
+	return boneIndices1;
+}
+
+float* Mesh::getBoneWeights0() const
+{
+	return boneWeights0;
+}
+
+float* Mesh::getBoneWeights1() const
+{
+	return boneWeights1;
+}

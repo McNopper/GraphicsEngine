@@ -18,7 +18,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	FbxEntityFactory entityFactory;
 
-	GlTfEntityFactory glTFentityFactory;
+	GlTfEntityEncoderFactory glTFentityEncoderFactory;
 
 	ModelEntitySP entity;
 
@@ -34,7 +34,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	// Textured cube with rotation animation
 
-	/*Texture2DSP cubeTexture = Texture2DManager::getInstance()->createTexture("crate.tga");
+	Texture2DSP cubeTexture = Texture2DManager::getInstance()->createTexture("crate.tga");
 	surfaceMaterial = surfaceMaterialFactory.createSurfaceMaterial("Crate", Color::DEFAULT_EMISSIVE, Color::DEFAULT_AMBIENT, Color::DEFAULT_DIFFUSE, cubeTexture, Color::DEFAULT_SPECULAR, 0.0f);
 	position = Point4(0.0f, 0.0f, -20.0f);
 
@@ -55,9 +55,16 @@ GLUSboolean initGame(GLUSvoid)
 	entity->setAnimation(0, 0);
 
 	GeneralEntityManager::getInstance()->updateEntity(entity);
-	*/
 
+	//
+	// Save as glTF
+	//
+
+	glTFentityEncoderFactory.saveGlTfModelFile(entity, "CrateCube");
+
+	//
 	// Skinned and animated cylinder.
+	//
 
 	filename = "Skinned_Cylinder.fbx";
 	entity = entityFactory.loadFbxModelFile("Cylinder", filename, 1.0f);
@@ -67,11 +74,17 @@ GLUSboolean initGame(GLUSvoid)
 
 		return GLUS_FALSE;
 	}
-	position = Point4(0.0f, 0.0f, -20.0f);
+	position = Point4(5.0f, 0.0f, -20.0f);
 	entity->setPosition(position);
 	entity->setAnimation(0, 0);
 
 	GeneralEntityManager::getInstance()->updateEntity(entity);
+
+	//
+	// Save as glTF
+	//
+
+	glTFentityEncoderFactory.saveGlTfModelFile(entity, "SkinnedCylinder");
 
 	// Lights
 
@@ -96,12 +109,6 @@ GLUSboolean initGame(GLUSvoid)
 	glEnable(GL_CULL_FACE);
 	glClearColor(0.9f, 0.9f, 0.9f, 0.0f);
 	glClearDepth(1.0f);
-
-	//
-	// Save as glTF
-	//
-
-	glTFentityFactory.saveGlTfModelFile(entity, "cube");
 
 	return GLUS_TRUE;
 }

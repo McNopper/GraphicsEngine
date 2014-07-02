@@ -223,10 +223,20 @@ void TextureFactoryBase::setIntegerBitsPerPixel(enum FormatDepth integerBitsPerP
 
 bool TextureFactoryBase::saveTexture2D(const Texture2DSP texture2D) const
 {
-	return saveImage(texture2D->getIdentifier(), texture2D->getPixelData());
+	return saveTexture2D(texture2D, "");
 }
 
 bool TextureFactoryBase::saveTextureCubeMap(const TextureCubeMapSP textureCubeMap) const
+{
+	return saveTextureCubeMap(textureCubeMap, "");
+}
+
+bool TextureFactoryBase::saveTexture2D(const Texture2DSP texture2D, const string& path) const
+{
+	return saveImage(path + texture2D->getIdentifier(), texture2D->getPixelData());
+}
+
+bool TextureFactoryBase::saveTextureCubeMap(const TextureCubeMapSP textureCubeMap, const string& path) const
 {
 	string postFix;
 
@@ -254,7 +264,7 @@ bool TextureFactoryBase::saveTextureCubeMap(const TextureCubeMapSP textureCubeMa
 			break;
 		}
 
-		saveImage(textureCubeMap->getIdentifier() + postFix, textureCubeMap->getPixelData(i));
+		saveImage(path + textureCubeMap->getIdentifier() + postFix, textureCubeMap->getPixelData(i));
 	}
 
 	return true;

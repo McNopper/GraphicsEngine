@@ -113,6 +113,10 @@ public:
 
 	bool saveTextureCubeMap(const TextureCubeMapSP textureCubeMap) const;
 
+	bool saveTexture2D(const Texture2DSP texture2D, const std::string& path) const;
+
+	bool saveTextureCubeMap(const TextureCubeMapSP textureCubeMap, const std::string& path) const;
+
 };
 
 #endif /* TEXTUREFACTORYBASE_H_ */

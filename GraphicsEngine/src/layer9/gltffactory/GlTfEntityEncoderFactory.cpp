@@ -1,5 +1,5 @@
 /*
- * GlTfEntityFactory.cpp
+ * GlTfEntityEncoderFactory.cpp
  *
  *  Created on: 18.06.2014
  *      Author: nopper
@@ -7,20 +7,22 @@
 
 #include "../../layer0/algorithm/Quicksort.h"
 #include "../../layer0/json/JSONencoder.h"
+#include "../../layer0/os/Directory.h"
+#include "../../layer1/texture/TextureFactory.h"
 
-#include "GlTfEntityFactory.h"
+#include "GlTfEntityEncoderFactory.h"
 
 using namespace std;
 
-GlTfEntityFactory::GlTfEntityFactory()
+GlTfEntityEncoderFactory::GlTfEntityEncoderFactory()
 {
 }
 
-GlTfEntityFactory::~GlTfEntityFactory()
+GlTfEntityEncoderFactory::~GlTfEntityEncoderFactory()
 {
 }
 
-string GlTfEntityFactory::channelToString(const AnimationLayer::eCHANNELS_XYZ channel) const
+string GlTfEntityEncoderFactory::channelToString(const AnimationLayer::eCHANNELS_XYZ channel) const
 {
 	string value;
 
@@ -40,7 +42,39 @@ string GlTfEntityFactory::channelToString(const AnimationLayer::eCHANNELS_XYZ ch
 	return value;
 }
 
-void GlTfEntityFactory::addChannelParameterSampler(GlTfBin& bin, JSONarraySP& channelsArray, JSONobjectSP& parametersObject, JSONobjectSP& samplersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const JSONstringSP& bufferString, const JSONstringSP& nodeValueString, const string& identifier, const string& transform, const string& channel, const map<float, float>& timeValues, const map<float, const Interpolator*>& timeInterpolators) const
+const NodeSP GlTfEntityEncoderFactory::getParentRootJointNode(const NodeSP& node) const
+{
+	if (node.get() == nullptr)
+	{
+		return NodeSP();
+	}
+
+	if (node->getJointIndex() >= 0)
+	{
+		if (node->getParentNode().get() != nullptr)
+		{
+			return node->getParentNode();
+		}
+
+		return node;
+	}
+
+	for (uint32_t i = 0; i < node->getChildCount(); i++)
+	{
+		auto childNode = node->getChild(i);
+
+		auto foundNode = getParentRootJointNode(childNode);
+
+		if (foundNode.get() != nullptr)
+		{
+			return foundNode;
+		}
+	}
+
+	return NodeSP();
+}
+
+void GlTfEntityEncoderFactory::addChannelParameterSampler(GlTfBin& bin, JSONarraySP& channelsArray, JSONobjectSP& parametersObject, JSONobjectSP& samplersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const JSONstringSP& bufferString, const JSONstringSP& nodeValueString, const string& identifier, const string& transform, const string& channel, const map<float, float>& timeValues, const map<float, const Interpolator*>& timeInterpolators) const
 {
 	JSONstringSP inputString = JSONstringSP(new JSONstring("input"));
 	JSONstringSP interpolationString = JSONstringSP(new JSONstring("interpolation"));
@@ -190,7 +224,7 @@ void GlTfEntityFactory::addChannelParameterSampler(GlTfBin& bin, JSONarraySP& ch
 	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, values.size(), "SCALAR");
 }
 
-void GlTfEntityFactory::addChannelValues(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idValueString, const JSONstringSP& pathValueString, const JSONstringSP& elementValueString) const
+void GlTfEntityEncoderFactory::addChannelValues(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idValueString, const JSONstringSP& pathValueString, const JSONstringSP& elementValueString) const
 {
 	JSONstringSP samplerString = JSONstringSP(new JSONstring("sampler"));
 
@@ -210,7 +244,7 @@ void GlTfEntityFactory::addChannelValues(JSONobjectSP& channelObject, const JSON
 	targetObject->addKeyValue(elementString, elementValueString);
 }
 
-void GlTfEntityFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP& animationsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelSP& model) const
+void GlTfEntityEncoderFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP& animationsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelSP& model, const string& folderName) const
 {
 	char buffer[128];
 
@@ -336,18 +370,27 @@ void GlTfEntityFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP& anima
 			JSONstringSP valueString;
 			JSONnumberSP valueNumber;
 
-			valueString =  JSONstringSP(new JSONstring(currentAnimation + ".bin"));
+			valueString = JSONstringSP(new JSONstring(currentAnimation + ".bin"));
 			bufferObject->addKeyValue(uriString, valueString);
 
 			valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
 			bufferObject->addKeyValue(byteLengthString, valueNumber);
 
-			// TODO Save animation binary to file.
+			//
+			// Save animation binary to file.
+			//
+
+			GLUSbinaryfile binaryfile;
+
+			binaryfile.length = bin.getLength();
+			binaryfile.binary = (GLUSubyte*)bin.getData();
+
+			glusSaveBinaryFile((folderName + valueString->getValue()).c_str(), &binaryfile);
 		}
 	}
 }
 
-void GlTfEntityFactory::addAsset(JSONobjectSP& assetObject) const
+void GlTfEntityEncoderFactory::addAsset(JSONobjectSP& assetObject) const
 {
 	JSONstringSP valueString;
 
@@ -364,7 +407,7 @@ void GlTfEntityFactory::addAsset(JSONobjectSP& assetObject) const
 	assetObject->addKeyValue(versionString, valueString);
 }
 
-void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const
+void GlTfEntityEncoderFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture, const string& folderName) const
 {
 	auto walker = imagesObject->getAllKeys().begin();
 
@@ -402,10 +445,16 @@ void GlTfEntityFactory::addImage(JSONobjectSP& imagesObject, const JSONstringSP&
 	valueString = JSONstringSP(new JSONstring(path));
 	imageObject->addKeyValue(uriString, valueString);
 
-	// TODO Save image to file.
+	//
+	// Save image to file.
+	//
+
+	TextureFactory textureFactory;
+
+	textureFactory.saveTexture2D(texture, folderName);
 }
 
-void GlTfEntityFactory::addSampler(JSONobjectSP& samplersObject, const JSONstringSP& samplerString, const Texture2DSP& texture) const
+void GlTfEntityEncoderFactory::addSampler(JSONobjectSP& samplersObject, const JSONstringSP& samplerString, const Texture2DSP& texture) const
 {
 	auto walker = samplersObject->getAllKeys().begin();
 
@@ -445,7 +494,7 @@ void GlTfEntityFactory::addSampler(JSONobjectSP& samplersObject, const JSONstrin
 	samplerObject->addKeyValue(wrapTString, valueNumber);
 }
 
-void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstringSP& textureString, const Texture2DSP& texture) const
+void GlTfEntityEncoderFactory::addTexture(JSONobjectSP& texturesObject, const JSONstringSP& textureString, const Texture2DSP& texture) const
 {
 	auto walker = texturesObject->getAllKeys().begin();
 
@@ -494,16 +543,16 @@ void GlTfEntityFactory::addTexture(JSONobjectSP& texturesObject, const JSONstrin
 	textureObject->addKeyValue(typeString, valueNumber);
 }
 
-void GlTfEntityFactory::addTextureSamplerImage(JSONobjectSP& texturesObject, const JSONstringSP& textureString, JSONobjectSP& samplersObject, const JSONstringSP& samplerString, JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture) const
+void GlTfEntityEncoderFactory::addTextureSamplerImage(JSONobjectSP& texturesObject, const JSONstringSP& textureString, JSONobjectSP& samplersObject, const JSONstringSP& samplerString, JSONobjectSP& imagesObject, const JSONstringSP& imageString, const Texture2DSP& texture, const string& folderName) const
 {
 	addTexture(texturesObject, textureString, texture);
 
 	addSampler(samplersObject, samplerString, texture);
 
-	addImage(imagesObject, imageString, texture);
+	addImage(imagesObject, imageString, texture, folderName);
 }
 
-void GlTfEntityFactory::addShader(JSONobjectSP& shadersObject, const JSONstringSP& shaderString, const ProgramSeparableSP programSeparable) const
+void GlTfEntityEncoderFactory::addShader(JSONobjectSP& shadersObject, const JSONstringSP& shaderString, const ProgramSeparableSP programSeparable) const
 {
 	if (programSeparable.get() == nullptr)
 	{
@@ -536,7 +585,7 @@ void GlTfEntityFactory::addShader(JSONobjectSP& shadersObject, const JSONstringS
 	shaderObject->addKeyValue(typeString, JSONnumberSP(new JSONnumber((int32_t)programSeparable->getShaderType())));
 }
 
-void GlTfEntityFactory::addProgramShader(JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& programString, const ProgramPipelineSP programPipeline) const
+void GlTfEntityEncoderFactory::addProgramShader(JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& programString, const ProgramPipelineSP programPipeline) const
 {
 	if (programPipeline.get() == nullptr)
 	{
@@ -617,7 +666,7 @@ void GlTfEntityFactory::addProgramShader(JSONobjectSP& programsObject, JSONobjec
 	}
 }
 
-void GlTfEntityFactory::addTechniqueProgramShader(JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& techniqueString, const ProgramPipelineSP programPipeline) const
+void GlTfEntityEncoderFactory::addTechniqueProgramShader(JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, const JSONstringSP& techniqueString, const ProgramPipelineSP programPipeline) const
 {
 	if (programPipeline.get() == nullptr)
 	{
@@ -675,7 +724,7 @@ void GlTfEntityFactory::addTechniqueProgramShader(JSONobjectSP& techniquesObject
 	addProgramShader(programsObject, shadersObject, valueString, programPipeline);
 }
 
-void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSONobjectSP& materialsObject, JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, JSONobjectSP& texturesObject, JSONobjectSP& samplersObject, JSONobjectSP& imagesObject,const ModelSP& model) const
+void GlTfEntityEncoderFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSONobjectSP& materialsObject, JSONobjectSP& techniquesObject, JSONobjectSP& programsObject, JSONobjectSP& shadersObject, JSONobjectSP& texturesObject, JSONobjectSP& samplersObject, JSONobjectSP& imagesObject, const ModelSP& model, const string& folderName) const
 {
 	JSONstringSP valueString;
 	JSONnumberSP valueNumber;
@@ -767,7 +816,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getEmissiveTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getEmissiveTexture(), folderName);
 		}
 		else
 		{
@@ -792,7 +841,8 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDiffuseTexture());		}
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDiffuseTexture(), folderName);
+		}
 		else
 		{
 			transformArray = JSONarraySP(new JSONarray());
@@ -816,7 +866,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getReflectionCoefficientTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getReflectionCoefficientTexture(), folderName);
 		}
 		else
 		{
@@ -836,7 +886,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getRoughnessTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getRoughnessTexture(), folderName);
 		}
 		else
 		{
@@ -856,7 +906,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getTransparencyTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getTransparencyTexture(), folderName);
 		}
 		else
 		{
@@ -876,7 +926,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getNormalMapTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getNormalMapTexture(), folderName);
 		}
 
 		// Displacement map
@@ -890,7 +940,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 
 			//
 
-			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDisplacementMapTexture());
+			addTextureSamplerImage(texturesObject, textureString, samplersObject, samplerString, imagesObject, imageString, surfaceMaterial->getDisplacementMapTexture(), folderName);
 		}
 
 		//
@@ -901,7 +951,7 @@ void GlTfEntityFactory::addMaterialTechniqueProgramShaderTextureSamplerImage(JSO
 	}
 }
 
-void GlTfEntityFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const
+void GlTfEntityEncoderFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& node) const
 {
 	JSONstringSP PostTranslationString = JSONstringSP(new JSONstring("postTranslation"));
 	JSONstringSP PostRotationString = JSONstringSP(new JSONstring("postRotation"));
@@ -943,7 +993,7 @@ void GlTfEntityFactory::addFBXValues(JSONobjectSP& nodeObject, const NodeSP& nod
 	nodeObject->addKeyValue(GeometricTranslationString, valueArray);
 }
 
-void GlTfEntityFactory::addAccessorValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
+void GlTfEntityEncoderFactory::addAccessorValues(JSONobjectSP& accessorObject, const JSONstringSP& bufferViewValueString, size_t byteOffset, size_t byteStride, GLenum componentType, int32_t count, const string& type) const
 {
 	JSONstringSP bufferViewString = JSONstringSP(new JSONstring("bufferView"));
 	JSONstringSP byteOffsetString = JSONstringSP(new JSONstring("byteOffset"));
@@ -973,7 +1023,7 @@ void GlTfEntityFactory::addAccessorValues(JSONobjectSP& accessorObject, const JS
 	accessorObject->addKeyValue(typeString, valueString);
 }
 
-void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const
+void GlTfEntityEncoderFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength, GLenum target) const
 {
 	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
@@ -994,7 +1044,7 @@ void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, cons
 	bufferViewObject->addKeyValue(targetString, valueNumber);
 }
 
-void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength) const
+void GlTfEntityEncoderFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, const JSONstringSP& bufferValueString, size_t byteOffset, size_t byteLength) const
 {
 	JSONstringSP bufferString = JSONstringSP(new JSONstring("buffer"));
 	JSONstringSP byteLengthString = JSONstringSP(new JSONstring("byteLength"));
@@ -1011,7 +1061,7 @@ void GlTfEntityFactory::addBufferViewValues(JSONobjectSP& bufferViewObject, cons
 	bufferViewObject->addKeyValue(byteLengthString, valueNumber);
 }
 
-void GlTfEntityFactory::addBufferBufferViewAccessor(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh) const
+void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh, const string& folderName) const
 {
 	auto walker = buffersObject->getAllKeys().begin();
 
@@ -1134,6 +1184,97 @@ void GlTfEntityFactory::addBufferBufferViewAccessor(JSONobjectSP& buffersObject,
 		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
 	}
 
+	//
+
+	if (mesh->hasSkinning())
+	{
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 4 * sizeof(GLfloat);
+		bin.addData((const uint8_t*)mesh->getBoneIndices0(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_boneindices0"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices0"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+
+
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 4 * sizeof(GLfloat);
+		bin.addData((const uint8_t*)mesh->getBoneIndices1(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_boneindices1"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices1"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+
+
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 4 * sizeof(GLfloat);
+		bin.addData((const uint8_t*)mesh->getBoneWeights0(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_boneweights0"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights0"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+
+
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * 4 * sizeof(GLfloat);
+		bin.addData((const uint8_t*)mesh->getBoneWeights1(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_boneweights1"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights1"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+
+
+		beforeTotalLength = bin.getLength();
+		currentLength = mesh->getNumberVertices() * sizeof(GLfloat);
+		bin.addData((const uint8_t*)mesh->getBoneCounters(), currentLength);
+
+		bufferViewString = JSONstringSP(new JSONstring("bufferView_" + mesh->getName() + "_bonecounters"));
+		bufferViewObject = JSONobjectSP(new JSONobject());
+		bufferViewsObject->addKeyValue(bufferViewString, bufferViewObject);
+
+		addBufferViewValues(bufferViewObject, bufferString, beforeTotalLength, currentLength, GL_ARRAY_BUFFER);
+
+		accessorString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bonecounters"));
+		accessorObject = JSONobjectSP(new JSONobject());
+		accessorsObject->addKeyValue(accessorString, accessorObject);
+
+		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "SCALAR");
+	}
+
+	//
+
 	beforeTotalLength = bin.getLength();
 	currentLength = mesh->getNumberIndices() * sizeof(GLuint);
 	bin.addData((const uint8_t*)mesh->getIndices(), currentLength);
@@ -1177,13 +1318,24 @@ void GlTfEntityFactory::addBufferBufferViewAccessor(JSONobjectSP& buffersObject,
 	valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
 	bufferObject->addKeyValue(byteLengthString, valueNumber);
 
+	JSONstringSP fileName = valueString;
+
 	valueString =  JSONstringSP(new JSONstring("arraybuffer"));
 	bufferObject->addKeyValue(typeString, valueString);
 
-	// TODO Save binary buffer to file.
+	//
+	// Save binary buffer to file.
+	//
+
+	GLUSbinaryfile binaryfile;
+
+	binaryfile.length = bin.getLength();
+	binaryfile.binary = (GLUSubyte*)bin.getData();
+
+	glusSaveBinaryFile((folderName + fileName->getValue()).c_str(), &binaryfile);
 }
 
-void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, int32_t index) const
+void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, int32_t index) const
 {
 	auto walker = meshesObject->getAllKeys().begin();
 
@@ -1277,6 +1429,31 @@ void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& 
 
 	//
 
+	if (mesh->hasSkinning())
+	{
+		attributeString = JSONstringSP(new JSONstring("BONEINDICES0"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices0"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+
+		attributeString = JSONstringSP(new JSONstring("BONEINDICES1"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices1"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+
+		attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS0"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights0"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+
+		attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS1"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights1"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+
+		attributeString = JSONstringSP(new JSONstring("BONECOUNTERS"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bonecounters"));
+		valueObject->addKeyValue(attributeString, attributeValueString);
+	}
+
+	//
+
 	primitivesObject->addKeyValue(attributesString, valueObject);
 
 	sprintf(buffer, "%03d", index);
@@ -1290,7 +1467,7 @@ void GlTfEntityFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& 
 	primitivesObject->addKeyValue(primitiveString, valueNumber);
 }
 
-void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model) const
+void GlTfEntityEncoderFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model, const string& folderName) const
 {
 	char buffer[128];
 
@@ -1300,6 +1477,15 @@ void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesO
 	JSONstringSP childrenString = JSONstringSP(new JSONstring("children"));
 	JSONarraySP childrenArray;
 	JSONstringSP childNodeString;
+
+	JSONstringSP instanceSkinString = JSONstringSP(new JSONstring("instanceSkin"));
+	JSONobjectSP instanceSkinObject;
+	JSONstringSP skeletonsString = JSONstringSP(new JSONstring("skeletons"));
+	JSONarraySP skeletonsArray;
+	JSONstringSP skinString = JSONstringSP(new JSONstring("skin"));
+	JSONstringSP skinValueString;
+	JSONstringSP sourcesString = JSONstringSP(new JSONstring("sources"));
+	JSONarraySP sourcesArray;
 
 	JSONstringSP jointString = JSONstringSP(new JSONstring("joint"));
 	JSONstringSP jointValueString;
@@ -1346,22 +1532,50 @@ void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesO
 		//
 		// Instance skin
 		//
+		if (node->getMesh() && node->getMesh()->hasSkinning())
+		{
+			instanceSkinObject = JSONobjectSP(new JSONobject());
 
-		// TODO Add instance skin.
+			nodeObject->addKeyValue(instanceSkinString, instanceSkinObject);
+
+			skeletonsArray = JSONarraySP(new JSONarray());
+			instanceSkinObject->addKeyValue(skeletonsString, skeletonsArray);
+
+			skinValueString = JSONstringSP(new JSONstring("skin_" + getParentRootJointNode(model->getRootNode())->getName()));
+			instanceSkinObject->addKeyValue(skinString, skinValueString);
+
+			sourcesArray = JSONarraySP(new JSONarray());
+			instanceSkinObject->addKeyValue(sourcesString, sourcesArray);
+
+			//
+			// Populate the skeletons array.
+			//
+
+			for (int32_t jointIndex = 0; jointIndex < model->getNumberJoints(); jointIndex++)
+			{
+				// Make sure that nodes are stored in the correct order.
+				for (int32_t i = 0; i < model->getNodeCount(); i++)
+				{
+					NodeSP currentNode = model->getNodeAt(i);
+
+					if (currentNode->getJointIndex() == jointIndex)
+					{
+						jointString = JSONstringSP(new JSONstring(currentNode->getName()));
+
+						skeletonsArray->addValue(jointString);
+
+						break;
+					}
+				}
+			}
+		}
 
 		//
 		// Joint
 		//
-
 		if (node->getJointIndex() >= 0)
 		{
-			string currentJointName = "joint_";
-
-			sprintf(buffer, "%03d", node->getJointIndex());
-
-			currentJointName.append(buffer);
-
-			jointValueString  = JSONstringSP(new JSONstring(currentJointName));
+			jointValueString  = JSONstringSP(new JSONstring(node->getName()));
 
 			nodeObject->addKeyValue(jointString, jointValueString);
 		}
@@ -1378,7 +1592,7 @@ void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesO
 		{
 			nodeBufferString = JSONstringSP(new JSONstring("buffer_" + node->getMesh()->getName()));
 
-			addBufferBufferViewAccessor(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh());
+			addBufferBufferViewAccessor(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh(), folderName);
 
 			for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
 			{
@@ -1395,6 +1609,11 @@ void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesO
 				//
 
 				addMesh(meshesObject, nodeMeshString, node->getMesh(), (int32_t)k);
+
+				if (node->getMesh()->hasSkinning())
+				{
+					sourcesArray->addValue(nodeMeshString);
+				}
 			}
 		}
 
@@ -1437,7 +1656,7 @@ void GlTfEntityFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesO
 	}
 }
 
-void GlTfEntityFactory::addScene(JSONobjectSP& scenesObject, const JSONstringSP& sceneString, const NodeSP& rootNode) const
+void GlTfEntityEncoderFactory::addScene(JSONobjectSP& scenesObject, const JSONstringSP& sceneString, const NodeSP& rootNode) const
 {
 	JSONobjectSP sceneObject = JSONobjectSP(new JSONobject());
 	scenesObject->addKeyValue(sceneString, sceneObject);
@@ -1450,9 +1669,8 @@ void GlTfEntityFactory::addScene(JSONobjectSP& scenesObject, const JSONstringSP&
 	nodesArray->addValue(rootNodeString);
 }
 
-void GlTfEntityFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelEntitySP& modelEntity) const
+void GlTfEntityEncoderFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const ModelEntitySP& modelEntity, const string& folderName) const
 {
-	// TODO Move to method.
 	if (modelEntity->getModel()->isSkinned())
 	{
 		size_t beforeTotalLength;
@@ -1461,7 +1679,7 @@ void GlTfEntityFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffers
 
 		GlTfBin bin;
 
-		JSONstringSP skinString = JSONstringSP(new JSONstring("skin_" + modelEntity->getModel()->getRootNode()->getName()));
+		JSONstringSP skinString = JSONstringSP(new JSONstring("skin_" + getParentRootJointNode(modelEntity->getModel()->getRootNode())->getName()));
 		JSONobjectSP skinObject = JSONobjectSP(new JSONobject());
 
 		skinsObject->addKeyValue(skinString, skinObject);
@@ -1543,16 +1761,39 @@ void GlTfEntityFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& buffers
 		valueNumber = JSONnumberSP(new JSONnumber((int32_t)bin.getLength()));
 		bufferObject->addKeyValue(byteLengthString, valueNumber);
 
-		// TODO Save inverse bind matrices binary.
+		//
+		// Save inverse bind matrices binary.
+		//
+
+		GLUSbinaryfile binaryfile;
+
+		binaryfile.length = bin.getLength();
+		binaryfile.binary = (GLUSubyte*)bin.getData();
+
+		glusSaveBinaryFile((folderName + valueString->getValue()).c_str(), &binaryfile);
 	}
 }
 
-bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, const string& identifier)
+bool GlTfEntityEncoderFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, const string& identifier)
 {
 	if (modelEntity.get() == nullptr)
 	{
 		return false;
 	}
+
+	//
+	// Create directory structure
+	//
+
+	Directory::create("assets");
+
+	string folderName = "assets/" + identifier;
+
+	Directory::create(folderName);
+
+	folderName.append("/");
+
+	//
 
 	JSONobjectSP glTF = JSONobjectSP(new JSONobject());
 
@@ -1641,7 +1882,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(animationsString, animationsObject);
 
-	addAnimationBufferBufferViewAccessor(animationsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity->getModel());
+	addAnimationBufferBufferViewAccessor(animationsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity->getModel(), folderName);
 
 
 	//
@@ -1688,7 +1929,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(materialsString, materialsObject);
 
-	addMaterialTechniqueProgramShaderTextureSamplerImage(materialsObject, techniquesObject, programsObject, shadersObject, texturesObject, samplersObject, imagesObject, modelEntity->getModel());
+	addMaterialTechniqueProgramShaderTextureSamplerImage(materialsObject, techniquesObject, programsObject, shadersObject, texturesObject, samplersObject, imagesObject, modelEntity->getModel(), folderName);
 
 	//
 	// Meshes
@@ -1702,7 +1943,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(nodesString, nodesObject);
 
-	addNodeBufferBufferViewAccessorMesh(nodesObject, buffersObject, bufferViewsObject, accessorsObject, meshesObject, modelEntity->getModel());
+	addNodeBufferBufferViewAccessorMesh(nodesObject, buffersObject, bufferViewsObject, accessorsObject, meshesObject, modelEntity->getModel(), folderName);
 
 	//
 	// Programs
@@ -1744,7 +1985,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	glTF->addKeyValue(skinsString, skinsObject);
 
-	addSkin(skinsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity);
+	addSkin(skinsObject, buffersObject, bufferViewsObject, accessorsObject, modelEntity, folderName);
 
 	//
 	// Techniques
@@ -1759,7 +2000,7 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 	glTF->addKeyValue(texturesString, texturesObject);
 
 	//
-	// TODO Save JSON text to file.
+	// Encode created content.
 	//
 
 	JSONencoder encoder;
@@ -1767,7 +2008,20 @@ bool GlTfEntityFactory::saveGlTfModelFile(const ModelEntitySP& modelEntity, cons
 
 	encoder.encode(glTF, jsonText);
 
-	printf("\nEncoded Crate Cube:\n%s\n\n", jsonText.c_str());
+	glusLogPrint(GLUS_LOG_DEBUG, "\nEncoded:\n%s\n\n", jsonText.c_str());
+
+	//
+	// Save JSON text to file.
+	//
+
+	GLUStextfile textfile;
+
+	textfile.length = jsonText.size();
+	textfile.text = (GLUSchar*)jsonText.c_str();
+
+	glusSaveTextFile((folderName + identifier + ".json").c_str(), &textfile);
+
+	glusLogPrint(GLUS_LOG_INFO, "Saved %s to %s", identifier.c_str(), folderName.c_str());
 
 	return true;
 }
