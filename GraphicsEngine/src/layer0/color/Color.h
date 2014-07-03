@@ -80,6 +80,9 @@ public:
 	void setA(float a);
 	float getA() const;
 
+	void setRGBA(float value, std::int32_t index);
+	float getRGBA(std::int32_t index) const;
+
 	const float* getRGBA() const;
 };
 

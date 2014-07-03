@@ -163,6 +163,16 @@ float Color::getA() const
 	return rgba[3];
 }
 
+void Color::setRGBA(float value, int32_t index)
+{
+	rgba[index] = value;
+}
+
+float Color::getRGBA(int32_t index) const
+{
+	return rgba[index];
+}
+
 const float* Color::getRGBA() const
 {
 	return rgba;

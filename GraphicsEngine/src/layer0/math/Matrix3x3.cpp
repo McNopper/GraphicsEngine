@@ -113,6 +113,16 @@ const float* Matrix3x3::getM() const
 	return m;
 }
 
+void Matrix3x3::setM(float value, int32_t index)
+{
+	m[index] = value;
+}
+
+float Matrix3x3::getM(int32_t index) const
+{
+	return m[index];
+}
+
 void Matrix3x3::debugOut() const
 {
 	glusLogPrint(GLUS_LOG_DEBUG, "Matrix3x3:");

@@ -131,6 +131,16 @@ const float* Matrix4x4::getM() const
 	return m;
 }
 
+void Matrix4x4::setM(float value, int32_t index)
+{
+	m[index] = value;
+}
+
+float Matrix4x4::getM(int32_t index) const
+{
+	return m[index];
+}
+
 void Matrix4x4::debugOut() const
 {
 	glusLogPrint(GLUS_LOG_DEBUG, "Matrix4x4:");

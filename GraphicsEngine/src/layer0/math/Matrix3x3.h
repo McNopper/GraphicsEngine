@@ -74,6 +74,10 @@ public:
 
 	const float* getM() const;
 
+	void setM(float value, std::int32_t index);
+
+	float getM(std::int32_t index) const;
+
 	void debugOut() const;
 
 };
