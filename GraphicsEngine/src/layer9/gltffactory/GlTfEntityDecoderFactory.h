@@ -20,10 +20,31 @@
 #include "../../layer0/math/Matrix4x4.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
+#include "GlTfAccessor.h"
+#include "GlTfBufferView.h"
+#include "GlTfSampler.h"
+
 class GlTfEntityDecoderFactory
 {
 
 private:
+
+	std::map<std::string, GLUSbinaryfile> allBuffers;
+	std::map<std::string, GlTfBufferViewSP> allBufferViews;
+	std::map<std::string, GlTfAccessorSP> allAccessors;
+
+	std::map<std::string, GLUStgaimage> allTgaImages;
+	std::map<std::string, GLUShdrimage> allHdrImages;
+	std::map<std::string, GlTfSamplerSP> allSamplers;
+
+	bool decodeBuffers(const JSONobjectSP& jsonGlTf, const std::string& folderName);
+	bool decodeBufferViews(const JSONobjectSP& jsonGlTf);
+	bool decodeAccessors(const JSONobjectSP& jsonGlTf);
+
+	bool decodeImages(const JSONobjectSP& jsonGlTf, const std::string& folderName);
+	bool decodeSamplers(const JSONobjectSP& jsonGlTf);
+
+	//
 
 	bool decodeFloat(float& number, const JSONvalueSP& jsonValue) const;
 
@@ -37,8 +58,9 @@ private:
 
 	bool decodeColor(Color& color, const JSONvalueSP& jsonValue) const;
 
+	//
 
-	NodeSP createNode(const JSONstringSP& nodeName, const JSONobjectSP& jsonGlTf) const;
+	void cleanUp();
 
 public:
 
@@ -46,7 +68,7 @@ public:
 
 	virtual ~GlTfEntityDecoderFactory();
 
-	ModelEntitySP loadGlTfModelFile(const std::string& identifier, const std::string& fileName, const std::string& folderName, float scale) const;
+	ModelEntitySP loadGlTfModelFile(const std::string& identifier, const std::string& fileName, const std::string& folderName, float scale);
 
 };
 

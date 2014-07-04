@@ -164,7 +164,7 @@ void GlTfEntityEncoderFactory::addChannelParameterSampler(GlTfBin& bin, JSONarra
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, times.size(), "SCALAR");
+	addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, times.size(), "SCALAR");
 
 	//
 
@@ -193,7 +193,7 @@ void GlTfEntityEncoderFactory::addChannelParameterSampler(GlTfBin& bin, JSONarra
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_UNSIGNED_INT, interpolators.size(), "SCALAR");
+	addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_UNSIGNED_INT, interpolators.size(), "SCALAR");
 	//
 
 	value = "accessor_" + identifier + "_" + transform + "_" + channel;
@@ -221,7 +221,7 @@ void GlTfEntityEncoderFactory::addChannelParameterSampler(GlTfBin& bin, JSONarra
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, values.size(), "SCALAR");
+	addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, values.size(), "SCALAR");
 }
 
 void GlTfEntityEncoderFactory::addChannelValues(JSONobjectSP& channelObject, const JSONstringSP& samplerValueString, const JSONstringSP& idValueString, const JSONstringSP& pathValueString, const JSONstringSP& elementValueString) const
@@ -732,7 +732,7 @@ void GlTfEntityEncoderFactory::addMaterialTechniqueProgramShaderTextureSamplerIm
 	JSONstringSP materialString;
 	JSONobjectSP materialObject;
 
-	JSONstringSP instanceTechniqueString = JSONstringSP(new JSONstring("instanceTechniqueString"));
+	JSONstringSP instanceTechniqueString = JSONstringSP(new JSONstring("instanceTechnique"));
 	JSONobjectSP instanceTechniqueObject;
 
 	JSONstringSP techniqueString = JSONstringSP(new JSONstring("technique"));
@@ -1106,7 +1106,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 	accessorObject = JSONobjectSP(new JSONobject());
 	accessorsObject->addKeyValue(accessorString, accessorObject);
 
-	addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+	addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 	if (mesh->getNormals())
 	{
@@ -1124,7 +1124,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getBitangents())
@@ -1143,7 +1143,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTangents())
@@ -1162,7 +1162,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC3");
 	}
 
 	if (mesh->getTexCoords())
@@ -1181,7 +1181,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC2");
 	}
 
 	//
@@ -1202,7 +1202,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 
 		beforeTotalLength = bin.getLength();
@@ -1219,7 +1219,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 
 		beforeTotalLength = bin.getLength();
@@ -1236,7 +1236,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 
 		beforeTotalLength = bin.getLength();
@@ -1253,7 +1253,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "VEC4");
 
 
 		beforeTotalLength = bin.getLength();
@@ -1270,7 +1270,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, mesh->getNumberVertices(), "SCALAR");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, mesh->getNumberVertices(), "SCALAR");
 	}
 
 	//
@@ -1295,7 +1295,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 		accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength + currentSubMesh->getIndicesOffset(), 0, GL_UNSIGNED_INT, currentSubMesh->getTriangleCount() * 3, "SCALAR");
+		addAccessorValues(accessorObject, bufferViewString, 0 + currentSubMesh->getIndicesOffset(), 0, GL_UNSIGNED_INT, currentSubMesh->getTriangleCount() * 3, "SCALAR");
 	}
 
 	//
@@ -1739,7 +1739,7 @@ void GlTfEntityEncoderFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& 
 		JSONobjectSP accessorObject = JSONobjectSP(new JSONobject());
 		accessorsObject->addKeyValue(accessorString, accessorObject);
 
-		addAccessorValues(accessorObject, bufferViewString, beforeTotalLength, 0, GL_FLOAT, modelEntity->getNumberJoints(), "MAT4");
+		addAccessorValues(accessorObject, bufferViewString, 0, 0, GL_FLOAT, modelEntity->getNumberJoints(), "MAT4");
 
 		//
 		// Buffer
