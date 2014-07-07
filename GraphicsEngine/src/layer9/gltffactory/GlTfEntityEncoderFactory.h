@@ -71,7 +71,7 @@ private:
 	void addBufferBufferViewAccessor(JSONobjectSP& buffersObject, const JSONstringSP& bufferString, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, const MeshSP& mesh, const std::string& folderName) const;
 
 
-	void addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, std::int32_t index) const;
+	void addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh) const;
 
 
 	void addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model, const std::string& folderName) const;

@@ -55,6 +55,10 @@ public:
 
 	const float* getV() const;
 
+	void setV(float value, std::int32_t index);
+
+	float getV(std::int32_t index) const;
+
 	Vector3 normalize() const;
 	float length() const;
 	float dot(const Vector3& other) const;

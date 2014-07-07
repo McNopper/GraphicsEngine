@@ -10,7 +10,7 @@
 using namespace std;
 
 SurfaceMaterial::SurfaceMaterial(const string& name) :
-	name(name), reflectionCoefficient(0.0f), reflectionCoefficientTexture(), roughness(0.0f), roughnessTexture(), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), shininessTexture(), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), transparency(1.0f), normalMapTexture(), displacementMapTexture(), dynamicCubeMapTexture(), convertDirectX(true), programPipeline()
+	name(name), reflectionCoefficient(0.0f), reflectionCoefficientTexture(), roughness(0.0f), roughnessTexture(), emissive(Color::DEFAULT_EMISSIVE), emissiveTexture(), diffuse(Color::DEFAULT_DIFFUSE), diffuseTexture(), ambient(Color::DEFAULT_AMBIENT), ambientTexture(), specular(Color::DEFAULT_SPECULAR), specularTexture(), shininess(0.0f), shininessTexture(), reflection(Color::DEFAULT_REFLECTION), reflectionTexture(), refraction(Color::DEFAULT_REFRACTION), refractionTexture(), refractiveIndex(0.0f), refractiveIndexTexture(), transparency(1.0f), normalMapTexture(), displacementMapTexture(), dynamicCubeMapTexture(), convertDirectX(true), programPipeline()
 {
 }
 
@@ -87,26 +87,6 @@ GLuint SurfaceMaterial::getEmissiveTextureName() const
 	return 0;
 }
 
-const Color& SurfaceMaterial::getAmbient() const
-{
-	return ambient;
-}
-
-const Texture2DSP& SurfaceMaterial::getAmbientTexture() const
-{
-	return ambientTexture;
-}
-
-GLuint SurfaceMaterial::getAmbientTextureName() const
-{
-	if (ambientTexture.get())
-	{
-		return ambientTexture->getTextureName();
-	}
-
-	return 0;
-}
-
 const Color& SurfaceMaterial::getDiffuse() const
 {
 	return diffuse;
@@ -127,6 +107,25 @@ GLuint SurfaceMaterial::getDiffuseTextureName() const
 	return 0;
 }
 
+const Color& SurfaceMaterial::getAmbient() const
+{
+	return ambient;
+}
+
+const Texture2DSP& SurfaceMaterial::getAmbientTexture() const
+{
+	return ambientTexture;
+}
+
+GLuint SurfaceMaterial::getAmbientTextureName() const
+{
+	if (ambientTexture.get())
+	{
+		return ambientTexture->getTextureName();
+	}
+
+	return 0;
+}
 const Color& SurfaceMaterial::getSpecular() const
 {
 	return specular;
@@ -210,6 +209,21 @@ GLuint SurfaceMaterial::getRefractionTextureName() const
 float SurfaceMaterial::getRefractiveIndex() const
 {
 	return refractiveIndex;
+}
+
+const Texture2DSP& SurfaceMaterial::getRefractiveIndexTexture() const
+{
+	return refractiveIndexTexture;
+}
+
+GLuint SurfaceMaterial::getRefractiveIndexTextureName() const
+{
+	if (refractiveIndexTexture.get())
+	{
+		return refractiveIndexTexture->getTextureName();
+	}
+
+	return 0;
 }
 
 float SurfaceMaterial::getTransparency() const
@@ -372,6 +386,11 @@ void SurfaceMaterial::setRefractionTexture(const Texture2DSP& refractionTexture)
 void SurfaceMaterial::setRefractiveIndex(float refractiveIndex)
 {
 	this->refractiveIndex = refractiveIndex;
+}
+
+void SurfaceMaterial::setRefractiveIndexTexture(const Texture2DSP& refractiveIndexTexture)
+{
+	this->refractiveIndexTexture = refractiveIndexTexture;
 }
 
 void SurfaceMaterial::setTransparency(float transparency)

@@ -1335,7 +1335,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 	glusSaveBinaryFile((folderName + fileName->getValue()).c_str(), &binaryfile);
 }
 
-void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh, int32_t index) const
+void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh) const
 {
 	auto walker = meshesObject->getAllKeys().begin();
 
@@ -1348,8 +1348,6 @@ void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstr
 
 		walker++;
 	}
-
-	const SurfaceMaterialSP& surfaceMaterial = mesh->getSurfaceMaterialAt(index);
 
 	//
 
@@ -1373,12 +1371,6 @@ void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstr
 
 	//
 
-	JSONobjectSP primitivesObject = JSONobjectSP(new JSONobject());
-
-	valueArray->addValue(primitivesObject);
-
-	//
-
 	JSONstringSP attributesString = JSONstringSP(new JSONstring("attributes"));
 	JSONstringSP indicesString = JSONstringSP(new JSONstring("indices"));
 	JSONstringSP materialString = JSONstringSP(new JSONstring("material"));
@@ -1388,89 +1380,98 @@ void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstr
 	JSONnumberSP valueNumber;
 	JSONobjectSP valueObject;
 
-	valueObject =  JSONobjectSP(new JSONobject());
-
-	//
-
-	JSONstringSP attributeString;
-	JSONstringSP attributeValueString;
-
-	attributeString = JSONstringSP(new JSONstring("POSITION"));
-	attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
-	valueObject->addKeyValue(attributeString, attributeValueString);
-
-	if (mesh->getNormals())
+	for (uint32_t k = 0; k < mesh->getSubMeshesCount(); k++)
 	{
-		attributeString = JSONstringSP(new JSONstring("NORMAL"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
+		JSONobjectSP primitivesObject = JSONobjectSP(new JSONobject());
+
+		valueArray->addValue(primitivesObject);
+
+		const SurfaceMaterialSP& surfaceMaterial = mesh->getSurfaceMaterialAt(k);
+
+		//
+
+		valueObject =  JSONobjectSP(new JSONobject());
+
+		//
+
+		JSONstringSP attributeString;
+		JSONstringSP attributeValueString;
+
+		attributeString = JSONstringSP(new JSONstring("POSITION"));
+		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_vertices"));
 		valueObject->addKeyValue(attributeString, attributeValueString);
+
+		if (mesh->getNormals())
+		{
+			attributeString = JSONstringSP(new JSONstring("NORMAL"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_normals"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+		}
+
+		if (mesh->getBitangents())
+		{
+			attributeString = JSONstringSP(new JSONstring("BITANGENT"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+		}
+
+		if (mesh->getTangents())
+		{
+			attributeString = JSONstringSP(new JSONstring("TANGENT"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+		}
+
+		if (mesh->getTexCoords())
+		{
+			attributeString = JSONstringSP(new JSONstring("TEXCOORD"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+		}
+
+		//
+
+		if (mesh->hasSkinning())
+		{
+			attributeString = JSONstringSP(new JSONstring("BONEINDICES0"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices0"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+
+			attributeString = JSONstringSP(new JSONstring("BONEINDICES1"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices1"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+
+			attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS0"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights0"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+
+			attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS1"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights1"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+
+			attributeString = JSONstringSP(new JSONstring("BONECOUNTERS"));
+			attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bonecounters"));
+			valueObject->addKeyValue(attributeString, attributeValueString);
+		}
+
+		//
+
+		primitivesObject->addKeyValue(attributesString, valueObject);
+
+		sprintf(buffer, "%03d", k);
+		valueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_indices_" + buffer));
+		primitivesObject->addKeyValue(indicesString, valueString);
+
+		valueString = JSONstringSP(new JSONstring(surfaceMaterial->getName()));
+		primitivesObject->addKeyValue(materialString, valueString);
+
+		valueNumber = JSONnumberSP(new JSONnumber((int32_t)GL_TRIANGLES));
+		primitivesObject->addKeyValue(primitiveString, valueNumber);
 	}
-
-	if (mesh->getBitangents())
-	{
-		attributeString = JSONstringSP(new JSONstring("BITANGENT"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bitangents"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-	}
-
-	if (mesh->getTangents())
-	{
-		attributeString = JSONstringSP(new JSONstring("TANGENT"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_tangents"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-	}
-
-	if (mesh->getTexCoords())
-	{
-		attributeString = JSONstringSP(new JSONstring("TEXCOORD"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_texcoords"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-	}
-
-	//
-
-	if (mesh->hasSkinning())
-	{
-		attributeString = JSONstringSP(new JSONstring("BONEINDICES0"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices0"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-
-		attributeString = JSONstringSP(new JSONstring("BONEINDICES1"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneindices1"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-
-		attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS0"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights0"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-
-		attributeString = JSONstringSP(new JSONstring("BONEWEIGHTS1"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_boneweights1"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-
-		attributeString = JSONstringSP(new JSONstring("BONECOUNTERS"));
-		attributeValueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_bonecounters"));
-		valueObject->addKeyValue(attributeString, attributeValueString);
-	}
-
-	//
-
-	primitivesObject->addKeyValue(attributesString, valueObject);
-
-	sprintf(buffer, "%03d", index);
-	valueString = JSONstringSP(new JSONstring("accessor_" + mesh->getName() + "_indices_" + buffer));
-	primitivesObject->addKeyValue(indicesString, valueString);
-
-	valueString = JSONstringSP(new JSONstring(surfaceMaterial->getName()));
-	primitivesObject->addKeyValue(materialString, valueString);
-
-	valueNumber = JSONnumberSP(new JSONnumber((int32_t)GL_TRIANGLES));
-	primitivesObject->addKeyValue(primitiveString, valueNumber);
 }
 
 void GlTfEntityEncoderFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP& nodesObject, JSONobjectSP& buffersObject, JSONobjectSP& bufferViewsObject, JSONobjectSP& accessorsObject, JSONobjectSP& meshesObject, const ModelSP& model, const string& folderName) const
 {
-	char buffer[128];
-
 	JSONstringSP nodeString;
 	JSONobjectSP nodeObject;
 
@@ -1594,26 +1595,15 @@ void GlTfEntityEncoderFactory::addNodeBufferBufferViewAccessorMesh(JSONobjectSP&
 
 			addBufferBufferViewAccessor(buffersObject, nodeBufferString, bufferViewsObject, accessorsObject, node->getMesh(), folderName);
 
-			for (uint32_t k = 0; k < node->getMesh()->getSubMeshesCount(); k++)
+			nodeMeshString = JSONstringSP(new JSONstring("mesh_" + node->getMesh()->getName()));
+
+			nodeMeshesArray->addValue(nodeMeshString);
+
+			addMesh(meshesObject, nodeMeshString, node->getMesh());
+
+			if (node->getMesh()->hasSkinning())
 			{
-				string currentMeshName = "mesh_" + node->getMesh()->getName() + "_";
-
-				sprintf(buffer, "%03d", k);
-
-				currentMeshName.append(buffer);
-
-				nodeMeshString = JSONstringSP(new JSONstring(currentMeshName));
-
-				nodeMeshesArray->addValue(nodeMeshString);
-
-				//
-
-				addMesh(meshesObject, nodeMeshString, node->getMesh(), (int32_t)k);
-
-				if (node->getMesh()->hasSkinning())
-				{
-					sourcesArray->addValue(nodeMeshString);
-				}
+				sourcesArray->addValue(nodeMeshString);
 			}
 		}
 

@@ -152,6 +152,11 @@ Texture2DSP TextureFactoryBase::createTexture2D(const string& identifier, GLint 
 	return Texture2DSP(new Texture2D(identifier, internalFormat, width, height, format, type, nullptr, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 }
 
+Texture2DSP TextureFactoryBase::createTexture2D(const string& identifier, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixels, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
+{
+	return Texture2DSP(new Texture2D(identifier, internalFormat, width, height, format, type, pixels, 0, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+}
+
 Texture2DArraySP TextureFactoryBase::createTexture2DArray(const string& identifier, int32_t width, int32_t height, GLenum format, GLenum type, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic) const
 {
 	return Texture2DArraySP(new Texture2DArray(identifier, gatherInternalFormat(format, type), width, height, format, type, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));

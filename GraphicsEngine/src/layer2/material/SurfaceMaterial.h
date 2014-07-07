@@ -33,46 +33,55 @@ private:
 	Texture2DSP roughnessTexture;
 
 	//
+	// For all color models.
+	//
 
 	Color emissive;
 	Texture2DSP emissiveTexture;
 
-	// TODO Remove.
-	Color ambient;
-	Texture2DSP ambientTexture;
-
 	Color diffuse;
 	Texture2DSP diffuseTexture;
 
-	// TODO Remove.
+	//
+	// Phong
+	//
+
+	Color ambient;
+	Texture2DSP ambientTexture;
+
 	Color specular;
 	Texture2DSP specularTexture;
 
-	// TODO Remove.
 	float shininess;
 	Texture2DSP shininessTexture;
 
-	// TODO Remove.
 	Color reflection;
 	Texture2DSP reflectionTexture;
 
-	// TODO Remove.
 	Color refraction;
 	Texture2DSP refractionTexture;
 
-	// TODO Remove.
 	float refractiveIndex;
+	Texture2DSP refractiveIndexTexture;
 
 	float transparency;
 	Texture2DSP transparencyTexture;
+
+	//
 
 	Texture2DSP normalMapTexture;
 
 	Texture2DSP displacementMapTexture;
 
+	//
+
 	TextureCubeMapSP dynamicCubeMapTexture;
 
+	//
+
 	bool convertDirectX;
+
+	//
 
 	ProgramPipelineSP programPipeline;
 
@@ -99,13 +108,15 @@ public:
 	const Texture2DSP& getEmissiveTexture() const;
     GLuint getEmissiveTextureName() const;
 
-    const Color& getAmbient() const;
-	const Texture2DSP& getAmbientTexture() const;
-    GLuint getAmbientTextureName() const;
-
     const Color& getDiffuse() const;
 	const Texture2DSP& getDiffuseTexture() const;
     GLuint getDiffuseTextureName() const;
+
+    //
+
+    const Color& getAmbient() const;
+	const Texture2DSP& getAmbientTexture() const;
+    GLuint getAmbientTextureName() const;
 
     const Color& getSpecular() const;
 	const Texture2DSP& getSpecularTexture() const;
@@ -124,6 +135,8 @@ public:
     GLuint getRefractionTextureName() const;
 
     float getRefractiveIndex() const;
+	const Texture2DSP& getRefractiveIndexTexture() const;
+    GLuint getRefractiveIndexTextureName() const;
 
     float getTransparency() const;
 	const Texture2DSP& getTransparencyTexture() const;
@@ -168,6 +181,7 @@ public:
     void setRefractionTexture(const Texture2DSP& refractionTexture);
 
     void setRefractiveIndex(float refractiveIndex);
+    void setRefractiveIndexTexture(const Texture2DSP& refractiveIndexTexture);
 
     void setTransparency(float transparency);
     void setTransparencyTexture(const Texture2DSP& transparencyTexture);

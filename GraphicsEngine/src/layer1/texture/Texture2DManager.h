@@ -39,6 +39,8 @@ public:
 
 	Texture2DSP createTexture(const std::string& key, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f);
 
+	Texture2DSP createTexture(const std::string& key, GLint internalFormat, std::int32_t width, std::int32_t height, GLenum format, GLenum type, const std::uint8_t* pixels, bool mipMap = true, GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_LINEAR, GLint wrapS = GL_REPEAT, GLint wrapT = GL_REPEAT, float anisotropic = 1.0f);
+
 };
 
 #endif /* TEXTURE2DMANAGER_H_ */

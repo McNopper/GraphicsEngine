@@ -11,6 +11,8 @@
 
 #include "Vector3.h"
 
+using namespace std;
+
 Vector3::Vector3()
 {
 	v[0] = 0.0f;
@@ -141,6 +143,16 @@ void Vector3::setZ(float z)
 const float* Vector3::getV() const
 {
 	return v;
+}
+
+void Vector3::setV(float value, int32_t index)
+{
+	v[index] = value;
+}
+
+float Vector3::getV(int32_t index) const
+{
+	return v[index];
 }
 
 float Vector3::length() const

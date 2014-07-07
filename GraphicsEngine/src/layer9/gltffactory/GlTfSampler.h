@@ -5,10 +5,10 @@
  *      Author: nopper
  */
 
-#include "../../UsedLibs.h"
-
 #ifndef GLTFSAMPLER_H_
 #define GLTFSAMPLER_H_
+
+#include "../../UsedLibs.h"
 
 class GlTfSampler
 {

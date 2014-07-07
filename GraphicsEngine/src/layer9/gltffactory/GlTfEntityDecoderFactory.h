@@ -18,10 +18,13 @@
 #include "../../layer0/json/JSONvalue.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer0/math/Matrix4x4.h"
+#include "../../layer2/material/SurfaceMaterial.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
 #include "GlTfAccessor.h"
 #include "GlTfBufferView.h"
+#include "GlTfMesh.h"
+#include "GlTfNode.h"
 #include "GlTfSampler.h"
 
 class GlTfEntityDecoderFactory
@@ -36,6 +39,13 @@ private:
 	std::map<std::string, GLUStgaimage> allTgaImages;
 	std::map<std::string, GLUShdrimage> allHdrImages;
 	std::map<std::string, GlTfSamplerSP> allSamplers;
+	std::map<std::string, Texture2DSP> allTextures2D;
+
+	std::map<std::string, SurfaceMaterialSP> allSurfaceMaterials;
+
+	std::map<std::string, GlTfMeshSP> allMeshes;
+
+	std::map<std::string, GlTfNodeSP> allNodes;
 
 	bool decodeBuffers(const JSONobjectSP& jsonGlTf, const std::string& folderName);
 	bool decodeBufferViews(const JSONobjectSP& jsonGlTf);
@@ -43,6 +53,14 @@ private:
 
 	bool decodeImages(const JSONobjectSP& jsonGlTf, const std::string& folderName);
 	bool decodeSamplers(const JSONobjectSP& jsonGlTf);
+	bool decodeTextures(const JSONobjectSP& jsonGlTf);
+
+	bool decodeMaterials(const JSONobjectSP& jsonGlTf);
+
+	bool decodeMeshes(const JSONobjectSP& jsonGlTf);
+
+	GlTfNodeSP decodeNode(const std::string& name, const JSONobjectSP& nodesObject);
+	bool decodeNodes(const JSONobjectSP& jsonGlTf);
 
 	//
 
@@ -56,7 +74,13 @@ private:
 
 	bool decodeMatrix3x3(Matrix3x3& matrix, const JSONvalueSP& jsonValue) const;
 
+	bool decodeVector3(Vector3& vector, const JSONvalueSP& jsonValue) const;
+
 	bool decodeColor(Color& color, const JSONvalueSP& jsonValue) const;
+
+	bool decodeTexture2D(Texture2DSP& texture, const JSONvalueSP& jsonValue) const;
+
+	bool decodeAccessor(GlTfAccessorSP& accessor, const JSONvalueSP& jsonValue) const;
 
 	//
 

@@ -74,3 +74,17 @@ Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFor
 
 	return allTextures[key];
 }
+
+Texture2DSP Texture2DManager::createTexture(const string& key, GLint internalFormat, int32_t width, int32_t height, GLenum format, GLenum type, const uint8_t* pixels, bool mipMap, GLint minFilter, GLint magFilter, GLint wrapS, GLint wrapT, float anisotropic)
+{
+	TextureFactory textureFactory;
+
+	if (!allTextures.contains(key))
+	{
+		allTextures[key] = textureFactory.createTexture2D(key, internalFormat, width, height, format, type, pixels, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic);
+
+		return allTextures[key];
+	}
+
+	return allTextures[key];
+}
