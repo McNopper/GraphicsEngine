@@ -20,7 +20,7 @@
 
 using namespace std;
 
-Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float LclTranslation[3], float RotationOffset[3], float RotationPivot[3], float PreRotation[3], float LclRotation[3], float PostRotation[3], float ScalingOffset[3], float ScalingPivot[3], float LclScaling[3], float GeometricTranslation[3], float GeometricRotation[3], float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks) :
+Node::Node(const string& name, const shared_ptr<Node>& parent, const float LclTranslation[3], const float RotationOffset[3], const float RotationPivot[3], const float PreRotation[3], const float LclRotation[3], const float PostRotation[3], const float ScalingOffset[3], const float ScalingPivot[3], const float LclScaling[3], const float GeometricTranslation[3], const float GeometricRotation[3], const float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks) :
 	name(name), parentNode(parent), postTranslationMatrix(), postRotationMatrix(), postScalingMatrix(), geometricTransformMatrix(), mesh(mesh), camera(camera), light(light), visible(true), transparent(false), joint(false), jointIndex(-1), inverseBindMatrix(), allAnimStacks(allAnimStacks), allChilds()
 {
 	this->LclTranslation[0] = LclTranslation[0];
@@ -71,6 +71,22 @@ Node::Node(const std::string& name, const std::shared_ptr<Node>& parent, float L
 	this->geometricTransformMatrix.translate(GeometricTranslation[0], GeometricTranslation[1], GeometricTranslation[2]);
 	this->geometricTransformMatrix.rotateRzRyRx(GeometricRotation[2], GeometricRotation[1], GeometricRotation[0]);
 	this->geometricTransformMatrix.scale(GeometricScaling[0], GeometricScaling[1], GeometricScaling[2]);
+}
+
+Node::Node(const string& name, const shared_ptr<Node>& parent, const float LclTranslation[3], const Matrix4x4& postTranslation, const float LclRotation[3], const Matrix4x4& postRotation, const float LclScaling[3], const Matrix4x4& postScaling, const Matrix4x4& geometricTransform, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks) :
+		name(name), parentNode(parent), postTranslationMatrix(postTranslation), postRotationMatrix(postRotation), postScalingMatrix(postScaling), geometricTransformMatrix(geometricTransform), mesh(mesh), camera(camera), light(light), visible(true), transparent(false), joint(false), jointIndex(-1), inverseBindMatrix(), allAnimStacks(allAnimStacks), allChilds()
+{
+	this->LclTranslation[0] = LclTranslation[0];
+	this->LclTranslation[1] = LclTranslation[1];
+	this->LclTranslation[2] = LclTranslation[2];
+
+	this->LclRotation[0] = LclRotation[0];
+	this->LclRotation[1] = LclRotation[1];
+	this->LclRotation[2] = LclRotation[2];
+
+	this->LclScaling[0] = LclScaling[0];
+	this->LclScaling[1] = LclScaling[1];
+	this->LclScaling[2] = LclScaling[2];
 }
 
 Node::~Node()

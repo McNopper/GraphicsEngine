@@ -2,7 +2,7 @@
  * Directory.h
  *
  *  Created on: 01.07.2014
- *      Author: b48616
+ *      Author: nopper
  */
 
 #ifndef DIRECTORY_H_

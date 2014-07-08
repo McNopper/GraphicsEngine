@@ -2,7 +2,7 @@
  * Directory_Linux.cpp
  *
  *  Created on: 01.07.2014
- *      Author: b48616
+ *      Author: nopper
  */
 
 #include <sys/stat.h>

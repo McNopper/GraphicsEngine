@@ -37,7 +37,9 @@ public:
 
 	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
 
-	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
+	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, const float translate[3], const float rotateOffset[3], const float rotatePivot[3], const float preRotate[3], const float rotate[3], const float postRotate[3], const float scaleOffset[3], const float scalePivot[3], const float scale[3], const float geoTranslate[3], const float geoRotate[3], const float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
+
+	NodeSP createNode(const std::string& nodeName, const std::string& parentNodeName, const float translate[3], const Matrix4x4& postTranslation, const float rotate[3], const Matrix4x4& postRotation, const float scale[3], const Matrix4x4& postScaling, const Matrix4x4& geometricTransform, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
 
 	std::int32_t createIndex() const;
 

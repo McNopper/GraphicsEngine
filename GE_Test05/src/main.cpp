@@ -37,7 +37,7 @@ GLUSboolean initGame(GLUSvoid)
 
 	filename = "CrateCube.json";
 	foldername = "assets/CrateCube/";
-	entity = glTFentityDecoderFactory.loadGlTfModelFile("CrateCube", filename, foldername, 1.0f);
+	entity = glTFentityDecoderFactory.loadGlTfModelFile("CrateCube", filename, foldername, 5.0f);
 	if (!entity.get())
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "File not found %s", filename.c_str());

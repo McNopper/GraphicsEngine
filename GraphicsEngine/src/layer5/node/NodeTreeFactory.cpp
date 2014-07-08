@@ -79,11 +79,29 @@ NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentN
 	return createNode(nodeName, parentNodeName, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks);
 }
 
-NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, float translate[3], float rotateOffset[3], float rotatePivot[3], float preRotate[3], float rotate[3], float postRotate[3], float scaleOffset[3], float scalePivot[3], float scale[3], float geoTranslate[3], float geoRotate[3], float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks)
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const float translate[3], const float rotateOffset[3], const float rotatePivot[3], const float preRotate[3], const float rotate[3], const float postRotate[3], const float scaleOffset[3], const float scalePivot[3], const float scale[3], const float geoTranslate[3], const float geoRotate[3], const float geoScale[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks)
 {
 	NodeSP parentNode = findNode(parentNodeName, rootNode);
 
 	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, rotateOffset, rotatePivot, preRotate, rotate, postRotate, scaleOffset, scalePivot, scale, geoTranslate, geoRotate, geoScale, mesh, camera, light, allAnimStacks));
+
+	if (parentNode.get())
+	{
+		addChild(parentNode, node);
+	}
+	else
+	{
+		rootNode = node;
+	}
+
+	return node;
+}
+
+NodeSP NodeTreeFactory::createNode(const string& nodeName, const string& parentNodeName, const float translate[3], const Matrix4x4& postTranslation, const float rotate[3], const Matrix4x4& postRotation, const float scale[3], const Matrix4x4& postScaling, const Matrix4x4& geometricTransform, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const vector<AnimationStackSP>& allAnimStacks)
+{
+	NodeSP parentNode = findNode(parentNodeName, rootNode);
+
+	NodeSP node = NodeSP(new Node(nodeName, parentNode, translate, postTranslation, rotate, postRotation, scale, postScaling, geometricTransform, mesh, camera, light, allAnimStacks));
 
 	if (parentNode.get())
 	{

@@ -18,6 +18,11 @@ GlTfMesh::~GlTfMesh()
 {
 }
 
+const string& GlTfMesh::getName() const
+{
+	return name;
+}
+
 void GlTfMesh::addPrimitive(const GlTfPrimitiveSP& primitive)
 {
 	allPrimitives.push_back(primitive);

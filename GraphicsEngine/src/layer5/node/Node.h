@@ -92,7 +92,8 @@ private:
 
 public:
 
-	Node(const std::string& name, const std::shared_ptr<Node>& parent, float LclTranslation[3], float RotationOffset[3], float RotationPivot[3], float PreRotation[3], float LclRotation[3], float PostRotation[3], float ScalingOffset[3], float ScalingPivot[3], float LclScaling[3], float GeometricTranslation[3], float GeometricRotation[3], float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
+	Node(const std::string& name, const std::shared_ptr<Node>& parent, const float LclTranslation[3], const float RotationOffset[3], const float RotationPivot[3], const float PreRotation[3], const float LclRotation[3], const float PostRotation[3], const float ScalingOffset[3], const float ScalingPivot[3], const float LclScaling[3], const float GeometricTranslation[3], const float GeometricRotation[3], const float GeometricScaling[3], const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
+	Node(const std::string& name, const std::shared_ptr<Node>& parent, const float LclTranslation[3], const Matrix4x4& postTranslation, const float LclRotation[3], const Matrix4x4& postRotation, const float LclScaling[3], const Matrix4x4& postScaling, const Matrix4x4& geometricTransform, const MeshSP& mesh, const CameraSP& camera, const LightSP& light, const std::vector<AnimationStackSP>& allAnimStacks);
 	virtual ~Node();
 
 	const MeshSP& getMesh() const;

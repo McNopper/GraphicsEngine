@@ -2,7 +2,7 @@
  * JSONobject.cpp
  *
  *  Created on: Jun 16, 2014
- *      Author: B48616
+ *      Author: nopper
  */
 
 #include "JSONobject.h"

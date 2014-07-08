@@ -2,7 +2,7 @@
  * JSONobject.h
  *
  *  Created on: Jun 16, 2014
- *      Author: B48616
+ *      Author: nopper
  */
 
 #ifndef JSONOBJECT_H_

@@ -13,6 +13,7 @@
 #include "../../layer0/math/Matrix4x4.h"
 #include "../../layer0/math/Vector3.h"
 
+#include "GlTfInstanceSkin.h"
 #include "GlTfMesh.h"
 
 class GlTfNode
@@ -24,7 +25,7 @@ private:
 
 	std::vector<std::shared_ptr<GlTfNode>> allChildren;
 
-	// TODO Instance skin.
+	GlTfInstanceSkinSP instanceSkin;
 
 	bool joint;
 
@@ -49,6 +50,9 @@ public:
 	const std::vector<std::shared_ptr<GlTfNode>>& getAllChildren() const;
 	void addChild(const std::shared_ptr<GlTfNode>& child);
 
+	const GlTfInstanceSkinSP& getInstanceSkin() const;
+	void setInstanceSkin(const GlTfInstanceSkinSP& instanceSkin);
+
 	bool isJoint() const;
 	void setJoint(bool joint);
 
@@ -70,7 +74,6 @@ public:
 	void setPostScaling(const Matrix4x4& postScaling);
 	const Matrix4x4& getGeometricTransform() const;
 	void setGeometricTransform(const Matrix4x4& geometricTransform);
-
 };
 
 typedef std::shared_ptr<GlTfNode> GlTfNodeSP;

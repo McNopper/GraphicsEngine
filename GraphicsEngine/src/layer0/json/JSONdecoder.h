@@ -2,7 +2,7 @@
  * JSONdecoder.h
  *
  *  Created on: Jun 16, 2014
- *      Author: B48616
+ *      Author: nopper
  */
 
 #ifndef JSONDECODER_H_

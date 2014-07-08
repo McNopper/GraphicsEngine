@@ -2,7 +2,7 @@
  * JSONencoder.cpp
  *
  *  Created on: Jun 16, 2014
- *      Author: B48616
+ *      Author: nopper
  */
 
 #define JSON_TAB_STEP 3

@@ -33,6 +33,16 @@ void GlTfNode::addChild(const GlTfNodeSP& child)
 	allChildren.push_back(child);
 }
 
+const GlTfInstanceSkinSP& GlTfNode::getInstanceSkin() const
+{
+	return instanceSkin;
+}
+
+void GlTfNode::setInstanceSkin(const GlTfInstanceSkinSP& instanceSkin)
+{
+	this->instanceSkin = instanceSkin;
+}
+
 bool GlTfNode::isJoint() const
 {
 	return joint;

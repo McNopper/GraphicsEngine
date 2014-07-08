@@ -18,19 +18,28 @@
 #include "../../layer0/json/JSONvalue.h"
 #include "../../layer0/math/Matrix3x3.h"
 #include "../../layer0/math/Matrix4x4.h"
+#include "../../layer5/node/NodeTreeFactory.h"
 #include "../../layer2/material/SurfaceMaterial.h"
 #include "../../layer8/modelentity/ModelEntity.h"
 
 #include "GlTfAccessor.h"
+#include "GlTfAnimation.h"
 #include "GlTfBufferView.h"
 #include "GlTfMesh.h"
 #include "GlTfNode.h"
 #include "GlTfSampler.h"
+#include "GlTfSkin.h"
 
 class GlTfEntityDecoderFactory
 {
 
 private:
+
+	bool doReset;
+
+	float minX, maxX, minY, maxY, minZ, maxZ;
+
+	NodeTreeFactory nodeTreeFactory;
 
 	std::map<std::string, GLUSbinaryfile> allBuffers;
 	std::map<std::string, GlTfBufferViewSP> allBufferViews;
@@ -45,7 +54,11 @@ private:
 
 	std::map<std::string, GlTfMeshSP> allMeshes;
 
+	std::map<std::string, GlTfSkinSP> allSkins;
+
 	std::map<std::string, GlTfNodeSP> allNodes;
+
+	std::map<std::string, GlTfAnimationSP> allAnimations;
 
 	bool decodeBuffers(const JSONobjectSP& jsonGlTf, const std::string& folderName);
 	bool decodeBufferViews(const JSONobjectSP& jsonGlTf);
@@ -59,8 +72,12 @@ private:
 
 	bool decodeMeshes(const JSONobjectSP& jsonGlTf);
 
+	bool decodeSkins(const JSONobjectSP& jsonGlTf);
+
 	GlTfNodeSP decodeNode(const std::string& name, const JSONobjectSP& nodesObject);
 	bool decodeNodes(const JSONobjectSP& jsonGlTf);
+
+	bool decodeAnimations(const JSONobjectSP& jsonGlTf);
 
 	//
 
@@ -81,6 +98,12 @@ private:
 	bool decodeTexture2D(Texture2DSP& texture, const JSONvalueSP& jsonValue) const;
 
 	bool decodeAccessor(GlTfAccessorSP& accessor, const JSONvalueSP& jsonValue) const;
+
+	//
+
+	void processMinMax(const float* vertices, std::int32_t numberVertices, const Matrix4x4& matrix);
+
+	NodeSP buildNode(const NodeSP& parentNode, const GlTfNodeSP& node, const Matrix4x4& parentMatrix);
 
 	//
 

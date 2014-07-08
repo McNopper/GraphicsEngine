@@ -7,12 +7,14 @@
 
 #include "../../layer0/json/JSONdecoder.h"
 #include "../../layer1/texture/Texture2DManager.h"
+#include "../../layer3/mesh/Mesh.h"
 
 #include "GlTfEntityDecoderFactory.h"
 
 using namespace std;
 
-GlTfEntityDecoderFactory::GlTfEntityDecoderFactory()
+GlTfEntityDecoderFactory::GlTfEntityDecoderFactory() :
+		doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), nodeTreeFactory()
 {
 }
 
@@ -563,7 +565,7 @@ bool GlTfEntityDecoderFactory::decodeTextures(const JSONobjectSP& jsonGlTf)
 
 		//
 
-		currentValue = currentTexture->getValue(formatString);
+		currentValue = currentTexture->getValue(internalFormatString);
 		if (!currentValue->isJsonNumber())
 		{
 			return false;
@@ -611,7 +613,7 @@ bool GlTfEntityDecoderFactory::decodeTextures(const JSONobjectSP& jsonGlTf)
 
 		//
 
-		currentValue = currentTexture->getValue(formatString);
+		currentValue = currentTexture->getValue(typeString);
 		if (!currentValue->isJsonNumber())
 		{
 			return false;
@@ -634,17 +636,32 @@ bool GlTfEntityDecoderFactory::decodeTextures(const JSONobjectSP& jsonGlTf)
 
 		Texture2DSP texture2D;
 
+		uint32_t sizeOfData;
+
 		if (allHdrImages.find(currentSource->getValue()) != allHdrImages.end())
 		{
 			const GLUShdrimage& hdrImage = allHdrImages[currentSource->getValue()];
 
-			texture2D = Texture2DManager::getInstance()->createTexture(currentKey->getValue(), internalFormat, hdrImage.width, hdrImage.height, format, type, (const uint8_t*)hdrImage.data, true, sampler->getMinFilter(), sampler->getMagFilter(), sampler->getWrapS(), sampler->getWrapT(), 1.0f);
+			sizeOfData = 3 * sizeof(GLfloat) * hdrImage.width * hdrImage.height;
+
+			texture2D = Texture2DManager::getInstance()->createTexture(currentKey->getValue(), internalFormat, hdrImage.width, hdrImage.height, format, type, (const uint8_t*)hdrImage.data, sizeOfData, true, sampler->getMinFilter(), sampler->getMagFilter(), sampler->getWrapS(), sampler->getWrapT(), 1.0f);
 		}
 		else if (allTgaImages.find(currentSource->getValue()) != allTgaImages.end())
 		{
 			const GLUStgaimage& tgaImage = allTgaImages[currentSource->getValue()];
 
-			texture2D = Texture2DManager::getInstance()->createTexture(currentKey->getValue(), internalFormat, tgaImage.width, tgaImage.height, format, type, (const uint8_t*)tgaImage.data, true, sampler->getMinFilter(), sampler->getMagFilter(), sampler->getWrapS(), sampler->getWrapT(), 1.0f);
+			sizeOfData = sizeof(GLubyte) * tgaImage.width * tgaImage.height;
+
+			if (tgaImage.format == GL_RGB)
+			{
+				sizeOfData *= 3;
+			}
+			else if (tgaImage.format == GL_RGBA)
+			{
+				sizeOfData *= 4;
+			}
+
+			texture2D = Texture2DManager::getInstance()->createTexture(currentKey->getValue(), internalFormat, tgaImage.width, tgaImage.height, format, type, (const uint8_t*)tgaImage.data, sizeOfData, true, sampler->getMinFilter(), sampler->getMagFilter(), sampler->getWrapS(), sampler->getWrapT(), 1.0f);
 		}
 		else
 		{
@@ -724,7 +741,7 @@ bool GlTfEntityDecoderFactory::decodeMaterials(const JSONobjectSP& jsonGlTf)
 
 		//
 
-		Color emissionColor;
+		Color emissionColor = Color::DEFAULT_EMISSIVE;
 		Texture2DSP emissionTexture;
 
 		currentValue = currentValues->getValue(emissionString);
@@ -735,7 +752,7 @@ bool GlTfEntityDecoderFactory::decodeMaterials(const JSONobjectSP& jsonGlTf)
 
 		//
 
-		Color diffuseColor;
+		Color diffuseColor = Color::DEFAULT_DIFFUSE;
 		Texture2DSP diffuseTexture;
 
 		currentValue = currentValues->getValue(diffuseString);
@@ -1039,6 +1056,87 @@ bool GlTfEntityDecoderFactory::decodeMeshes(const JSONobjectSP& jsonGlTf)
 	return true;
 }
 
+bool GlTfEntityDecoderFactory::decodeSkins(const JSONobjectSP& jsonGlTf)
+{
+	JSONstringSP skinsString = JSONstringSP(new JSONstring("skins"));
+
+	if (!jsonGlTf->hasKey(skinsString))
+	{
+		return true;
+	}
+
+	JSONvalueSP value = jsonGlTf->getValue(skinsString);
+
+	if (!value->isJsonObject())
+	{
+		return false;
+	}
+
+	JSONobjectSP skinsObject = dynamic_pointer_cast<JSONobject>(value);
+
+
+	JSONstringSP inverseBindMatricesString = JSONstringSP(new JSONstring("inverseBindMatrices"));
+	JSONstringSP jointsString = JSONstringSP(new JSONstring("joints"));
+
+
+	for (auto& currentKey : skinsObject->getAllKeys())
+	{
+		JSONvalueSP currentValue = skinsObject->getValue(currentKey);
+
+		if (!currentValue->isJsonObject())
+		{
+			return false;
+		}
+
+		JSONobjectSP currentSkin = dynamic_pointer_cast<JSONobject>(currentValue);
+
+		//
+
+		GlTfSkinSP glTFSkin = GlTfSkinSP(new GlTfSkin());
+
+		//
+		//
+
+		currentValue = currentSkin->getValue(inverseBindMatricesString);
+
+		GlTfAccessorSP inverseBindMatrices;
+
+		if (!decodeAccessor(inverseBindMatrices, currentValue))
+		{
+			return false;
+		}
+		glTFSkin->setInverseBindMatrices(inverseBindMatrices);
+
+		//
+
+		currentValue = currentSkin->getValue(jointsString);
+		if (!currentValue->isJsonArray())
+		{
+			return false;
+		}
+
+		JSONarraySP currentJoints = dynamic_pointer_cast<JSONarray>(currentValue);
+
+		for (auto& currentElement : currentJoints->getAllValues())
+		{
+			if (!currentElement->isJsonString())
+			{
+				return false;
+			}
+
+			JSONstringSP currentJoint = dynamic_pointer_cast<JSONstring>(currentElement);
+
+			glTFSkin->addJointName(currentJoint->getValue());
+		}
+
+		//
+
+		allSkins[currentKey->getValue()] = glTFSkin;
+	}
+
+	return true;
+}
+
 GlTfNodeSP GlTfEntityDecoderFactory::decodeNode(const string& name, const JSONobjectSP& nodesObject)
 {
 	if (allNodes.find(name) != allNodes.end())
@@ -1067,7 +1165,13 @@ GlTfNodeSP GlTfEntityDecoderFactory::decodeNode(const string& name, const JSONob
 	//
 
 	JSONstringSP childrenString = JSONstringSP(new JSONstring("children"));
+
 	JSONstringSP instanceSkinString = JSONstringSP(new JSONstring("instanceSkin"));
+	JSONstringSP skeletonsString = JSONstringSP(new JSONstring("skeletons"));
+	JSONstringSP skinString = JSONstringSP(new JSONstring("skin"));
+	JSONstringSP sourcesString = JSONstringSP(new JSONstring("sources"));
+
+
 	JSONstringSP jointString = JSONstringSP(new JSONstring("joint"));
 	JSONstringSP meshesString = JSONstringSP(new JSONstring("meshes"));
 	JSONstringSP translationString = JSONstringSP(new JSONstring("translation"));
@@ -1120,12 +1224,80 @@ GlTfNodeSP GlTfEntityDecoderFactory::decodeNode(const string& name, const JSONob
 	if (currentNode->hasKey(instanceSkinString))
 	{
 		JSONvalueSP currentValue = currentNode->getValue(instanceSkinString);
+		if (!currentValue->isJsonObject())
+		{
+			return GlTfNodeSP();
+		}
+		JSONobjectSP currentInstanceSkin = dynamic_pointer_cast<JSONobject>(currentValue);
+
+		GlTfInstanceSkinSP glTfInstanceSkin = GlTfInstanceSkinSP(new GlTfInstanceSkin());
+
+		//
+
+		currentValue = currentInstanceSkin->getValue(skeletonsString);
+		if (!currentValue->isJsonArray())
+		{
+			return GlTfNodeSP();
+		}
+		JSONarraySP currentSkeletons = dynamic_pointer_cast<JSONarray>(currentValue);
+
+		for (auto& currentElement : currentSkeletons->getAllValues())
+		{
+			if (!currentElement->isJsonString())
+			{
+				return GlTfNodeSP();
+			}
+
+			JSONstringSP currentSkeleton = dynamic_pointer_cast<JSONstring>(currentElement);
+
+			glTfInstanceSkin->addSkeletonName(currentSkeleton->getValue());
+		}
+
+		//
+
+		currentValue = currentInstanceSkin->getValue(skinString);
 		if (!currentValue->isJsonString())
 		{
 			return GlTfNodeSP();
 		}
-		JSONstringSP currentInstanceSkin = dynamic_pointer_cast<JSONstring>(currentValue);
-		// TODO Instance skin.
+		JSONstringSP currentSkin = dynamic_pointer_cast<JSONstring>(currentValue);
+
+		if (allSkins.find(currentSkin->getValue()) == allSkins.end())
+		{
+			return GlTfNodeSP();
+		}
+
+		glTfInstanceSkin->setSkin(allSkins[currentSkin->getValue()]);
+
+		//
+
+		currentValue = currentInstanceSkin->getValue(sourcesString);
+		if (!currentValue->isJsonArray())
+		{
+			return GlTfNodeSP();
+		}
+		JSONarraySP currentSources = dynamic_pointer_cast<JSONarray>(currentValue);
+
+		for (auto& currentElement : currentSources->getAllValues())
+		{
+			if (!currentElement->isJsonString())
+			{
+				return GlTfNodeSP();
+			}
+
+			JSONstringSP currentSource = dynamic_pointer_cast<JSONstring>(currentElement);
+
+			if (allMeshes.find(currentSource->getValue()) == allMeshes.end())
+			{
+				return GlTfNodeSP();
+			}
+
+			glTfInstanceSkin->addSource(allMeshes[currentSource->getValue()]);
+		}
+
+		//
+
+		glTfNode->setInstanceSkin(glTfInstanceSkin);
 	}
 
 	if (currentNode->hasKey(jointString))
@@ -1317,6 +1489,247 @@ bool GlTfEntityDecoderFactory::decodeNodes(const JSONobjectSP& jsonGlTf)
 		{
 			allNodes[glTfNode->getName()] = glTfNode;
 		}
+	}
+
+	return true;
+}
+
+bool GlTfEntityDecoderFactory::decodeAnimations(const JSONobjectSP& jsonGlTf)
+{
+	JSONstringSP animationsString = JSONstringSP(new JSONstring("animations"));
+
+	if (!jsonGlTf->hasKey(animationsString))
+	{
+		return true;
+	}
+
+	JSONvalueSP value = jsonGlTf->getValue(animationsString);
+
+	if (!value->isJsonObject())
+	{
+		return false;
+	}
+
+	JSONobjectSP animationsObject = dynamic_pointer_cast<JSONobject>(value);
+
+
+	for (auto& currentKey : animationsObject->getAllKeys())
+	{
+		if (!currentKey->isJsonString())
+		{
+			return false;
+		}
+
+		value = animationsObject->getValue(currentKey);
+
+		if (!value->isJsonObject())
+		{
+			return false;
+		}
+
+		JSONobjectSP currentAnimation = dynamic_pointer_cast<JSONobject>(value);
+
+		//
+
+		GlTfAnimationSP glTfAnimation = GlTfAnimationSP(new GlTfAnimation());
+
+		//
+
+		JSONstringSP channelsString = JSONstringSP(new JSONstring("channels"));
+		JSONstringSP samplerString = JSONstringSP(new JSONstring("sampler"));
+		JSONstringSP targetString = JSONstringSP(new JSONstring("target"));
+		JSONstringSP idString = JSONstringSP(new JSONstring("id"));
+		JSONstringSP pathString = JSONstringSP(new JSONstring("path"));
+		JSONstringSP elementString = JSONstringSP(new JSONstring("element"));
+
+		JSONstringSP parametersString = JSONstringSP(new JSONstring("parameters"));
+
+		JSONstringSP samplersString = JSONstringSP(new JSONstring("samplers"));
+		JSONstringSP inputString = JSONstringSP(new JSONstring("input"));
+		JSONstringSP interpolationString = JSONstringSP(new JSONstring("interpolation"));
+		JSONstringSP outputString = JSONstringSP(new JSONstring("output"));
+
+		//
+
+		value = currentAnimation->getValue(channelsString);
+
+		if (!value->isJsonArray())
+		{
+			return false;
+		}
+
+		JSONarraySP currentChannels = dynamic_pointer_cast<JSONarray>(value);
+
+
+		value = currentAnimation->getValue(parametersString);
+
+		if (!value->isJsonObject())
+		{
+			return false;
+		}
+
+		JSONobjectSP currentParameters = dynamic_pointer_cast<JSONobject>(value);
+
+
+		value = currentAnimation->getValue(samplersString);
+
+		if (!value->isJsonObject())
+		{
+			return false;
+		}
+
+		JSONobjectSP currentSamplers = dynamic_pointer_cast<JSONobject>(value);
+
+		//
+
+		for (auto& currentElement : currentChannels->getAllValues())
+		{
+			if (!currentElement->isJsonObject())
+			{
+				return false;
+			}
+
+			JSONobjectSP currentChannel = dynamic_pointer_cast<JSONobject>(currentElement);
+
+			//
+
+			GlTfChannelSP glTfChannel = GlTfChannelSP(new GlTfChannel());
+
+			//
+			//
+
+			value = currentChannel->getValue(targetString);
+			if (!value->isJsonObject())
+			{
+				return false;
+			}
+			JSONobjectSP currentTarget = dynamic_pointer_cast<JSONobject>(value);
+
+
+			value = currentTarget->getValue(idString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentId = dynamic_pointer_cast<JSONstring>(value);
+
+			if (allNodes.find(currentId->getValue()) == allNodes.end())
+			{
+				return false;
+			}
+
+			glTfChannel->setTargetNode(allNodes[currentId->getValue()]);
+
+
+			value = currentTarget->getValue(pathString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentPath = dynamic_pointer_cast<JSONstring>(value);
+
+			glTfChannel->setTargetPath(currentPath->getValue());
+
+
+			value = currentTarget->getValue(elementString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentTargetElement = dynamic_pointer_cast<JSONstring>(value);
+
+			glTfChannel->setTargetElement(currentTargetElement->getValue());
+
+			//
+
+			value = currentChannel->getValue(samplerString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentSampler = dynamic_pointer_cast<JSONstring>(value);
+
+			if (!currentSamplers->hasKey(currentSampler))
+			{
+				return false;
+			}
+			value = currentSamplers->getValue(currentSampler);
+			if (!value->isJsonObject())
+			{
+				return false;
+			}
+			JSONobjectSP currentSamplerObject = dynamic_pointer_cast<JSONobject>(value);
+
+
+			value = currentSamplerObject->getValue(inputString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentInput = dynamic_pointer_cast<JSONstring>(value);
+
+			if (!currentParameters->hasKey(currentInput))
+			{
+				return false;
+			}
+
+			value = currentSamplerObject->getValue(interpolationString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentInterpolation = dynamic_pointer_cast<JSONstring>(value);
+
+			if (!currentParameters->hasKey(currentInterpolation))
+			{
+				return false;
+			}
+
+			value = currentSamplerObject->getValue(outputString);
+			if (!value->isJsonString())
+			{
+				return false;
+			}
+			JSONstringSP currentOutput = dynamic_pointer_cast<JSONstring>(value);
+
+			if (!currentParameters->hasKey(currentOutput))
+			{
+				return false;
+			}
+
+			//
+
+			GlTfAccessorSP input;
+			GlTfAccessorSP interpolator;
+			GlTfAccessorSP output;
+
+			if (!decodeAccessor(input, currentParameters->getValue(currentInput)))
+			{
+				return false;
+			}
+			glTfChannel->setTime(input);
+
+			if (!decodeAccessor(interpolator, currentParameters->getValue(currentInterpolation)))
+			{
+				return false;
+			}
+			glTfChannel->setInterpolator(interpolator);
+
+			if (!decodeAccessor(output, currentParameters->getValue(currentOutput)))
+			{
+				return false;
+			}
+			glTfChannel->setValue(output);
+
+			//
+			//
+
+			glTfAnimation->addChannel(glTfChannel);
+		}
+
+		//
+
+		allAnimations[currentKey->getValue()] = glTfAnimation;
 	}
 
 	return true;
@@ -1603,6 +2016,10 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	glusLogPrint(GLUS_LOG_INFO, "Decoded '%s'", completeFilename.c_str());
 
+	nodeTreeFactory.reset();
+
+	doReset = true;
+
 	//
 
 	if (!jsonResult->isJsonObject())
@@ -1622,7 +2039,6 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	//
 
-	BoundingSphere boundingSphere;
 	NodeSP rootNode;
 	int32_t numberJoints = 0.0f;
 	bool animationData = false;
@@ -1780,7 +2196,14 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	//
 
-	// TODO Decode Skins.
+	if (!decodeSkins(jsonGlTf))
+	{
+		glusLogPrint(GLUS_LOG_ERROR, "Could not decode skins");
+
+		cleanUp();
+
+		return result;
+	}
 
 	//
 
@@ -1795,13 +2218,27 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	//
 
-	// TODO Decode Animations.
+	if (!decodeAnimations(jsonGlTf))
+	{
+		glusLogPrint(GLUS_LOG_ERROR, "Could not decode animations");
+
+		cleanUp();
+
+		return result;
+	}
 
 	//
 
-	// TODO Calculate bounding box.
+	if (allNodes.find(rootNodeString->getValue()) == allNodes.end())
+	{
+		glusLogPrint(GLUS_LOG_ERROR, "Root node '%s' not found", rootNodeString->getValue().c_str());
 
-	// TODO Build graphics engine node tree.
+		cleanUp();
+
+		return result;
+	}
+
+	rootNode = buildNode(NodeSP(), allNodes[rootNodeString->getValue()], Matrix4x4());
 
 	if (rootNode.get() == nullptr)
 	{
@@ -1811,6 +2248,23 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 		return result;
 	}
+
+	nodeTreeFactory.createIndex();
+
+	// TODO Set inverse bind matrices of nodes.
+
+	float absMaxX = glusMaxf(fabs(maxX), fabs(minX));
+	float absMaxY = glusMaxf(fabs(maxY), fabs(minY));
+	float absMaxZ = glusMaxf(fabs(maxZ), fabs(minZ));
+
+	float newRadius = glusLengthf(absMaxX, absMaxY, absMaxZ);
+
+	BoundingSphere boundingSphere;
+	boundingSphere.setRadius(newRadius);
+
+	// TODO Calculate number joints.
+
+	// TODO Set if animated and skinned.
 
 	// Create the model.
 
@@ -1823,6 +2277,199 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 	//
 
 	cleanUp();
+
+	nodeTreeFactory.reset();
+
+	return result;
+}
+
+void GlTfEntityDecoderFactory::processMinMax(const float* vertices, int32_t numberVertices, const Matrix4x4& matrix)
+{
+	GLfloat vertex[4];
+
+	// Calculate bounding sphere from existing vertices in mesh
+	for (int32_t i = 0; i < numberVertices; i++)
+	{
+		glusMatrix4x4MultiplyPoint4f(vertex, matrix.getM(), &vertices[i * 4]);
+
+		if (doReset)
+		{
+			minX = vertex[0];
+			maxX = vertex[0];
+			minY = vertex[1];
+			maxY = vertex[1];
+			minZ = vertex[2];
+			maxZ = vertex[2];
+
+			doReset = false;
+		}
+		else
+		{
+			if (vertex[0] < minX)
+			{
+				minX = vertex[0];
+			}
+			if (vertex[0] > maxX)
+			{
+				maxX = vertex[0];
+			}
+			if (vertex[1] < minY)
+			{
+				minY = vertex[1];
+			}
+			if (vertex[1] > maxY)
+			{
+				maxY = vertex[1];
+			}
+			if (vertex[2] < minZ)
+			{
+				minZ = vertex[2];
+			}
+			if (vertex[2] > maxZ)
+			{
+				maxZ = vertex[2];
+			}
+		}
+	}
+}
+
+NodeSP GlTfEntityDecoderFactory::buildNode(const NodeSP& parentNode, const GlTfNodeSP& node, const Matrix4x4& parentMatrix)
+{
+	Matrix4x4 newParentMatrix(parentMatrix);
+
+	if (node.get() == nullptr)
+	{
+		return NodeSP();
+	}
+
+	MeshSP mesh;
+	CameraSP camera;
+	LightSP light;
+	vector<AnimationStackSP> allAnimStacks;
+
+	//
+
+	for (auto& currentMesh : node->getAllMeshes())
+	{
+		string name;
+		uint32_t numberVertices;
+		float* vertices = nullptr;
+		float* normals = nullptr;
+		float* bitangents = nullptr;
+		float* tangents = nullptr;
+		float* texCoords = nullptr;
+		uint32_t numberIndices;
+		uint32_t* indices = nullptr;
+		map<int32_t, SubMeshSP> subMeshes;
+		map<int32_t, SurfaceMaterialSP> surfaceMaterials;
+
+		name = currentMesh->getName();
+
+		int32_t index = 0;
+
+		for (auto& currentPrimitive : currentMesh->getAllPrimitives())
+		{
+			// Only shared attributes supported
+			if (index == 0)
+			{
+				numberVertices = static_cast<uint32_t>(currentPrimitive->getPosition()->getCount());
+
+				vertices = new float[4 * numberVertices];
+				memcpy(vertices, currentPrimitive->getPosition()->getData(), 4 * sizeof(float) * numberVertices);
+
+				if (currentPrimitive->getNormal().get() != nullptr)
+				{
+					normals = new float[3 * numberVertices];
+					memcpy(normals, currentPrimitive->getNormal()->getData(), 3 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getBitangent().get() != nullptr)
+				{
+					bitangents = new float[3 * numberVertices];
+					memcpy(bitangents, currentPrimitive->getBitangent()->getData(), 3 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getTangent().get() != nullptr)
+				{
+					tangents = new float[3 * numberVertices];
+					memcpy(tangents, currentPrimitive->getTangent()->getData(), 3 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getTexcoord().get() != nullptr)
+				{
+					texCoords = new float[2 * numberVertices];
+					memcpy(texCoords, currentPrimitive->getTexcoord()->getData(), 2 * sizeof(float) * numberVertices);
+				}
+
+				// TODO Bones etc.
+
+				numberIndices = static_cast<uint32_t>(currentPrimitive->getIndices()->getCount());
+
+				indices = new uint32_t[numberIndices];
+				memcpy(indices, currentPrimitive->getIndices()->getData(), sizeof(uint32_t) * numberIndices);
+			}
+
+			SubMeshSP currentSubMesh = SubMeshSP(new SubMesh(currentPrimitive->getIndices()->getByteOffset(), currentPrimitive->getIndices()->getCount()));
+
+			subMeshes[index] = currentSubMesh;
+
+			surfaceMaterials[index] = currentPrimitive->getSurfaceMaterial();
+
+			index++;
+		}
+
+		mesh = MeshSP(new Mesh(name, numberVertices, vertices, normals, bitangents, tangents, texCoords, numberIndices, indices, subMeshes, surfaceMaterials));
+
+		// Only one mesh supported.
+		break;
+	}
+
+
+	//
+
+	// TODO Create animation stacks.
+
+	//
+
+	string parentNodeName = parentNode.get() ? parentNode->getName() : "[NULL]";
+
+	NodeSP result = nodeTreeFactory.createNode(node->getName(), parentNodeName, node->getTranslation().getV(), node->getPostTranslation(), node->getRotation().getV(), node->getPostRotation(), node->getScale().getV(), node->getPostScaling(), node->getGeometricTransform(), mesh, camera, light, allAnimStacks);
+
+	//
+
+	if (node->isJoint())
+	{
+		nodeTreeFactory.setJoint(node->getName());
+	}
+
+	//
+
+	if (result->getMesh().get() != nullptr)
+	{
+		Matrix4x4 matrix;
+		Matrix4x4 localMatrix;
+
+		result->calculateLocalMatrix(localMatrix);
+
+		newParentMatrix = newParentMatrix * localMatrix;
+
+		matrix = newParentMatrix * result->getGeometricTransformMatrix();
+
+		// Update the min max for the final bounding sphere
+		processMinMax(result->getMesh()->getVertices(), result->getMesh()->getNumberVertices(), matrix);
+	}
+
+	//
+
+	for (auto& currentChild : node->getAllChildren())
+	{
+		NodeSP child = buildNode(result, currentChild, newParentMatrix);
+
+		if (child.get() == nullptr)
+		{
+			return NodeSP();
+		}
+	}
 
 	return result;
 }
@@ -1861,4 +2508,13 @@ void GlTfEntityDecoderFactory::cleanUp()
 
 
 	allMeshes.clear();
+
+
+	allSkins.clear();
+
+
+	allNodes.clear();
+
+
+	allAnimations.clear();
 }

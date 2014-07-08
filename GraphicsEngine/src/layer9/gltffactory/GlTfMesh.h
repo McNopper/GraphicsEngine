@@ -26,6 +26,8 @@ public:
 	GlTfMesh(const std::string& name);
 	virtual ~GlTfMesh();
 
+	const std::string& getName() const;
+
 	void addPrimitive(const GlTfPrimitiveSP& primitive);
 
 	const std::vector<GlTfPrimitiveSP>& getAllPrimitives() const;
