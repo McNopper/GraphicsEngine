@@ -39,7 +39,7 @@ ModelEntity::ModelEntity(const string& name, const ModelSP& model, float scaleX,
 
 	setUpdateable(model->isAnimated());
 
-	if (model->isAnimated() && model->isSkinned())
+	if (model->isSkinned())
 	{
 		jointIndex = model->getRootNode()->getRootJointIndex();
 

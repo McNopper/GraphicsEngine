@@ -295,6 +295,16 @@ void GlTfEntityEncoderFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP
 
 			animationObject->addKeyValue(samplersString, samplersObject);
 
+			JSONstringSP startTimeString = JSONstringSP(new JSONstring("startTime"));
+			JSONnumberSP startTimeValue = JSONnumberSP(new JSONnumber());
+
+			animationObject->addKeyValue(startTimeString, startTimeValue);
+
+			JSONstringSP stopTimeString = JSONstringSP(new JSONstring("stopTime"));
+			JSONnumberSP stopTimeValue = JSONnumberSP(new JSONnumber());
+
+			animationObject->addKeyValue(stopTimeString, stopTimeValue);
+
 			//
 
 			JSONstringSP nodeValueString;
@@ -316,6 +326,9 @@ void GlTfEntityEncoderFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP
 				if (animStackIndex < allAnimStacks.size())
 				{
 					auto animStack = allAnimStacks[animStackIndex];
+
+					startTimeValue->setFloatValue(animStack->getStartTime());
+					stopTimeValue->setFloatValue(animStack->getStopTime());
 
 					if (animStack->getAnimationLayersCount() > 0)
 					{

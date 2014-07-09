@@ -6,6 +6,9 @@
  */
 
 #include "../../layer0/json/JSONdecoder.h"
+#include "../../layer2/interpolation/ConstantInterpolator.h"
+#include "../../layer2/interpolation/CubicInterpolator.h"
+#include "../../layer2/interpolation/LinearInterpolator.h"
 #include "../../layer1/texture/Texture2DManager.h"
 #include "../../layer3/mesh/Mesh.h"
 
@@ -14,7 +17,7 @@
 using namespace std;
 
 GlTfEntityDecoderFactory::GlTfEntityDecoderFactory() :
-		doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), nodeTreeFactory()
+		doReset(true), minX(0.0f), maxX(0.0f), minY(0.0f), maxY(0.0f), minZ(0.0f), maxZ(0.0f), nodeTreeFactory(), animated(false), skinned(false)
 {
 }
 
@@ -1549,6 +1552,9 @@ bool GlTfEntityDecoderFactory::decodeAnimations(const JSONobjectSP& jsonGlTf)
 		JSONstringSP interpolationString = JSONstringSP(new JSONstring("interpolation"));
 		JSONstringSP outputString = JSONstringSP(new JSONstring("output"));
 
+		JSONstringSP startTimeString = JSONstringSP(new JSONstring("startTime"));
+		JSONstringSP stopTimeString = JSONstringSP(new JSONstring("stopTime"));
+
 		//
 
 		value = currentAnimation->getValue(channelsString);
@@ -1581,6 +1587,28 @@ bool GlTfEntityDecoderFactory::decodeAnimations(const JSONobjectSP& jsonGlTf)
 		JSONobjectSP currentSamplers = dynamic_pointer_cast<JSONobject>(value);
 
 		//
+
+		value = currentAnimation->getValue(startTimeString);
+
+		if (!value->isJsonNumber())
+		{
+			return false;
+		}
+
+		JSONnumberSP currentStartTime = dynamic_pointer_cast<JSONnumber>(value);
+
+		glTfAnimation->setStartTime(currentStartTime->getFloatValue());
+
+		value = currentAnimation->getValue(stopTimeString);
+
+		if (!value->isJsonNumber())
+		{
+			return false;
+		}
+
+		JSONnumberSP currentStopTime = dynamic_pointer_cast<JSONnumber>(value);
+
+		glTfAnimation->setStopTime(currentStopTime->getFloatValue());
 
 		for (auto& currentElement : currentChannels->getAllValues())
 		{
@@ -2020,6 +2048,10 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	doReset = true;
 
+	animated = false;
+
+	skinned = false;
+
 	//
 
 	if (!jsonResult->isJsonObject())
@@ -2041,8 +2073,6 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	NodeSP rootNode;
 	int32_t numberJoints = 0.0f;
-	bool animationData = false;
-	bool skinned = false;
 
 	//
 
@@ -2249,9 +2279,27 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 		return result;
 	}
 
-	nodeTreeFactory.createIndex();
+	numberJoints = nodeTreeFactory.createIndex();
 
-	// TODO Set inverse bind matrices of nodes.
+	// Set inverse bind matrices of nodes.
+
+	for (auto& currentSkinPair : allSkins)
+	{
+		auto& currentSkin = currentSkinPair.second;
+
+		const float* currentData = (const float*)currentSkin->getInverseBindMatrices()->getData();
+
+		for (auto& currentJointName : currentSkin->getAllJointNames())
+		{
+			Matrix4x4 currentInverseBindMatrix(currentData);
+
+			nodeTreeFactory.setInverseBindMatrix(currentJointName, currentInverseBindMatrix);
+
+			currentData += 16;
+		}
+	}
+
+	//
 
 	float absMaxX = glusMaxf(fabs(maxX), fabs(minX));
 	float absMaxY = glusMaxf(fabs(maxY), fabs(minY));
@@ -2262,13 +2310,9 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 	BoundingSphere boundingSphere;
 	boundingSphere.setRadius(newRadius);
 
-	// TODO Calculate number joints.
-
-	// TODO Set if animated and skinned.
-
 	// Create the model.
 
-	ModelSP model = ModelSP(new Model(boundingSphere, rootNode, numberJoints, animationData, skinned));
+	ModelSP model = ModelSP(new Model(boundingSphere, rootNode, numberJoints, animated, skinned));
 
 	// Create the model entity.
 
@@ -2279,6 +2323,10 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 	cleanUp();
 
 	nodeTreeFactory.reset();
+
+	animated = false;
+
+	skinned = false;
 
 	return result;
 }
@@ -2353,11 +2401,19 @@ NodeSP GlTfEntityDecoderFactory::buildNode(const NodeSP& parentNode, const GlTfN
 	{
 		string name;
 		uint32_t numberVertices;
+
 		float* vertices = nullptr;
 		float* normals = nullptr;
 		float* bitangents = nullptr;
 		float* tangents = nullptr;
 		float* texCoords = nullptr;
+
+		float* boneIndices0 = nullptr;
+		float* boneIndices1 = nullptr;
+		float* boneWeights0 = nullptr;
+		float* boneWeights1 = nullptr;
+		float* boneCounters = nullptr;
+
 		uint32_t numberIndices;
 		uint32_t* indices = nullptr;
 		map<int32_t, SubMeshSP> subMeshes;
@@ -2401,7 +2457,39 @@ NodeSP GlTfEntityDecoderFactory::buildNode(const NodeSP& parentNode, const GlTfN
 					memcpy(texCoords, currentPrimitive->getTexcoord()->getData(), 2 * sizeof(float) * numberVertices);
 				}
 
-				// TODO Bones etc.
+				//
+
+				if (currentPrimitive->getBoneIndices0().get() != nullptr)
+				{
+					boneIndices0 = new float[4 * numberVertices];
+					memcpy(boneIndices0, currentPrimitive->getBoneIndices0()->getData(), 4 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getBoneIndices1().get() != nullptr)
+				{
+					boneIndices1 = new float[4 * numberVertices];
+					memcpy(boneIndices1, currentPrimitive->getBoneIndices1()->getData(), 4 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getBoneWeights0().get() != nullptr)
+				{
+					boneWeights0 = new float[4 * numberVertices];
+					memcpy(boneWeights0, currentPrimitive->getBoneWeights0()->getData(), 4 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getBoneWeights1().get() != nullptr)
+				{
+					boneWeights1 = new float[4 * numberVertices];
+					memcpy(boneWeights1, currentPrimitive->getBoneWeights1()->getData(), 4 * sizeof(float) * numberVertices);
+				}
+
+				if (currentPrimitive->getBoneCounters().get() != nullptr)
+				{
+					boneCounters = new float[numberVertices];
+					memcpy(boneCounters, currentPrimitive->getBoneCounters()->getData(), sizeof(float) * numberVertices);
+				}
+
+				//
 
 				numberIndices = static_cast<uint32_t>(currentPrimitive->getIndices()->getCount());
 
@@ -2420,14 +2508,103 @@ NodeSP GlTfEntityDecoderFactory::buildNode(const NodeSP& parentNode, const GlTfN
 
 		mesh = MeshSP(new Mesh(name, numberVertices, vertices, normals, bitangents, tangents, texCoords, numberIndices, indices, subMeshes, surfaceMaterials));
 
+		if (boneIndices0 && boneIndices1 && boneWeights0 && boneWeights1 && boneCounters)
+		{
+			mesh->addSkinningData(boneIndices0, boneIndices1, boneWeights0, boneWeights1, boneCounters);
+
+			skinned = true;
+		}
+
 		// Only one mesh supported.
 		break;
 	}
 
 
-	//
+	// Add animations.
 
-	// TODO Create animation stacks.
+	if (allAnimations.size() > 0)
+	{
+		animated = true;
+
+		for (auto& currentAnimationPair : allAnimations)
+		{
+			auto& currentAnimation = currentAnimationPair.second;
+
+			AnimationStackSP currentAnimationStack = AnimationStackSP(new AnimationStack(currentAnimationPair.first, currentAnimation->getStartTime(), currentAnimation->getStopTime()));
+
+			allAnimStacks.push_back(currentAnimationStack);
+
+			// Note: Currently only supporting one animation layer.
+			AnimationLayerSP currentAnimationLayer = AnimationLayerSP(new AnimationLayer());
+
+			currentAnimationStack->addAnimationLayer(currentAnimationLayer);
+
+			for (auto& currentChannel : currentAnimation->getAllChannels())
+			{
+				if (currentChannel->getTargetNode()->getName() == node->getName())
+				{
+					for (int32_t i = 0; i < currentChannel->getTime()->getCount(); i++)
+					{
+						float time = ((float*)currentChannel->getTime()->getData())[i];
+						float value = ((float*)currentChannel->getValue()->getData())[i];
+						uint32_t interpolatorIndex = ((uint32_t*)currentChannel->getInterpolator()->getData())[i];
+
+						const Interpolator* interpolator;
+						switch (interpolatorIndex)
+						{
+							case 0:
+								interpolator = &ConstantInterpolator::interpolator;
+								break;
+							case 1:
+								interpolator = &LinearInterpolator::interpolator;
+								break;
+							case 2:
+								interpolator = &CubicInterpolator::interpolator;
+								break;
+							default:
+								return NodeSP();
+						}
+
+						enum AnimationLayer::eCHANNELS_XYZ channel;
+						if (currentChannel->getTargetElement() == "x")
+						{
+							channel = AnimationLayer::X;
+						}
+						else if (currentChannel->getTargetElement() == "y")
+						{
+							channel = AnimationLayer::Y;
+						}
+						else if (currentChannel->getTargetElement() == "z")
+						{
+							channel = AnimationLayer::Z;
+						}
+						else
+						{
+							return NodeSP();
+						}
+
+						if (currentChannel->getTargetPath() == "translation")
+						{
+							currentAnimationLayer->addTranslationValue(channel, time, value, *interpolator);
+						}
+						else if (currentChannel->getTargetPath() == "rotation")
+						{
+							currentAnimationLayer->addRotationValue(channel, time, value, *interpolator);
+						}
+						else if (currentChannel->getTargetPath() == "scale")
+						{
+							currentAnimationLayer->addScalingValue(channel, time, value, *interpolator);
+						}
+						else
+						{
+							return NodeSP();
+						}
+					}
+
+				}
+			}
+		}
+	}
 
 	//
 

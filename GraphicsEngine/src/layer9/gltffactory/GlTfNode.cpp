@@ -10,7 +10,7 @@
 using namespace std;
 
 GlTfNode::GlTfNode(const string& name) :
-	name(name), allChildren() /*, TODO Instance skin */, joint(false), allMeshes(), translation(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f), postTranslation(), postRotation(), postScaling(), geometricTransform()
+	name(name), allChildren(), instanceSkin(), joint(false), allMeshes(), translation(0.0f, 0.0f, 0.0f), rotation(0.0f, 0.0f, 0.0f), scale(1.0f, 1.0f, 1.0f), postTranslation(), postRotation(), postScaling(), geometricTransform()
 {
 }
 

@@ -41,6 +41,10 @@ private:
 
 	NodeTreeFactory nodeTreeFactory;
 
+	bool animated;
+
+	bool skinned;
+
 	std::map<std::string, GLUSbinaryfile> allBuffers;
 	std::map<std::string, GlTfBufferViewSP> allBufferViews;
 	std::map<std::string, GlTfAccessorSP> allAccessors;
