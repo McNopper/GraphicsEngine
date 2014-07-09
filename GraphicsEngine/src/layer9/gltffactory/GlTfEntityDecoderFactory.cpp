@@ -2072,7 +2072,7 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 	//
 
 	NodeSP rootNode;
-	int32_t numberJoints = 0.0f;
+	int32_t numberJoints;
 
 	//
 
