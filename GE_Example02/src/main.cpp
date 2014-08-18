@@ -275,6 +275,26 @@ GLUSvoid keyGame(GLUSboolean pressed, GLUSint key)
 
 int main(int argc, char* argv[])
 {
+	EGLint eglConfigAttributes[] = {
+	        EGL_RED_SIZE, 8,
+	        EGL_GREEN_SIZE, 8,
+	        EGL_BLUE_SIZE, 8,
+	        EGL_DEPTH_SIZE, 24,
+	        EGL_STENCIL_SIZE, 8,
+	        EGL_SAMPLE_BUFFERS, 1,
+	        EGL_SAMPLES, 8,
+	        EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
+	        EGL_NONE
+	};
+
+    EGLint eglContextAttributes[] = {
+    		EGL_CONTEXT_MAJOR_VERSION, 4,
+    		EGL_CONTEXT_MINOR_VERSION, 1,
+    		EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, EGL_TRUE,
+    		EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+    		EGL_NONE
+    };
+
 	glusInitFunc(::initGame);
 	glusReshapeFunc(::reshapeGame);
 	glusUpdateFunc(::updateGame);
@@ -284,10 +304,7 @@ int main(int argc, char* argv[])
 	glusMouseMoveFunc(::mouseMoveGame);
 	glusKeyFunc(::keyGame);
 
-	glusPrepareContext(4, 1, GLUS_FORWARD_COMPATIBLE_BIT);
-	glusPrepareMSAA(8);
-	glusPrepareNoResize(GLUS_TRUE);
-	if (!glusCreateWindow("OpenGL Graphics Engine", 1024, 768, 24, 8, GLUS_FALSE))
+	if (!glusCreateWindow("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes))
 	{
 		return -1;
 	}
