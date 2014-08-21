@@ -18,7 +18,7 @@ Shape::Shape(const GLUSshape& shape) : shape(shape)
 
 Shape::~Shape()
 {
-	glusDestroyShapef(&shape);
+	glusShapeDestroyf(&shape);
 }
 
 Shape& Shape::operator =(const Shape& other)
@@ -28,9 +28,9 @@ Shape& Shape::operator =(const Shape& other)
 		return *this;
 	}
 
-	glusDestroyShapef(&shape);
+	glusShapeDestroyf(&shape);
 
-	glusCopyShapef(&shape, &other.shape);
+	glusShapeCopyf(&shape, &other.shape);
 
 	return *this;
 }

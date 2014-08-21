@@ -25,11 +25,11 @@ Program::Program(const string& type, const string& computeFilename) :
 
 	glusLogPrint(GLUS_LOG_INFO, "Loading shader: %s", computeFilename.c_str());
 
-	glusLoadTextFile(computeFilename.c_str(), &computeSource);
+	glusFileLoadText(computeFilename.c_str(), &computeSource);
 
-	glusBuildComputeProgramFromSource(&shaderprogram, (const GLUSchar**) &computeSource.text);
+	glusProgramBuildComputeFromSource(&shaderprogram, (const GLUSchar**) &computeSource.text);
 
-	glusDestroyTextFile(&computeSource);
+	glusFileDestroyText(&computeSource);
 }
 
 Program::Program(const string& type, const string& vertexFilename, const string& fragmentFilename) :
@@ -40,13 +40,13 @@ Program::Program(const string& type, const string& vertexFilename, const string&
 
 	glusLogPrint(GLUS_LOG_INFO, "Loading shader: %s %s", vertexFilename.c_str(), fragmentFilename.c_str());
 
-	glusLoadTextFile(vertexFilename.c_str(), &vertexSource);
-	glusLoadTextFile(fragmentFilename.c_str(), &fragmentSource);
+	glusFileLoadText(vertexFilename.c_str(), &vertexSource);
+	glusFileLoadText(fragmentFilename.c_str(), &fragmentSource);
 
-	glusBuildProgramFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, 0, 0, 0, (const GLUSchar**) &fragmentSource.text);
+	glusProgramBuildFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, 0, 0, 0, (const GLUSchar**) &fragmentSource.text);
 
-	glusDestroyTextFile(&vertexSource);
-	glusDestroyTextFile(&fragmentSource);
+	glusFileDestroyText(&vertexSource);
+	glusFileDestroyText(&fragmentSource);
 }
 
 Program::Program(const string& type, const string& vertexFilename, const string& geometryFilename, const string& fragmentFilename) :
@@ -58,15 +58,15 @@ Program::Program(const string& type, const string& vertexFilename, const string&
 
 	glusLogPrint(GLUS_LOG_INFO, "Loading shader: %s %s %s", vertexFilename.c_str(), geometryFilename.c_str(), fragmentFilename.c_str());
 
-	glusLoadTextFile(vertexFilename.c_str(), &vertexSource);
-	glusLoadTextFile(geometryFilename.c_str(), &geometrySource);
-	glusLoadTextFile(fragmentFilename.c_str(), &fragmentSource);
+	glusFileLoadText(vertexFilename.c_str(), &vertexSource);
+	glusFileLoadText(geometryFilename.c_str(), &geometrySource);
+	glusFileLoadText(fragmentFilename.c_str(), &fragmentSource);
 
-	glusBuildProgramFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, 0, 0, (const GLUSchar**) &geometrySource.text, (const GLUSchar**) &fragmentSource.text);
+	glusProgramBuildFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, 0, 0, (const GLUSchar**) &geometrySource.text, (const GLUSchar**) &fragmentSource.text);
 
-	glusDestroyTextFile(&vertexSource);
-	glusDestroyTextFile(&geometrySource);
-	glusDestroyTextFile(&fragmentSource);
+	glusFileDestroyText(&vertexSource);
+	glusFileDestroyText(&geometrySource);
+	glusFileDestroyText(&fragmentSource);
 }
 
 Program::Program(const string& type, const string& vertexFilename, const string& controlFilename, const string& evaluationFilename, const string& geometryFilename, const string& fragmentFilename) :
@@ -80,19 +80,19 @@ Program::Program(const string& type, const string& vertexFilename, const string&
 
 	glusLogPrint(GLUS_LOG_INFO, "Loading shader: %s %s %s %s %s", vertexFilename.c_str(), controlFilename.c_str(), evaluationFilename.c_str(), geometryFilename.c_str(), fragmentFilename.c_str());
 
-	glusLoadTextFile(vertexFilename.c_str(), &vertexSource);
-	glusLoadTextFile(controlFilename.c_str(), &controlSource);
-	glusLoadTextFile(evaluationFilename.c_str(), &evaluationSource);
-	glusLoadTextFile(geometryFilename.c_str(), &geometrySource);
-	glusLoadTextFile(fragmentFilename.c_str(), &fragmentSource);
+	glusFileLoadText(vertexFilename.c_str(), &vertexSource);
+	glusFileLoadText(controlFilename.c_str(), &controlSource);
+	glusFileLoadText(evaluationFilename.c_str(), &evaluationSource);
+	glusFileLoadText(geometryFilename.c_str(), &geometrySource);
+	glusFileLoadText(fragmentFilename.c_str(), &fragmentSource);
 
-	glusBuildProgramFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, (const GLUSchar**) &controlSource.text, (const GLUSchar**) &evaluationSource.text, (const GLUSchar**) &geometrySource.text, (const GLUSchar**) &fragmentSource.text);
+	glusProgramBuildFromSource(&shaderprogram, (const GLUSchar**) &vertexSource.text, (const GLUSchar**) &controlSource.text, (const GLUSchar**) &evaluationSource.text, (const GLUSchar**) &geometrySource.text, (const GLUSchar**) &fragmentSource.text);
 
-	glusDestroyTextFile(&vertexSource);
-	glusDestroyTextFile(&controlSource);
-	glusDestroyTextFile(&evaluationSource);
-	glusDestroyTextFile(&geometrySource);
-	glusDestroyTextFile(&fragmentSource);
+	glusFileDestroyText(&vertexSource);
+	glusFileDestroyText(&controlSource);
+	glusFileDestroyText(&evaluationSource);
+	glusFileDestroyText(&geometrySource);
+	glusFileDestroyText(&fragmentSource);
 }
 
 Program::~Program()
@@ -104,7 +104,7 @@ Program::~Program()
 			off();
 		}
 
-		glusDestroyProgram(&shaderprogram);
+		glusProgramDestroy(&shaderprogram);
 	}
 
 	allUniforms.clear();

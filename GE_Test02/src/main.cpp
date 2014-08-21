@@ -304,23 +304,23 @@ int main(int argc, char* argv[])
     		EGL_NONE
     };
 
-	glusInitFunc(::initGame);
-	glusReshapeFunc(::reshapeGame);
-	glusUpdateFunc(::updateGame);
-	glusTerminateFunc(::terminateGame);
-	glusMouseFunc(::mouseButtonGame);
-	glusMouseWheelFunc(::mouseWheelGame);
-	glusMouseMoveFunc(::mouseMoveGame);
-	glusKeyFunc(::keyGame);
+	glusCallbackSetInitFunc(::initGame);
+	glusCallbackSetReshapeFunc(::reshapeGame);
+	glusCallbackSetUpdateFunc(::updateGame);
+	glusCallbackSetTerminateFunc(::terminateGame);
+	glusCallbackSetMouseFunc(::mouseButtonGame);
+	glusCallbackSetMouseWheelFunc(::mouseWheelGame);
+	glusCallbackSetMouseMoveFunc(::mouseMoveGame);
+	glusCallbackSetKeyFunc(::keyGame);
 
-	if (!glusCreateWindow("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes))
+	if (!glusWindowCreate("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes))
 	{
 		return -1;
 	}
 
 	glusLogPrint(GLUS_LOG_INFO, "Initialization complete");
 
-	glusRun();
+	glusWindowRun();
 
 	return 0;
 }

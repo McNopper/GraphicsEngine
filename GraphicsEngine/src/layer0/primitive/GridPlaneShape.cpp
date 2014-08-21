@@ -12,7 +12,7 @@ using namespace std;
 GridPlaneShape::GridPlaneShape(float horizontalExtend, float verticalExtend, uint32_t rows, uint32_t columns) :
 		Shape()
 {
-	glusCreateRectangularGridPlanef(&shape, horizontalExtend, verticalExtend, rows, columns, GLUS_FALSE);
+	glusShapeCreateRectangularGridPlanef(&shape, horizontalExtend, verticalExtend, rows, columns, GLUS_FALSE);
 }
 
 GridPlaneShape::~GridPlaneShape()

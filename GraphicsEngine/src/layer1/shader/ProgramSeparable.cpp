@@ -18,14 +18,14 @@ ProgramSeparable::ProgramSeparable(const GLUSenum shaderType, const string& file
 
 	glusLogPrint(GLUS_LOG_INFO, "Loading shader: %s", filename.c_str());
 
-	if(!glusLoadTextFile(filename.c_str(), &source))
+	if(!glusFileLoadText(filename.c_str(), &source))
 	{
 		return;
 	}
 
 	shaderSource = source.text;
 
-	glusDestroyTextFile(&source);
+	glusFileDestroyText(&source);
 
 	if (!includeShader(shaderSource))
 	{
@@ -34,14 +34,14 @@ ProgramSeparable::ProgramSeparable(const GLUSenum shaderType, const string& file
 
 	const char* finalSource = shaderSource.c_str();
 
-	glusBuildShaderProgramFromSource(&shaderprogram, shaderType, (const GLUSchar**)&finalSource);
+	glusProgramBuildSeparableFromSource(&shaderprogram, shaderType, (const GLUSchar**)&finalSource);
 }
 
 ProgramSeparable::~ProgramSeparable()
 {
 	if (shaderprogram.program)
 	{
-		glusDestroyProgram(&shaderprogram);
+		glusProgramDestroy(&shaderprogram);
 	}
 }
 
@@ -83,14 +83,14 @@ bool ProgramSeparable::includeShader(string& shaderSource) const
 
 		// Shader not found.
 
-		if(!glusLoadTextFile(filename.c_str(), &source))
+		if(!glusFileLoadText(filename.c_str(), &source))
 		{
 			return false;
 		}
 
 		replace = source.text;
 
-		glusDestroyTextFile(&source);
+		glusFileDestroyText(&source);
 
 		// Include content from function shader.
 

@@ -116,11 +116,11 @@ ModelEntitySP FbxEntityFactory::loadFbxFile(const string& name, const string& fi
 		return ModelEntitySP();
 	}
 
-	float absMaxX = glusMaxf(fabs(maxX), fabs(minX));
-	float absMaxY = glusMaxf(fabs(maxY), fabs(minY));
-	float absMaxZ = glusMaxf(fabs(maxZ), fabs(minZ));
+	float absMaxX = glusMathMaxf(fabs(maxX), fabs(minX));
+	float absMaxY = glusMathMaxf(fabs(maxY), fabs(minY));
+	float absMaxZ = glusMathMaxf(fabs(maxZ), fabs(minZ));
 
-	float newRadius = glusLengthf(absMaxX, absMaxY, absMaxZ);
+	float newRadius = glusMathLengthf(absMaxX, absMaxY, absMaxZ);
 
 	BoundingSphere boundingSphere;
 	boundingSphere.setRadius(newRadius);
@@ -1329,7 +1329,7 @@ MeshSP FbxEntityFactory::processMesh(FbxMesh* mesh)
 		meshShape.indices = indices;
 		meshShape.allAttributes = 0;
 
-		glusCalculateTangentSpacef(&meshShape);
+		glusShapeCalculateTangentBitangentf(&meshShape);
 
 		binormals = meshShape.bitangents;
 		tangents = meshShape.tangents;
@@ -1423,8 +1423,8 @@ LightSP FbxEntityFactory::processLight(FbxLight* light)
 	}
 	else if (lightType == FbxLight::eSpot)
 	{
-		float spotCosCutOff = cosf(glusDegToRadf(static_cast<float>(light->InnerAngle.Get())));
-		float spotCosCutOffOuter = cosf(glusDegToRadf(static_cast<float>(light->OuterAngle.Get())));
+		float spotCosCutOff = cosf(glusMathDegToRadf(static_cast<float>(light->InnerAngle.Get())));
+		float spotCosCutOffOuter = cosf(glusMathDegToRadf(static_cast<float>(light->OuterAngle.Get())));
 
 		SpotLightSP spotLight = SpotLightSP(new SpotLight(lightName, spotCosCutOff, spotCosCutOffOuter, constantAttenuation, linearAttenuation, quadraticAttenuation, diffuse, specular));
 

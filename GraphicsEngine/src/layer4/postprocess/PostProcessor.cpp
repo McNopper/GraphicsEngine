@@ -129,8 +129,8 @@ void PostProcessor::render() const
 	Point4 biasedFocusedObjectPoint = defaultCamera->getBiasedProjectionMatrix() * defaultCamera->getViewMatrix() * focusedObjectPoint;
 
 	glUniform1f(program->getUniformLocation(u_aperture), aperture);
-	glUniform1f(program->getUniformLocation(u_focal), glusClampf(biasedFocalPoint.getZ(), 0.0f, 1.0f));
-	glUniform1f(program->getUniformLocation(u_focusedObject), glusClampf(biasedFocusedObjectPoint.getZ(), 0.0f, 1.0f));
+	glUniform1f(program->getUniformLocation(u_focal), glusMathClampf(biasedFocalPoint.getZ(), 0.0f, 1.0f));
+	glUniform1f(program->getUniformLocation(u_focusedObject), glusMathClampf(biasedFocusedObjectPoint.getZ(), 0.0f, 1.0f));
 
 	//
 

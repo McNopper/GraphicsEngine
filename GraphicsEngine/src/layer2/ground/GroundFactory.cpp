@@ -23,7 +23,7 @@ GroundFactory::~GroundFactory()
 
 GroundSP GroundFactory::createGround(float horizontalExtend, float verticalExtend, uint32_t rows, uint32_t columns) const
 {
-	float radius = glusLengthf(horizontalExtend / 2.0f, verticalExtend / 2.0f, 0.0f);
+	float radius = glusMathLengthf(horizontalExtend / 2.0f, verticalExtend / 2.0f, 0.0f);
 
 	BoundingSphere boundingSphere(Point4(), radius);
 

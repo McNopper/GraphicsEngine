@@ -28,11 +28,11 @@ ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(const string& na
 
 	float halfExtend = 0.5f;
 
-	glusCreateCubef(&shape, halfExtend);
+	glusShapeCreateCubef(&shape, halfExtend);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, halfExtend, halfExtend));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, halfExtend, halfExtend));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
@@ -45,11 +45,11 @@ ModelEntitySP PrimitiveEntityFactory::createCubePrimitiveEntity(const string& na
 
 	float halfExtend = 0.5f;
 
-	glusCreateCubef(&shape, halfExtend);
+	glusShapeCreateCubef(&shape, halfExtend);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, halfExtend, halfExtend));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, halfExtend, halfExtend));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
@@ -64,7 +64,7 @@ ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(const string& 
 
 	uint32_t numberSlices = 32;
 
-	glusCreateSpheref(&shape, radius, numberSlices);
+	glusShapeCreateSpheref(&shape, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
@@ -83,7 +83,7 @@ ModelEntitySP PrimitiveEntityFactory::createSpherePrimitiveEntity(const string& 
 
 	uint32_t numberSlices = 32;
 
-	glusCreateSpheref(&shape, radius, numberSlices);
+	glusShapeCreateSpheref(&shape, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
@@ -102,7 +102,7 @@ ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(const string& na
 
 	uint32_t numberSlices = 32;
 
-	glusCreateDomef(&shape, radius, numberSlices);
+	glusShapeCreateDomef(&shape, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
@@ -121,7 +121,7 @@ ModelEntitySP PrimitiveEntityFactory::createDomePrimitiveEntity(const string& na
 
 	uint32_t numberSlices = 32;
 
-	glusCreateDomef(&shape, radius, numberSlices);
+	glusShapeCreateDomef(&shape, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
@@ -141,7 +141,7 @@ ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(const string& n
 	uint32_t numberSlices = 32;
 	uint32_t numberStacks = 32;
 
-	glusCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
+	glusShapeCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
 
 	BoundingSphere boundingSphere;
 
@@ -161,7 +161,7 @@ ModelEntitySP PrimitiveEntityFactory::createTorusPrimitiveEntity(const string& n
 	uint32_t numberSlices = 32;
 	uint32_t numberStacks = 32;
 
-	glusCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
+	glusShapeCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
 
 	BoundingSphere boundingSphere;
 
@@ -181,11 +181,11 @@ ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(const string& na
 	uint32_t numberSlices = 32;
 	uint32_t numberStacks = 32;
 
-	glusCreateConef(&shape, halfExtend, radius, numberSlices, numberStacks);
+	glusShapeCreateConef(&shape, halfExtend, radius, numberSlices, numberStacks);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, radius, 0.0f));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
@@ -201,11 +201,11 @@ ModelEntitySP PrimitiveEntityFactory::createConePrimitiveEntity(const string& na
 	uint32_t numberSlices = 32;
 	uint32_t numberStacks = 32;
 
-	glusCreateConef(&shape, halfExtend, radius, numberSlices, numberStacks);
+	glusShapeCreateConef(&shape, halfExtend, radius, numberSlices, numberStacks);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, radius, 0.0f));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }
@@ -220,11 +220,11 @@ ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(const string
 	float radius = 0.5f;
 	uint32_t numberSlices = 32;
 
-	glusCreateCylinderf(&shape, halfExtend, radius, numberSlices);
+	glusShapeCreateCylinderf(&shape, halfExtend, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, radius, 0.0f));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial), scaleX, scaleY, scaleZ));
 }
@@ -239,11 +239,11 @@ ModelEntitySP PrimitiveEntityFactory::createCylinderPrimitiveEntity(const string
 	float radius = 0.5f;
 	uint32_t numberSlices = 32;
 
-	glusCreateCylinderf(&shape, halfExtend, radius, numberSlices);
+	glusShapeCreateCylinderf(&shape, halfExtend, radius, numberSlices);
 
 	BoundingSphere boundingSphere;
 
-	boundingSphere.setRadius(glusLengthf(halfExtend, radius, 0.0f));
+	boundingSphere.setRadius(glusMathLengthf(halfExtend, radius, 0.0f));
 
 	return ModelEntitySP(new ModelEntity(name, modelFactory.createModel(name, boundingSphere, shape, surfaceMaterial, allAnimStacks), scaleX, scaleY, scaleZ));
 }

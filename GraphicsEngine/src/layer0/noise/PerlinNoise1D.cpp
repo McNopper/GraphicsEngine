@@ -17,7 +17,7 @@ PerlinNoise1D::PerlinNoise1D(int32_t width, int32_t seed, float frequency, float
 
 	GLUStgaimage image;
 
-	if (!glusCreatePerlinNoise1D(&image, width, seed, frequency, amplitude, persistence, octaves))
+	if (!glusPerlinCreateNoise1D(&image, width, seed, frequency, amplitude, persistence, octaves))
 	{
 		return;
 	}

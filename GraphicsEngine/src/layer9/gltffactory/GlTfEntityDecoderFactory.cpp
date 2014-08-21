@@ -73,7 +73,7 @@ bool GlTfEntityDecoderFactory::decodeBuffers(const JSONobjectSP& jsonGlTf, const
 
 		glusLogPrint(GLUS_LOG_INFO, "Loading buffer '%s'", (folderName + currentUri->getValue()).c_str());
 
-		if (!glusLoadBinaryFile((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &binaryfile))
+		if (!glusFileLoadBinary((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &binaryfile))
 		{
 			return false;
 		}
@@ -392,7 +392,7 @@ bool GlTfEntityDecoderFactory::decodeImages(const JSONobjectSP& jsonGlTf, const 
 		{
 			glusLogPrint(GLUS_LOG_INFO, "Loading image '%s'", (folderName + currentUri->getValue()).c_str());
 
-			if (!glusLoadTgaImage((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &tgaimage))
+			if (!glusImageLoadTga((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &tgaimage))
 			{
 				return false;
 			}
@@ -403,7 +403,7 @@ bool GlTfEntityDecoderFactory::decodeImages(const JSONobjectSP& jsonGlTf, const 
 		{
 			glusLogPrint(GLUS_LOG_INFO, "Loading image '%s'", (folderName + currentUri->getValue()).c_str());
 
-			if (!glusLoadHdrImage((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &hdrimage))
+			if (!glusImageLoadHdr((GLUSchar*)(folderName + currentUri->getValue()).c_str(), &hdrimage))
 			{
 				return false;
 			}
@@ -2016,7 +2016,7 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	string completeFilename = folderName + fileName;
 
-	if (!glusLoadTextFile((const GLUSchar*)completeFilename.c_str(), &textfile))
+	if (!glusFileLoadText((const GLUSchar*)completeFilename.c_str(), &textfile))
 	{
 		glusLogPrint(GLUS_LOG_ERROR, "Could not load '%s'", completeFilename.c_str());
 
@@ -2031,14 +2031,14 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	if (!decoder.decode(jsonText, jsonResult))
 	{
-		glusDestroyTextFile(&textfile);
+		glusFileDestroyText(&textfile);
 
 		glusLogPrint(GLUS_LOG_ERROR, "Could not load '%s'", completeFilename.c_str());
 
 		return result;
 	}
 
-	glusDestroyTextFile(&textfile);
+	glusFileDestroyText(&textfile);
 
 	//
 
@@ -2301,11 +2301,11 @@ ModelEntitySP GlTfEntityDecoderFactory::loadGlTfModelFile(const string& identifi
 
 	//
 
-	float absMaxX = glusMaxf(fabs(maxX), fabs(minX));
-	float absMaxY = glusMaxf(fabs(maxY), fabs(minY));
-	float absMaxZ = glusMaxf(fabs(maxZ), fabs(minZ));
+	float absMaxX = glusMathMaxf(fabs(maxX), fabs(minX));
+	float absMaxY = glusMathMaxf(fabs(maxY), fabs(minY));
+	float absMaxZ = glusMathMaxf(fabs(maxZ), fabs(minZ));
 
-	float newRadius = glusLengthf(absMaxX, absMaxY, absMaxZ);
+	float newRadius = glusMathLengthf(absMaxX, absMaxY, absMaxZ);
 
 	BoundingSphere boundingSphere;
 	boundingSphere.setRadius(newRadius);
@@ -2655,7 +2655,7 @@ void GlTfEntityDecoderFactory::cleanUp()
 {
 	for (auto& currentBuffer : allBuffers)
 	{
-		glusDestroyBinaryFile(&currentBuffer.second);
+		glusFileDestroyBinary(&currentBuffer.second);
 	}
 	allBuffers.clear();
 
@@ -2666,13 +2666,13 @@ void GlTfEntityDecoderFactory::cleanUp()
 
 	for (auto& currentTgaImage : allTgaImages)
 	{
-		glusDestroyTgaImage(&currentTgaImage.second);
+		glusImageDestroyTga(&currentTgaImage.second);
 	}
 	allTgaImages.clear();
 
 	for (auto& currentHdrImage : allHdrImages)
 	{
-		glusDestroyHdrImage(&currentHdrImage.second);
+		glusImageDestroyHdr(&currentHdrImage.second);
 	}
 	allHdrImages.clear();
 

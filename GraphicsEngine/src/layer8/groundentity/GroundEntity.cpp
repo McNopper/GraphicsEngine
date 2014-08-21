@@ -17,8 +17,8 @@ using namespace std;
 GroundEntity::GroundEntity(const string& name, const GroundSP& ground, const SurfaceMaterialSP& surfaceMaterial, float scaleX, float scaleY, float scaleZ) :
 		GeneralEntity(name, scaleX, scaleY, scaleZ), repeat(1.0f), displacementScale(1.0f), transparent(false), tessellate(true), screenDistance(8.0f), ground(ground), surfaceMaterial(surfaceMaterial)
 {
-	float maxScale = glusMaxf(scaleX, scaleY);
-	maxScale = glusMaxf(maxScale, scaleZ);
+	float maxScale = glusMathMaxf(scaleX, scaleY);
+	maxScale = glusMathMaxf(maxScale, scaleZ);
 
 	setBoundingSphere(BoundingSphere(ground->getBoundingSphere().getCenter(), ground->getBoundingSphere().getRadius() * maxScale));
 

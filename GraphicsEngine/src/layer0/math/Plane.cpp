@@ -50,7 +50,7 @@ void Plane::setPlane(const Plane& other)
 	plane[2] = other.plane[2];
 	plane[3] = other.plane[3];
 
-	float length = glusLengthf(plane[0], plane[1], plane[2]);
+	float length = glusMathLengthf(plane[0], plane[1], plane[2]);
 
 	if (length != 0.0f)
 	{
@@ -68,7 +68,7 @@ void Plane::setPlane(const Vector3& normal, float d)
 	plane[2] = normal.v[2];
 	plane[3] = d;
 
-	float length = glusLengthf(plane[0], plane[1], plane[2]);
+	float length = glusMathLengthf(plane[0], plane[1], plane[2]);
 
 	if (length != 0.0f)
 	{

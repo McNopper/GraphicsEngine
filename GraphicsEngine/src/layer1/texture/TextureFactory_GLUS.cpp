@@ -22,7 +22,7 @@ void TextureFactory::destroyTgaImages(GLUStgaimage* image, int32_t start, int32_
 {
 	for (int32_t i = start; i < end; i++)
 	{
-		glusDestroyTgaImage(&image[i]);
+		glusImageDestroyTga(&image[i]);
 	}
 }
 
@@ -30,7 +30,7 @@ void TextureFactory::destroyHdrImages(GLUShdrimage* image, int32_t start, int32_
 {
 	for (int32_t i = start; i < end; i++)
 	{
-		glusDestroyHdrImage(&image[i]);
+		glusImageDestroyHdr(&image[i]);
 	}
 }
 
@@ -82,7 +82,7 @@ bool TextureFactory::loadTgaImage(const string& filename, std::string& identifie
 
 	GLint found;
 
-	GLboolean success = glusLoadTgaImage(strippedFilename.c_str(), &image);
+	GLboolean success = glusImageLoadTga(strippedFilename.c_str(), &image);
 
 	if (!success)
 	{
@@ -92,7 +92,7 @@ bool TextureFactory::loadTgaImage(const string& filename, std::string& identifie
 		{
 			strippedFilename = strippedFilename.substr(found + 1);
 
-			success = glusLoadTgaImage(strippedFilename.c_str(), &image);
+			success = glusImageLoadTga(strippedFilename.c_str(), &image);
 		}
 		else
 		{
@@ -102,7 +102,7 @@ bool TextureFactory::loadTgaImage(const string& filename, std::string& identifie
 			{
 				strippedFilename = strippedFilename.substr(found + 1);
 
-				success = glusLoadTgaImage(strippedFilename.c_str(), &image);
+				success = glusImageLoadTga(strippedFilename.c_str(), &image);
 			}
 		}
 	}
@@ -136,7 +136,7 @@ bool TextureFactory::loadHdrImage(const string& filename, std::string& identifie
 
 	GLint found;
 
-	GLboolean success = glusLoadHdrImage(strippedFilename.c_str(), &image);
+	GLboolean success = glusImageLoadHdr(strippedFilename.c_str(), &image);
 
 	if (!success)
 	{
@@ -146,7 +146,7 @@ bool TextureFactory::loadHdrImage(const string& filename, std::string& identifie
 		{
 			strippedFilename = strippedFilename.substr(found + 1);
 
-			success = glusLoadHdrImage(strippedFilename.c_str(), &image);
+			success = glusImageLoadHdr(strippedFilename.c_str(), &image);
 		}
 		else
 		{
@@ -156,7 +156,7 @@ bool TextureFactory::loadHdrImage(const string& filename, std::string& identifie
 			{
 				strippedFilename = strippedFilename.substr(found + 1);
 
-				success = glusLoadHdrImage(strippedFilename.c_str(), &image);
+				success = glusImageLoadHdr(strippedFilename.c_str(), &image);
 			}
 		}
 	}
@@ -202,9 +202,9 @@ Texture2DSP TextureFactory::loadTexture2D(const string& filename, bool mipMap, G
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Creating texture: %s", filename.c_str());
 
-		texture2D = Texture2DSP(new Texture2D(identifier, gatherInternalFormat(tgaimage.format, GL_UNSIGNED_BYTE), tgaimage.width, tgaimage.height, tgaimage.format, GL_UNSIGNED_BYTE, tgaimage.data, sizeof(uint8_t) * getNumberChannels(tgaimage.format) * tgaimage.width * tgaimage.height, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+		texture2D = Texture2DSP(new Texture2D(identifier, gatherInternalFormat(tgaimage.format, GL_UNSIGNED_BYTE), tgaimage.width, image_tgaeight, tgaimage.format, GL_UNSIGNED_BYTE, tgaimage.data, sizeof(uint8_t) * getNumberChannels(tgaimage.format) * tgaimage.width * image_tgaeight, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
-		glusDestroyTgaImage(&tgaimage);
+		glusImageDestroyTga(&tgaimage);
 	}
 	else if (isHdrFilename(filename))
 	{
@@ -215,9 +215,9 @@ Texture2DSP TextureFactory::loadTexture2D(const string& filename, bool mipMap, G
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Creating texture: %s", filename.c_str());
 
-		texture2D = Texture2DSP(new Texture2D(identifier, gatherInternalFormat(hdrimage.format, GL_FLOAT), hdrimage.width, hdrimage.height, hdrimage.format, GL_FLOAT, (uint8_t*)hdrimage.data, sizeof(float) * getNumberChannels(hdrimage.format) * hdrimage.width * hdrimage.height, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
+		texture2D = Texture2DSP(new Texture2D(identifier, gatherInternalFormat(hdrimage.format, GL_FLOAT), hdrimage.width, image_hdreight, hdrimage.format, GL_FLOAT, (uint8_t*)hdrimage.data, sizeof(float) * getNumberChannels(hdrimage.format) * hdrimage.width * image_hdreight, mipMap, minFilter, magFilter, wrapS, wrapT, anisotropic));
 
-		glusDestroyHdrImage(&hdrimage);
+		glusImageDestroyHdr(&hdrimage);
 	}
 	else
 	{
@@ -507,14 +507,14 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 		string filename = identifier + ".hdr";
 
 		hdrimage.width = pixelData.getWidth();
-		hdrimage.height = pixelData.getHeight();
+		image_hdreight = pixelData.getHeight();
 		hdrimage.depth= 1;
 		hdrimage.format = pixelData.getFormat();
 		hdrimage.data = (float*)pixelData.getPixels();
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Saving HDR texture: %s", filename.c_str());
 
-		result = glusSaveHdrImage(filename.c_str(), &hdrimage);
+		result = glusImageSaveHdr(filename.c_str(), &hdrimage);
 	}
 	else
 	{
@@ -523,14 +523,14 @@ bool TextureFactory::saveImage(const string& identifier, const PixelData& pixelD
 		string filename = identifier + ".tga";
 
 		tgaimage.width = pixelData.getWidth();
-		tgaimage.height = pixelData.getHeight();
+		image_tgaeight = pixelData.getHeight();
 		tgaimage.depth= 1;
 		tgaimage.format = pixelData.getFormat();
 		tgaimage.data = pixelData.getPixels();
 
 		glusLogPrint(GLUS_LOG_DEBUG, "Saving TGA texture: %s", filename.c_str());
 
-		result = glusSaveTgaImage(filename.c_str(), &tgaimage);
+		result = glusImageSaveTga(filename.c_str(), &tgaimage);
 	}
 
 	return static_cast<bool>(result == GL_TRUE);

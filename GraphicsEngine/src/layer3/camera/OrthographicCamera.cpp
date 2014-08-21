@@ -60,7 +60,7 @@ void OrthographicCamera::orthographic(const Viewport& viewport, float zNear, flo
 	this->width = static_cast<float>(viewport.getWidth());
 	this->height = static_cast<float>(viewport.getHeight());
 
-	glusOrthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
+	glusMatrix4x4Orthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
 
 	projectionMatrix.setM(result);
 
@@ -78,7 +78,7 @@ void OrthographicCamera::orthographic(float width, float height, float zNear, fl
 	this->width = width;
 	this->height = height;
 
-	glusOrthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
+	glusMatrix4x4Orthof(result, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, zNear, zFar);
 
 	projectionMatrix.setM(result);
 
@@ -132,7 +132,7 @@ void OrthographicCamera::adjustToFrustum(const ViewFrustum& viewFrustum, int32_t
 
 	//
 
-	float orthographicScale = glusMaxf(abs(max[0] - min[0]), abs(max[1] - min[1]));
+	float orthographicScale = glusMathMaxf(abs(max[0] - min[0]), abs(max[1] - min[1]));
 
 	orthographic(orthographicScale, orthographicScale, 0.1f, 1000.0f);
 

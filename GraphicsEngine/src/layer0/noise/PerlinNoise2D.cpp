@@ -19,7 +19,7 @@ PerlinNoise2D::PerlinNoise2D(int32_t width, int32_t height, int32_t seed, float 
 
 	GLUStgaimage image;
 
-	if (!glusCreatePerlinNoise2D(&image, width, height, seed, frequency, amplitude, persistence, octaves))
+	if (!glusPerlinCreateNoise2D(&image, width, height, seed, frequency, amplitude, persistence, octaves))
 	{
 		return;
 	}

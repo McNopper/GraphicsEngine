@@ -213,7 +213,7 @@ Point4 Point4::lerp(const Point4& other, float t) const
 
 	for (int32_t i = 0; i < 3; i++)
 	{
-		result.p[i] = glusMixf(p[i], other.p[i], t);
+		result.p[i] = glusMathMixf(p[i], other.p[i], t);
 	}
 
 	return result;

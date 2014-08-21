@@ -30,7 +30,7 @@ Font::Font(const string& filename, float width, float height, int32_t columns, i
 	program = programFactory.createFontProgram();
 
 	GLUSshape rectangularPlane;
-	glusCreateRectangularPlanef(&rectangularPlane, cellWidth / 2.0f, cellHeight / 2.0f);
+	glusShapeCreateRectangularPlanef(&rectangularPlane, cellWidth / 2.0f, cellHeight / 2.0f);
 
 	numberIndices = rectangularPlane.numberIndices;
 
@@ -48,7 +48,7 @@ Font::Font(const string& filename, float width, float height, int32_t columns, i
 
 	fontVAO = FontVAOSP(new FontVAO(program, *this));
 
-	glusDestroyShapef(&rectangularPlane);
+	glusShapeDestroyf(&rectangularPlane);
 }
 
 Font::~Font()

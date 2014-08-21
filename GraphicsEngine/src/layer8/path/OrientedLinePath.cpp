@@ -25,8 +25,8 @@ bool OrientedLinePath::update(float deltaTime, const GeneralEntitySP& entity, bo
 {
 	bool result = LinePath::update(deltaTime, entity, false);
 
-	float rotY = -glusRadToDegf(asinf(direction.getX()));
-	float rotX = glusRadToDegf(asinf(direction.getY()));
+	float rotY = -glusMathRadToDegf(asinf(direction.getX()));
+	float rotX = glusMathRadToDegf(asinf(direction.getY()));
 
 	Quaternion rotation;
 	rotation.rotateRzRyRxf(0.0f, rotY, rotX);

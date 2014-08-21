@@ -17,7 +17,7 @@ PerlinNoise3D::PerlinNoise3D(int32_t width, int32_t height, int32_t depth, int32
 
 	GLUStgaimage image;
 
-	if (!glusCreatePerlinNoise3D(&image, width, height, depth, seed, frequency, amplitude, persistence, octaves))
+	if (!glusPerlinCreateNoise3D(&image, width, height, depth, seed, frequency, amplitude, persistence, octaves))
 	{
 		return;
 	}

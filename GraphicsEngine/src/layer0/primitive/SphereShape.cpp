@@ -11,7 +11,7 @@ using namespace std;
 
 SphereShape::SphereShape(float radius, uint32_t numberSlices) : Shape()
 {
-	glusCreateSpheref(&shape, radius, numberSlices);
+	glusShapeCreateSpheref(&shape, radius, numberSlices);
 }
 
 SphereShape::~SphereShape()

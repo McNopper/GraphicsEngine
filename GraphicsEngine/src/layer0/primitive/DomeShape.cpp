@@ -11,7 +11,7 @@ using namespace std;
 
 DomeShape::DomeShape(float radius, uint32_t numberSlices) : Shape()
 {
-	glusCreateDomef(&shape, radius, numberSlices);
+	glusShapeCreateDomef(&shape, radius, numberSlices);
 }
 
 DomeShape::~DomeShape()

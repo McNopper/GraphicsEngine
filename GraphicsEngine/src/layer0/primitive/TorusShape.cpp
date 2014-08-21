@@ -11,7 +11,7 @@ using namespace std;
 
 TorusShape::TorusShape(float innerRadius, float outerRadius, uint32_t numberSlices, uint32_t numberStacks) : Shape()
 {
-	glusCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
+	glusShapeCreateTorusf(&shape, innerRadius, outerRadius, numberSlices, numberStacks);
 }
 
 TorusShape::~TorusShape()

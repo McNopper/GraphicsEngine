@@ -42,7 +42,7 @@ bool BoundingSphere::encloses(const BoundingSphere& boundingSphere) const
 
 bool BoundingSphere::encloses(const AxisAlignedBoundingBox& axisAlignedBox) const
 {
-	float halfDiagonal = glusLengthf(axisAlignedBox.getHalfWidth(), axisAlignedBox.getHalfHeight(), axisAlignedBox.getHalfDepth());
+	float halfDiagonal = glusMathLengthf(axisAlignedBox.getHalfWidth(), axisAlignedBox.getHalfHeight(), axisAlignedBox.getHalfDepth());
 
 	float distance = center.distance(axisAlignedBox.getCenter());
 

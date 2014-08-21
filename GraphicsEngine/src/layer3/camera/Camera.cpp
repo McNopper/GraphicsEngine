@@ -60,7 +60,7 @@ void Camera::updateViewFrustum()
 		// see http://www.songho.ca/opengl/gl_projectionmatrix.html
 		zNDC = (-(zFar + zNear) / (zFar - zNear) * zCurrent + (-2.0f * zFar * zNear) / (zFar - zNear)) / -zCurrent;
 
-		frustumZs.push_back(glusClampf(zNDC, -1.0f, 1.0f));
+		frustumZs.push_back(glusMathClampf(zNDC, -1.0f, 1.0f));
 	}
 }
 
@@ -77,7 +77,7 @@ void Camera::lookAt(const Point4& eye, const Point4& center, const Vector3& up)
 
 	this->up = direction.cross(left).normalize();
 
-	glusLookAtf(result, eye.getX(), eye.getY(), eye.getZ(), center.getX(), center.getY(), center.getZ(), up.getX(), up.getY(), up.getZ());
+	glusMatrix4x4LookAtf(result, eye.getX(), eye.getY(), eye.getZ(), center.getX(), center.getY(), center.getZ(), up.getX(), up.getY(), up.getZ());
 
 	viewMatrix.setM(result);
 

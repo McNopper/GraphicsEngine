@@ -13,7 +13,7 @@ TextureStandard::TextureStandard(const std::string& identifier, GLenum target, f
 		Texture(identifier, target, GL_R32F, 1, 1),
 		format(GL_RED), type(GL_FLOAT), sizeOfData(sizeof(red)), mipMap(false), minFilter(GL_NEAREST), magFilter(GL_NEAREST), wrapS(GL_REPEAT), wrapT(GL_REPEAT), anisotropic(1.0)
 {
-	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
+	hasAnisotropic = glusExtensionIsSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
 
 	setAnisotropic(false);
 }
@@ -22,7 +22,7 @@ TextureStandard::TextureStandard(const string& identifier, GLenum target, const 
 		Texture(identifier, target, GL_RGBA32F, 1, 1),
 		format(GL_RGBA), type(GL_FLOAT), sizeOfData(sizeof(color)), mipMap(false), minFilter(GL_NEAREST), magFilter(GL_NEAREST), wrapS(GL_REPEAT), wrapT(GL_REPEAT), anisotropic(1.0)
 {
-	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
+	hasAnisotropic = glusExtensionIsSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
 
 	setAnisotropic(false);
 }
@@ -31,7 +31,7 @@ TextureStandard::TextureStandard(const string& identifier, GLenum target, GLint 
 		Texture(identifier, target, internalFormat, width, height),
 		format(format), type(type), sizeOfData(sizeOfData), mipMap(mipMap), minFilter(minFilter), magFilter(magFilter), wrapS(wrapS), wrapT(wrapT), anisotropic(1.0)
 {
-	hasAnisotropic = glusExtensionSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
+	hasAnisotropic = glusExtensionIsSupported("GL_EXT_texture_filter_anisotropic") ? true : false;
 
 	setAnisotropic(anisotropic);
 }

@@ -25,25 +25,25 @@ void DebugDrawFactory::createDefaultDebugGeometry() const
 	LineGeometrySP lineGeometry;
 
 	GLUSline gridPlane;
-	glusCreateRectangularGridf(&gridPlane, 50.0f, 50.0f, 50, 50);
+	glusLineCreateRectangularGridf(&gridPlane, 50.0f, 50.0f, 50, 50);
 	lineGeometry = LineGeometrySP(new LineGeometry(gridPlane));
-	glusDestroyLinef(&gridPlane);
+	glusLineDestroyf(&gridPlane);
 	LineGeometryManager::getInstance()->setLineGeometry("GridPlane", lineGeometry);
 
 	GLUSshape sphere;
-	glusCreateSpheref(&sphere, 1.0f, 16);
+	glusShapeCreateSpheref(&sphere, 1.0f, 16);
 	lineGeometry = LineGeometrySP(new LineGeometry(sphere));
-	glusDestroyShapef(&sphere);
+	glusShapeDestroyf(&sphere);
 	LineGeometryManager::getInstance()->setLineGeometry("Sphere", lineGeometry);
 
 	GLUSshape cone;
-	glusCreateConef(&cone, 0.5f, 0.5f, 16, 16);
+	glusShapeCreateConef(&cone, 0.5f, 0.5f, 16, 16);
 	lineGeometry = LineGeometrySP(new LineGeometry(cone));
-	glusDestroyShapef(&cone);
+	glusShapeDestroyf(&cone);
 	LineGeometryManager::getInstance()->setLineGeometry("Cone", lineGeometry);
 
 	GLUSshape pyramid;
-	glusCreateConef(&pyramid, 0.5f, 0.5f, 4, 1);
+	glusShapeCreateConef(&pyramid, 0.5f, 0.5f, 4, 1);
 
 	// The pyramid gets rotated. So adjust the height to the edge and not the vertex.
 	float height = sqrtf(0.125f);
@@ -56,32 +56,32 @@ void DebugDrawFactory::createDefaultDebugGeometry() const
 	}
 
 	lineGeometry = LineGeometrySP(new LineGeometry(pyramid));
-	glusDestroyShapef(&pyramid);
+	glusShapeDestroyf(&pyramid);
 	LineGeometryManager::getInstance()->setLineGeometry("Pyramid", lineGeometry);
 
 	GLUSshape cylinder;
-	glusCreateCylinderf(&cylinder, 0.5f, 0.5f, 16);
+	glusShapeCreateCylinderf(&cylinder, 0.5f, 0.5f, 16);
 	lineGeometry = LineGeometrySP(new LineGeometry(cylinder));
-	glusDestroyShapef(&cone);
+	glusShapeDestroyf(&cone);
 	LineGeometryManager::getInstance()->setLineGeometry("Cylinder", lineGeometry);
 
 	GLUSline square;
-	glusCreateSquaref(&square, 1.0f);
+	glusLineCreateSquaref(&square, 1.0f);
 	lineGeometry = LineGeometrySP(new LineGeometry(square));
-	glusDestroyLinef(&square);
+	glusLineDestroyf(&square);
 	LineGeometryManager::getInstance()->setLineGeometry("Square", lineGeometry);
 
 	GLUSline circle;
-	glusCreateCirclef(&circle, 1.0f, 32);
+	glusLineCreateCirclef(&circle, 1.0f, 32);
 	lineGeometry = LineGeometrySP(new LineGeometry(circle));
-	glusDestroyLinef(&circle);
+	glusLineDestroyf(&circle);
 	LineGeometryManager::getInstance()->setLineGeometry("Circle", lineGeometry);
 
 	GLUSline singleLine;
 	GLUSfloat origin0[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 	GLUSfloat origin1[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glusCreateLinef(&singleLine, origin0, origin1);
+	glusLineCreateLinef(&singleLine, origin0, origin1);
 	lineGeometry = LineGeometrySP(new LineGeometry(singleLine));
-	glusDestroyLinef(&singleLine);
+	glusLineDestroyf(&singleLine);
 	LineGeometryManager::getInstance()->setLineGeometry("SingleLine", lineGeometry);
 }

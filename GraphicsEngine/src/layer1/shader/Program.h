@@ -17,7 +17,7 @@ protected:
 
 	static Program* lastUsedProgram;
 
-	GLUSshaderprogram shaderprogram;
+	GLUSprogram shaderprogram;
 
 	std::string type;
 

@@ -9,7 +9,7 @@
 
 CubeShape::CubeShape(float halfExtend) : Shape()
 {
-	glusCreateCubef(&shape, halfExtend);
+	glusShapeCreateCubef(&shape, halfExtend);
 }
 
 CubeShape::~CubeShape()

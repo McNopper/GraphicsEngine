@@ -398,7 +398,7 @@ void GlTfEntityEncoderFactory::addAnimationBufferBufferViewAccessor(JSONobjectSP
 			binaryfile.length = bin.getLength();
 			binaryfile.binary = (GLUSubyte*)bin.getData();
 
-			glusSaveBinaryFile((folderName + valueString->getValue()).c_str(), &binaryfile);
+			glusFileSaveBinary((folderName + valueString->getValue()).c_str(), &binaryfile);
 		}
 	}
 }
@@ -1345,7 +1345,7 @@ void GlTfEntityEncoderFactory::addBufferBufferViewAccessor(JSONobjectSP& buffers
 	binaryfile.length = bin.getLength();
 	binaryfile.binary = (GLUSubyte*)bin.getData();
 
-	glusSaveBinaryFile((folderName + fileName->getValue()).c_str(), &binaryfile);
+	glusFileSaveBinary((folderName + fileName->getValue()).c_str(), &binaryfile);
 }
 
 void GlTfEntityEncoderFactory::addMesh(JSONobjectSP& meshesObject, const JSONstringSP& meshString, const MeshSP& mesh) const
@@ -1773,7 +1773,7 @@ void GlTfEntityEncoderFactory::addSkin(JSONobjectSP& skinsObject, JSONobjectSP& 
 		binaryfile.length = bin.getLength();
 		binaryfile.binary = (GLUSubyte*)bin.getData();
 
-		glusSaveBinaryFile((folderName + valueString->getValue()).c_str(), &binaryfile);
+		glusFileSaveBinary((folderName + valueString->getValue()).c_str(), &binaryfile);
 	}
 }
 
@@ -2022,7 +2022,7 @@ bool GlTfEntityEncoderFactory::saveGlTfModelFile(const ModelEntitySP& modelEntit
 	textfile.length = jsonText.size();
 	textfile.text = (GLUSchar*)jsonText.c_str();
 
-	glusSaveTextFile((folderName + identifier + ".json").c_str(), &textfile);
+	glusFileSaveText((folderName + identifier + ".json").c_str(), &textfile);
 
 	glusLogPrint(GLUS_LOG_INFO, "Saved %s to %s", identifier.c_str(), folderName.c_str());
 

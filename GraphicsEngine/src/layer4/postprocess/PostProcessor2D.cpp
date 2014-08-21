@@ -89,7 +89,7 @@ PostProcessor2D::PostProcessor2D(GLenum internalFormat, GLenum format, GLenum ty
 	program = programFactory.createPostProcess2DProgram();
 
 	GLUSshape rectangularPlane;
-	glusCreateRectangularPlanef(&rectangularPlane, 0.5f, 0.5f);
+	glusShapeCreateRectangularPlanef(&rectangularPlane, 0.5f, 0.5f);
 
 	numberIndices = rectangularPlane.numberIndices;
 
@@ -107,7 +107,7 @@ PostProcessor2D::PostProcessor2D(GLenum internalFormat, GLenum format, GLenum ty
 
 	postProcessorVAO = PostProcessorVAOSP(new PostProcessorVAO(program, *this));
 
-	glusDestroyShapef(&rectangularPlane);
+	glusShapeDestroyf(&rectangularPlane);
 }
 
 PostProcessor2D::~PostProcessor2D()

@@ -11,7 +11,7 @@ using namespace std;
 
 CylinderShape::CylinderShape(float halfExtend, float radius, uint32_t numberSlices) : Shape()
 {
-	glusCreateCylinderf(&shape, halfExtend, radius, numberSlices);
+	glusShapeCreateCylinderf(&shape, halfExtend, radius, numberSlices);
 }
 
 CylinderShape::~CylinderShape()

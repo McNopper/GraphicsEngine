@@ -27,17 +27,17 @@ void PerspectiveCamera::updateProjectionMatrix()
 {
 	if (fovxDirty)
 	{
-		float d = static_cast<float>(viewport.getHeight()) / tanf(glusDegToRadf(fovy / 2.0f));
+		float d = static_cast<float>(viewport.getHeight()) / tanf(glusMathDegToRadf(fovy / 2.0f));
 
-		fovx = glusRadToDegf(atanf(static_cast<float>(viewport.getWidth()) / d)) * 2.0f;
+		fovx = glusMathRadToDegf(atanf(static_cast<float>(viewport.getWidth()) / d)) * 2.0f;
 
 		fovxDirty = false;
 	}
 	else if (fovyDirty)
 	{
-		float d = static_cast<float>(viewport.getWidth()) / tanf(glusDegToRadf(fovx / 2.0f));
+		float d = static_cast<float>(viewport.getWidth()) / tanf(glusMathDegToRadf(fovx / 2.0f));
 
-		fovy = glusRadToDegf(atanf(static_cast<float>(viewport.getHeight()) / d)) * 2.0f;
+		fovy = glusMathRadToDegf(atanf(static_cast<float>(viewport.getHeight()) / d)) * 2.0f;
 
 		fovyDirty = false;
 	}
@@ -76,7 +76,7 @@ void PerspectiveCamera::perspective(float fovy, const Viewport& viewport, float 
 	this->width = static_cast<float>(viewport.getWidth());
 	this->height = static_cast<float>(viewport.getHeight());
 
-	glusPerspectivef(result, fovy, width / height, zNear, zFar);
+	glusMatrix4x4Perspectivef(result, fovy, width / height, zNear, zFar);
 
 	projectionMatrix.setM(result);
 
@@ -95,7 +95,7 @@ void PerspectiveCamera::perspective(float fovy, float width, float height, float
 	this->width = width;
 	this->height = height;
 
-	glusPerspectivef(result, fovy, width / height, zNear, zFar);
+	glusMatrix4x4Perspectivef(result, fovy, width / height, zNear, zFar);
 
 	projectionMatrix.setM(result);
 

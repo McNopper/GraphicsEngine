@@ -15,7 +15,7 @@ class ProgramSeparable
 
 protected:
 
-	GLUSshaderprogram shaderprogram;
+	GLUSprogram shaderprogram;
 
 	GLUSenum shaderType;
 
