@@ -405,14 +405,14 @@ int main(int argc, char* argv[])
     		EGL_NONE
     };
 
-	glusCallbackSetInitFunc(::initGame);
-	glusCallbackSetReshapeFunc(::reshapeGame);
-	glusCallbackSetUpdateFunc(::updateGame);
-	glusCallbackSetTerminateFunc(::terminateGame);
-	glusCallbackSetMouseFunc(::mouseButtonGame);
-	glusCallbackSetMouseWheelFunc(::mouseWheelGame);
-	glusCallbackSetMouseMoveFunc(::mouseMoveGame);
-	glusCallbackSetKeyFunc(::keyGame);
+	glusWindowSetInitFunc(::initGame);
+	glusWindowSetReshapeFunc(::reshapeGame);
+	glusWindowSetUpdateFunc(::updateGame);
+	glusWindowSetTerminateFunc(::terminateGame);
+	glusWindowSetMouseFunc(::mouseButtonGame);
+	glusWindowSetMouseWheelFunc(::mouseWheelGame);
+	glusWindowSetMouseMoveFunc(::mouseMoveGame);
+	glusWindowSetKeyFunc(::keyGame);
 
 	if (!glusWindowCreate("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes))
 	{
