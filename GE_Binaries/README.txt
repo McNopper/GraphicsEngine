@@ -7,5 +7,7 @@ Important:
   It is located in the ViewScene example folder.
   Otherwise the example will not run.
 
-10.11.2013 Norbert Nopper (norbert@nopper.tv)
- 
+Further information:
+
+- README.txt of GraphicsEngine
+- README.txt of GLUS

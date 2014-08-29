@@ -1,35 +1,34 @@
-OpenGL Graphics Engine:
------------------------
+OpenGL 4 Graphics Engine:
+-------------------------
 
-How to build the engine / examples:
+How to build the Graphics Engine and the examples:
 
-1. Install Eclipse IDE for C/C++ Developers and the GNU Compiler Collection for Linux.
-   (Removed: Command line tools from XCode for Mac OS X.)
-   For building with Visual C++ 2013, CMake and the Windows SDK 8.1 are needed.
-2. Extract this ZIP file and set GraphicsEngine-master folder as your Eclipse workspace.
-3. Set the build configurations in Eclipse to your operating system.
-4. Build GLUS.
-5. Build the Graphics Engine.
-6. Build any of the examples.
-7. Please read the README.txt in the GE_Binaries folder. 
-8. The executables are located in the GE_Binaries folder. Execute them directly or create a run configuration in Eclipse.
+1. Install Eclipse IDE for C/C++ Developers and a GNU Compiler Collection for your operating system.
+   For building with Visual C++ 2012, CMake and the Windows SDK 8.1 are needed. 
+2. Import GraphicsEngine as an existing project.   
+3. Set the build configuration in Eclipse to your operating system.
+4. Build GraphicsEngine.
+5. Build GLUS (see README.txt of GLUS).
+6. Import an example as an existing project.
+7. Set the build configuration of the example in Eclipse to your operating system.
+8. Build the example.
+9. The executable is located in the GE_Binaries folder.
 
 If you get build errors:
 
-- Please make sure, that you install all the needed header and libraries (see below).
-- Some pre-build libraries are located in the External project folder. If you want, replace these libraries with your own build.
+- Please make sure, that you install all the needed header and libraries.
+- Pre-build libraries are located in the External project folder. If you want, replace these libraries with your own build.
 - The DevIL and the Autodesk FBX headers/libraries have to be installed separately. 
+- Note: On Ubuntu 14.04, just use the libraries provided with the OS.
 
-Libraries/SDKs used:
+SDKs and Libraries:
 
 - Autodesk FBX SDK 2015.1 http://usa.autodesk.com/fbx/
 - DevIL 1.7.8 http://openil.sourceforge.net/
-- GLEW 1.10.0 http://glew.sourceforge.net/
+- GLEW 1.11.0 http://glew.sourceforge.net/
 - GLFW 3.0.4 http://www.glfw.org/
 
-Please note: On Ubuntu 14.04, just use the libraries provided with the OS, even if they are older versions.
-
-Features:
+Features (maybe incomplete):
 
 - Primitive rendering of Sphere, Dome, Cube, Torus, Cylinder and Cone
 - Model rendering out of FBX File
@@ -63,42 +62,19 @@ Build configuration naming:
 
 [CPU]_[GPU]_[OS]_[OpenGL]_[Compiler]_[Configuration]
 
-CPU:						ARMv6, ARMv7, x64, x86
-GPU/Emulator (Optional):	AMD, ANGLE, Mali, PowerVR, VC4, Vivante 
-OS: 						Darwin, Linux, Windows
-OpenGL (Optional):			GLES2, GLES3
-Compiler:					GCC, MinGW
-Configuration:				Debug, Release
+CPU:								ARMv6, ARMv7, x64, x86
+GPU/Emulator (Optional):			AMD, ANGLE, Khronos, Mali, PowerVR, VC4, Vivante  
+OS: 								Darwin, Linux, Windows
+OpenGL/OpenGL ES/OpenVG (Optional):	GLES2, GLES3, GLES31, VG11
+Compiler:							GCC, MinGW
+Configuration:						Debug, Release
 
-e.g. x86__Windows__MSVC_Debug
+e.g. x86__Windows__MinGW_Debug or ARMv6_VC4_Linux_GLES2_GCC_Release
 
-13.06.2014 Norbert Nopper (norbert@nopper.tv)
+
+Yours Norbert Nopper
+
 
 Changelog:
 
-- Switched to C++11 and removed Boost dependencies.
-- Removed support for MacOS X. Engine will be based upon OpenGL 4.4 in the future.
-  If MacOS X supports OpenGL 4.4, support will be enabled again.
-- Upgraded to FBX SDK 2015.1
-- Upgraded to Visual C++ 2013
-- Some refactoring
-- Upgraded to Visual C++ 2012
-- Updated README
-- Removed MSVC build profile. Use CMakeLists.txt to create Visual C++ project
-- Updated to latest Boost (1.55.0) and FBX SDK (2014.2)
-- Added shadow and cascaded shadow mapping
-- Removed FBX python script for blender, as now integrated in Blender 2.69
-- Added latest GLFW (3.0.3)
-- Added latest GLFW (2.7.9)
-- Using latest FBX SDK and Boost libraries
-- Added dynamic environment mapping
-- Added latest GLFW (2.7.8)
-- Added entity exclude list
-- Added path
-- Added depth of field
-- Added ground plane debug output
-- Added plane debug output
-- Changed build configuration naming
-- Added MSAA textures, render buffers and frame buffers
-- Added MSAA post processor 
-- Bug fixes and improvements
+29.08.2014 - Reorganisation and improvement of READMEs.
