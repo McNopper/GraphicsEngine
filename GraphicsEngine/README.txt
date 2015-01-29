@@ -25,8 +25,8 @@ SDKs and Libraries:
 
 - Autodesk FBX SDK 2015.1 http://usa.autodesk.com/fbx/
 - DevIL 1.7.8 http://openil.sourceforge.net/
-- GLEW 1.11.0 http://glew.sourceforge.net/
-- GLFW 3.0.4 http://www.glfw.org/
+- GLEW 1.12.0 http://glew.sourceforge.net/
+- GLFW 3.1 http://www.glfw.org/
 
 Features (maybe incomplete):
 
@@ -76,5 +76,7 @@ Yours Norbert Nopper
 
 
 Changelog:
+
+29.01.2015 - Updated to GLEW 1.12.0.
 
 29.08.2014 - Reorganisation and improvement of READMEs.
