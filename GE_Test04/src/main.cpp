@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 	glusWindowSetMouseMoveFunc(::mouseMoveGame);
 	glusWindowSetKeyFunc(::keyGame);
 
-	if (!glusWindowCreate("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes))
+	if (!glusWindowCreate("OpenGL Graphics Engine", 1024, 768, GLUS_FALSE, GLUS_TRUE, eglConfigAttributes, eglContextAttributes, 0))
 	{
 		return -1;
 	}
