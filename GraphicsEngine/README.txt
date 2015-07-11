@@ -4,11 +4,11 @@ OpenGL 4 Graphics Engine:
 How to build the Graphics Engine and the examples:
 
 1. Install Eclipse IDE for C/C++ Developers and a GNU Compiler Collection for your operating system.
-   For building with Visual C++ 2012, CMake and the Windows SDK 8.1 are needed. 
-2. Import GraphicsEngine as an existing project.   
+   For building with Visual C++ 2013, CMake and the Windows SDK 8.1 are needed. 
+2. Import GLUS, GraphicsEngine, External and GE_Binaries as an existing project.   
 3. Set the build configuration in Eclipse to your operating system.
-4. Build GraphicsEngine.
-5. Build GLUS (see README.txt of GLUS).
+4. Build GLUS.
+5. Build GraphicsEngine.
 6. Import an example as an existing project.
 7. Set the build configuration of the example in Eclipse to your operating system.
 8. Build the example.
@@ -19,14 +19,14 @@ If you get build errors:
 - Please make sure, that you install all the needed header and libraries.
 - Pre-build libraries are located in the External project folder. If you want, replace these libraries with your own build.
 - The DevIL and the Autodesk FBX headers/libraries have to be installed separately. 
-- Note: On Ubuntu 14.04, just use the libraries provided with the OS.
+- Note: On Ubuntu 15.04, just use the libraries provided with the OS.
 
 SDKs and Libraries:
 
 - Autodesk FBX SDK 2015.1 http://usa.autodesk.com/fbx/
 - DevIL 1.7.8 http://openil.sourceforge.net/
 - GLEW 1.12.0 http://glew.sourceforge.net/
-- GLFW 3.1 http://www.glfw.org/
+- GLFW 3.1.1 http://www.glfw.org/
 
 Features (maybe incomplete):
 
